@@ -1,0 +1,19 @@
+export const LANGS = ['en', 'fr'] as const;
+export type Lang = (typeof LANGS)[number];
+
+export function isLang(v: string): v is Lang {
+	return (LANGS as readonly string[]).includes(v);
+}
+
+/** First supported language from the browser's preference list, else 'en'. */
+export function pickLang(prefs: readonly string[]): Lang {
+	for (const pref of prefs) {
+		const base = pref.toLowerCase().split('-')[0];
+		if (isLang(base)) return base;
+	}
+	return 'en';
+}
+
+export function otherLang(lang: Lang): Lang {
+	return lang === 'en' ? 'fr' : 'en';
+}

@@ -1,0 +1,35 @@
+import { describe, expect, it } from 'vitest';
+import { isLang, otherLang, pickLang } from './lang';
+
+describe('isLang', () => {
+	it('accepts supported locales', () => {
+		expect(isLang('en')).toBe(true);
+		expect(isLang('fr')).toBe(true);
+	});
+	it('rejects anything else, case-sensitively', () => {
+		for (const v of ['de', 'EN', 'Fr', '', 'en-US']) expect(isLang(v)).toBe(false);
+	});
+});
+
+describe('pickLang', () => {
+	it('picks fr for any French regional variant', () => {
+		expect(pickLang(['fr-FR'])).toBe('fr');
+		expect(pickLang(['fr-CA', 'en-US'])).toBe('fr');
+		expect(pickLang(['FR'])).toBe('fr');
+	});
+	it('skips unsupported languages to the first supported one', () => {
+		expect(pickLang(['de-DE', 'fr-FR'])).toBe('fr');
+		expect(pickLang(['es', 'en-GB', 'fr'])).toBe('en');
+	});
+	it('falls back to en', () => {
+		expect(pickLang(['de-DE', 'ja'])).toBe('en');
+		expect(pickLang([])).toBe('en');
+	});
+});
+
+describe('otherLang', () => {
+	it('swaps en and fr', () => {
+		expect(otherLang('en')).toBe('fr');
+		expect(otherLang('fr')).toBe('en');
+	});
+});
