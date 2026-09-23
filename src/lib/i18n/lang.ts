@@ -17,3 +17,8 @@ export function pickLang(prefs: readonly string[]): Lang {
 export function otherLang(lang: Lang): Lang {
 	return lang === 'en' ? 'fr' : 'en';
 }
+
+/** Base-aware locale URL, e.g. localeHref('/portfolio', 'en') → '/portfolio/en/'. */
+export function localeHref(base: string, lang: Lang): string {
+	return `${base}/${lang}/`;
+}

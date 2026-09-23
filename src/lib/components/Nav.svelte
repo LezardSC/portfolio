@@ -9,7 +9,7 @@
 
 <header class="nav">
 	<a class="brand" href="#hero">{t.hero.name}</a>
-	<nav aria-label="Main">
+	<nav aria-label={t.navLabel}>
 		<ul>
 			{#each SECTIONS as id (id)}
 				<li><a href="#{id}">{t.nav[id]}</a></li>

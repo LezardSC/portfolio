@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { dicts, isLang } from '$lib/i18n';
+import { dicts, isLang, LANGS } from '$lib/i18n';
 import type { EntryGenerator, PageLoad } from './$types';
 
-export const entries: EntryGenerator = () => [{ lang: 'en' }, { lang: 'fr' }];
+export const entries: EntryGenerator = () => LANGS.map((lang) => ({ lang }));
 
 export const load: PageLoad = ({ params }) => {
 	if (!isLang(params.lang)) error(404);

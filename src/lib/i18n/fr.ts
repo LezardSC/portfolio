@@ -10,6 +10,7 @@ export const fr: Dict = {
 		name: 'Jocelyn',
 		tagline: 'Ingénieur logiciel — systèmes, web, blockchain & IA.'
 	},
+	navLabel: 'Principale',
 	nav: {
 		about: 'À propos',
 		projects: 'Projets',
