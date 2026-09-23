@@ -10,6 +10,7 @@ export const en = {
 		name: 'Jocelyn',
 		tagline: 'Software engineer — systems, web, blockchain & AI.'
 	},
+	navLabel: 'Main',
 	nav: {
 		about: 'About',
 		projects: 'Projects',

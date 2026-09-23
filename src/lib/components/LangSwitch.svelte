@@ -1,20 +1,22 @@
 <script lang="ts">
-	import { otherLang, type Dict, type Lang } from '$lib/i18n';
+	import { base } from '$app/paths';
+	import { localeHref, otherLang, type Dict, type Lang } from '$lib/i18n';
 
 	let { lang, t }: { lang: Lang; t: Dict['langSwitch'] } = $props();
 
 	const target = $derived(otherLang(lang));
+	const href = $derived(localeHref(base, target));
 
 	function onclick(e: MouseEvent) {
 		if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
 		e.preventDefault();
-		location.assign(`/${target}/${location.hash}`);
+		location.assign(`${href}${location.hash}`);
 	}
 </script>
 
 <a
 	class="lang"
-	href="/{target}/"
+	{href}
 	hreflang={target}
 	lang={target}
 	aria-label={t.label}
