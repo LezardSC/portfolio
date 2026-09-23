@@ -42,7 +42,7 @@ static/  projects/*.webp, cv-en.pdf, cv-fr.pdf, photo
 
 ## Projects (core feature)
 ```ts
-type Context = 'school' | 'personal' | 'hackathon' | 'gamejam';
+type Context = 'professionnal' | 'personal' | 'school' | 'hackathon';
 type Domain  = 'web' | 'blockchain' | 'ai' | 'low-level' | 'games';
 type Project = {
   id: string; title: string;
