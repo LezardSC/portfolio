@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isLang, otherLang, pickLang } from './lang';
+import { isLang, localeHref, otherLang, pickLang } from './lang';
 
 describe('isLang', () => {
 	it('accepts supported locales', () => {
@@ -31,5 +31,20 @@ describe('otherLang', () => {
 	it('swaps en and fr', () => {
 		expect(otherLang('en')).toBe('fr');
 		expect(otherLang('fr')).toBe('en');
+	});
+});
+
+describe('localeHref', () => {
+	it('builds a trailing-slash locale URL from an empty (domain-root) base', () => {
+		expect(localeHref('', 'en')).toBe('/en/');
+		expect(localeHref('', 'fr')).toBe('/fr/');
+	});
+	it('builds a locale URL from a relative base', () => {
+		expect(localeHref('.', 'en')).toBe('./en/');
+		expect(localeHref('..', 'fr')).toBe('../fr/');
+	});
+	it('builds a locale URL from an absolute sub-path base', () => {
+		expect(localeHref('/portfolio', 'en')).toBe('/portfolio/en/');
+		expect(localeHref('/portfolio', 'fr')).toBe('/portfolio/fr/');
 	});
 });

@@ -21,6 +21,20 @@
 	--border: #d1d9e0;
 }
 
+/* No-JS visitors: default tokens are dark, so follow the system preference
+   for light before any script (or the theme attribute it sets) runs. */
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme]) {
+		color-scheme: light;
+		--bg: #ffffff;
+		--surface: #f6f8fa;
+		--text: #1f2328;
+		--muted: #59636e;
+		--accent: #0969da;
+		--border: #d1d9e0;
+	}
+}
+
 *,
 *::before,
 *::after {

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+	import { localeHref } from '$lib/i18n/lang';
 	import Nav from '$lib/components/Nav.svelte';
 	import About from '$lib/components/sections/About.svelte';
 	import Contact from '$lib/components/sections/Contact.svelte';
@@ -14,8 +16,8 @@
 <svelte:head>
 	<title>{t.meta.title}</title>
 	<meta name="description" content={t.meta.description} />
-	<link rel="alternate" hreflang="en" href="/en/" />
-	<link rel="alternate" hreflang="fr" href="/fr/" />
+	<link rel="alternate" hreflang="en" href={localeHref(base, 'en')} />
+	<link rel="alternate" hreflang="fr" href={localeHref(base, 'fr')} />
 </svelte:head>
 
 <Nav lang={data.lang} {t} />
