@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-	import { localeHref, pickLang } from '$lib/i18n/lang';
-
-	onMount(() => {
-		const prefs = navigator.languages?.length ? navigator.languages : [navigator.language];
-		location.replace(localeHref(base, pickLang(prefs)));
-	});
+	import { en } from '$lib/i18n/en';
+	import { localeHref } from '$lib/i18n/lang';
+	import { redirectScript } from '$lib/i18n/redirect';
 </script>
+
+<svelte:head>
+	<title>{en.meta.title}</title>
+	<!-- Inline so the redirect runs before first paint, not after hydration. -->
+	{@html `<script>${redirectScript(base)}</script>`}
+</svelte:head>
 
 <noscript>
 	<p>
