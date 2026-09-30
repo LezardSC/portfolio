@@ -3,7 +3,8 @@
 	import { PROFILE } from '$lib/data/profile';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { MENU_BREAKPOINT, nextMenu, type MenuEvent } from '$lib/nav-menu';
-	import { SECTIONS } from '$lib/sections';
+	import { SECTIONS, type SectionId } from '$lib/sections';
+	import { currentSection } from '$lib/sections-dom';
 	import LangSwitch from './LangSwitch.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 
@@ -14,6 +15,8 @@
 	let enhanced = $state(false);
 	let header: HTMLElement | undefined = $state();
 	let button: HTMLButtonElement | undefined = $state();
+	/** Section on screen; null on the hero. */
+	let active = $state<SectionId | null>(null);
 
 	function send(event: MenuEvent) {
 		const next = nextMenu(open, event);
@@ -23,6 +26,18 @@
 
 	onMount(() => {
 		enhanced = true;
+		// Recompute at most once per frame while scrolling or resizing.
+		let frame = 0;
+		const track = () => {
+			if (frame) return;
+			frame = requestAnimationFrame(() => {
+				frame = 0;
+				active = currentSection();
+			});
+		};
+		active = currentSection();
+		addEventListener('scroll', track, { passive: true });
+		addEventListener('resize', track);
 		const wide = matchMedia(MENU_BREAKPOINT);
 		const onWide = () => {
 			if (wide.matches) send('wide');
@@ -40,6 +55,9 @@
 			wide.removeEventListener('change', onWide);
 			document.removeEventListener('keydown', onKey);
 			document.removeEventListener('pointerdown', onPointer);
+			removeEventListener('scroll', track);
+			removeEventListener('resize', track);
+			cancelAnimationFrame(frame);
 		};
 	});
 </script>
@@ -68,7 +86,13 @@
 		</button>
 		<ul id="nav-links" role="list" class:open>
 			{#each SECTIONS as id (id)}
-				<li><a href="#{id}" onclick={() => send('link')}>{t.nav[id]}</a></li>
+				<li>
+					<a
+						href="#{id}"
+						aria-current={active === id ? 'true' : undefined}
+						onclick={() => send('link')}>{t.nav[id]}</a
+					>
+				</li>
 			{/each}
 		</ul>
 	</nav>
@@ -117,6 +141,11 @@
 	}
 	nav a:hover {
 		color: var(--text);
+	}
+	nav a[aria-current] {
+		color: var(--text);
+		text-decoration: underline 2px var(--accent);
+		text-underline-offset: 0.4em;
 	}
 	.actions {
 		display: flex;
