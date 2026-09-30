@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { PROFILE } from '$lib/data/profile';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { SECTIONS } from '$lib/sections';
 	import LangSwitch from './LangSwitch.svelte';
@@ -8,7 +9,7 @@
 </script>
 
 <header class="nav">
-	<a class="brand" href="#hero">{t.hero.name}</a>
+	<a class="brand" href="#hero">{PROFILE.name}</a>
 	<nav aria-label={t.navLabel}>
 		<ul>
 			{#each SECTIONS as id (id)}
@@ -40,6 +41,7 @@
 		font-weight: 700;
 		color: var(--text);
 		text-decoration: none;
+		white-space: nowrap;
 	}
 	nav {
 		flex: 1;
