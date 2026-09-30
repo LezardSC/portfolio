@@ -2,13 +2,19 @@ import type { Dict } from './en';
 
 export const fr: Dict = {
 	meta: {
-		title: 'Jocelyn — Ingénieur logiciel',
+		title: 'Jocelyn Renault — Ingénieur logiciel',
 		description:
-			'Portfolio de Jocelyn, ingénieur logiciel issu de 42 : projets systèmes, web, blockchain et IA.'
+			'Portfolio de Jocelyn Renault, ingénieur logiciel issu de 42 : projets backend, systèmes, web, blockchain et IA.'
 	},
 	hero: {
-		name: 'Jocelyn',
-		tagline: 'Ingénieur logiciel — systèmes, web, blockchain & IA.'
+		available: 'Disponible',
+		projects: 'Voir les projets',
+		cv: 'Télécharger le CV',
+		github: 'GitHub',
+		newTab: '(ouvre un nouvel onglet)'
+	},
+	about: {
+		photoAlt: 'Photo de Jocelyn Renault'
 	},
 	navLabel: 'Principale',
 	nav: {

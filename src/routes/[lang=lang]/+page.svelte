@@ -23,7 +23,7 @@
 <Nav lang={data.lang} {t} />
 
 <main>
-	<Hero {t} />
+	<Hero lang={data.lang} t={t.hero} />
 	<About {t} />
 	<Projects lang={data.lang} title={t.sections.projects} t={t.projects} />
 	<Skills {t} />
