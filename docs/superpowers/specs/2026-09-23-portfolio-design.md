@@ -29,12 +29,14 @@ src/
   lib/
     i18n/en.ts, fr.ts, index.ts # UI strings; fr typed as `typeof en` shape (Dict)
     data/projects.ts            # typed project entries
+    data/profile.ts             # name, role, pitch, bio, facts, links, CV/photo paths
     data/skills.ts, experience.ts
+    paths.ts                    # pure assetHref(base, path)
     projects.ts                 # pure filterProjects() + counts
     components/Nav.svelte, ThemeToggle.svelte, LangSwitch.svelte
     components/projects/ProjectFilters, ProjectCardLarge, ProjectCardSmall, ProjectMedia, ProjectLinks, DomainIcon (.svelte)
     components/sections/Hero|About|Projects|Skills|Experience|Contact.svelte
-static/  projects/* (images/videos), cv-en.pdf, cv-fr.pdf, photo
+static/  projects/* (images/videos), cv-en.pdf, cv-fr.pdf, photo.jpg
 ```
 - Localized text in data files uses `{ en: string; fr: string }`.
 - Theme: CSS custom properties on `:root[data-theme=dark|light]`; choice stored in `localStorage`, fallback `prefers-color-scheme`.
@@ -69,9 +71,47 @@ type Project = {
 - **Animation:** both tiers use `animate:flip` + fade-in (duration 0 under `prefers-reduced-motion`). Outgoing cards leave immediately (no fade-out: it would hold their grid cell and shove the others); a project moving between tiers fades into its new tier.
 - **Initial content:** at least one project per context. Professional: GoldenEye data augmentation (SogetiLabs/Capgemini, private). Hackathon: KAYP (PBW 2024 winner; links to the backend repo), KAYP-H-WEB3PARIS (winner), Bahapad (PBW 2025 3rd), GameJam Confiture de jeu, Love_Takedown. School: libft, ft_printf, get_next_line, libasm, ft_linear_regression, tokenizer, tokenizArt, ft_transcendence. Personal: microcode. Descriptions drafted from READMEs; Jocelyn edits the list freely afterwards.
 
+## Hero + About
+_Settled during Milestone 3 brainstorming (2026-09-30)._
+
+**Positioning:** general software engineer with a backend & systems lean. Broader than the Malt profile ("Développeur Backend & Systèmes") so web, blockchain, AI and games projects stay on-message. No location is shown anywhere on the site.
+
+**Content** lives in a new `src/lib/data/profile.ts` (content, `{ en, fr }` fields). UI labels (CTA texts, photo alt, availability text) live in the i18n dicts. `hero.name` / `hero.tagline` leave the dicts; `meta.title` becomes "Jocelyn Renault — Software Engineer" / "Jocelyn Renault — Ingénieur logiciel", and the meta description uses the full name.
+```ts
+export const profile = {
+  name: 'Jocelyn Renault',
+  role:  Localized,        // 'Software Engineer · Backend & Systems' / 'Ingénieur logiciel · Backend & Systèmes'
+  pitch: Localized,        // one sentence, see below
+  bio:   Localized[],      // 3 paragraphs, see below
+  facts: Localized[],      // '42 Lyon (RNCP 7)', 'French / English' | 'Français / Anglais'
+  github: 'https://github.com/LezardSC',
+  cv:    { en: 'cv-en.pdf', fr: 'cv-fr.pdf' },   // paths under static/, resolved with `base`
+  photo: 'photo.jpg',
+  available: false         // true shows the "Available for work" pill in the Hero
+};
+```
+
+**Assets** (`static/`): `cv-en.pdf`, `cv-fr.pdf` (phone number removed; `cv-en.pdf` is temporarily a copy of the French CV until the English one is re-exported — replacing the file needs no code change), `photo.jpg` (cropped once to a 480×480 square centred on Jocelyn, EXIF stripped; the original is not kept).
+
+**Hero** (`sections/Hero.svelte`, props `{ lang, t: Dict['hero'] }`): full height (`100svh`), centred.
+- Optional pill "● Available for work" / "● Disponible" (green dot) when `profile.available`.
+- `h1` name, role line, pitch (muted, max ~60ch).
+- CTAs, wrapping on narrow screens: **See projects** (primary, `#projects`), **Download CV** (opens `cv-{lang}.pdf` in a new tab, no forced download), **GitHub** (icon + label, new tab). External links use `target=_blank rel="noopener noreferrer"`.
+- Pitch EN: *"I build the invisible part of products: APIs, services, data processing, automation and deployment. My field is backend and low-level — reliability and performance over UI."*
+- Pitch FR: *"Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c'est le backend et le bas niveau — la fiabilité et la performance plutôt que l'interface."*
+
+**About** (`sections/About.svelte` inside `Section`, props `{ lang, t: Dict['about'] }`): two-column grid, round 200px photo left and bio right; under 640px it stacks with the photo centred on top. Photo has explicit `width`/`height`, `loading="lazy"`, localized alt ("Photo of Jocelyn Renault"). Below the bio, the facts render as chips in the project tech-tag style (🎓 42 Lyon (RNCP 7) · 🗣 French / English).
+
+Bio draft (Jocelyn edits freely):
+1. EN *"I got into programming for the money. I stayed because I found out I love understanding how things work underneath: memory, processes, the network, the machine itself."* — FR *"Je me suis mis à la programmation pour l'argent. J'y suis resté parce que j'ai découvert que j'adore comprendre comment les choses fonctionnent en dessous : la mémoire, les processus, le réseau, la machine elle-même."*
+2. EN *"I trained at 42 Lyon (RNCP 7 — Expert in computer architecture), then worked as a full-stack developer at Y247 Group and as a machine-learning developer at Sogeti (Capgemini), and won several hackathons along the way."* — FR *"Je me suis formé à 42 Lyon (RNCP 7 — Expert en architecture informatique), puis j'ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage."*
+3. EN *"Today I focus on backend and systems work — APIs, services, Rust, infrastructure — while staying at home with Web3 and AI when a project needs them."* — FR *"Aujourd'hui je me concentre sur le backend et les systèmes — APIs, services, Rust, infrastructure — tout en restant à l'aise avec le Web3 et l'IA quand un projet en a besoin."*
+
+**Logic:** pure `assetHref(base, path)` in `src/lib/paths.ts` (joins `base` and a `static/` path without double slashes), used for the CV and photo URLs so the site works under a sub-path.
+
+**Tests:** `assetHref` (empty and non-empty `base`, no `//`); `profile.spec.ts` (CV and photo files exist in `static/`, every localized field non-empty in both languages, `github` is `https`).
+
 ## Other sections
-- **Hero:** name, one-line pitch, CTAs: See projects / Download CV / GitHub.
-- **About:** photo, short bio (keeps the "got into programming for the money" line), 42 School.
 - **Skills:** grouped lists (Languages, Web, Blockchain, Tools) with icons; no percentage bars.
 - **Experience/Education:** vertical timeline (42 School, jobs, hackathon results).
 - **Contact:** email, GitHub, LinkedIn, CV link. No form/backend.
