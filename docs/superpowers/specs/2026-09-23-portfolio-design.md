@@ -11,7 +11,7 @@ Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, buil
 | Framework | SvelteKit (Svelte 5 runes) + `@sveltejs/adapter-static`, fully prerendered, TypeScript |
 | Languages | EN + FR toggle; routes `/en`, `/fr` |
 | Theme | Dark + light toggle, defaults to system preference |
-| Hosting | Undecided → plain static output, host-agnostic |
+| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later — its own milestone (M9) once the site is polished |
 | Project click | Icon links (GitHub / demo) + clickable media, new tab; no detail pages/modals. Private projects have no link |
 | Sections | Hero, About, Projects, Skills, Experience/Education, Contact |
 | Filtering | Two combinable single-select chip groups: Context × Domain + sort |
@@ -240,6 +240,48 @@ Order and content:
 **Tests:** `contact.spec.ts` (tile order and ids, `mailto:` href, CV href follows `lang` and `base`, `external` flags); `profile.spec` (email is a valid address, LinkedIn and Malt are `https` URLs); i18n completeness covers the new keys. Visual check with Playwright: both themes, both languages, 1280px and 375px.
 
 
+## Milestone 7 — Fixes & accessibility
+_Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" milestone is split in two: M7 (this one: nav, a11y, fixes, audit tooling) and M8 (visual polish & SEO). No domain yet, so nothing here depends on one.
+
+**Mobile nav.** Under ~760px the section links collapse behind a ☰ button (`aria-expanded`, `aria-controls`) that opens a panel below the bar with the links stacked. Brand, language switch and theme toggle stay in the bar at every width. The panel closes on Esc (focus returns to the button), on a link tap, on a tap outside, and resets to closed when the viewport grows past the breakpoint. Before hydration / without JS the links stay reachable (the panel renders as a plain list until the menu script takes over). Open/close rules live in a pure, unit-tested function; the component only wires events.
+
+**Active-section highlight.** Reuses `sectionInView()` / `isAtBottom()` from `src/lib/sections.ts` (the same rule the language switch uses, so both always agree), recomputed on scroll behind `requestAnimationFrame`. The current link gets `aria-current="true"` and an `--accent` underline; on the hero no link is marked.
+
+**Theme.** A `matchMedia('(prefers-color-scheme: dark)')` listener makes the page follow OS changes live, only while no theme is stored. ThemeToggle's accessible name is correct from first paint: both labels are rendered and the one for the current `data-theme` is shown by CSS (the other is `display: none`, so it is out of the accessibility tree), instead of an `aria-label` that is wrong until hydration on a light OS. The `title` tooltip is only set after hydration (it is not the accessible name, so a brief wrong tooltip is harmless).
+
+**LangSwitch.** The modifier guard also lets `altKey` through to the browser.
+
+**Page-wide a11y.**
+- "Skip to content" link, first focusable element, visible on focus, targets `<main>`; text in both dicts.
+- `role="list"` on every `list-style: none` list (Safari/VoiceOver drops list semantics otherwise).
+- Experience periods wrapped in `<time datetime="YYYY-MM">`.
+- One `:focus-visible` outline in `app.css`, visible in both themes.
+- Interactive targets ≥ 44px on touch (`pointer: coarse`): nav buttons, filter chips, link icons.
+- Anything else axe or Lighthouse reports is fixed in this milestone.
+
+**French typography.** Non-breaking space (U+00A0) before `: ; ! ?` and inside « », written into `fr.ts` and the `fr` fields of the data files (no runtime transform). A unit test fails on a plain space before those characters (or after «, before ») in any French string; U+00A0 and U+202F are both accepted.
+
+**`/` redirect.** Moves to an inline `<head>` script on `/` so it runs before first paint instead of after hydration; `/` gets a `<title>`; the `<noscript>` links stay. The inline copy duplicates `pickLang` on purpose, like the theme script duplicates `resolveTheme`; keep them in sync.
+
+**Deferred review minors folded in.**
+- About facts `{#each}` keyed on index, not emoji.
+- Hero availability dot uses a new `--ok` theme token instead of `#2da44e`.
+- `profile.spec` resolves `static/` from the test file's location, not the cwd; the experience timezone test actually runs under a non-UTC `TZ`.
+- Skill icons store only the `simple-icons` `path` (and `hex` where used), not whole objects.
+- Chips keep a sane radius if they ever wrap to two lines.
+- The Malt symbol's cropped path is inlined in `contact-icons.ts` instead of depending on `simple-icons` subpath order.
+- Copy email: a repeat copy is re-announced; on failure a visible "press Ctrl+C" hint appears next to the selected address; the timer is cleared on destroy; the email tile text comes from the `contactLinks` label.
+
+**Responsive pass.** Whole page checked at 360, 390, 768, 1024 and 1440px, both themes, both languages; fix overflow, crowding and bad wraps. No horizontal scroll at 360px (enforced by the audit).
+
+**Audit script.** `npm run audit` → `scripts/audit.ts`. Dev dependencies: `playwright` (Chromium only), `@axe-core/playwright`, `lighthouse`. It builds, starts `vite preview`, then:
+- axe on `/en/` and `/fr/` × dark/light × 360px/1280px: **0 violations**;
+- no horizontal scroll at 360px;
+- Lighthouse (Playwright's Chromium) on `/en/`, mobile and desktop: **Accessibility, Best Practices, SEO = 100; Performance ≥ 95**.
+It prints a pass/fail table, exits non-zero on any failure, and writes full reports to a git-ignored `reports/`. SEO checks that need a real domain (absolute canonical/hreflang) are listed and carried to M8 rather than faked.
+
+**Tests.** Unit tests for the menu state function, the active-link logic and the French typography check; existing tests, `npm run check` and `npm run lint` stay clean. The M7 review guide includes the audit table and screenshots at each width.
+
 ## Testing
 - Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
 - `svelte-check` clean.
@@ -252,7 +294,9 @@ Order and content:
 4. **Skills**
 5. **Experience / Education**
 6. **Contact + footer**
-7. **Polish** — responsive, scroll-reveal animations, SEO/OG meta per locale, a11y, Lighthouse pass.
+7. **Fixes & accessibility** — mobile nav, active-section highlight, a11y, French typography, `/` redirect, deferred review minors, responsive pass, `npm run audit` (axe + Lighthouse).
+8. **Visual polish & SEO** — scroll-reveal animations, favicon, OG image and per-locale meta, project screenshots as media.
+9. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
 
 ## Next steps after approval
 1. `git init` in `/home/lezard/portfolio`, save this spec to `docs/superpowers/specs/2026-09-23-portfolio-design.md`, commit.
