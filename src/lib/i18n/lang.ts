@@ -1,6 +1,9 @@
 export const LANGS = ['en', 'fr'] as const;
 export type Lang = (typeof LANGS)[number];
 
+/** Text available in every supported language. */
+export type Localized = Record<Lang, string>;
+
 export function isLang(v: string): v is Lang {
 	return (LANGS as readonly string[]).includes(v);
 }
