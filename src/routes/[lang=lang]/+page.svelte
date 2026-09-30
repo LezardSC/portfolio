@@ -27,6 +27,6 @@
 	<About lang={data.lang} title={t.sections.about} t={t.about} />
 	<Projects lang={data.lang} title={t.sections.projects} t={t.projects} />
 	<Skills lang={data.lang} title={t.sections.skills} />
-	<Experience {t} />
+	<Experience lang={data.lang} title={t.sections.experience} t={t.experience} />
 	<Contact {t} />
 </main>
