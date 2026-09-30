@@ -26,6 +26,32 @@ export const fr: Dict = {
 		contact: 'Contact'
 	},
 	placeholder: 'Bientôt disponible.',
+	projects: {
+		contextLabel: 'Contexte',
+		domainLabel: 'Domaine',
+		all: 'Tous',
+		contexts: {
+			professional: 'Professionnel',
+			personal: 'Personnel',
+			school: 'École',
+			hackathon: 'Hackathon'
+		},
+		domains: {
+			web: 'Web',
+			blockchain: 'Blockchain',
+			ai: 'IA',
+			'low-level': 'Bas niveau',
+			games: 'Jeux'
+		},
+		sortLabel: 'Trier par',
+		sort: { featured: 'À la une', newest: 'Plus récents' },
+		empty: 'Aucun projet ne correspond à ces filtres.',
+		reset: 'Réinitialiser les filtres',
+		more: 'Autres projets',
+		private: 'Privé',
+		repo: 'Code source sur GitHub',
+		demo: 'Démo en ligne'
+	},
 	theme: {
 		toLight: 'Passer au thème clair',
 		toDark: 'Passer au thème sombre'
