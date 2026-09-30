@@ -154,7 +154,7 @@ Deliberately left out: C# and a Game dev group (not enough to fill it yet), NumP
 ## Experience & Education
 _Settled during Milestone 5 brainstorming (2026-09-30). Sources: Jocelyn's CV and Malt profile._
 
-**Layout:** two columns (Experience | Education), each a small vertical timeline, with a full-width Hackathons row underneath. Nothing is clickable, and there are no company logos.
+**Layout:** two columns (Experience | Education), each a small vertical timeline, with a full-width Hackathons row underneath. The only link is the CS50 certificate; there are no company logos.
 
 **Data:** types and pure helpers in `src/lib/experience.ts`, content in `src/lib/data/experience.ts` (same split as projects and skills):
 ```ts
@@ -167,13 +167,13 @@ type Job = {
   points: Localized[]; tech: string[];
   quote?: Quote;
 };
-type Education = { school: string; title: Localized; start?: string; end: string; points: Localized[] };  // years 'YYYY'
+type Education = { school: string; title: Localized; start?: string; end: string; points: Localized[]; link?: string };  // years 'YYYY'; link = certificate
 type Hackathon = { medal: 1 | 2 | 3; event: string; date: Month; project?: string | Localized };
 export const JOBS: Job[]; export const EDUCATION: Education[]; export const HACKATHONS: Hackathon[];
 ```
 - `localize(value: string | Localized, lang)` resolves a plain or localized string.
 - `formatPeriod(start, end, lang)` formats the period with `Intl.DateTimeFormat` (month + year for `YYYY-MM`, year alone for `YYYY`): "Jul 2025 – Jan 2026" / "juil. 2025 – janv. 2026"; a missing `end` gives "Present" / "Aujourd'hui" (label passed in from the dict); a single year gives just "2024".
-- Sorting: jobs and education newest first (by end, then start; an open end counts as newest); hackathons by medal (gold first), then newest first.
+- Sorting: jobs and education newest first (by end, then start; an open end counts as newest); hackathons newest first.
 
 **Content** (EN shown; FR written alongside, drawn from the CV and Malt):
 - **Sogeti, part of Capgemini**, Machine Learning & Computer Vision developer, 2025-07 → 2026-01, internship.
@@ -188,7 +188,7 @@ export const JOBS: Job[]; export const EDUCATION: Education[]; export const HACK
   - Tech: SvelteKit, Node.js, Express.
   - Quote, Vincent Tamme, "President, Y247 Group" / "Président, Y247 Group": FR original *"Il a pleinement participé au développement de notre plateforme, aussi bien sur les sujets front-end que back-end. Il s'est montré sérieux, autonome et impliqué, avec une bonne capacité à comprendre rapidement les problématiques techniques et à proposer des solutions adaptées."* EN *"He took a full part in developing our platform, on both front-end and back-end. He proved serious, autonomous and committed, quick to grasp technical problems and propose suitable solutions."*
 - **42 Lyon**, 2022 → 2026, title "Expert in computer architecture" / "Expert en architecture informatique". Points: "RNCP 7: information systems & networks" / "RNCP 7 : systèmes d'information et réseaux"; "RNCP 6: software solutions designer-developer, web & mobile" / "RNCP 6 : concepteur développeur de solutions informatiques, web et mobile".
-- **Harvard**, CS50's Introduction to Computer Science, 2024, no points.
+- **Harvard**, CS50's Introduction to Computer Science, 2024, no points, `link: 'https://certificates.cs50.io/b9c16727-3912-4e88-ac47-07ed9a982bc5.pdf?size=letter'`.
 - **Hackathons:** 🥇 Paris Blockchain Week 2024 · KAYP; 🥇 H-W3B Paris 2024 · KAYP; 🥈 H-W3B Super Finale 2024 · KAYP; 🥉 Paris Blockchain Week 2025 · Bahapad; 🥉 Commissariat au Numérique de Défense 2025 · "Firewall log triage for the armed forces" / "Tri de logs pare-feu pour les armées" (the project's name is forgotten, so a description stands in for it).
 
 The recommendations were written in French: the FR page shows the original, and the EN page shows the translation followed by a muted "(translated from French)".
@@ -197,11 +197,11 @@ The recommendations were written in French: the FR page shows the original, and 
 
 **Component:** `sections/Experience.svelte` inside `Section`, props `{ lang, title, t: Dict['experience'] }`.
 - Grid: two columns ≥ 900px, stacked below. Each column has an `h3` heading and an `<ol>` timeline: a 2px `--border` vertical line with an `--accent` dot per entry; each entry is an `<li>` holding an `<article>`.
-- Entry: period line (muted, small, e.g. "Jul 2025 – Jan 2026 · Internship") → `h4` role (or diploma title) → company or school → bullet list → tech tags (project tech-tag style) → optional `<blockquote>` (3px `--accent` left border, italic) with a `<footer>`: "— author, role" and the translated note when relevant.
+- Entry: period line (muted, small, e.g. "Jul 2025 – Jan 2026 · Internship") → `h4` role (or diploma title; when `link` is set, the title is a link to the certificate, `target=_blank rel="noopener noreferrer"`) → company or school → bullet list → tech tags (project tech-tag style) → optional `<blockquote>` (3px `--accent` left border, italic) with a `<footer>`: "— author, role" and the translated note when relevant.
 - Hackathons: full-width row under the columns, `h3` + `<ul>` of pills that wrap: medal emoji (`aria-hidden`) + visually hidden place label + event + year + " · project" when present.
 - `.sr-only` moves from `Hero.svelte` to `src/app.css` (this is its second user).
 
-**Tests:** `experience.spec.ts` (`formatPeriod` in both languages: month range, open end, year range, single year; sort orders; `localize`); `data/experience.spec.ts` (valid `YYYY-MM` / `YYYY` dates, start ≤ end, every localized field non-empty in both languages, every job has at least one point, medals in 1–3).
+**Tests:** `experience.spec.ts` (`formatPeriod` in both languages: month range, open end, year range, single year; sort orders; `localize`); `data/experience.spec.ts` (valid `YYYY-MM` / `YYYY` dates, start ≤ end, every localized field non-empty in both languages, every job has at least one point, medals in 1–3, every `link` is `https`).
 
 ## Other sections
 - **Contact:** email, GitHub, LinkedIn, CV link. No form/backend.
