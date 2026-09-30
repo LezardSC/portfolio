@@ -154,7 +154,7 @@ Deliberately left out: C# and a Game dev group (not enough to fill it yet), NumP
 ## Experience & Education
 _Settled during Milestone 5 brainstorming (2026-09-30). Sources: Jocelyn's CV and Malt profile._
 
-**Layout:** two columns (Experience | Education), each a small vertical timeline, with a full-width Hackathons row underneath. The only link is the CS50 certificate; there are no company logos.
+**Layout:** two columns: Experience (a vertical timeline) | Education (a vertical timeline) with Hackathons below it in the same column, since Education is always the shorter one _(revised after the PR review; it was a full-width row under both columns)_. The only link is the CS50 certificate; there are no company logos.
 
 **Data:** types and pure helpers in `src/lib/experience.ts`, content in `src/lib/data/experience.ts` (same split as projects and skills):
 ```ts
@@ -198,7 +198,7 @@ The recommendations were written in French (`original: 'fr'`): the FR page shows
 **Component:** `sections/Experience.svelte` inside `Section`, props `{ lang, title, t: Dict['experience'] }`.
 - Grid: two columns ≥ 900px, stacked below. Each column has an `h3` heading and an `<ol>` timeline: a 2px `--border` vertical line with an `--accent` dot per entry; each entry is an `<li>` holding an `<article>`.
 - Entry: period line (muted, small, e.g. "Jul 2025 – Jan 2026 · Internship") → `h4` role (or diploma title; when `link` is set, the title is a link to the certificate, `target=_blank rel="noopener noreferrer"`) → company or school → bullet list → tech tags (project tech-tag style) → optional `<blockquote>` (3px `--accent` left border, italic) with a `<footer>`: "— author, role" and the translated note when relevant.
-- Hackathons: full-width row under the columns, `h3` + `<ul>` of pills that wrap: medal emoji (`aria-hidden`) + visually hidden place label + event + year + " · project" when present.
+- Hackathons: under the Education timeline in the right column, `h3` + `<ul>` of pills that wrap: medal emoji (`aria-hidden`) + visually hidden place label + event + year + " · project" when present.
 - `.sr-only` moves from `Hero.svelte` to `src/app.css` (this is its second user).
 
 **Tests:** `experience.spec.ts` (`formatPeriod` in both languages: month range, open end, year range, single year; sort orders; `localize`); `data/experience.spec.ts` (valid `YYYY-MM` / `YYYY` dates, start ≤ end, every localized field non-empty in both languages, every job has at least one point, medals in 1–3, every `link` is `https`).

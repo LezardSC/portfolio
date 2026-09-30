@@ -31,6 +31,7 @@ npm install
 | `feat: render experience and education timelines with hackathon results` | Task 3 |
 | `fix: use French guillemets for quotes on the French page` | final review |
 | `docs: add Milestone 5 review guide` | this file |
+| `feat: move hackathons under education in the right column` | review feedback |
 
 ## 1. Automated checks
 
@@ -51,21 +52,21 @@ npm run preview    # http://localhost:4173
 ```
 
 Experience & Education (`/en/#experience`, then `/fr/#experience`):
-- [ ] Two columns. **Experience** has Sogeti (part of Capgemini) first, then Y247 Group. **Education** has 42 Lyon, then CS50.
+- [ ] Two columns. **Experience** has Sogeti (part of Capgemini) first, then Y247 Group. **Education** has 42 Lyon, then CS50, and **Hackathons** sits below it in the same column.
 - [ ] Period lines: *Jul 2025 – Jan 2026 · Internship* and *Oct 2024 – Apr 2025 · Internship*. On `/fr/`: *juil. 2025 – janv. 2026 · Stage*.
 - [ ] No location anywhere.
 - [ ] Each job has its bullet points, tech tags in the project style, and a quote with a blue bar on the left.
 - [ ] On `/fr/`, the quotes are the French originals in « guillemets », with no note.
 - [ ] On `/en/`, the quotes are the English translations, each followed by *(translated from French)*.
 - [ ] The **CS50** title is a link that opens the certificate PDF in a new tab. Nothing else in the section is clickable.
-- [ ] **Hackathons** row, newest first: 🥉 Commissariat au Numérique de Défense 2025 · Firewall log triage for the armed forces, 🥉 Paris Blockchain Week 2025 · Bahapad, 🥈 H-W3B Super Finale 2024 · KAYP, 🥇 Paris Blockchain Week 2024 · KAYP, 🥇 H-W3B Paris 2024 · KAYP.
+- [ ] **Hackathons**, newest first: 🥉 Commissariat au Numérique de Défense 2025 · Firewall log triage for the armed forces, 🥉 Paris Blockchain Week 2025 · Bahapad, 🥈 H-W3B Super Finale 2024 · KAYP, 🥇 Paris Blockchain Week 2024 · KAYP, 🥇 H-W3B Paris 2024 · KAYP.
 - [ ] The medal emoji show up in your browser.
 
 Both themes (toggle in the nav):
 - [ ] The timeline line, the blue dots, the quote bars and the hackathon pill borders are visible in dark **and** light mode.
 
 Widths (DevTools device mode):
-- [ ] Two columns from 900px wide, one below.
+- [ ] Two columns from 900px wide, one below (Experience, Education, Hackathons).
 - [ ] At 360px on `/fr/`, nothing scrolls sideways. The long CND pill wraps inside a rounded rectangle, and the dots stay on the line.
 
 Unchanged but touched:
@@ -83,7 +84,7 @@ Content, which is yours to edit freely in `src/lib/data/experience.ts`:
 Code:
 - `src/lib/experience.ts`: types and pure helpers. `formatPeriod` formats months with `Intl` in UTC, so a visitor's timezone can't shift a month. `newestFirst` sorts jobs and education, `hackathonsNewestFirst` sorts hackathons, and `quoted` picks “…” or « … » by language.
 - `src/lib/data/experience.ts`: content only. `src/lib/data/experience.spec.ts` checks date formats, that nothing ends before it starts, that no text is empty in either language, that every job has at least one point, the medal values and the https link.
-- `src/lib/components/experience/JobItem.svelte` and `EducationItem.svelte`: one timeline entry each. `src/lib/components/sections/Experience.svelte`: the grid, the timeline line and dots, and the hackathon pills. Props are narrowed to `{ lang, title, t: Dict['experience'] }`.
+- `src/lib/components/experience/JobItem.svelte` and `EducationItem.svelte`: one timeline entry each. `src/lib/components/sections/Experience.svelte`: the grid, the timeline line and dots, and the hackathon pills under Education. Props are narrowed to `{ lang, title, t: Dict['experience'] }`.
 - Accessibility: medal emoji are hidden from screen readers and replaced by a hidden "1st place" / "1re place". Headings go h2 → h3 (columns) → h4 (entries).
 
 Left for later (final-review minors):
