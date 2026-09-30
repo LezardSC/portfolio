@@ -31,6 +31,7 @@ npm install
 | `feat: render hero with role, pitch and CTAs` | Task 3 (dicts, Hero, Nav brand, shared `GitHubIcon`) |
 | `feat: render about section with photo, bio and facts` | Task 4 |
 | `docs: add Milestone 3 review guide` | this file |
+| `fix: language switch lands on the section in view` | review feedback |
 
 Task 5 (build verification) changed no files.
 
@@ -39,7 +40,7 @@ Task 5 (build verification) changed no files.
 ```bash
 npm run check && npm test && npm run lint && npm run build
 ```
-Expected: 0 errors/warnings, 56 tests pass, lint clean, build writes `build/`.
+Expected: 0 errors/warnings, 61 tests pass, lint clean, build writes `build/`.
 
 ## 2. Manual browser testing
 
@@ -58,6 +59,10 @@ Hero (`/en/` then `/fr/`):
 About:
 - [ ] Round photo on the left, the 3 paragraphs on the right, and 2 fact chips below (🎓 42 Lyon (RNCP 7), 🗣 French / English).
 - [ ] The photo shows only you: no friend, no hand.
+
+Language switch (the fix from your first review):
+- [ ] Click **About** in the nav, scroll back to the very top, then switch language: you stay at the top.
+- [ ] Scroll into Projects without clicking a link, then switch language: you land on Projects.
 
 Both themes (toggle in the nav):
 - [ ] The primary button is readable in dark and light mode.

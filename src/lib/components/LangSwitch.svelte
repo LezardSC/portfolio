@@ -1,16 +1,26 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { localeHref, otherLang, type Dict, type Lang } from '$lib/i18n';
+	import { sectionInView, SECTIONS, type SectionId } from '$lib/sections';
 
 	let { lang, t }: { lang: Lang; t: Dict['langSwitch'] } = $props();
 
 	const target = $derived(otherLang(lang));
 	const href = $derived(localeHref(base, target));
 
+	// Land on the section on screen, not the stale #hash left by the last nav click.
 	function onclick(e: MouseEvent) {
 		if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
 		e.preventDefault();
-		location.assign(`${href}${location.hash}`);
+		const tops = Object.fromEntries(
+			SECTIONS.map((id) => [
+				id,
+				document.getElementById(id)?.getBoundingClientRect().top ?? Infinity
+			])
+		) as Record<SectionId, number>;
+		const navHeight = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+		const id = sectionInView(tops, navHeight);
+		location.assign(id ? `${href}#${id}` : href);
 	}
 </script>
 
