@@ -1,4 +1,5 @@
 import type { SectionId } from '$lib/sections';
+import type { Context, Domain, SortKey } from '$lib/projects';
 
 export const en = {
 	meta: {
@@ -26,6 +27,32 @@ export const en = {
 		contact: 'Contact'
 	} satisfies Record<SectionId, string>,
 	placeholder: 'Coming soon.',
+	projects: {
+		contextLabel: 'Context',
+		domainLabel: 'Domain',
+		all: 'All',
+		contexts: {
+			professional: 'Professional',
+			personal: 'Personal',
+			school: 'School',
+			hackathon: 'Hackathon'
+		} satisfies Record<Context, string>,
+		domains: {
+			web: 'Web',
+			blockchain: 'Blockchain',
+			ai: 'AI',
+			'low-level': 'Low-level',
+			games: 'Games'
+		} satisfies Record<Domain, string>,
+		sortLabel: 'Sort by',
+		sort: { featured: 'Featured', newest: 'Newest' } satisfies Record<SortKey, string>,
+		empty: 'No project matches these filters.',
+		reset: 'Reset filters',
+		more: 'More projects',
+		private: 'Private',
+		repo: 'Source code on GitHub',
+		demo: 'Live demo'
+	},
 	theme: {
 		toLight: 'Switch to light theme',
 		toDark: 'Switch to dark theme'
