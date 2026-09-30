@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { savePendingSection, sectionInView, takePendingSection } from './sections';
+import { isAtBottom, savePendingSection, sectionInView, takePendingSection } from './sections';
 
 // Viewport-relative tops of each section, as getBoundingClientRect().top would report them.
 const tops = (about: number) => ({
@@ -29,6 +29,30 @@ describe('sectionInView', () => {
 
 	it('tolerates sub-pixel offsets after an anchor jump', () => {
 		expect(sectionInView(tops(56.5), 56)).toBe('about');
+	});
+
+	// Contact is shorter than the viewport, so its top never reaches the nav:
+	// scrolled to the very bottom, Experience's top is still the last one past the nav.
+	it('returns the last section when scrolled to the bottom of the page', () => {
+		expect(sectionInView(tops(-3700), 56, true)).toBe('contact');
+	});
+
+	it('ignores the bottom flag while not at the bottom', () => {
+		expect(sectionInView(tops(-3700), 56, false)).toBe('experience');
+	});
+});
+
+describe('isAtBottom', () => {
+	it('is true when the viewport reaches the end of the page', () => {
+		expect(isAtBottom(4100, 900, 5000)).toBe(true);
+	});
+
+	it('tolerates a sub-pixel or zoom rounding shortfall', () => {
+		expect(isAtBottom(4098.5, 900, 5000)).toBe(true);
+	});
+
+	it('is false higher up the page', () => {
+		expect(isAtBottom(3900, 900, 5000)).toBe(false);
 	});
 });
 
