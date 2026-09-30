@@ -42,3 +42,7 @@ The user builds this **one milestone at a time** and reviews each one before the
 - Remote: `origin` = `git@github.com:LezardSC/portfolio.git`, default branch `master`.
 - Worktrees live in `.claude/worktrees/<name>`, with local branch `worktree-<name>`. The remote branch is `<name>`, so push with
   `git push origin worktree-<name>:<name>`, because a plain `git push` is refused (the names differ).
+
+## Reference material
+
+- `tmp/` in the main checkout (`/home/lezard/portfolio/tmp/`, gitignored, not in worktrees) holds 4 screenshots of the user's Malt profile (`malt1.png`–`malt4.png`): bio, stack, portfolio projects, experience, recommendations, education, certifications, skills. Use them as a content source; never commit them.
