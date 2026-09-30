@@ -68,6 +68,22 @@ function formatPoint(point: string, lang: Lang): string {
 	);
 }
 
+/** One end of a period: display text, plus a `<time datetime>` value unless it is "present". */
+export type PeriodPoint = { text: string; datetime?: string };
+
+/** The one or two ends of a period, in order; a missing end reads as `present`. */
+export function periodPoints(
+	start: string | undefined,
+	end: string | undefined,
+	lang: Lang,
+	present: string
+): PeriodPoint[] {
+	const to: PeriodPoint =
+		end === undefined ? { text: present } : { text: formatPoint(end, lang), datetime: end };
+	if (start === undefined || start === end) return [to];
+	return [{ text: formatPoint(start, lang), datetime: start }, to];
+}
+
 /** "Jul 2025 – Jan 2026", "2022 – 2026", "2024"; a missing end reads as `present`. */
 export function formatPeriod(
 	start: string | undefined,
@@ -75,9 +91,9 @@ export function formatPeriod(
 	lang: Lang,
 	present: string
 ): string {
-	const to = end === undefined ? present : formatPoint(end, lang);
-	if (start === undefined || start === end) return to;
-	return `${formatPoint(start, lang)} – ${to}`;
+	return periodPoints(start, end, lang, present)
+		.map((p) => p.text)
+		.join(' – ');
 }
 
 /** Newest first: by end (no end = ongoing = newest), then by start. For 'YYYY' or 'YYYY-MM' dates. */

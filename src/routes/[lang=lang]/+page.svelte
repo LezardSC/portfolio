@@ -21,9 +21,10 @@
 	<link rel="alternate" hreflang="fr" href={localeHref(base, 'fr')} />
 </svelte:head>
 
+<a class="skip-link" href="#main">{t.skipToContent}</a>
 <Nav lang={data.lang} {t} />
 
-<main>
+<main id="main" tabindex="-1">
 	<Hero lang={data.lang} t={t.hero} newTab={t.newTab} />
 	<About lang={data.lang} title={t.sections.about} t={t.about} />
 	<Projects lang={data.lang} title={t.sections.projects} t={t.projects} />

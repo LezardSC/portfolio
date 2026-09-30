@@ -23,7 +23,7 @@
 			{#each PROFILE.bio as paragraph, i (i)}
 				<p>{paragraph[lang]}</p>
 			{/each}
-			<ul class="facts">
+			<ul class="facts" role="list">
 				{#each PROFILE.facts as fact (fact.icon)}
 					<li><span aria-hidden="true">{fact.icon}</span> {fact.text[lang]}</li>
 				{/each}
