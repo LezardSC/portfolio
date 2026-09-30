@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { nextTheme, resolveTheme } from './theme';
+import { nextTheme, resolveTheme, themeOnSystemChange } from './theme';
 
 describe('resolveTheme', () => {
 	it('uses a valid stored choice over the system preference', () => {
@@ -18,5 +18,19 @@ describe('nextTheme', () => {
 	it('toggles', () => {
 		expect(nextTheme('dark')).toBe('light');
 		expect(nextTheme('light')).toBe('dark');
+	});
+});
+
+describe('themeOnSystemChange', () => {
+	it('follows the OS when the visitor never picked a theme', () => {
+		expect(themeOnSystemChange(null, true)).toBe('dark');
+		expect(themeOnSystemChange(null, false)).toBe('light');
+	});
+	it('treats an invalid stored value as no choice', () => {
+		expect(themeOnSystemChange('blue', false)).toBe('light');
+	});
+	it("keeps the visitor's own choice (returns null: nothing to change)", () => {
+		expect(themeOnSystemChange('dark', false)).toBeNull();
+		expect(themeOnSystemChange('light', true)).toBeNull();
 	});
 });

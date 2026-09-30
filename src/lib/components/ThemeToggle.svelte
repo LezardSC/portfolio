@@ -1,19 +1,40 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { Dict } from '$lib/i18n';
-	import { nextTheme, THEME_KEY, type Theme } from '$lib/theme';
+	import { nextTheme, THEME_KEY, themeOnSystemChange, type Theme } from '$lib/theme';
 
 	let { t }: { t: Dict['theme'] } = $props();
 
 	let theme = $state<Theme>('dark');
+	let mounted = $state(false);
+
+	function apply(next: Theme) {
+		theme = next;
+		document.documentElement.dataset.theme = next;
+	}
+
+	function stored(): string | null {
+		try {
+			return localStorage.getItem(THEME_KEY);
+		} catch {
+			return null; // storage blocked: behave as if nothing was chosen
+		}
+	}
 
 	onMount(() => {
 		theme = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+		mounted = true;
+		const dark = matchMedia('(prefers-color-scheme: dark)');
+		const onSystemChange = () => {
+			const next = themeOnSystemChange(stored(), dark.matches);
+			if (next) apply(next);
+		};
+		dark.addEventListener('change', onSystemChange);
+		return () => dark.removeEventListener('change', onSystemChange);
 	});
 
 	function toggle() {
-		theme = nextTheme(theme);
-		document.documentElement.dataset.theme = theme;
+		apply(nextTheme(theme));
 		try {
 			localStorage.setItem(THEME_KEY, theme);
 		} catch {
@@ -26,9 +47,10 @@
 	type="button"
 	class="icon-btn"
 	onclick={toggle}
-	aria-label={theme === 'dark' ? t.toLight : t.toDark}
-	title={theme === 'dark' ? t.toLight : t.toDark}
+	title={mounted ? (theme === 'dark' ? t.toLight : t.toDark) : undefined}
 >
+	<span class="sr-only to-light">{t.toLight}</span>
+	<span class="sr-only to-dark">{t.toDark}</span>
 	<svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
 		<circle cx="12" cy="12" r="4" fill="currentColor" />
 		<path
@@ -47,8 +69,8 @@
 	.icon-btn {
 		display: grid;
 		place-items: center;
-		width: 2.25rem;
-		height: 2.25rem;
+		width: var(--tap);
+		height: var(--tap);
 		border: 1px solid var(--border);
 		border-radius: 50%;
 		background: var(--surface);
@@ -58,23 +80,33 @@
 	.icon-btn:hover {
 		border-color: var(--accent);
 	}
-	/* Correct icon from first paint: keyed on the html[data-theme] the inline
-	   no-flash script sets, with a prefers-color-scheme fallback for no-JS. */
-	.icon-moon {
+	/* Correct icon and label from first paint: keyed on the html[data-theme] the inline
+	   no-flash script sets, with a prefers-color-scheme fallback for no-JS.
+	   Dark theme (default): sun icon, "switch to light" label. */
+	.icon-moon,
+	.to-dark {
 		display: none;
 	}
-	:global(:root[data-theme='light']) .icon-sun {
+	:global(:root[data-theme='light']) .icon-sun,
+	:global(:root[data-theme='light']) .to-light {
 		display: none;
 	}
 	:global(:root[data-theme='light']) .icon-moon {
 		display: block;
 	}
+	:global(:root[data-theme='light']) .to-dark {
+		display: inline;
+	}
 	@media (prefers-color-scheme: light) {
-		:global(:root:not([data-theme])) .icon-sun {
+		:global(:root:not([data-theme])) .icon-sun,
+		:global(:root:not([data-theme])) .to-light {
 			display: none;
 		}
 		:global(:root:not([data-theme])) .icon-moon {
 			display: block;
+		}
+		:global(:root:not([data-theme])) .to-dark {
+			display: inline;
 		}
 	}
 </style>
