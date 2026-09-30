@@ -75,11 +75,11 @@ export const EDUCATION: Education[] = [
 		points: [
 			{
 				en: 'RNCP 7: information systems & networks',
-				fr: 'RNCP 7 : systèmes d’information et réseaux'
+				fr: 'RNCP 7\u00a0: systèmes d’information et réseaux'
 			},
 			{
 				en: 'RNCP 6: software solutions designer-developer, web & mobile',
-				fr: 'RNCP 6 : concepteur développeur de solutions informatiques, web et mobile'
+				fr: 'RNCP 6\u00a0: concepteur développeur de solutions informatiques, web et mobile'
 			}
 		]
 	},

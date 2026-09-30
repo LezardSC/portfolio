@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
 		title: 'KAYP — H-W3B Paris',
 		description: {
 			en: 'First version of KAYP, built in a weekend: a web app to generate, exchange and store maritime bills of lading, secured and audited on the blockchain.',
-			fr: 'Première version de KAYP, construite en un week-end : une application web pour générer, échanger et stocker des connaissements maritimes, sécurisés et audités sur la blockchain.'
+			fr: 'Première version de KAYP, construite en un week-end\u00a0: une application web pour générer, échanger et stocker des connaissements maritimes, sécurisés et audités sur la blockchain.'
 		},
 		date: '2024-03',
 		context: 'hackathon',
@@ -42,7 +42,7 @@ export const PROJECTS: Project[] = [
 		title: 'ft_transcendence',
 		description: {
 			en: 'Final project of the 42 Common Core: a website for online multiplayer Pong with tournaments, e-mail-verified accounts, 3D rendering, an AI opponent and a blockchain module, in English, French and Spanish.',
-			fr: 'Projet final du tronc commun de 42 : un site de Pong multijoueur en ligne avec tournois, comptes vérifiés par e-mail, rendu 3D, IA adverse et module blockchain, en anglais, français et espagnol.'
+			fr: 'Projet final du tronc commun de 42\u00a0: un site de Pong multijoueur en ligne avec tournois, comptes vérifiés par e-mail, rendu 3D, IA adverse et module blockchain, en anglais, français et espagnol.'
 		},
 		date: '2024-08',
 		context: 'school',
@@ -56,7 +56,7 @@ export const PROJECTS: Project[] = [
 		title: 'microcode',
 		description: {
 			en: 'A small autonomous AI agent written from scratch in Python on top of a local Ollama model: raw API calls, tool schemas generated from docstrings, and a ReAct loop that chains web search, scraping, file reading and more.',
-			fr: 'Un petit agent IA autonome écrit de zéro en Python sur un modèle Ollama local : appels API bruts, schémas d’outils générés depuis les docstrings et boucle ReAct qui enchaîne recherche web, scraping, lecture de fichiers, etc.'
+			fr: 'Un petit agent IA autonome écrit de zéro en Python sur un modèle Ollama local\u00a0: appels API bruts, schémas d’outils générés depuis les docstrings et boucle ReAct qui enchaîne recherche web, scraping, lecture de fichiers, etc.'
 		},
 		date: '2026-05',
 		context: 'personal',
@@ -70,7 +70,7 @@ export const PROJECTS: Project[] = [
 		title: 'Bahapad',
 		description: {
 			en: 'A token launchpad for the Bahamut blockchain: a factory contract lets anyone deploy a custom ERC-20 token with its metadata (name, symbol, supply, image, description).',
-			fr: 'Un launchpad de tokens pour la blockchain Bahamut : un contrat factory permet à chacun de déployer son propre token ERC-20 avec ses métadonnées (nom, symbole, offre, image, description).'
+			fr: 'Un launchpad de tokens pour la blockchain Bahamut\u00a0: un contrat factory permet à chacun de déployer son propre token ERC-20 avec ses métadonnées (nom, symbole, offre, image, description).'
 		},
 		date: '2025-04',
 		context: 'hackathon',
@@ -115,7 +115,7 @@ export const PROJECTS: Project[] = [
 		title: 'tokenizer',
 		description: {
 			en: 'Altarian42, an ERC-20 token meant to modernize 42’s wallet system: capped and burnable supply, with multisignature approval of every reward.',
-			fr: 'Altarian42, un token ERC-20 pensé pour moderniser le porte-monnaie de 42 : offre plafonnée et brûlable, avec validation multisignature de chaque récompense.'
+			fr: 'Altarian42, un token ERC-20 pensé pour moderniser le porte-monnaie de 42\u00a0: offre plafonnée et brûlable, avec validation multisignature de chaque récompense.'
 		},
 		date: '2024-06',
 		context: 'school',
@@ -128,7 +128,7 @@ export const PROJECTS: Project[] = [
 		title: 'ft_linear_regression',
 		description: {
 			en: 'An introduction to machine learning: a linear regression written from scratch, with gradient descent and min–max normalization, predicting a car’s price from its mileage.',
-			fr: 'Une introduction au machine learning : une régression linéaire écrite de zéro, avec descente de gradient et normalisation min–max, qui prédit le prix d’une voiture selon son kilométrage.'
+			fr: 'Une introduction au machine learning\u00a0: une régression linéaire écrite de zéro, avec descente de gradient et normalisation min–max, qui prédit le prix d’une voiture selon son kilométrage.'
 		},
 		date: '2025-07',
 		context: 'school',
@@ -141,7 +141,7 @@ export const PROJECTS: Project[] = [
 		title: 'DSLR',
 		description: {
 			en: 'Data science × logistic regression, as a Hogwarts sorting hat: statistics recoded by hand, data visualization to pick features, then a one-vs-all logistic regression trained with gradient descent from scratch. Group project.',
-			fr: 'Data science × régression logistique, façon Choixpeau de Poudlard : statistiques recodées à la main, visualisation des données pour choisir les features, puis une régression logistique one-vs-all entraînée par descente de gradient, écrite de zéro. Projet de groupe.'
+			fr: 'Data science × régression logistique, façon Choixpeau de Poudlard\u00a0: statistiques recodées à la main, visualisation des données pour choisir les features, puis une régression logistique one-vs-all entraînée par descente de gradient, écrite de zéro. Projet de groupe.'
 		},
 		date: '2025-08',
 		context: 'school',
@@ -180,7 +180,7 @@ export const PROJECTS: Project[] = [
 		title: 'libft',
 		description: {
 			en: 'My own C standard library, the first 42 project, validated at 125%, and extended throughout the curriculum with extra functions.',
-			fr: 'Ma propre bibliothèque standard C : premier projet de 42, validé à 125 %, puis enrichie de nouvelles fonctions tout au long du cursus.'
+			fr: 'Ma propre bibliothèque standard C\u00a0: premier projet de 42, validé à 125\u00a0%, puis enrichie de nouvelles fonctions tout au long du cursus.'
 		},
 		date: '2022-11',
 		context: 'school',
@@ -206,7 +206,7 @@ export const PROJECTS: Project[] = [
 		title: 'get_next_line',
 		description: {
 			en: 'A function that reads a file descriptor one line at a time, whatever the buffer size: careful buffer handling and memory management in C.',
-			fr: 'Une fonction qui lit un descripteur de fichier ligne par ligne, quelle que soit la taille du buffer : gestion rigoureuse des buffers et de la mémoire en C.'
+			fr: 'Une fonction qui lit un descripteur de fichier ligne par ligne, quelle que soit la taille du buffer\u00a0: gestion rigoureuse des buffers et de la mémoire en C.'
 		},
 		date: '2022-11',
 		context: 'school',
@@ -219,7 +219,7 @@ export const PROJECTS: Project[] = [
 		title: 'Confiture de Jeu #1',
 		description: {
 			en: 'A 48-hour game jam in Lyon on the theme “beware of appearances”: a platformer where the hero puts on a mask to reveal hidden platforms.',
-			fr: 'Une game jam de 48 h à Lyon sur le thème « méfiez-vous des apparences » : un jeu de plateforme où le héros enfile un masque pour révéler des plateformes cachées.'
+			fr: 'Une game jam de 48 h à Lyon sur le thème «\u00a0méfiez-vous des apparences\u00a0»\u00a0: un jeu de plateforme où le héros enfile un masque pour révéler des plateformes cachées.'
 		},
 		date: '2024-03',
 		context: 'hackathon',
