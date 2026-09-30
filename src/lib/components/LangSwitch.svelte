@@ -3,14 +3,8 @@
 	import { localeHref, otherLang, type Dict, type Lang } from '$lib/i18n';
 	import { onMount } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
-	import {
-		isAtBottom,
-		savePendingSection,
-		sectionInView,
-		SECTIONS,
-		takePendingSection,
-		type SectionId
-	} from '$lib/sections';
+	import { savePendingSection, takePendingSection } from '$lib/sections';
+	import { currentSection } from '$lib/sections-dom';
 
 	let { lang, t }: { lang: Lang; t: Dict['langSwitch'] } = $props();
 
@@ -31,18 +25,11 @@
 	});
 
 	// Remember the section on screen (not the stale #hash left by the last nav click).
+	// Modified clicks (new tab, new window, download) keep their normal browser behaviour.
 	function onclick(e: MouseEvent) {
-		if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+		if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
 		e.preventDefault();
-		const tops = Object.fromEntries(
-			SECTIONS.map((id) => [
-				id,
-				document.getElementById(id)?.getBoundingClientRect().top ?? Infinity
-			])
-		) as Record<SectionId, number>;
-		const navHeight = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-		const atBottom = isAtBottom(scrollY, innerHeight, document.documentElement.scrollHeight);
-		savePendingSection(() => sessionStorage, sectionInView(tops, navHeight, atBottom));
+		savePendingSection(() => sessionStorage, currentSection());
 		location.assign(href);
 	}
 </script>
