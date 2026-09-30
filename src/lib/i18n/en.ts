@@ -51,7 +51,7 @@ export const en = {
 			games: 'Games'
 		} satisfies Record<Domain, string>,
 		sortLabel: 'Sort by',
-		sort: { featured: 'Featured', newest: 'Newest' } satisfies Record<SortKey, string>,
+		sort: { featured: 'Highlights', newest: 'Newest' } satisfies Record<SortKey, string>,
 		empty: 'No project matches these filters.',
 		reset: 'Reset filters',
 		more: 'More projects',

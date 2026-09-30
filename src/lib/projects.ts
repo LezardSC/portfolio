@@ -26,7 +26,7 @@ export type Project = {
 	/** `src`/`poster` are relative to `static/`, without a leading slash. */
 	media?: { kind: 'image' | 'video'; src: string; poster?: string };
 	award?: Localized;
-	/** Lower = earlier in the "Featured" sort. */
+	/** Lower = earlier in the "Highlights" sort (key `featured`). */
 	featured?: number;
 };
 
