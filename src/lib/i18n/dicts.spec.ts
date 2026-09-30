@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SECTIONS } from '$lib/sections';
+import { CONTEXTS, DOMAINS, SORTS } from '$lib/projects';
 import { dicts } from './index';
 import { LANGS } from './lang';
 
@@ -30,5 +31,12 @@ describe('dictionaries', () => {
 			expect(dicts[lang].nav[id]).toBeTruthy();
 			expect(dicts[lang].sections[id]).toBeTruthy();
 		}
+	});
+
+	it.each(LANGS)('%s labels every project context, domain and sort', (lang) => {
+		const p = dicts[lang].projects;
+		for (const c of CONTEXTS) expect(p.contexts[c], c).toBeTruthy();
+		for (const d of DOMAINS) expect(p.domains[d], d).toBeTruthy();
+		for (const s of SORTS) expect(p.sort[s], s).toBeTruthy();
 	});
 });
