@@ -36,22 +36,21 @@
 					<li><EducationItem {item} {lang} {t} /></li>
 				{/each}
 			</ol>
+			<h3 id="experience-hackathons" class="later">{t.hackathons}</h3>
+			<ul class="hackathons" aria-labelledby="experience-hackathons">
+				{#each hackathons as h (h.event + h.date)}
+					<li>
+						<span aria-hidden="true">{MEDAL_EMOJI[h.medal]}</span>
+						<span class="sr-only">{t.places[h.medal]}:</span>
+						{h.event}
+						{yearOf(h.date)}{#if h.project}<span class="project"
+								>{` · ${localize(h.project, lang)}`}</span
+							>{/if}
+					</li>
+				{/each}
+			</ul>
 		</div>
 	</div>
-
-	<h3 id="experience-hackathons">{t.hackathons}</h3>
-	<ul class="hackathons" aria-labelledby="experience-hackathons">
-		{#each hackathons as h (h.event + h.date)}
-			<li>
-				<span aria-hidden="true">{MEDAL_EMOJI[h.medal]}</span>
-				<span class="sr-only">{t.places[h.medal]}:</span>
-				{h.event}
-				{yearOf(h.date)}{#if h.project}<span class="project"
-						>{` · ${localize(h.project, lang)}`}</span
-					>{/if}
-			</li>
-		{/each}
-	</ul>
 </Section>
 
 <style>
@@ -59,7 +58,6 @@
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		gap: 2.5rem;
-		margin-bottom: 3rem;
 	}
 	@media (min-width: 56.25rem) {
 		.columns {
@@ -70,6 +68,9 @@
 	h3 {
 		margin: 0 0 1.25rem;
 		font-size: 1.3rem;
+	}
+	h3.later {
+		margin-top: 2.5rem;
 	}
 	.timeline {
 		margin: 0;
