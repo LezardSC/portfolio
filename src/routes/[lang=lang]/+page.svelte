@@ -23,10 +23,10 @@
 <Nav lang={data.lang} {t} />
 
 <main>
-	<Hero lang={data.lang} t={t.hero} />
+	<Hero lang={data.lang} t={t.hero} newTab={t.newTab} />
 	<About lang={data.lang} title={t.sections.about} t={t.about} />
 	<Projects lang={data.lang} title={t.sections.projects} t={t.projects} />
 	<Skills lang={data.lang} title={t.sections.skills} />
-	<Experience lang={data.lang} title={t.sections.experience} t={t.experience} />
+	<Experience lang={data.lang} title={t.sections.experience} t={t.experience} newTab={t.newTab} />
 	<Contact {t} />
 </main>

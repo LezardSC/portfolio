@@ -10,13 +10,13 @@ export const fr: Dict = {
 		available: 'Disponible',
 		projects: 'Voir les projets',
 		cv: 'Télécharger le CV',
-		github: 'GitHub',
-		newTab: '(ouvre un nouvel onglet)'
+		github: 'GitHub'
 	},
 	about: {
 		photoAlt: 'Photo de Jocelyn Renault'
 	},
 	navLabel: 'Principale',
+	newTab: '(s’ouvre dans un nouvel onglet)',
 	nav: {
 		about: 'À propos',
 		projects: 'Projets',
@@ -65,7 +65,6 @@ export const fr: Dict = {
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
-		newTab: '(s’ouvre dans un nouvel onglet)',
 		places: { 1: '1re place', 2: '2e place', 3: '3e place' }
 	},
 	theme: {

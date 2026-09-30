@@ -44,4 +44,9 @@ describe('dictionaries', () => {
 	it.each(LANGS)('%s labels every hackathon medal', (lang) => {
 		for (const m of MEDALS) expect(dicts[lang].experience.places[m], String(m)).toBeTruthy();
 	});
+
+	it.each(LANGS)('%s has a single top-level "opens in a new tab" text', (lang) => {
+		const newTabKeys = keys(dicts[lang]).filter((k) => k.endsWith('newTab'));
+		expect(newTabKeys).toEqual(['newTab']);
+	});
 });

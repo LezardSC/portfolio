@@ -12,13 +12,14 @@ export const en = {
 		available: 'Available for work',
 		projects: 'See projects',
 		cv: 'Download CV',
-		github: 'GitHub',
-		newTab: '(opens in a new tab)'
+		github: 'GitHub'
 	},
 	about: {
 		photoAlt: 'Photo of Jocelyn Renault'
 	},
 	navLabel: 'Main',
+	/** Screen-reader suffix for links that open in a new tab. */
+	newTab: '(opens in a new tab)',
 	nav: {
 		about: 'About',
 		projects: 'Projects',
@@ -67,7 +68,6 @@ export const en = {
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
-		newTab: '(opens in a new tab)',
 		places: { 1: '1st place', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>
 	},
 	theme: {
