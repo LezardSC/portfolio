@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import {
+		isAtBottom,
 		savePendingSection,
 		sectionInView,
 		SECTIONS,
@@ -40,7 +41,8 @@
 			])
 		) as Record<SectionId, number>;
 		const navHeight = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-		savePendingSection(() => sessionStorage, sectionInView(tops, navHeight));
+		const atBottom = isAtBottom(scrollY, innerHeight, document.documentElement.scrollHeight);
+		savePendingSection(() => sessionStorage, sectionInView(tops, navHeight, atBottom));
 		location.assign(href);
 	}
 </script>

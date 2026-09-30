@@ -38,12 +38,21 @@ export function takePendingSection(getStore: () => SessionStore): SectionId | nu
 /**
  * The section the reader is looking at: the last one whose top has scrolled up to the nav bar.
  * `tops` are viewport-relative (getBoundingClientRect().top). null means the hero (top of page).
+ * At the bottom of the page it is the last section, whose top may never reach the nav if it is
+ * shorter than the viewport.
  */
 export function sectionInView(
 	tops: Record<SectionId, number>,
-	navHeight: number
+	navHeight: number,
+	atBottom = false
 ): SectionId | null {
+	if (atBottom) return SECTIONS[SECTIONS.length - 1];
 	let current: SectionId | null = null;
 	for (const id of SECTIONS) if (tops[id] <= navHeight + 1) current = id;
 	return current;
+}
+
+/** Whether the page is scrolled to its end, within 2px for sub-pixel and zoom rounding. */
+export function isAtBottom(scrollY: number, viewportHeight: number, pageHeight: number): boolean {
+	return scrollY + viewportHeight >= pageHeight - 2;
 }
