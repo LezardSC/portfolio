@@ -3,13 +3,19 @@ import type { Context, Domain, SortKey } from '$lib/projects';
 
 export const en = {
 	meta: {
-		title: 'Jocelyn — Software Engineer',
+		title: 'Jocelyn Renault — Software Engineer',
 		description:
-			'Portfolio of Jocelyn, software engineer from 42 School: systems, web, blockchain and AI projects.'
+			'Portfolio of Jocelyn Renault, software engineer from 42 School: backend, systems, web, blockchain and AI projects.'
 	},
 	hero: {
-		name: 'Jocelyn',
-		tagline: 'Software engineer — systems, web, blockchain & AI.'
+		available: 'Available for work',
+		projects: 'See projects',
+		cv: 'Download CV',
+		github: 'GitHub',
+		newTab: '(opens in a new tab)'
+	},
+	about: {
+		photoAlt: 'Photo of Jocelyn Renault'
 	},
 	navLabel: 'Main',
 	nav: {
