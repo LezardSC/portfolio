@@ -1,6 +1,7 @@
 :root {
 	--nav-h: 3.5rem;
 	--radius: 0.75rem;
+	--tap: 2.25rem;
 	--font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 	color-scheme: dark;
 	--bg: #0d1117;
@@ -9,6 +10,13 @@
 	--muted: #8b949e;
 	--accent: #58a6ff;
 	--border: #30363d;
+}
+
+/* Touch screens: controls at least 44px so they are easy to hit. */
+@media (pointer: coarse) {
+	:root {
+		--tap: 2.75rem;
+	}
 }
 
 :root[data-theme='light'] {
