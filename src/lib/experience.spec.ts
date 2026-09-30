@@ -4,6 +4,7 @@ import {
 	hackathonsNewestFirst,
 	localize,
 	newestFirst,
+	quoted,
 	yearOf,
 	type Hackathon
 } from './experience';
@@ -81,5 +82,14 @@ describe('yearOf', () => {
 	it('returns the year of a month or a year', () => {
 		expect(yearOf('2025-11')).toBe('2025');
 		expect(yearOf('2024')).toBe('2024');
+	});
+});
+
+describe('quoted', () => {
+	it('uses curly quotes in English', () => {
+		expect(quoted('Serious and committed.', 'en')).toBe('“Serious and committed.”');
+	});
+	it('uses guillemets with narrow no-break spaces in French', () => {
+		expect(quoted('Sérieux et impliqué.', 'fr')).toBe('«\u202fSérieux et impliqué.\u202f»');
 	});
 });

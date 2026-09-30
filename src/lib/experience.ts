@@ -51,6 +51,11 @@ export function localize(value: string | Localized, lang: Lang): string {
 	return typeof value === 'string' ? value : value[lang];
 }
 
+/** Wraps a quotation in the language's quotation marks: “…” in English, « … » in French. */
+export function quoted(text: string, lang: Lang): string {
+	return lang === 'fr' ? `« ${text} »` : `“${text}”`;
+}
+
 /** 'YYYY' stays as is; 'YYYY-MM' becomes "Jul 2025" / "juil. 2025". UTC, so the month never shifts. */
 function formatPoint(point: string, lang: Lang): string {
 	if (/^\d{4}$/.test(point)) return point;
