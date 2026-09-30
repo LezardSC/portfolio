@@ -26,6 +26,45 @@ export const DATABASE: SkillIcon = {
 	hex: '336791'
 };
 
+/** Filled circle, counter-clockwise (same winding as `link`, so overlaps merge instead of cutting holes). */
+const node = (x: number, y: number, r: number) =>
+	`M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0z`;
+
+/** Straight bar of width `w` from (x1, y1) to (x2, y2), counter-clockwise. */
+const link = (x1: number, y1: number, x2: number, y2: number, w: number) => {
+	const len = Math.hypot(x2 - x1, y2 - y1);
+	const [nx, ny] = [(-(y2 - y1) / len) * (w / 2), ((x2 - x1) / len) * (w / 2)];
+	const pt = (x: number, y: number) => `${+x.toFixed(2)} ${+y.toFixed(2)}`;
+	return `M${pt(x1 + nx, y1 + ny)}L${pt(x2 + nx, y2 + ny)}L${pt(x2 - nx, y2 - ny)}L${pt(x1 - nx, y1 - ny)}z`;
+};
+
+const NET_LAYERS = [
+	[
+		[3.5, 7],
+		[3.5, 17]
+	],
+	[
+		[12, 4],
+		[12, 12],
+		[12, 20]
+	],
+	[[20.5, 12]]
+] as const;
+
+/** Small neural network: 2 → 3 → 1 nodes, fully connected (Deep Learning). */
+export const NEURAL_NET: SkillIcon = {
+	path:
+		NET_LAYERS.slice(1)
+			.flatMap((layer, i) =>
+				layer.flatMap(([x2, y2]) => NET_LAYERS[i].map(([x1, y1]) => link(x1, y1, x2, y2, 1.3)))
+			)
+			.join('') +
+		NET_LAYERS.flat()
+			.map(([x, y]) => node(x, y, 2.4))
+			.join(''),
+	hex: 'FF6F00'
+};
+
 /** Chat bubble with three dots cut out (Prompt engineering). */
 export const CHAT: SkillIcon = {
 	path:
