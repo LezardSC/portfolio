@@ -203,8 +203,42 @@ The recommendations were written in French (`original: 'fr'`): the FR page shows
 
 **Tests:** `experience.spec.ts` (`formatPeriod` in both languages: month range, open end, year range, single year; sort orders; `localize`); `data/experience.spec.ts` (valid `YYYY-MM` / `YYYY` dates, start ≤ end, every localized field non-empty in both languages, every job has at least one point, medals in 1–3, every `link` is `https`).
 
-## Other sections
-- **Contact:** email, GitHub, LinkedIn, CV link. No form/backend.
+## Contact & Footer
+_Settled during Milestone 6 brainstorming (2026-10-01)._
+
+No form, no backend, no phone number, no location. The site's repo stays private, so nothing links to it and there is no license.
+
+**Data:** `PROFILE` in `src/lib/data/profile.ts` gains `email: 'jocelynrenaultpro@gmail.com'`, `linkedin: 'https://www.linkedin.com/in/jocelyn-renault/'` and `malt: 'https://www.malt.fr/profile/jocelynrenault'` (next to `github` and `cv`). A pure helper in `src/lib/contact.ts` builds the tiles:
+```ts
+type ContactId = 'email' | 'linkedin' | 'github' | 'malt' | 'cv';
+type ContactLink = { id: ContactId; label: string; href: string; external: boolean };
+export function contactLinks(lang: Lang, base: string): ContactLink[];
+```
+Order and content:
+
+| id | label | href |
+|---|---|---|
+| email | jocelynrenaultpro@gmail.com | `mailto:` + email |
+| linkedin | jocelyn-renault | LinkedIn profile |
+| github | LezardSC | GitHub profile |
+| malt | Malt | Malt profile |
+| cv | "CV (PDF)" (label from the dict, passed in or resolved by the component) | `assetHref(base, PROFILE.cv[lang])` |
+
+`external` is true for everything except email.
+
+**Component:** `sections/Contact.svelte` inside `Section`, props `{ lang, title, t: Dict['contact'], newTab }` (not the full `Dict`).
+- A short muted intro line under the heading: "Open to opportunities. Email is the fastest way to reach me." / « Ouvert aux opportunités. Le plus rapide pour me joindre, c'est l'e-mail. »
+- A centered, wrapping `<ul>` of tiles, **always expanded** (logo + label, no hover-to-reveal). Tile: 1px `--border`, rounded, 28px logo, label in `--text`. Hover / `:focus-visible`: border turns `--accent` and the tile lifts slightly. Under 640px the tiles stack as full-width rows.
+- Link tiles (LinkedIn, GitHub, Malt, CV): the whole tile is the link, `target=_blank rel="noopener noreferrer"`, with the shared screen-reader new-tab text.
+- Email tile: the envelope icon is the `mailto:` link (`aria-label` "Send me an email" / « M'envoyer un e-mail »); the address is plain selectable text; a copy button (`navigator.clipboard.writeText`) shows "Copied!" / « Copié ! » for 2 s, announced through an `aria-live="polite"` region. If the write fails, the address text is selected so the visitor can press Ctrl+C.
+- Logos: GitHub and Malt from `simple-icons` (store only `{ path, hex }`), coloured with `logoColor` from `skills.ts` so a dark brand colour falls back to `--text`. LinkedIn is not in `simple-icons` (removed at LinkedIn's request): new `components/icons/LinkedInIcon.svelte`. Envelope and CV (document) are hand-drawn line icons in `--accent`, `DomainIcon` style. All logos `aria-hidden`.
+
+**Footer:** new `components/Footer.svelte`, after `<main>` in `[lang=lang]/+page.svelte`, props `{ t: Dict['footer'] }`. One slim row with a 1px `--border` top: "© {year} Jocelyn Renault" on the left, "Back to top ↑" / « Retour en haut ↑ » (link to `#hero`) on the right. `year` is the build year (`new Date().getFullYear()`, prerendered, so it updates on each rebuild). Under 640px both parts stack and center.
+
+**i18n:** new `contact` (intro, cv label, email aria-label, copy, copied) and `footer` (backToTop) keys in both dicts. The two "opens in a new tab" keys (`hero.newTab`, `experience.newTab`, whose French wording differed) merge into one top-level `newTab` ("(opens in a new tab)" / « (s’ouvre dans un nouvel onglet) ») used by Hero, Experience and Contact. The unused `placeholder` key is removed.
+
+**Tests:** `contact.spec.ts` (tile order and ids, `mailto:` href, CV href follows `lang` and `base`, `external` flags); `profile.spec` (email is a valid address, LinkedIn and Malt are `https` URLs); i18n completeness covers the new keys. Visual check with Playwright: both themes, both languages, 1280px and 375px.
+
 
 ## Testing
 - Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
