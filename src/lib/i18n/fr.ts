@@ -50,7 +50,7 @@ export const fr: Dict = {
 			games: 'Jeux'
 		},
 		sortLabel: 'Trier par',
-		sort: { featured: 'À la une', newest: 'Plus récents' },
+		sort: { featured: 'Incontournables', newest: 'Plus récents' },
 		empty: 'Aucun projet ne correspond à ces filtres.',
 		reset: 'Réinitialiser les filtres',
 		more: 'Autres projets',

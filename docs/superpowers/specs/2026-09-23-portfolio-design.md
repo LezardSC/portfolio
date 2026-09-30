@@ -56,11 +56,11 @@ type Project = {
   links: { repo?: string; demo?: string };   // both optional: private projects have none
   media?: { kind: 'image' | 'video'; src: string; poster?: string }; // files in static/projects/
   award?: Localized;
-  featured?: number;       // lower = shown first in "Featured" sort
+  featured?: number;       // lower = shown first in the "Highlights" sort
 };
 ```
 - **Filters:** group *Context* (All, Professional, Personal, School, Hackathon — game jams count as Hackathon) and group *Domain* (All, Web, Blockchain, AI, Low-level, Games). One active chip per group; groups combine with AND. Each chip shows a count computed against the other group's current selection.
-- **Sort:** Featured (default; projects with `featured` first, ascending, then the rest newest first) | Newest.
+- **Sort:** Highlights / Incontournables (key `featured`; default; projects with `featured` first, ascending, then the rest newest first) | Newest.
 - **Empty state:** "No project matches" + reset button.
 - **Two tiers (by position, after filter + sort):** the first **6** results render as **large cards, 2 per row** (1 on mobile); all remaining results render as **small cards, 3 per row** (1–2 on smaller screens).
   - *Large card:* 16:9 media on top (image, or muted looping video that autoplays only while in view and never under `prefers-reduced-motion`, showing the poster instead); below it date · context, title, award badge, description, tech tags, link icons.
