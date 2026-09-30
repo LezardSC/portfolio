@@ -37,18 +37,19 @@
 				{/each}
 			</ol>
 			<h3 id="experience-hackathons" class="later">{t.hackathons}</h3>
-			<ul class="hackathons" aria-labelledby="experience-hackathons">
+			<ol class="timeline compact" aria-labelledby="experience-hackathons">
 				{#each hackathons as h (h.event + h.date)}
 					<li>
-						<span aria-hidden="true">{MEDAL_EMOJI[h.medal]}</span>
-						<span class="sr-only">{t.places[h.medal]}:</span>
-						{#if h.fullName}<abbr title={h.fullName}>{h.event}</abbr>{:else}{h.event}{/if}
-						{yearOf(h.date)}{#if h.project}<span class="project"
-								>{` · ${localize(h.project, lang)}`}</span
-							>{/if}
+						<span class="medal" aria-hidden="true">{MEDAL_EMOJI[h.medal]}</span>
+						<p class="event">
+							<span class="sr-only">{t.places[h.medal]}:</span>
+							{#if h.fullName}<abbr title={h.fullName}>{h.event}</abbr>{:else}{h.event}{/if}
+							{yearOf(h.date)}
+						</p>
+						{#if h.project}<p class="project">{localize(h.project, lang)}</p>{/if}
 					</li>
 				{/each}
-			</ul>
+			</ol>
 		</div>
 	</div>
 </Section>
@@ -97,23 +98,31 @@
 		background: var(--accent);
 		box-shadow: 0 0 0 3px var(--bg);
 	}
-	.hackathons {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.6rem;
-		margin: 0;
-		padding: 0;
-		list-style: none;
+	/* Hackathons: tighter entries, and the medal replaces the dot, centred on the line. */
+	.compact > li {
+		padding-bottom: 1rem;
 	}
-	.hackathons li {
-		max-width: 100%;
-		padding: 0.45rem 0.9rem;
-		border: 1px solid var(--border);
-		border-radius: var(--radius);
-		font-weight: 500;
+	.compact > li::before {
+		content: none;
+	}
+	.medal {
+		position: absolute;
+		left: calc(-0.8rem - 1px);
+		top: 0;
+		width: 1.6rem;
+		text-align: center;
+		line-height: 1.6;
+		background: var(--bg);
+	}
+	.event,
+	.project {
+		margin: 0;
+	}
+	.event {
+		font-weight: 600;
 	}
 	.project {
+		font-size: 0.9rem;
 		color: var(--muted);
-		font-weight: 400;
 	}
 </style>
