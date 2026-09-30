@@ -1,5 +1,6 @@
 import type { SectionId } from '$lib/sections';
 import type { Context, Domain, SortKey } from '$lib/projects';
+import type { Medal } from '$lib/experience';
 
 export const en = {
 	meta: {
@@ -58,6 +59,16 @@ export const en = {
 		private: 'Private',
 		repo: 'Source code on GitHub',
 		demo: 'Live demo'
+	},
+	experience: {
+		work: 'Experience',
+		education: 'Education',
+		hackathons: 'Hackathons',
+		present: 'Present',
+		internship: 'Internship',
+		translated: '(translated from French)',
+		newTab: '(opens in a new tab)',
+		places: { 1: '1st place', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>
 	},
 	theme: {
 		toLight: 'Switch to light theme',
