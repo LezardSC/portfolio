@@ -33,6 +33,7 @@ npm install
 | `docs: add Milestone 3 review guide` | this file |
 | `fix: language switch lands on the section in view` | review feedback |
 | `feat: glide to the current section after a language switch` | review feedback |
+| `feat: rename the Featured sort to Highlights` | review feedback |
 
 Task 5 (build verification) changed no files.
 
@@ -65,6 +66,9 @@ Language switch (the fix from your first review):
 - [ ] Click **About** in the nav, scroll back to the very top, then switch language: you stay at the top.
 - [ ] Scroll into Projects without clicking a link, then switch language: the new page opens at the top, then glides smoothly to the start of Projects. The URL has no `#projects`.
 - [ ] With reduced motion on (DevTools → Rendering → `prefers-reduced-motion: reduce`), the same switch jumps to Projects without animating.
+
+Projects sort:
+- [ ] The sort menu reads **Highlights / Newest** in EN and **Incontournables / Plus récents** in FR.
 
 Both themes (toggle in the nav):
 - [ ] The primary button is readable in dark and light mode.
