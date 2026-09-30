@@ -137,6 +137,32 @@ export const PROJECTS: Project[] = [
 		links: { repo: gh('42-ft_linear_regression') }
 	},
 	{
+		id: 'dslr',
+		title: 'DSLR',
+		description: {
+			en: 'Data science × logistic regression, as a Hogwarts sorting hat: statistics recoded by hand, data visualization to pick features, then a one-vs-all logistic regression trained with gradient descent from scratch. Group project.',
+			fr: 'Data science × régression logistique, façon Choixpeau de Poudlard : statistiques recodées à la main, visualisation des données pour choisir les features, puis une régression logistique one-vs-all entraînée par descente de gradient, écrite de zéro. Projet de groupe.'
+		},
+		date: '2025-08',
+		context: 'school',
+		domains: ['ai'],
+		tech: ['Python', 'Matplotlib'],
+		links: {}
+	},
+	{
+		id: 'leaffliction',
+		title: 'Leaffliction',
+		description: {
+			en: 'Leaf disease classification from photos with a convolutional neural network in PyTorch, with data augmentation to balance the dataset and PlantCV image transformations.',
+			fr: 'Classification de maladies des feuilles à partir de photos avec un réseau de neurones convolutif en PyTorch, avec de l’augmentation de données pour équilibrer le dataset et des transformations d’images PlantCV.'
+		},
+		date: '2025-12',
+		context: 'school',
+		domains: ['ai'],
+		tech: ['Python', 'PyTorch', 'PlantCV'],
+		links: { repo: gh('42-Leaffliction') }
+	},
+	{
 		id: 'libasm',
 		title: 'libasm',
 		description: {
