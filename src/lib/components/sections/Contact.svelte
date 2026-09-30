@@ -14,6 +14,7 @@
 	}: { lang: Lang; title: string; t: Dict['contact']; newTab: string } = $props();
 
 	const links = $derived(contactLinks(lang, base, t.cv));
+	const [local, domain] = PROFILE.email.split('@');
 
 	let copied = $state(false);
 	let address: HTMLElement | undefined = $state();
@@ -47,7 +48,8 @@
 						<a class="mail" href={link.href} aria-label={t.emailLabel}>
 							<ContactIcon id="email" />
 						</a>
-						<span class="label" bind:this={address}>{link.label}</span>
+						<!-- <wbr> lets a narrow screen break the address after the @, not mid-word. -->
+						<span class="label" bind:this={address}>{local}@<wbr />{domain}</span>
 						<button type="button" class="copy" onclick={copy}>
 							{copied ? t.copied : t.copy}
 						</button>
