@@ -32,6 +32,15 @@ describe('profile data', () => {
 		expect(PROFILE.github).toMatch(/^https:\/\/github\.com\//);
 	});
 
+	it('has a plain email address', () => {
+		expect(PROFILE.email).toMatch(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i);
+	});
+
+	it('links LinkedIn and Malt profiles over https', () => {
+		expect(PROFILE.linkedin).toMatch(/^https:\/\/www\.linkedin\.com\/in\/[^/]+\/?$/);
+		expect(PROFILE.malt).toMatch(/^https:\/\/www\.malt\.fr\/profile\/[^/]+$/);
+	});
+
 	it('points the CV of every language and the photo at relative files in static/', () => {
 		const paths = [...LANGS.map((l) => PROFILE.cv[l]), PROFILE.photo];
 		const bad = paths.filter((p) => p.startsWith('/') || !existsSync(staticFile(p)));

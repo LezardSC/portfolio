@@ -9,7 +9,10 @@ export type Profile = {
 	/** About paragraphs, in order. */
 	bio: Localized[];
 	facts: Fact[];
+	email: string;
+	linkedin: string;
 	github: string;
+	malt: string;
 	/** Paths relative to static/, resolved with assetHref. */
 	cv: Record<Lang, string>;
 	photo: string;
@@ -45,7 +48,10 @@ export const PROFILE: Profile = {
 		{ icon: '🎓', text: { en: '42 Lyon (RNCP 7)', fr: '42 Lyon (RNCP 7)' } },
 		{ icon: '🗣', text: { en: 'French / English', fr: 'Français / Anglais' } }
 	],
+	email: 'jocelynrenaultpro@gmail.com',
+	linkedin: 'https://www.linkedin.com/in/jocelyn-renault/',
 	github: 'https://github.com/LezardSC',
+	malt: 'https://www.malt.fr/profile/jocelynrenault',
 	cv: { en: 'cv-en.pdf', fr: 'cv-fr.pdf' },
 	photo: 'photo.jpg',
 	available: false
