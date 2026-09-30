@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SKILL_GROUPS } from '$lib/data/skills';
 	import type { Lang } from '$lib/i18n';
-	import { skillName } from '$lib/skills';
+	import { logoColor, skillName, THEME_BG } from '$lib/skills';
 	import Section from '../Section.svelte';
 	import SkillGroupIcon from '../skills/SkillGroupIcon.svelte';
 
@@ -18,11 +18,14 @@
 				</h3>
 				<ul>
 					{#each group.skills as skill (skillName(skill, 'en'))}
-						<li>
+						<li
+							style:--logo-dark={logoColor(skill.icon.hex, THEME_BG.dark)}
+							style:--logo-light={logoColor(skill.icon.hex, THEME_BG.light)}
+						>
 							<svg
 								viewBox="0 0 24 24"
-								width="16"
-								height="16"
+								width="22"
+								height="22"
 								fill="currentColor"
 								aria-hidden="true"
 							>
@@ -61,7 +64,7 @@
 	ul {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: 0.6rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
@@ -69,17 +72,26 @@
 	li {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.4rem;
+		gap: 0.55rem;
 		max-width: 100%;
-		padding: 0.3rem 0.75rem;
+		padding: 0.45rem 0.9rem;
 		border: 1px solid var(--border);
 		border-radius: 999px;
-		font-size: 0.9rem;
+		font-weight: 500;
 		color: var(--text);
 	}
+	/* Brand colour per theme (computed by logoColor); same theme selectors as src/app.css. */
 	li svg {
 		flex-shrink: 0;
-		color: var(--muted);
+		color: var(--logo-dark);
+	}
+	:global(:root[data-theme='light']) li svg {
+		color: var(--logo-light);
+	}
+	@media (prefers-color-scheme: light) {
+		:global(:root:not([data-theme])) li svg {
+			color: var(--logo-light);
+		}
 	}
 	@media (max-width: 64rem) {
 		.groups {
