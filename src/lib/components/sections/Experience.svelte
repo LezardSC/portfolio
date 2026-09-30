@@ -47,7 +47,7 @@
 					<li>
 						<span class="medal" aria-hidden="true">{MEDAL_EMOJI[h.medal]}</span>
 						<p class="event">
-							<span class="sr-only">{t.places[h.medal]}:</span>
+							<span class="sr-only">{t.places[h.medal]}</span>
 							{#if h.fullName}<abbr title={h.fullName}>{h.event}</abbr>{:else}{h.event}{/if}
 							<time datetime={h.date}>{yearOf(h.date)}</time>
 						</p>
