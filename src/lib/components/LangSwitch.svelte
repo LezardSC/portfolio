@@ -1,14 +1,35 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { localeHref, otherLang, type Dict, type Lang } from '$lib/i18n';
-	import { sectionInView, SECTIONS, type SectionId } from '$lib/sections';
+	import { onMount } from 'svelte';
+	import { prefersReducedMotion } from 'svelte/motion';
+	import {
+		savePendingSection,
+		sectionInView,
+		SECTIONS,
+		takePendingSection,
+		type SectionId
+	} from '$lib/sections';
 
 	let { lang, t }: { lang: Lang; t: Dict['langSwitch'] } = $props();
 
 	const target = $derived(otherLang(lang));
 	const href = $derived(localeHref(base, target));
 
-	// Land on the section on screen, not the stale #hash left by the last nav click.
+	// After a language switch the new page opens at the top, then glides to the section the
+	// reader was on, so they can see where they are. A short pause lets the top register first.
+	onMount(() => {
+		const id = takePendingSection(() => sessionStorage);
+		if (!id) return;
+		const timer = setTimeout(() => {
+			document
+				.getElementById(id)
+				?.scrollIntoView({ behavior: prefersReducedMotion.current ? 'instant' : 'smooth' });
+		}, 250);
+		return () => clearTimeout(timer);
+	});
+
+	// Remember the section on screen (not the stale #hash left by the last nav click).
 	function onclick(e: MouseEvent) {
 		if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
 		e.preventDefault();
@@ -19,8 +40,8 @@
 			])
 		) as Record<SectionId, number>;
 		const navHeight = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-		const id = sectionInView(tops, navHeight);
-		location.assign(id ? `${href}#${id}` : href);
+		savePendingSection(() => sessionStorage, sectionInView(tops, navHeight));
+		location.assign(href);
 	}
 </script>
 
