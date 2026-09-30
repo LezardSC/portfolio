@@ -30,10 +30,13 @@ src/
     i18n/en.ts, fr.ts, index.ts # UI strings; fr typed as `typeof en` shape (Dict)
     data/projects.ts            # typed project entries
     data/profile.ts             # name, role, pitch, bio, facts, links, CV/photo paths
-    data/skills.ts, experience.ts
+    data/skills.ts, skill-icons.ts  # skill groups; hand-drawn icon paths
+    data/experience.ts
+    skills.ts                   # pure skillName()
     paths.ts                    # pure assetHref(base, path)
     projects.ts                 # pure filterProjects() + counts
     components/Nav.svelte, ThemeToggle.svelte, LangSwitch.svelte
+    components/skills/SkillGroupIcon.svelte
     components/projects/ProjectFilters, ProjectCardLarge, ProjectCardSmall, ProjectMedia, ProjectLinks, DomainIcon (.svelte)
     components/sections/Hero|About|Projects|Skills|Experience|Contact.svelte
 static/  projects/* (images/videos), cv-en.pdf, cv-fr.pdf, photo.jpg
@@ -111,13 +114,47 @@ Bio draft (Jocelyn edits freely):
 
 **Tests:** `assetHref` (empty and non-empty `base`, no `//`); `profile.spec.ts` (CV and photo files exist in `static/`, every localized field non-empty in both languages, `github` is `https`).
 
+## Skills
+_Settled during Milestone 4 brainstorming (2026-09-30)._
+
+A **static showcase**: grouped skill chips with logos. Nothing is clickable and nothing is linked to the Projects filters; no percentage bars, no levels.
+
+**Data** in `src/lib/data/skills.ts`:
+```ts
+type SkillIcon = { path: string };                 // one 24×24 SVG path, filled with currentColor
+type Skill = { name: string | Localized; icon: SkillIcon };
+type SkillGroupId = 'backend' | 'systems' | 'devops' | 'ai' | 'blockchain' | 'frontend';
+type SkillGroup = { id: SkillGroupId; title: Localized; skills: Skill[] };
+export const SKILL_GROUPS: SkillGroup[];
+```
+- **Brand icons** come from `simple-icons` (CC0, devDependency), imported one by one (`import { siRust } from 'simple-icons'`) so only the used ones end up in the build. Always monochrome (`currentColor`), never brand colours, so they read in both themes.
+- **Hand-drawn icons** for skills without a logo, in `src/lib/data/skill-icons.ts`, same `{ path }` shape: Hardhat (hard hat with an Ethereum diamond cut out; drawn from scratch, not copied), x86-64 Assembly (CPU chip), SQL (database cylinder), Prompt engineering (chat bubble).
+- Names are plain strings except translatable ones, which are `{ en, fr }`. Pure `skillName(skill, lang)` in `src/lib/skills.ts` resolves either.
+- Each skill appears in exactly one group.
+
+**Content**, groups in this order (leads with the backend & systems positioning), chips in the order listed:
+
+| Group (EN / FR) | Skills (icon) |
+|---|---|
+| Backend / Backend | Python · Node.js · Express · Django · Java (OpenJDK) · SQL (hand-drawn) · PostgreSQL |
+| Systems & Low-level / Systèmes & bas niveau | Rust · C · x86-64 Assembly (hand-drawn) · Linux |
+| DevOps & Tools / DevOps & outils | Docker · Kubernetes · Nginx · GitHub Actions (CI/CD) · Git |
+| AI & ML / IA & ML | PyTorch · scikit-learn · pandas · Computer Vision / Vision par ordinateur (OpenCV) · LLM agents / Agents LLM (Ollama) · Prompt engineering / Ingénierie de prompts (hand-drawn) |
+| Blockchain / Blockchain | Solidity · Hardhat (hand-drawn) · Solana · XRPL (XRP) · IPFS |
+| Frontend / Frontend | TypeScript · JavaScript · SvelteKit (Svelte) · React · Tailwind CSS |
+
+Deliberately left out: C# and a Game dev group (not enough to fill it yet), NumPy (implied by PyTorch/pandas), Jupyter (an environment, not a skill), a separate "Languages" group (languages sit in the group they belong to).
+
+**Components:** `sections/Skills.svelte` inside `Section`, props `{ lang, title }` (no dict needed). Grid: 3 columns on desktop, 2 on tablet, 1 under 640px. Each group is an `<article>` deliberately unlike the project cards: transparent background, no side/bottom borders, a 3px `--accent` top border; header = line icon from `components/skills/SkillGroupIcon.svelte` (DomainIcon style, one shape per group id, `aria-hidden`) + `h3` title. Chips are a `<ul>` of pills: 1px `--border`, ~16px logo in `--muted` (`aria-hidden`), name in `--text`. No hover effect (nothing is clickable).
+
+**Tests:** `skills.spec.ts` (`skillName` with string and localized names); `data/skills.spec.ts` (unique group ids, unique skill names across all groups, every group non-empty, every localized field non-empty in both languages, every icon path non-empty and starting with `M`/`m`).
+
 ## Other sections
-- **Skills:** grouped lists (Languages, Web, Blockchain, Tools) with icons; no percentage bars.
 - **Experience/Education:** vertical timeline (42 School, jobs, hackathon results).
 - **Contact:** email, GitHub, LinkedIn, CV link. No form/backend.
 
 ## Testing
-- Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); i18n completeness (fr keys == en keys).
+- Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; i18n completeness (fr keys == en keys).
 - `svelte-check` clean.
 - `npm run build` prerenders `/en` and `/fr` without errors; `npm run preview` manual check of theme toggle, language switch, filters.
 
