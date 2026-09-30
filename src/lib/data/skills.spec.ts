@@ -44,4 +44,11 @@ describe('skill data', () => {
 			.map((s) => skillName(s, 'en'));
 		expect(bad).toEqual([]);
 	});
+
+	it('gives every skill a brand colour as 6 hex digits without #', () => {
+		const bad = allSkills
+			.filter((s) => !/^[0-9A-F]{6}$/i.test(s.icon.hex))
+			.map((s) => skillName(s, 'en'));
+		expect(bad).toEqual([]);
+	});
 });
