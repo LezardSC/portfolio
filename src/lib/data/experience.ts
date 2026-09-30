@@ -103,11 +103,9 @@ export const HACKATHONS: Hackathon[] = [
 	{ medal: 3, event: 'Paris Blockchain Week', date: '2025-04', project: 'Bahapad' },
 	{
 		medal: 3,
-		event: 'Commissariat au Numérique de Défense',
+		event: 'CND',
+		fullName: 'Commissariat au Numérique de Défense',
 		date: '2025-11',
-		project: {
-			en: 'Firewall log triage for the armed forces',
-			fr: 'Tri de logs pare-feu pour les armées'
-		}
+		project: { en: 'Firewall log triage', fr: 'Tri de logs pare-feu' }
 	}
 ];

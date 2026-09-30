@@ -41,7 +41,10 @@ export const MEDAL_EMOJI: Record<Medal, string> = { 1: '🥇', 2: '🥈', 3: '�
 
 export type Hackathon = {
 	medal: Medal;
+	/** Short name shown on the pill (an acronym when the full name is long). */
 	event: string;
+	/** Full name when `event` is an acronym; shown as its tooltip. */
+	fullName?: string;
 	date: Month;
 	/** Project name, or a description when it has no name. */
 	project?: string | Localized;
