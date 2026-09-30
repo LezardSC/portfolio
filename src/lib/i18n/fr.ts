@@ -73,6 +73,9 @@ export const fr: Dict = {
 		copy: 'Copier',
 		copied: 'Copié\u00a0!'
 	},
+	footer: {
+		backToTop: 'Retour en haut'
+	},
 	theme: {
 		toLight: 'Passer au thème clair',
 		toDark: 'Passer au thème sombre'

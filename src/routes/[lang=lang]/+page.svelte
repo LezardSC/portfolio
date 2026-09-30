@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { localeHref } from '$lib/i18n/lang';
+	import Footer from '$lib/components/Footer.svelte';
 	import Nav from '$lib/components/Nav.svelte';
 	import About from '$lib/components/sections/About.svelte';
 	import Contact from '$lib/components/sections/Contact.svelte';
@@ -30,3 +31,5 @@
 	<Experience lang={data.lang} title={t.sections.experience} t={t.experience} newTab={t.newTab} />
 	<Contact lang={data.lang} title={t.sections.contact} t={t.contact} newTab={t.newTab} />
 </main>
+
+<Footer t={t.footer} />
