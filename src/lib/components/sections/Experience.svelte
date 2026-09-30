@@ -28,7 +28,7 @@
 	<div class="columns">
 		<div>
 			<h3 id="experience-work">{t.work}</h3>
-			<ol class="timeline" aria-labelledby="experience-work">
+			<ol role="list" class="timeline" aria-labelledby="experience-work">
 				{#each jobs as job (job.company + job.start)}
 					<li><JobItem {job} {lang} {t} /></li>
 				{/each}
@@ -36,20 +36,20 @@
 		</div>
 		<div>
 			<h3 id="experience-education">{t.education}</h3>
-			<ol class="timeline" aria-labelledby="experience-education">
+			<ol role="list" class="timeline" aria-labelledby="experience-education">
 				{#each education as item (item.school + item.end)}
 					<li><EducationItem {item} {lang} {t} {newTab} /></li>
 				{/each}
 			</ol>
 			<h3 id="experience-hackathons" class="later">{t.hackathons}</h3>
-			<ol class="timeline compact" aria-labelledby="experience-hackathons">
+			<ol role="list" class="timeline compact" aria-labelledby="experience-hackathons">
 				{#each hackathons as h (h.event + h.date)}
 					<li>
 						<span class="medal" aria-hidden="true">{MEDAL_EMOJI[h.medal]}</span>
 						<p class="event">
 							<span class="sr-only">{t.places[h.medal]}:</span>
 							{#if h.fullName}<abbr title={h.fullName}>{h.event}</abbr>{:else}{h.event}{/if}
-							{yearOf(h.date)}
+							<time datetime={h.date}>{yearOf(h.date)}</time>
 						</p>
 						{#if h.project}<p class="project">{localize(h.project, lang)}</p>{/if}
 					</li>

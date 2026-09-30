@@ -1,17 +1,18 @@
 <script lang="ts">
 	import type { Dict, Lang } from '$lib/i18n';
-	import { formatPeriod, quoted, type Job } from '$lib/experience';
+	import { periodPoints, quoted, type Job } from '$lib/experience';
 	import TechTags from '../projects/TechTags.svelte';
+	import Period from './Period.svelte';
 
 	let { job, lang, t }: { job: Job; lang: Lang; t: Dict['experience'] } = $props();
-
-	const period = $derived(
-		formatPeriod(job.start, job.end, lang, t.present) + (job.internship ? ` · ${t.internship}` : '')
-	);
 </script>
 
 <article>
-	<p class="period">{period}</p>
+	<p class="period">
+		<Period
+			points={periodPoints(job.start, job.end, lang, t.present)}
+		/>{#if job.internship}{' · '}{t.internship}{/if}
+	</p>
 	<h4>{job.role[lang]}</h4>
 	<p class="org">{job.company}</p>
 	<ul class="points">

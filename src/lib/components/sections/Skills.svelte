@@ -16,7 +16,7 @@
 					<span class="group-icon"><SkillGroupIcon id={group.id} /></span>
 					{group.title[lang]}
 				</h3>
-				<ul>
+				<ul role="list">
 					{#each group.skills as skill (skillName(skill, 'en'))}
 						<li
 							style:--logo-dark={logoColor(skill.icon.hex, THEME_BG.dark)}

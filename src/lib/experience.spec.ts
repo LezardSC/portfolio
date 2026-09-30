@@ -4,6 +4,7 @@ import {
 	hackathonsNewestFirst,
 	localize,
 	newestFirst,
+	periodPoints,
 	quoted,
 	yearOf,
 	type Hackathon
@@ -41,6 +42,29 @@ describe('formatPeriod', () => {
 	it('shows the end alone when there is no start or start equals end', () => {
 		expect(formatPeriod(undefined, '2024', 'fr', "Aujourd'hui")).toBe('2024');
 		expect(formatPeriod('2024', '2024', 'en', 'Present')).toBe('2024');
+	});
+});
+
+describe('periodPoints', () => {
+	it('gives each end of a range its text and machine-readable date', () => {
+		expect(periodPoints('2025-07', '2026-01', 'en', 'Present')).toEqual([
+			{ text: 'Jul 2025', datetime: '2025-07' },
+			{ text: 'Jan 2026', datetime: '2026-01' }
+		]);
+	});
+	it('gives "present" no date', () => {
+		expect(periodPoints('2026-02', undefined, 'fr', 'Aujourd’hui')).toEqual([
+			{ text: 'févr. 2026', datetime: '2026-02' },
+			{ text: 'Aujourd’hui' }
+		]);
+	});
+	it('collapses to one point when there is no start or start equals end', () => {
+		expect(periodPoints(undefined, '2024', 'en', 'Present')).toEqual([
+			{ text: '2024', datetime: '2024' }
+		]);
+		expect(periodPoints('2024', '2024', 'en', 'Present')).toEqual([
+			{ text: '2024', datetime: '2024' }
+		]);
 	});
 });
 

@@ -2,7 +2,7 @@
 	let { tech }: { tech: string[] } = $props();
 </script>
 
-<ul>
+<ul role="list">
 	{#each tech as tag (tag)}
 		<li>{tag}</li>
 	{/each}

@@ -40,7 +40,7 @@
 
 <Section id="contact" {title}>
 	<p class="intro">{t.intro}</p>
-	<ul class="tiles">
+	<ul class="tiles" role="list">
 		{#each links as link (link.id)}
 			<li>
 				{#if link.id === 'email'}
