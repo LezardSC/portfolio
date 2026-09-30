@@ -72,7 +72,7 @@ type Project = {
 - **Links:** GitHub and demo icons (`target=_blank rel=noopener noreferrer`) are the accessible links. The large card's media and the small card's title also link to the primary link (repo, else demo) — the media link is `tabindex=-1 aria-hidden` to avoid duplicate focus stops. No link at all → a "Private" tag, nothing clickable.
 - **Logic:** pure, unit-tested functions in `src/lib/projects.ts`: `filterProjects`, `sortProjects`, `countFor`, `splitTiers(list, 6)`, `primaryLink`. Components only render; filter/sort state lives in `sections/Projects.svelte`.
 - **Animation:** both tiers use `animate:flip` + fade-in (duration 0 under `prefers-reduced-motion`). Outgoing cards leave immediately (no fade-out: it would hold their grid cell and shove the others); a project moving between tiers fades into its new tier.
-- **Initial content:** at least one project per context. Professional: GoldenEye data augmentation (SogetiLabs/Capgemini, private). Hackathon: KAYP (PBW 2024 winner; links to the backend repo), KAYP-H-WEB3PARIS (winner), Bahapad (PBW 2025 3rd), GameJam Confiture de jeu, Love_Takedown. School: libft, ft_printf, get_next_line, libasm, ft_linear_regression, tokenizer, tokenizArt, ft_transcendence. Personal: microcode. Descriptions drafted from READMEs; Jocelyn edits the list freely afterwards.
+- **Initial content:** at least one project per context. Professional: GoldenEye data augmentation (SogetiLabs/Capgemini, private). Hackathon: KAYP (PBW 2024 winner; links to the backend repo), KAYP-H-WEB3PARIS (winner), Bahapad (PBW 2025 3rd), GameJam Confiture de jeu, Love_Takedown. School: libft, ft_printf, get_next_line, libasm, ft_linear_regression, DSLR (group project; repo is a teammate's), Leaffliction (added in M4), tokenizer, tokenizArt, ft_transcendence. Personal: microcode. Descriptions drafted from READMEs; Jocelyn edits the list freely afterwards.
 
 ## Hero + About
 _Settled during Milestone 3 brainstorming (2026-09-30)._
@@ -140,11 +140,11 @@ export const SKILL_GROUPS: SkillGroup[];
 | Backend / Backend | Python · Node.js · Express · Django · Java (OpenJDK) · SQL (hand-drawn) · PostgreSQL |
 | Systems & Low-level / Systèmes & bas niveau | Rust · C · x86-64 Assembly (hand-drawn) · Linux |
 | DevOps & Tools / DevOps & outils | Docker · Kubernetes · Nginx · GitHub Actions (CI/CD) · Git |
-| AI & ML / IA & ML | PyTorch · scikit-learn · pandas · Computer Vision / Vision par ordinateur (OpenCV) · LLM agents / Agents LLM (Ollama) · Prompt engineering / Ingénierie de prompts (hand-drawn) |
+| AI & ML / IA & ML | PyTorch · scikit-learn · Deep Learning (hand-drawn neural network) · Computer Vision (OpenCV) · LLM agents / Agents LLM (Ollama) · Prompt engineering (hand-drawn) |
 | Blockchain / Blockchain | Solidity · Hardhat (hand-drawn) · Solana · XRPL (XRP) · IPFS |
 | Frontend / Frontend | TypeScript · JavaScript · SvelteKit (Svelte) · React · Tailwind CSS |
 
-Deliberately left out: C# and a Game dev group (not enough to fill it yet), NumPy (implied by PyTorch/pandas), Jupyter (an environment, not a skill), a separate "Languages" group (languages sit in the group they belong to).
+Deliberately left out: C# and a Game dev group (not enough to fill it yet), NumPy and pandas (assumed for anyone doing Python data work; they tell a recruiter nothing), Jupyter (an environment, not a skill), a separate "Languages" group (languages sit in the group they belong to). "Computer Vision" and "Prompt engineering" stay in English on the French page, because French tech job ads use the English terms ("Vision par ordinateur" reads as academic). "Deep Learning" is backed by Leaffliction (CNN); the multilayer perceptron is not listed until it's finished.
 
 **Components:** `sections/Skills.svelte` inside `Section`, props `{ lang, title }` (no dict needed). Grid: 3 columns on desktop, 2 on tablet, 1 under 640px. Each group is an `<article>` deliberately unlike the project cards: transparent background, no side/bottom borders, a 3px `--accent` top border; header = line icon from `components/skills/SkillGroupIcon.svelte` (DomainIcon style, one shape per group id, `aria-hidden`) + `h3` title. Chips are a `<ul>` of pills: 1px `--border`, 22px logo in its brand colour (`aria-hidden`), name in `--text` at 1rem, weight 500. No hover effect (nothing is clickable).
 

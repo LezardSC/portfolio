@@ -32,6 +32,7 @@ npm install
 | `feat: render skills section with grouped logo chips` | Task 3 |
 | `docs: add Milestone 4 review guide` | this file |
 | `feat: show skill logos in brand colours, with bigger chips` | review feedback: grey logos were hard to scan |
+| `feat: add Deep Learning skill and the DSLR and Leaffliction projects` | review feedback: pandas dropped, English CV/prompt terms |
 
 ## 1. Automated checks
 
@@ -54,10 +55,10 @@ npm run preview    # http://localhost:4173
 
 Skills (`/en/#skills`, then `/fr/#skills`):
 - [ ] Six groups in this order: **Backend, Systems & Low-level, DevOps & Tools, AI & ML, Blockchain, Frontend**.
-- [ ] On `/fr/`: *Systèmes & bas niveau*, *DevOps & outils*, *IA & ML*. The three translated chips read *Vision par ordinateur*, *Agents LLM* and *Ingénierie de prompts*. Everything else stays in English: brand names, and Backend, Blockchain and Frontend, which are the same in French.
+- [ ] On `/fr/`: *Systèmes & bas niveau*, *DevOps & outils*, *IA & ML*. The only translated chip is *Agents LLM*. Everything else stays in English: brand names, *Computer Vision*, *Prompt engineering* and *Deep Learning* (the terms French job ads use), and Backend, Blockchain and Frontend, which are the same in French.
 - [ ] Each group has a thin accent line on top, an accent line icon and a title. There's no background and no side borders, so it looks clearly different from the project cards.
 - [ ] Every chip has its logo in brand colours (22px) and the name. Your main skills are quick to spot by their logo.
-- [ ] The four hand-drawn logos look right at chip size: **SQL** (database cylinder), **x86-64 Assembly** (CPU chip), **Prompt engineering** (chat bubble with 3 dots) and **Hardhat** (hard hat with an Ethereum diamond).
+- [ ] The five hand-drawn logos look right at chip size: **SQL** (database cylinder), **x86-64 Assembly** (CPU chip), **Prompt engineering** (chat bubble with 3 dots) and **Hardhat** (hard hat with an Ethereum diamond).
 - [ ] Nothing in the section reacts to hover or click.
 
 Both themes (toggle in the nav):
@@ -66,18 +67,19 @@ Both themes (toggle in the nav):
 
 Widths (DevTools device mode):
 - [ ] 3 columns on a wide screen, 2 columns below ~1024px, 1 column below 640px.
-- [ ] At 360px on `/fr/`, nothing scrolls sideways and long chips such as *Ingénierie de prompts* wrap onto the next line.
+- [ ] At 360px on `/fr/`, nothing scrolls sideways and long chips such as *GitHub Actions (CI/CD)* wrap onto the next line.
 
 ## 3. Content and code review
 
 Content, which is yours to edit freely in `src/lib/data/skills.ts`:
 - [ ] Every chip is something you're happy to be asked about in an interview. Remove or reorder anything; the order in the file is the display order.
-- [ ] Left out on purpose: C#, a Game dev group, NumPy, Jupyter. Add any of them back by adding a line.
+- [ ] Left out on purpose: C#, a Game dev group, NumPy, pandas, Jupyter. Add any of them back by adding a line.
+- [ ] Two new School × AI projects in Projects: **DSLR** (date guessed as 2025-08; no link yet, so it shows "Private") and **Leaffliction** (2025-12, links to `42-Leaffliction`).
 - [ ] To add a skill with a brand logo, import `si<Name>` from `simple-icons`, the slug from simpleicons.org in PascalCase (e.g. `siFlask`). Without a logo, add a path to `src/lib/data/skill-icons.ts`.
 
 Code:
 - `src/lib/skills.ts`: types, the pure `skillName(skill, lang)`, and `contrastRatio` / `logoColor`, which pick each logo's colour per theme: the brand colour, or the text colour below 2.2:1 contrast with the background. `THEME_BG` must match `--bg` in `src/app.css`, and a test checks it.
 - `src/lib/data/skills.ts`: content only. `src/lib/data/skills.spec.ts` guards the group order, that no group is empty, that no skill is duplicated, that the text is non-empty in both languages, and that SVG paths are well formed.
-- `src/lib/data/skill-icons.ts`: the four hand-drawn icons. Holes (the diamond, the dots, the chip centre) are subpaths wound the opposite way. Keep that in mind if you ever edit a path. Each also has a `hex` colour you can change.
+- `src/lib/data/skill-icons.ts`: the five hand-drawn icons. Holes (the diamond, the dots, the chip centre) are subpaths wound the opposite way. Keep that in mind if you ever edit a path. Each also has a `hex` colour you can change.
 - `src/lib/components/skills/SkillGroupIcon.svelte`: reuses the project `DomainIcon` for Systems, AI, Blockchain and Frontend, and draws Backend (a server stack) and DevOps (a cycle).
 - `src/lib/components/sections/Skills.svelte`: props narrowed to `{ lang, title }`, as the backlog asked.

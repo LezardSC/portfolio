@@ -14,7 +14,6 @@ import {
 	siOllama,
 	siOpencv,
 	siOpenjdk,
-	siPandas,
 	siPostgresql,
 	siPython,
 	siPytorch,
@@ -29,7 +28,7 @@ import {
 	siXrp
 } from 'simple-icons';
 import type { SkillGroup } from '$lib/skills';
-import { CHAT, CPU, DATABASE, HARDHAT } from './skill-icons';
+import { CHAT, CPU, DATABASE, HARDHAT, NEURAL_NET } from './skill-icons';
 
 /** Group and chip order is display order. Each skill belongs to exactly one group. */
 export const SKILL_GROUPS: SkillGroup[] = [
@@ -73,10 +72,10 @@ export const SKILL_GROUPS: SkillGroup[] = [
 		skills: [
 			{ name: 'PyTorch', icon: siPytorch },
 			{ name: 'scikit-learn', icon: siScikitlearn },
-			{ name: 'pandas', icon: siPandas },
-			{ name: { en: 'Computer Vision', fr: 'Vision par ordinateur' }, icon: siOpencv },
+			{ name: 'Deep Learning', icon: NEURAL_NET },
+			{ name: 'Computer Vision', icon: siOpencv },
 			{ name: { en: 'LLM agents', fr: 'Agents LLM' }, icon: siOllama },
-			{ name: { en: 'Prompt engineering', fr: 'Ingénierie de prompts' }, icon: CHAT }
+			{ name: 'Prompt engineering', icon: CHAT }
 		]
 	},
 	{
