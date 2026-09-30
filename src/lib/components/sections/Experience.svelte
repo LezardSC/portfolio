@@ -12,7 +12,12 @@
 	import JobItem from '../experience/JobItem.svelte';
 	import Section from '../Section.svelte';
 
-	let { lang, title, t }: { lang: Lang; title: string; t: Dict['experience'] } = $props();
+	let {
+		lang,
+		title,
+		t,
+		newTab
+	}: { lang: Lang; title: string; t: Dict['experience']; newTab: string } = $props();
 
 	const jobs = newestFirst(JOBS);
 	const education = newestFirst(EDUCATION);
@@ -33,7 +38,7 @@
 			<h3 id="experience-education">{t.education}</h3>
 			<ol class="timeline" aria-labelledby="experience-education">
 				{#each education as item (item.school + item.end)}
-					<li><EducationItem {item} {lang} {t} /></li>
+					<li><EducationItem {item} {lang} {t} {newTab} /></li>
 				{/each}
 			</ol>
 			<h3 id="experience-hackathons" class="later">{t.hackathons}</h3>

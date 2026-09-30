@@ -5,7 +5,7 @@
 	import { assetHref } from '$lib/paths';
 	import GitHubIcon from '../icons/GitHubIcon.svelte';
 
-	let { lang, t }: { lang: Lang; t: Dict['hero'] } = $props();
+	let { lang, t, newTab }: { lang: Lang; t: Dict['hero']; newTab: string } = $props();
 </script>
 
 <section id="hero" class="hero">
@@ -23,11 +23,11 @@
 			target="_blank"
 			rel="noopener noreferrer"
 		>
-			{t.cv} <span class="sr-only">{t.newTab}</span>
+			{t.cv} <span class="sr-only">{newTab}</span>
 		</a>
 		<a class="btn" href={PROFILE.github} target="_blank" rel="noopener noreferrer">
 			<GitHubIcon size={18} />
-			{t.github} <span class="sr-only">{t.newTab}</span>
+			{t.github} <span class="sr-only">{newTab}</span>
 		</a>
 	</div>
 </section>
