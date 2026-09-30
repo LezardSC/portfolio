@@ -2,7 +2,12 @@
 	import type { Dict, Lang } from '$lib/i18n';
 	import { formatPeriod, type Education } from '$lib/experience';
 
-	let { item, lang, t }: { item: Education; lang: Lang; t: Dict['experience'] } = $props();
+	let {
+		item,
+		lang,
+		t,
+		newTab
+	}: { item: Education; lang: Lang; t: Dict['experience']; newTab: string } = $props();
 </script>
 
 <article>
@@ -10,7 +15,7 @@
 	<h4>
 		{#if item.link}
 			<a href={item.link} target="_blank" rel="noopener noreferrer"
-				>{item.title[lang]} <span class="sr-only">{t.newTab}</span></a
+				>{item.title[lang]} <span class="sr-only">{newTab}</span></a
 			>
 		{:else}
 			{item.title[lang]}
