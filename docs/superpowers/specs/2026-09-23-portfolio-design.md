@@ -31,7 +31,8 @@ src/
     data/projects.ts            # typed project entries
     data/profile.ts             # name, role, pitch, bio, facts, links, CV/photo paths
     data/skills.ts, skill-icons.ts  # skill groups; hand-drawn icon paths
-    data/experience.ts
+    data/experience.ts            # JOBS, EDUCATION, HACKATHONS
+    experience.ts                 # pure localize(), formatPeriod(), sorting
     skills.ts                   # pure skillName()
     paths.ts                    # pure assetHref(base, path)
     projects.ts                 # pure filterProjects() + counts
@@ -150,12 +151,63 @@ Deliberately left out: C# and a Game dev group (not enough to fill it yet), NumP
 
 **Tests:** `skills.spec.ts` (`skillName` with string and localized names; `contrastRatio`; `logoColor` keeps visible brand colours and falls back for invisible ones; `THEME_BG` matches `app.css`); `data/skills.spec.ts` (unique group ids, unique skill names across all groups, every group non-empty, every localized field non-empty in both languages, every icon path non-empty and starting with `M`/`m`, every icon has a 6-digit hex colour).
 
+## Experience & Education
+_Settled during Milestone 5 brainstorming (2026-09-30). Sources: Jocelyn's CV and Malt profile._
+
+**Layout:** two columns (Experience | Education), each a small vertical timeline, with a full-width Hackathons row underneath. Nothing is clickable, and there are no company logos.
+
+**Data:** types and pure helpers in `src/lib/experience.ts`, content in `src/lib/data/experience.ts` (same split as projects and skills):
+```ts
+type Month = string;   // 'YYYY-MM'
+type Quote = { text: Localized; author: string; role: Localized; translated: boolean };
+type Job = {
+  company: string; role: Localized;
+  start: Month; end?: Month;          // no end = "Present"
+  internship: boolean;                // adds "· Internship" to the period line
+  points: Localized[]; tech: string[];
+  quote?: Quote;
+};
+type Education = { school: string; title: Localized; start?: string; end: string; points: Localized[] };  // years 'YYYY'
+type Hackathon = { medal: 1 | 2 | 3; event: string; date: Month; project?: string | Localized };
+export const JOBS: Job[]; export const EDUCATION: Education[]; export const HACKATHONS: Hackathon[];
+```
+- `localize(value: string | Localized, lang)` resolves a plain or localized string.
+- `formatPeriod(start, end, lang)` formats the period with `Intl.DateTimeFormat` (month + year for `YYYY-MM`, year alone for `YYYY`): "Jul 2025 – Jan 2026" / "juil. 2025 – janv. 2026"; a missing `end` gives "Present" / "Aujourd'hui" (label passed in from the dict); a single year gives just "2024".
+- Sorting: jobs and education newest first (by end, then start; an open end counts as newest); hackathons by medal (gold first), then newest first.
+
+**Content** (EN shown; FR written alongside, drawn from the CV and Malt):
+- **Sogeti, part of Capgemini**, Machine Learning & Computer Vision developer, 2025-07 → 2026-01, internship.
+  - Built an automated experimentation workflow that improved a computer-vision model detecting and classifying underwater and satellite images, from training to evaluation.
+  - Co-wrote a scientific paper.
+  - Tech: PyTorch, Python, Computer Vision, Bash.
+  - Quote, Herve Nikue, "R&D Project Manager, Sogeti (internship tutor)" / "Chef de projet R&D, Sogeti (tuteur de stage)": FR original *"Très bon collaborateur, sérieux et impliqué. Il maîtrise bien les sujets de Machine Learning et sait proposer des solutions pertinentes tout en restant pragmatique."* EN *"A very good collaborator, serious and committed. He has a solid grasp of Machine Learning and proposes relevant solutions while staying pragmatic."*
+- **Y247 Group**, Full Stack developer, 2024-10 → 2025-04, internship.
+  - Designed and built a web application for a private-sector client, from scratch.
+  - Set up the dev environment, designed the database, and built the backend, API routes and authentication.
+  - Built the frontend, integrating mock-ups from a designer.
+  - Tech: SvelteKit, Node.js, Express.
+  - Quote, Vincent Tamme, "President, Y247 Group" / "Président, Y247 Group": FR original *"Il a pleinement participé au développement de notre plateforme, aussi bien sur les sujets front-end que back-end. Il s'est montré sérieux, autonome et impliqué, avec une bonne capacité à comprendre rapidement les problématiques techniques et à proposer des solutions adaptées."* EN *"He took a full part in developing our platform, on both front-end and back-end. He proved serious, autonomous and committed, quick to grasp technical problems and propose suitable solutions."*
+- **42 Lyon**, 2022 → 2026, title "Expert in computer architecture" / "Expert en architecture informatique". Points: "RNCP 7: information systems & networks" / "RNCP 7 : systèmes d'information et réseaux"; "RNCP 6: software solutions designer-developer, web & mobile" / "RNCP 6 : concepteur développeur de solutions informatiques, web et mobile".
+- **Harvard**, CS50's Introduction to Computer Science, 2024, no points.
+- **Hackathons:** 🥇 Paris Blockchain Week 2024 · KAYP; 🥇 H-W3B Paris 2024 · KAYP; 🥈 H-W3B Super Finale 2024 · KAYP; 🥉 Paris Blockchain Week 2025 · Bahapad; 🥉 Commissariat au Numérique de Défense 2025 · "Firewall log triage for the armed forces" / "Tri de logs pare-feu pour les armées" (the project's name is forgotten, so a description stands in for it).
+
+The recommendations were written in French: the FR page shows the original, and the EN page shows the translation followed by a muted "(translated from French)".
+
+**UI labels** live in the dicts under `experience`: column headings (Experience / Expérience, Education / Formation, Hackathons), "Present" / "Aujourd'hui", "Internship" / "Stage", "(translated from French)", and the screen-reader medal labels ("1st place", "2nd place", "3rd place" / "1re place", "2e place", "3e place").
+
+**Component:** `sections/Experience.svelte` inside `Section`, props `{ lang, title, t: Dict['experience'] }`.
+- Grid: two columns ≥ 900px, stacked below. Each column has an `h3` heading and an `<ol>` timeline: a 2px `--border` vertical line with an `--accent` dot per entry; each entry is an `<li>` holding an `<article>`.
+- Entry: period line (muted, small, e.g. "Jul 2025 – Jan 2026 · Internship") → `h4` role (or diploma title) → company or school → bullet list → tech tags (project tech-tag style) → optional `<blockquote>` (3px `--accent` left border, italic) with a `<footer>`: "— author, role" and the translated note when relevant.
+- Hackathons: full-width row under the columns, `h3` + `<ul>` of pills that wrap: medal emoji (`aria-hidden`) + visually hidden place label + event + year + " · project" when present.
+- `.sr-only` moves from `Hero.svelte` to `src/app.css` (this is its second user).
+
+**Tests:** `experience.spec.ts` (`formatPeriod` in both languages: month range, open end, year range, single year; sort orders; `localize`); `data/experience.spec.ts` (valid `YYYY-MM` / `YYYY` dates, start ≤ end, every localized field non-empty in both languages, every job has at least one point, medals in 1–3).
+
 ## Other sections
-- **Experience/Education:** vertical timeline (42 School, jobs, hackathon results).
 - **Contact:** email, GitHub, LinkedIn, CV link. No form/backend.
 
 ## Testing
-- Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; i18n completeness (fr keys == en keys).
+- Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
 - `svelte-check` clean.
 - `npm run build` prerenders `/en` and `/fr` without errors; `npm run preview` manual check of theme toggle, language switch, filters.
 
