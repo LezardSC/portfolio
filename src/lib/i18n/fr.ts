@@ -31,7 +31,6 @@ export const fr: Dict = {
 		experience: 'Expérience & Formation',
 		contact: 'Contact'
 	},
-	placeholder: 'Bientôt disponible.',
 	projects: {
 		contextLabel: 'Contexte',
 		domainLabel: 'Domaine',
@@ -66,6 +65,13 @@ export const fr: Dict = {
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
 		places: { 1: '1re place', 2: '2e place', 3: '3e place' }
+	},
+	contact: {
+		intro: 'Ouvert aux opportunités. Le plus rapide pour me joindre, c’est l’e-mail.',
+		cv: 'CV (PDF)',
+		emailLabel: 'M’envoyer un e-mail',
+		copy: 'Copier',
+		copied: 'Copié\u00a0!'
 	},
 	theme: {
 		toLight: 'Passer au thème clair',
