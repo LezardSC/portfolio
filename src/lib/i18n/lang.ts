@@ -8,7 +8,10 @@ export function isLang(v: string): v is Lang {
 	return (LANGS as readonly string[]).includes(v);
 }
 
-/** First supported language from the browser's preference list, else 'en'. */
+/**
+ * First supported language from the browser's preference list, else 'en'.
+ * redirectScript() in redirect.ts duplicates this for the `/` page; redirect.spec.ts keeps them in sync.
+ */
 export function pickLang(prefs: readonly string[]): Lang {
 	for (const pref of prefs) {
 		const base = pref.toLowerCase().split('-')[0];
