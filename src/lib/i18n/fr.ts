@@ -16,6 +16,7 @@ export const fr: Dict = {
 		photoAlt: 'Photo de Jocelyn Renault'
 	},
 	navLabel: 'Principale',
+	menu: 'Menu',
 	newTab: '(s’ouvre dans un nouvel onglet)',
 	nav: {
 		about: 'À propos',

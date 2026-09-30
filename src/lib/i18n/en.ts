@@ -18,6 +18,8 @@ export const en = {
 		photoAlt: 'Photo of Jocelyn Renault'
 	},
 	navLabel: 'Main',
+	/** Accessible name of the mobile menu button; its open/closed state comes from aria-expanded. */
+	menu: 'Menu',
 	/** Screen-reader suffix for links that open in a new tab. */
 	newTab: '(opens in a new tab)',
 	nav: {
