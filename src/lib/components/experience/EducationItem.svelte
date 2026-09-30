@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Dict, Lang } from '$lib/i18n';
-	import { formatPeriod, type Education } from '$lib/experience';
+	import { periodPoints, type Education } from '$lib/experience';
+	import Period from './Period.svelte';
 
 	let {
 		item,
@@ -11,7 +12,7 @@
 </script>
 
 <article>
-	<p class="period">{formatPeriod(item.start, item.end, lang, t.present)}</p>
+	<p class="period"><Period points={periodPoints(item.start, item.end, lang, t.present)} /></p>
 	<h4>
 		{#if item.link}
 			<a href={item.link} target="_blank" rel="noopener noreferrer"

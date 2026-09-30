@@ -35,7 +35,7 @@
 			<button type="button" onclick={() => (filters = { ...NO_FILTERS })}>{t.reset}</button>
 		</div>
 	{:else}
-		<ul class="grid large">
+		<ul class="grid large" role="list">
 			{#each tiers.large as project (project.id)}
 				<li animate:flip={{ duration: ms }} in:fade={{ duration: ms }}>
 					<ProjectCardLarge {project} {lang} {t} />
@@ -45,7 +45,7 @@
 
 		{#if tiers.small.length > 0}
 			<p class="divider">{t.more}</p>
-			<ul class="grid small">
+			<ul class="grid small" role="list">
 				{#each tiers.small as project (project.id)}
 					<li animate:flip={{ duration: ms }} in:fade={{ duration: ms }}>
 						<ProjectCardSmall {project} {lang} {t} />
