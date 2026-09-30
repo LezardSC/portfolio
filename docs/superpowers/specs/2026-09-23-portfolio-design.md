@@ -212,7 +212,7 @@ No form, no backend, no phone number, no location. The site's repo stays private
 ```ts
 type ContactId = 'email' | 'linkedin' | 'github' | 'malt' | 'cv';
 type ContactLink = { id: ContactId; label: string; href: string; external: boolean };
-export function contactLinks(lang: Lang, base: string): ContactLink[];
+export function contactLinks(lang: Lang, base: string, cvLabel: string): ContactLink[];
 ```
 Order and content:
 
@@ -222,7 +222,7 @@ Order and content:
 | linkedin | jocelyn-renault | LinkedIn profile |
 | github | LezardSC | GitHub profile |
 | malt | Malt | Malt profile |
-| cv | "CV (PDF)" (label from the dict, passed in or resolved by the component) | `assetHref(base, PROFILE.cv[lang])` |
+| cv | `cvLabel` ("CV (PDF)", from the dict) | `assetHref(base, PROFILE.cv[lang])` |
 
 `external` is true for everything except email.
 
