@@ -11,7 +11,7 @@
 {#if brand}
 	<svg
 		class="brand"
-		viewBox="0 0 24 24"
+		viewBox={brand.viewBox ?? '0 0 24 24'}
 		width={size}
 		height={size}
 		fill="currentColor"

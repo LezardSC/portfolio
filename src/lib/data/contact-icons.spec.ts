@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { siMalt } from 'simple-icons';
 import { logoColor, THEME_BG } from '$lib/skills';
 import { CONTACT_BRANDS } from './contact-icons';
 
@@ -19,4 +20,16 @@ describe('contact brand icons', () => {
 			expect(colours).toContain(`#${icon.hex}`);
 		}
 	);
+
+	it.each(Object.entries(CONTACT_BRANDS))('%s is drawn in a square viewBox', (_, icon) => {
+		const [, , w, h] = (icon.viewBox ?? '0 0 24 24').split(' ').map(Number);
+		expect(w).toBeGreaterThan(0);
+		expect(w).toBe(h);
+	});
+
+	it('keeps only the Malt symbol, not its unreadable-when-small wordmark', () => {
+		const wordmark = siMalt.path.split(/(?=M)/)[0];
+		expect(CONTACT_BRANDS.malt.path).not.toContain(wordmark);
+		expect(CONTACT_BRANDS.malt.viewBox).toBeDefined();
+	});
 });
