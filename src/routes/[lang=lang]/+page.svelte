@@ -24,7 +24,7 @@
 
 <main>
 	<Hero lang={data.lang} t={t.hero} />
-	<About {t} />
+	<About lang={data.lang} title={t.sections.about} t={t.about} />
 	<Projects lang={data.lang} title={t.sections.projects} t={t.projects} />
 	<Skills {t} />
 	<Experience {t} />
