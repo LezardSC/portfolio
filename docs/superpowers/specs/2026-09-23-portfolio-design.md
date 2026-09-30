@@ -159,7 +159,7 @@ _Settled during Milestone 5 brainstorming (2026-09-30). Sources: Jocelyn's CV an
 **Data:** types and pure helpers in `src/lib/experience.ts`, content in `src/lib/data/experience.ts` (same split as projects and skills):
 ```ts
 type Month = string;   // 'YYYY-MM'
-type Quote = { text: Localized; author: string; role: Localized; translated: boolean };
+type Quote = { text: Localized; author: string; role: Localized; original: Lang };  // language it was written in
 type Job = {
   company: string; role: Localized;
   start: Month; end?: Month;          // no end = "Present"
@@ -178,7 +178,7 @@ export const JOBS: Job[]; export const EDUCATION: Education[]; export const HACK
 **Content** (EN shown; FR written alongside, drawn from the CV and Malt):
 - **Sogeti, part of Capgemini**, Machine Learning & Computer Vision developer, 2025-07 → 2026-01, internship.
   - Built an automated experimentation workflow that improved a computer-vision model detecting and classifying underwater and satellite images, from training to evaluation.
-  - Co-wrote a scientific paper.
+  - Wrote a scientific paper.
   - Tech: PyTorch, Python, Computer Vision, Bash.
   - Quote, Herve Nikue, "R&D Project Manager, Sogeti (internship tutor)" / "Chef de projet R&D, Sogeti (tuteur de stage)": FR original *"Très bon collaborateur, sérieux et impliqué. Il maîtrise bien les sujets de Machine Learning et sait proposer des solutions pertinentes tout en restant pragmatique."* EN *"A very good collaborator, serious and committed. He has a solid grasp of Machine Learning and proposes relevant solutions while staying pragmatic."*
 - **Y247 Group**, Full Stack developer, 2024-10 → 2025-04, internship.
@@ -191,9 +191,9 @@ export const JOBS: Job[]; export const EDUCATION: Education[]; export const HACK
 - **Harvard**, CS50's Introduction to Computer Science, 2024, no points, `link: 'https://certificates.cs50.io/b9c16727-3912-4e88-ac47-07ed9a982bc5.pdf?size=letter'`.
 - **Hackathons** (newest first, with dates): 🥉 Commissariat au Numérique de Défense 2025 (2025-11) · "Firewall log triage for the armed forces" / "Tri de logs pare-feu pour les armées" (the project's name is forgotten, so a description stands in for it); 🥉 Paris Blockchain Week 2025 (2025-04) · Bahapad; 🥈 H-W3B Super Finale 2024 (2024-11) · KAYP; 🥇 Paris Blockchain Week 2024 (2024-04) · KAYP; 🥇 H-W3B Paris 2024 (2024-03) · KAYP.
 
-The recommendations were written in French: the FR page shows the original, and the EN page shows the translation followed by a muted "(translated from French)".
+The recommendations were written in French (`original: 'fr'`): the FR page shows the original, and the EN page shows the translation followed by a muted "(translated from French)". The note appears whenever the page language differs from `original`.
 
-**UI labels** live in the dicts under `experience`: column headings (Experience / Expérience, Education / Formation, Hackathons), "Present" / "Aujourd'hui", "Internship" / "Stage", "(translated from French)", and the screen-reader medal labels ("1st place", "2nd place", "3rd place" / "1re place", "2e place", "3e place").
+**UI labels** live in the dicts under `experience`: column headings (Experience / Expérience, Education / Formation, Hackathons), "Present" / "Aujourd'hui", "Internship" / "Stage", "(translated from French)" / "(traduit de l'anglais)", "(opens in a new tab)" for the certificate link, and the screen-reader medal labels ("1st place", "2nd place", "3rd place" / "1re place", "2e place", "3e place").
 
 **Component:** `sections/Experience.svelte` inside `Section`, props `{ lang, title, t: Dict['experience'] }`.
 - Grid: two columns ≥ 900px, stacked below. Each column has an `h3` heading and an `<ol>` timeline: a 2px `--border` vertical line with an `--accent` dot per entry; each entry is an `<li>` holding an `<article>`.
