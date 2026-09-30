@@ -2,7 +2,8 @@ import type { SkillIcon } from '$lib/skills';
 
 /** Hard hat with an Ethereum diamond cut out (Hardhat). Dome and brim clockwise, diamond counter-clockwise. */
 export const HARDHAT: SkillIcon = {
-	path: 'M4 16a8 8 0 0 1 16 0zM2 16h20v3H2zM12 9.5l-2.2 3 2.2 2.5 2.2-2.5z'
+	path: 'M4 16a8 8 0 0 1 16 0zM2 16h20v3H2zM12 9.5l-2.2 3 2.2 2.5 2.2-2.5z',
+	hex: 'FFF100'
 };
 
 /** CPU chip with a hollow ring, a solid core and 3 pins per side (x86-64 Assembly). */
@@ -12,7 +13,8 @@ export const CPU: SkillIcon = {
 		'M8.25 2h1.5v4h-1.5zM11.25 2h1.5v4h-1.5zM14.25 2h1.5v4h-1.5z' +
 		'M8.25 18h1.5v4h-1.5zM11.25 18h1.5v4h-1.5zM14.25 18h1.5v4h-1.5z' +
 		'M2 8.25h4v1.5H2zM2 11.25h4v1.5H2zM2 14.25h4v1.5H2z' +
-		'M18 8.25h4v1.5h-4zM18 11.25h4v1.5h-4zM18 14.25h4v1.5h-4z'
+		'M18 8.25h4v1.5h-4zM18 11.25h4v1.5h-4zM18 14.25h4v1.5h-4z',
+	hex: '0071C5'
 };
 
 /** Database cylinder: a top cap and two bands (SQL). */
@@ -20,7 +22,8 @@ export const DATABASE: SkillIcon = {
 	path:
 		'M4 5a8 3 0 1 0 16 0a8 3 0 1 0-16 0z' +
 		'M4 6.5V11c0 1.66 3.58 3 8 3s8-1.34 8-3V6.5c0 1.66-3.58 3-8 3s-8-1.34-8-3z' +
-		'M4 12.5V17c0 1.66 3.58 3 8 3s8-1.34 8-3v-4.5c0 1.66-3.58 3-8 3s-8-1.34-8-3z'
+		'M4 12.5V17c0 1.66 3.58 3 8 3s8-1.34 8-3v-4.5c0 1.66-3.58 3-8 3s-8-1.34-8-3z',
+	hex: '336791'
 };
 
 /** Chat bubble with three dots cut out (Prompt engineering). */
@@ -29,5 +32,6 @@ export const CHAT: SkillIcon = {
 		'M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z' +
 		'M6.75 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0-2.5 0z' +
 		'M10.75 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0-2.5 0z' +
-		'M14.75 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0-2.5 0z'
+		'M14.75 10a1.25 1.25 0 1 0 2.5 0a1.25 1.25 0 1 0-2.5 0z',
+	hex: 'D97757'
 };

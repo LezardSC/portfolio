@@ -1,7 +1,9 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { skillName, type Skill } from './skills';
+import { contrastRatio, logoColor, skillName, THEME_BG, type Skill } from './skills';
 
-const icon = { path: 'M0 0h24v24H0z' };
+const icon = { path: 'M0 0h24v24H0z', hex: '000000' };
 
 describe('skillName', () => {
 	it('returns a plain string name as-is in every language', () => {
@@ -17,5 +19,41 @@ describe('skillName', () => {
 		};
 		expect(skillName(skill, 'en')).toBe('Computer Vision');
 		expect(skillName(skill, 'fr')).toBe('Vision par ordinateur');
+	});
+});
+
+describe('contrastRatio', () => {
+	it('is 21 for black on white and 1 for a colour on itself', () => {
+		expect(contrastRatio('000000', 'ffffff')).toBeCloseTo(21, 5);
+		expect(contrastRatio('3776AB', '3776AB')).toBeCloseTo(1, 5);
+	});
+
+	it('does not depend on argument order and accepts a leading #', () => {
+		expect(contrastRatio('#0d1117', 'F7DF1E')).toBeCloseTo(contrastRatio('F7DF1E', '#0d1117'), 5);
+	});
+});
+
+describe('logoColor', () => {
+	it('uses the brand colour when it stands out from the background', () => {
+		expect(logoColor('3776AB', THEME_BG.light)).toBe('#3776AB'); // Python blue on white
+		expect(logoColor('F7DF1E', THEME_BG.dark)).toBe('#F7DF1E'); // JavaScript yellow on dark
+	});
+
+	it('falls back to the text colour when the brand colour would vanish', () => {
+		expect(logoColor('000000', THEME_BG.dark)).toBe('var(--text)'); // Rust black on dark
+		expect(logoColor('F7DF1E', THEME_BG.light)).toBe('var(--text)'); // JavaScript yellow on white
+	});
+});
+
+describe('THEME_BG', () => {
+	it('matches the --bg tokens of src/app.css', () => {
+		const css = readFileSync(resolve('src/app.css'), 'utf8');
+		const bgOf = (selector: string) =>
+			css
+				.slice(css.indexOf(selector))
+				.match(/--bg:\s*(#[0-9a-f]{6})/i)?.[1]
+				.toLowerCase();
+		expect(bgOf(':root {')).toBe(THEME_BG.dark);
+		expect(bgOf(":root[data-theme='light']")).toBe(THEME_BG.light);
 	});
 });
