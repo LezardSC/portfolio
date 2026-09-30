@@ -32,13 +32,14 @@ npm install
 | `feat: add site footer with back-to-top link` | Task 4 |
 | `fix: show the Malt symbol and break the email after the @` | Task 5 (visual check) |
 | `docs: add Milestone 6 review guide` | this file |
+| `fix: keep Contact when switching language from the bottom of the page` | review feedback |
 
 ## 1. Automated checks
 
 ```bash
 npm run check && npm test && npm run lint && npm run build
 ```
-Expected: 0 errors/warnings, 128 tests pass, lint clean, build writes `build/`.
+Expected: 0 errors/warnings, 133 tests pass, lint clean, build writes `build/`.
 
 ## 2. Manual browser testing
 
@@ -68,6 +69,10 @@ Widths (DevTools device mode):
 
 Keyboard:
 - [ ] Tab order through Contact: envelope → Copy → LinkedIn → GitHub → Malt → CV, each with a visible blue focus.
+
+Language switch (review feedback):
+- [ ] Scroll to the very bottom of `/en/` and click **FR**: `/fr/` opens on Contact, not Experience. Contact is shorter than the screen, so its top never reaches the nav; at the very bottom of the page the switch now picks the last section.
+- [ ] Switching from the middle of Experience still lands on Experience.
 
 Unchanged but touched:
 - [ ] Hero buttons and the CS50 link in Education look the same as before. Their hidden "(opens in a new tab)" text now comes from one shared key, so the French wording is *(s’ouvre dans un nouvel onglet)* everywhere.
