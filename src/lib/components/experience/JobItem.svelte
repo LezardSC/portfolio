@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Dict, Lang } from '$lib/i18n';
-	import { formatPeriod, type Job } from '$lib/experience';
+	import { formatPeriod, quoted, type Job } from '$lib/experience';
 	import TechTags from '../projects/TechTags.svelte';
 
 	let { job, lang, t }: { job: Job; lang: Lang; t: Dict['experience'] } = $props();
@@ -22,7 +22,7 @@
 	<TechTags tech={job.tech} />
 	{#if job.quote}
 		<blockquote>
-			<p>“{job.quote.text[lang]}”</p>
+			<p>{quoted(job.quote.text[lang], lang)}</p>
 			<footer>
 				— {job.quote.author}, {job.quote.role[lang]}
 				{#if job.quote.original !== lang}<span class="note">{t.translated}</span>{/if}
