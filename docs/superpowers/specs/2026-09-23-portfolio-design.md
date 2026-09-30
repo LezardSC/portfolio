@@ -243,7 +243,7 @@ Order and content:
 ## Milestone 7 — Fixes & accessibility
 _Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" milestone is split in two: M7 (this one: nav, a11y, fixes, audit tooling) and M8 (visual polish & SEO). No domain yet, so nothing here depends on one.
 
-**Mobile nav.** Under ~760px the section links collapse behind a ☰ button (`aria-expanded`, `aria-controls`) that opens a panel below the bar with the links stacked. Brand, language switch and theme toggle stay in the bar at every width. The panel closes on Esc (focus returns to the button), on a link tap, on a tap outside, and resets to closed when the viewport grows past the breakpoint. Before hydration / without JS the links stay reachable (the panel renders as a plain list until the menu script takes over). Open/close rules live in a pure, unit-tested function; the component only wires events.
+**Mobile nav.** Under ~760px the section links collapse behind a ☰ button (`aria-expanded`, `aria-controls`) that opens a panel below the bar with the links stacked. Brand, language switch and theme toggle stay in the bar at every width. The panel closes on Esc (focus returns to the button), on a link tap, on a tap outside, and resets to closed when the viewport grows past the breakpoint. Before hydration / without JS the links stay reachable: the menu button is hidden and the links stay the current horizontally scrollable row until the menu script takes over. Open/close rules live in a pure, unit-tested function; the component only wires events.
 
 **Active-section highlight.** Reuses `sectionInView()` / `isAtBottom()` from `src/lib/sections.ts` (the same rule the language switch uses, so both always agree), recomputed on scroll behind `requestAnimationFrame`. The current link gets `aria-current="true"` and an `--accent` underline; on the hero no link is marked.
 
@@ -267,8 +267,8 @@ _Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" m
 - About facts `{#each}` keyed on index, not emoji.
 - Hero availability dot uses a new `--ok` theme token instead of `#2da44e`.
 - `profile.spec` resolves `static/` from the test file's location, not the cwd; the experience timezone test actually runs under a non-UTC `TZ`.
-- Skill icons store only the `simple-icons` `path` (and `hex` where used), not whole objects.
-- Chips keep a sane radius if they ever wrap to two lines.
+- ~~Skill icons store only `{ path, hex }`~~ — dropped (checked 2026-10-01): the bundle keeps every referenced `simple-icons` object whole whatever fields are read, so the saving (a few KB of titles/URLs) would need an icon code generator; not worth it.
+- Pills and chips use a `--pill: 1.25rem` radius token instead of `999px`: a full pill on one line, a rounded rectangle (not a lozenge) if one ever wraps.
 - The Malt symbol's cropped path is inlined in `contact-icons.ts` instead of depending on `simple-icons` subpath order.
 - Copy email: a repeat copy is re-announced; on failure a visible "press Ctrl+C" hint appears next to the selected address; the timer is cleared on destroy; the email tile text comes from the `contactLinks` label.
 
