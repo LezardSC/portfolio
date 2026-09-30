@@ -32,6 +32,7 @@ npm install
 | `feat: render about section with photo, bio and facts` | Task 4 |
 | `docs: add Milestone 3 review guide` | this file |
 | `fix: language switch lands on the section in view` | review feedback |
+| `feat: glide to the current section after a language switch` | review feedback |
 
 Task 5 (build verification) changed no files.
 
@@ -40,7 +41,7 @@ Task 5 (build verification) changed no files.
 ```bash
 npm run check && npm test && npm run lint && npm run build
 ```
-Expected: 0 errors/warnings, 61 tests pass, lint clean, build writes `build/`.
+Expected: 0 errors/warnings, 66 tests pass, lint clean, build writes `build/`.
 
 ## 2. Manual browser testing
 
@@ -62,7 +63,8 @@ About:
 
 Language switch (the fix from your first review):
 - [ ] Click **About** in the nav, scroll back to the very top, then switch language: you stay at the top.
-- [ ] Scroll into Projects without clicking a link, then switch language: you land on Projects.
+- [ ] Scroll into Projects without clicking a link, then switch language: the new page opens at the top, then glides smoothly to the start of Projects. The URL has no `#projects`.
+- [ ] With reduced motion on (DevTools → Rendering → `prefers-reduced-motion: reduce`), the same switch jumps to Projects without animating.
 
 Both themes (toggle in the nav):
 - [ ] The primary button is readable in dark and light mode.
