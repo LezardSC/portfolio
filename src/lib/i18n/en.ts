@@ -34,7 +34,6 @@ export const en = {
 		experience: 'Experience & Education',
 		contact: 'Contact'
 	} satisfies Record<SectionId, string>,
-	placeholder: 'Coming soon.',
 	projects: {
 		contextLabel: 'Context',
 		domainLabel: 'Domain',
@@ -69,6 +68,13 @@ export const en = {
 		internship: 'Internship',
 		translated: '(translated from French)',
 		places: { 1: '1st place', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>
+	},
+	contact: {
+		intro: 'Open to opportunities. Email is the fastest way to reach me.',
+		cv: 'CV (PDF)',
+		emailLabel: 'Send me an email',
+		copy: 'Copy',
+		copied: 'Copied!'
 	},
 	theme: {
 		toLight: 'Switch to light theme',
