@@ -76,6 +76,9 @@ export const en = {
 		copy: 'Copy',
 		copied: 'Copied!'
 	},
+	footer: {
+		backToTop: 'Back to top'
+	},
 	theme: {
 		toLight: 'Switch to light theme',
 		toDark: 'Switch to dark theme'
