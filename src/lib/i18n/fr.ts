@@ -58,6 +58,16 @@ export const fr: Dict = {
 		repo: 'Code source sur GitHub',
 		demo: 'Démo en ligne'
 	},
+	experience: {
+		work: 'Expérience',
+		education: 'Formation',
+		hackathons: 'Hackathons',
+		present: 'Aujourd’hui',
+		internship: 'Stage',
+		translated: '(traduit de l’anglais)',
+		newTab: '(s’ouvre dans un nouvel onglet)',
+		places: { 1: '1re place', 2: '2e place', 3: '3e place' }
+	},
 	theme: {
 		toLight: 'Passer au thème clair',
 		toDark: 'Passer au thème sombre'

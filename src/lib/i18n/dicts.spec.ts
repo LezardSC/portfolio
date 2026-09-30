@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SECTIONS } from '$lib/sections';
 import { CONTEXTS, DOMAINS, SORTS } from '$lib/projects';
+import { MEDALS } from '$lib/experience';
 import { dicts } from './index';
 import { LANGS } from './lang';
 
@@ -38,5 +39,9 @@ describe('dictionaries', () => {
 		for (const c of CONTEXTS) expect(p.contexts[c], c).toBeTruthy();
 		for (const d of DOMAINS) expect(p.domains[d], d).toBeTruthy();
 		for (const s of SORTS) expect(p.sort[s], s).toBeTruthy();
+	});
+
+	it.each(LANGS)('%s labels every hackathon medal', (lang) => {
+		for (const m of MEDALS) expect(dicts[lang].experience.places[m], String(m)).toBeTruthy();
 	});
 });
