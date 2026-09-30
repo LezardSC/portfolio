@@ -32,6 +32,7 @@ npm install
 | `fix: use French guillemets for quotes on the French page` | final review |
 | `docs: add Milestone 5 review guide` | this file |
 | `feat: move hackathons under education in the right column` | review feedback |
+| `feat: shorten the CND hackathon pill` | review feedback |
 
 ## 1. Automated checks
 
@@ -59,7 +60,7 @@ Experience & Education (`/en/#experience`, then `/fr/#experience`):
 - [ ] On `/fr/`, the quotes are the French originals in « guillemets », with no note.
 - [ ] On `/en/`, the quotes are the English translations, each followed by *(translated from French)*.
 - [ ] The **CS50** title is a link that opens the certificate PDF in a new tab. Nothing else in the section is clickable.
-- [ ] **Hackathons**, newest first: 🥉 Commissariat au Numérique de Défense 2025 · Firewall log triage for the armed forces, 🥉 Paris Blockchain Week 2025 · Bahapad, 🥈 H-W3B Super Finale 2024 · KAYP, 🥇 Paris Blockchain Week 2024 · KAYP, 🥇 H-W3B Paris 2024 · KAYP.
+- [ ] **Hackathons**, newest first: 🥉 CND 2025 · Firewall log triage (hover *CND*: the tooltip shows *Commissariat au Numérique de Défense*), 🥉 Paris Blockchain Week 2025 · Bahapad, 🥈 H-W3B Super Finale 2024 · KAYP, 🥇 Paris Blockchain Week 2024 · KAYP, 🥇 H-W3B Paris 2024 · KAYP.
 - [ ] The medal emoji show up in your browser.
 
 Both themes (toggle in the nav):
@@ -67,7 +68,7 @@ Both themes (toggle in the nav):
 
 Widths (DevTools device mode):
 - [ ] Two columns from 900px wide, one below (Experience, Education, Hackathons).
-- [ ] At 360px on `/fr/`, nothing scrolls sideways. The long CND pill wraps inside a rounded rectangle, and the dots stay on the line.
+- [ ] At 360px on `/fr/`, nothing scrolls sideways. Long pills wrap inside a rounded rectangle, and the dots stay on the line.
 
 Unchanged but touched:
 - [ ] Hero buttons look the same as before. The hidden "(opens in a new tab)" text is still hidden, because the `.sr-only` rule moved to `src/app.css`.
@@ -78,7 +79,7 @@ Content, which is yours to edit freely in `src/lib/data/experience.ts`:
 - [ ] The English translations of the two recommendations read well to you.
 - [ ] The Sogeti and Y247 bullet points are accurate. Add or remove points freely.
 - [ ] Sogeti's role reads *Machine Learning & Computer Vision developer* / *Développeur Machine Learning & IA Vision*.
-- [ ] The CND 2025 project is described, not named: *Firewall log triage for the armed forces* / *Tri de logs pare-feu pour les armées*. Replace it with a name by setting `project: 'Name'`.
+- [ ] The CND 2025 project is described, not named: *Firewall log triage* / *Tri de logs pare-feu*. Replace it with a name by setting `project: 'Name'`.
 - [ ] A new job with no `end` shows *Present* / *Aujourd’hui* and sorts first. The order in the file doesn't matter.
 
 Code:
