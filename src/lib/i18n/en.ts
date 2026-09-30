@@ -70,7 +70,7 @@ export const en = {
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
-		places: { 1: '1st place', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>
+		places: { 1: '1st place:', 2: '2nd place:', 3: '3rd place:' } satisfies Record<Medal, string>
 	},
 	contact: {
 		intro: 'Open to opportunities. Email is the fastest way to reach me.',

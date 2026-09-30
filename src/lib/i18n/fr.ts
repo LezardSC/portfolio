@@ -4,7 +4,7 @@ export const fr: Dict = {
 	meta: {
 		title: 'Jocelyn Renault — Ingénieur logiciel',
 		description:
-			'Portfolio de Jocelyn Renault, ingénieur logiciel issu de 42 : projets backend, systèmes, web, blockchain et IA.'
+			'Portfolio de Jocelyn Renault, ingénieur logiciel issu de 42\u00a0: projets backend, systèmes, web, blockchain et IA.'
 	},
 	hero: {
 		available: 'Disponible',
@@ -66,7 +66,7 @@ export const fr: Dict = {
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
-		places: { 1: '1re place', 2: '2e place', 3: '3e place' }
+		places: { 1: '1re place\u00a0:', 2: '2e place\u00a0:', 3: '3e place\u00a0:' }
 	},
 	contact: {
 		intro: 'Ouvert aux opportunités. Le plus rapide pour me joindre, c’est l’e-mail.',
