@@ -91,12 +91,13 @@
 		color: var(--muted);
 	}
 	.chip {
+		min-height: var(--tap);
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4rem;
 		padding: 0.3rem 0.8rem;
 		border: 1px solid var(--border);
-		border-radius: 999px;
+		border-radius: var(--pill);
 		background: var(--surface);
 		color: var(--text);
 		font: inherit;
@@ -127,6 +128,7 @@
 		gap: 0.5rem;
 	}
 	select {
+		min-height: var(--tap);
 		padding: 0.3rem 0.6rem;
 		border: 1px solid var(--border);
 		border-radius: 0.5rem;

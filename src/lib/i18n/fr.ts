@@ -73,7 +73,8 @@ export const fr: Dict = {
 		cv: 'CV (PDF)',
 		emailLabel: 'M’envoyer un e-mail',
 		copy: 'Copier',
-		copied: 'Copié\u00a0!'
+		copied: 'Copié\u00a0!',
+		copyHint: 'Appuyez sur Ctrl+C (⌘C sur Mac) pour copier.'
 	},
 	footer: {
 		backToTop: 'Retour en haut'

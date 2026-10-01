@@ -1,10 +1,13 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { LANGS } from '$lib/i18n/lang';
 import { PROFILE } from './profile';
 
-const staticFile = (src: string) => resolve('static', src);
+/** static/ at the repo root, found from this file so the test works from any cwd. */
+const staticFile = (src: string) =>
+	resolve(fileURLToPath(new URL('../../../static', import.meta.url)), src);
 
 describe('profile data', () => {
 	it('has a name', () => {

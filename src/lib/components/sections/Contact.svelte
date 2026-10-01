@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { base } from '$app/paths';
 	import { contactLinks } from '$lib/contact';
 	import { PROFILE } from '$lib/data/profile';
@@ -14,20 +15,35 @@
 	}: { lang: Lang; title: string; t: Dict['contact']; newTab: string } = $props();
 
 	const links = $derived(contactLinks(lang, base, t.cv));
-	const [local, domain] = PROFILE.email.split('@');
 
 	let copied = $state(false);
+	/** Copy failed: show the keyboard hint next to the selected address. */
+	let failed = $state(false);
+	/** Text of the polite live region. */
+	let announcement = $state('');
 	let address: HTMLElement | undefined = $state();
 	let timer: ReturnType<typeof setTimeout> | undefined;
 
-	/** Copy the address; if the clipboard is unavailable (plain http, denied), select it instead. */
+	onDestroy(() => clearTimeout(timer));
+
+	/** Clearing first, then setting on the next frame, makes screen readers repeat an identical message. */
+	function announce(text: string) {
+		announcement = '';
+		requestAnimationFrame(() => (announcement = text));
+	}
+
+	/** Copy the address; if the clipboard is unavailable (plain http, denied), select it and show a hint. */
 	async function copy() {
 		try {
 			await navigator.clipboard.writeText(PROFILE.email);
+			failed = false;
 			copied = true;
+			announce(t.copied);
 			clearTimeout(timer);
 			timer = setTimeout(() => (copied = false), 2000);
 		} catch {
+			failed = true;
+			announce(t.copyHint);
 			if (!address) return;
 			const range = document.createRange();
 			range.selectNodeContents(address);
@@ -44,6 +60,7 @@
 		{#each links as link (link.id)}
 			<li>
 				{#if link.id === 'email'}
+					{@const [local, domain] = link.label.split('@')}
 					<div class="tile">
 						<a class="mail" href={link.href} aria-label={t.emailLabel}>
 							<ContactIcon id="email" />
@@ -54,6 +71,7 @@
 							{copied ? t.copied : t.copy}
 						</button>
 					</div>
+					{#if failed}<p class="hint">{t.copyHint}</p>{/if}
 				{:else}
 					<a
 						class="tile"
@@ -69,10 +87,16 @@
 			</li>
 		{/each}
 	</ul>
-	<p class="sr-only" aria-live="polite">{copied ? t.copied : ''}</p>
+	<p class="sr-only" aria-live="polite">{announcement}</p>
 </Section>
 
 <style>
+	.hint {
+		margin: 0.4rem 0 0;
+		font-size: 0.85rem;
+		color: var(--muted);
+		text-align: center;
+	}
 	.intro {
 		margin: -0.5rem 0 2rem;
 		text-align: center;
@@ -110,6 +134,10 @@
 	}
 	.mail {
 		display: flex;
+		min-width: var(--tap);
+		min-height: var(--tap);
+		align-items: center;
+		justify-content: center;
 		border-radius: 0.25rem;
 	}
 	.label {
@@ -118,6 +146,7 @@
 	}
 	.copy {
 		flex-shrink: 0;
+		min-height: var(--tap);
 		min-width: 4.5rem;
 		margin-left: auto;
 		padding: 0.2rem 0.7rem;
@@ -126,7 +155,7 @@
 		color: var(--muted);
 		background: none;
 		border: 1px solid var(--border);
-		border-radius: 999px;
+		border-radius: var(--pill);
 		cursor: pointer;
 		transition:
 			color 0.15s,

@@ -1,4 +1,4 @@
-import { siGithub, siMalt } from 'simple-icons';
+import { siGithub } from 'simple-icons';
 import type { BrandContactId } from '$lib/contact';
 import type { SkillIcon } from '$lib/skills';
 
@@ -13,10 +13,14 @@ export const CONTACT_BRANDS: Record<BrandContactId, BrandIcon> = {
 		hex: '0A66C2'
 	},
 	github: { path: siGithub.path, hex: siGithub.hex },
-	/** The Malt icon is its wordmark, unreadable at 28px: keep the symbol (the last two subpaths) and crop to it. */
+	/**
+	 * The simple-icons Malt icon is its wordmark, unreadable at 28px: this is only its symbol
+	 * (the icon's last subpaths, copied from simple-icons 16.33), cropped by the viewBox.
+	 * Inlined so a simple-icons update can't reorder the subpaths under us.
+	 */
 	malt: {
-		path: siMalt.path.split(/(?=M)/).slice(1).join(''),
-		hex: siMalt.hex,
+		path: 'M3.499 13.563l-.21.21.619.618c.304.304.79.598 1.244.144.339-.34.26-.695.073-.98-.06.004-1.726.008-1.726.008zm-.963-2.325.21-.21-.608-.607c-.304-.303-.765-.621-1.243-.143-.351.35-.273.692-.087.97Zm2.86.416c-.037.043-1.511 1.524-1.511 1.524h1.154c.43 0 .981-.101.981-.777 0-.496-.296-.683-.624-.747zm-3.244-.031H.981c-.43 0-.981.135-.981.778 0 .479.307.676.641.745.04-.046 1.511-1.523 1.511-1.523zm1.484 3.04-.618-.618-.608.607a2.613 2.613 0 0 1-.137.128c.07.333.266.639.745.639s.676-.307.745-.641c-.043-.037-.085-.073-.127-.115zM2.41 10.15l.608.607.618-.618a2.25 2.25 0 0 1 .128-.118c-.065-.327-.251-.623-.747-.623s-.682.297-.746.625c.046.04.092.08.14.127zm2.742.117c-.455-.454-.94-.16-1.244.144l-2.87 2.87c-.303.303-.621.765-.143 1.243.478.478.94.16 1.243-.143l2.87-2.87c.304-.304.598-.79.144-1.244Z',
+		hex: 'FC5757',
 		viewBox: '-0.3 9.1 6.62 6.62'
 	}
 };

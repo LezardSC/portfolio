@@ -67,7 +67,7 @@
 		margin: 0;
 		padding: 0.2rem 0.8rem;
 		border: 1px solid var(--border);
-		border-radius: 999px;
+		border-radius: var(--pill);
 		font-size: 0.85rem;
 		color: var(--muted);
 	}
@@ -75,7 +75,7 @@
 		width: 0.5rem;
 		height: 0.5rem;
 		border-radius: 50%;
-		background: #2da44e;
+		background: var(--ok);
 	}
 	.ctas {
 		display: flex;

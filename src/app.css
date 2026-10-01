@@ -2,6 +2,8 @@
 	--nav-h: 3.5rem;
 	--radius: 0.75rem;
 	--tap: 2.25rem;
+	/* Pill radius: a full pill up to ~40px tall; a rounded rectangle (not a lozenge) if the content ever wraps. */
+	--pill: 1.25rem;
 	--font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 	color-scheme: dark;
 	--bg: #0d1117;
@@ -10,6 +12,7 @@
 	--muted: #8b949e;
 	--accent: #58a6ff;
 	--border: #30363d;
+	--ok: #3fb950;
 }
 
 /* Touch screens: controls at least 44px so they are easy to hit. */
@@ -27,6 +30,7 @@
 	--muted: #59636e;
 	--accent: #0969da;
 	--border: #d1d9e0;
+	--ok: #1a7f37;
 }
 
 /* No-JS visitors: default tokens are dark, so follow the system preference
@@ -40,6 +44,7 @@
 		--muted: #59636e;
 		--accent: #0969da;
 		--border: #d1d9e0;
+		--ok: #1a7f37;
 	}
 }
 
