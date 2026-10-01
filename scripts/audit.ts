@@ -8,7 +8,6 @@
 import { execSync, spawn } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
-import { launch } from 'chrome-launcher';
 import lighthouse from 'lighthouse';
 import desktopConfig from 'lighthouse/core/config/desktop-config.js';
 import { chromium, type Browser, type Page } from 'playwright';
@@ -24,6 +23,7 @@ import {
 } from './audit-report.ts';
 
 const PORT = 4180;
+const DEBUG_PORT = 9223;
 const ORIGIN = `http://localhost:${PORT}`;
 const OUT = 'reports';
 const LANGS = ['en', 'fr'] as const;
@@ -109,10 +109,9 @@ async function screenshots(browser: Browser): Promise<void> {
 }
 
 async function lighthouseChecksFor(): Promise<Check[]> {
-	const chrome = await launch({
-		chromePath: chromium.executablePath(),
-		chromeFlags: ['--headless=new', '--no-sandbox']
-	});
+	// Lighthouse attaches to Playwright's own Chromium through its debugging port.
+	// (chrome-launcher is not used: under WSL it converts paths to Windows ones.)
+	const chrome = await chromium.launch({ args: [`--remote-debugging-port=${DEBUG_PORT}`] });
 	try {
 		const checks: Check[] = [];
 		const runs = [
@@ -122,7 +121,7 @@ async function lighthouseChecksFor(): Promise<Check[]> {
 		for (const [label, config] of runs) {
 			const result = await lighthouse(
 				`${ORIGIN}/en/`,
-				{ port: chrome.port, output: 'html', logLevel: 'error', onlyCategories: CATEGORIES },
+				{ port: DEBUG_PORT, output: 'html', logLevel: 'error', onlyCategories: CATEGORIES },
 				config
 			);
 			if (!result) throw new Error(`Lighthouse ${label} returned no result`);
@@ -141,7 +140,7 @@ async function lighthouseChecksFor(): Promise<Check[]> {
 		}
 		return checks;
 	} finally {
-		chrome.kill();
+		await chrome.close();
 	}
 }
 
