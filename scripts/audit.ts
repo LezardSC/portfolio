@@ -5,7 +5,7 @@
  * on /en/ (mobile and desktop). Prints a PASS/FAIL table, writes full reports to reports/,
  * and exits non-zero if anything failed. --screens also saves full-page screenshots.
  */
-import { execSync, spawn } from 'node:child_process';
+import { execSync, spawn, type ChildProcess } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import lighthouse from 'lighthouse';
@@ -31,17 +31,33 @@ const THEMES = ['dark', 'light'] as const;
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 const SCREEN_WIDTHS = [360, 390, 768, 1024, 1440];
 
-async function waitForServer(url: string, timeoutMs = 30_000): Promise<void> {
-	const deadline = Date.now() + timeoutMs;
-	while (Date.now() < deadline) {
-		try {
-			if ((await fetch(url)).ok) return;
-		} catch {
-			// not up yet
-		}
-		await new Promise((r) => setTimeout(r, 250));
-	}
-	throw new Error(`preview server did not answer at ${url}`);
+/**
+ * Resolves once `vite preview` itself prints its URL. Polling the port instead could get an
+ * answer from another server already on it (vite then exits on --strictPort), and audit that.
+ */
+function waitForPreview(server: ChildProcess, timeoutMs = 30_000): Promise<void> {
+	return new Promise((resolve, reject) => {
+		let output = '';
+		const timer = setTimeout(
+			() => reject(new Error('vite preview did not start in time')),
+			timeoutMs
+		);
+		const onData = (chunk: Buffer) => {
+			output += chunk.toString();
+			if (output.includes(`:${PORT}`)) {
+				clearTimeout(timer);
+				resolve();
+			}
+		};
+		server.stdout?.on('data', onData);
+		server.stderr?.on('data', onData);
+		server.on('exit', (code) => {
+			clearTimeout(timer);
+			reject(
+				new Error(`vite preview exited (code ${code}); is port ${PORT} already in use?\n${output}`)
+			);
+		});
+	});
 }
 
 async function axe(page: Page, label: string, file: string): Promise<Check> {
@@ -151,11 +167,11 @@ async function main(): Promise<void> {
 	const server = spawn(
 		'./node_modules/.bin/vite',
 		['preview', '--port', String(PORT), '--strictPort'],
-		{ stdio: 'ignore' }
+		{ stdio: ['ignore', 'pipe', 'pipe'] }
 	);
 	let checks: Check[] = [];
 	try {
-		await waitForServer(`${ORIGIN}/en/`);
+		await waitForPreview(server);
 		const browser = await chromium.launch();
 		try {
 			checks = await browserChecks(browser);
