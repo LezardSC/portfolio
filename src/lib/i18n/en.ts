@@ -77,7 +77,8 @@ export const en = {
 		cv: 'CV (PDF)',
 		emailLabel: 'Send me an email',
 		copy: 'Copy',
-		copied: 'Copied!'
+		copied: 'Copied!',
+		copyHint: 'Press Ctrl+C (⌘C on Mac) to copy.'
 	},
 	footer: {
 		backToTop: 'Back to top'

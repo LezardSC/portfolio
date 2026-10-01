@@ -24,7 +24,7 @@
 				<p>{paragraph[lang]}</p>
 			{/each}
 			<ul class="facts" role="list">
-				{#each PROFILE.facts as fact (fact.icon)}
+				{#each PROFILE.facts as fact, i (i)}
 					<li><span aria-hidden="true">{fact.icon}</span> {fact.text[lang]}</li>
 				{/each}
 			</ul>
@@ -63,7 +63,7 @@
 	.facts li {
 		padding: 0.2rem 0.8rem;
 		border: 1px solid var(--border);
-		border-radius: 999px;
+		border-radius: var(--pill);
 		font-size: 0.9rem;
 		color: var(--muted);
 	}
