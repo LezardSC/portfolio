@@ -110,9 +110,10 @@
 		margin: 0;
 	}
 	.empty button {
+		min-height: var(--tap);
 		padding: 0.4rem 1rem;
 		border: 1px solid var(--accent);
-		border-radius: 999px;
+		border-radius: var(--pill);
 		background: transparent;
 		color: var(--accent);
 		font: inherit;

@@ -76,7 +76,7 @@
 		max-width: 100%;
 		padding: 0.45rem 0.9rem;
 		border: 1px solid var(--border);
-		border-radius: 999px;
+		border-radius: var(--pill);
 		font-weight: 500;
 		color: var(--text);
 	}

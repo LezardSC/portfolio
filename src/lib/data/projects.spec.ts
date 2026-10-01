@@ -1,10 +1,13 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { CONTEXTS, DOMAINS } from '$lib/projects';
 import { PROJECTS } from './projects';
 
-const staticFile = (src: string) => resolve('static', src);
+/** static/ at the repo root, found from this file so the test works from any cwd. */
+const staticFile = (src: string) =>
+	resolve(fileURLToPath(new URL('../../../static', import.meta.url)), src);
 
 describe('project data', () => {
 	it('has unique kebab-case ids', () => {

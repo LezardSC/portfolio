@@ -27,9 +27,20 @@ describe('formatPeriod', () => {
 	it('formats a month range in French', () => {
 		expect(formatPeriod('2025-07', '2026-01', 'fr', "Aujourd'hui")).toBe('juil. 2025 – janv. 2026');
 	});
-	it('keeps January and December in their own year whatever the timezone', () => {
-		expect(formatPeriod('2024-01', '2024-12', 'en', 'Present')).toBe('Jan 2024 – Dec 2024');
-	});
+	it.each(['Pacific/Kiritimati', 'Pacific/Pago_Pago'])(
+		'keeps January and December in their own year under TZ=%s',
+		(tz) => {
+			const saved = process.env.TZ;
+			process.env.TZ = tz; // Node applies a TZ change immediately
+			try {
+				expect(new Date(2024, 0, 1).getTimezoneOffset(), 'TZ did not apply').not.toBe(0);
+				expect(formatPeriod('2024-01', '2024-12', 'en', 'Present')).toBe('Jan 2024 – Dec 2024');
+			} finally {
+				if (saved === undefined) delete process.env.TZ;
+				else process.env.TZ = saved;
+			}
+		}
+	);
 	it('uses the present label when there is no end', () => {
 		expect(formatPeriod('2026-02', undefined, 'en', 'Present')).toBe('Feb 2026 – Present');
 		expect(formatPeriod('2026-02', undefined, 'fr', "Aujourd'hui")).toBe(

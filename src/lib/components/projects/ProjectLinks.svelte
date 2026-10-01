@@ -57,6 +57,8 @@
 		gap: 0.5rem;
 	}
 	a {
+		min-width: var(--tap);
+		min-height: var(--tap);
 		display: grid;
 		place-items: center;
 		color: var(--muted);
@@ -72,7 +74,7 @@
 		font-size: 0.8rem;
 		color: var(--muted);
 		border: 1px solid var(--border);
-		border-radius: 999px;
+		border-radius: var(--pill);
 		padding: 0.1rem 0.6rem;
 	}
 </style>
