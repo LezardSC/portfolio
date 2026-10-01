@@ -13,6 +13,7 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - `npm run check`: svelte-check (type check)
 - `npm run lint` / `npm run format`: Prettier
 - `npm run build`, then `npm run preview`: static site in `build/`, served at http://localhost:4173
+- `npm run audit`: builds, serves, then runs axe (EN/FR × dark/light × 360/1280px, menu open, before hydration), a 360px overflow check and Lighthouse (mobile + desktop). Targets: 0 axe violations, Lighthouse 100 (Performance ≥ 95). Reports in `reports/` (git-ignored); `npm run audit -- --screens` also saves screenshots at 360–1440px. Not `npm audit`, which is npm's own security audit.
 
 ## Conventions
 
