@@ -48,10 +48,17 @@
 		const onPointer = (e: PointerEvent) => {
 			if (open && !header?.contains(e.target as Node)) send('outside');
 		};
+		// Keyboard focus moving past the last control (into the page) closes the panel, so it
+		// never covers the element that now has focus.
+		const onFocusOut = (e: FocusEvent) => {
+			if (open && !header?.contains(e.relatedTarget as Node | null)) send('outside');
+		};
+		header?.addEventListener('focusout', onFocusOut);
 		wide.addEventListener('change', onWide);
 		document.addEventListener('keydown', onKey);
 		document.addEventListener('pointerdown', onPointer);
 		return () => {
+			header?.removeEventListener('focusout', onFocusOut);
 			wide.removeEventListener('change', onWide);
 			document.removeEventListener('keydown', onKey);
 			document.removeEventListener('pointerdown', onPointer);
