@@ -122,6 +122,10 @@
 		font-size: 0.75rem;
 		color: var(--muted);
 	}
+	/* --muted is too faint on the accent-tinted background of the active chip. */
+	.chip[aria-pressed='true'] .count {
+		color: var(--text);
+	}
 	.sort {
 		display: flex;
 		align-items: center;
