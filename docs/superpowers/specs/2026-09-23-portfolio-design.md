@@ -278,7 +278,7 @@ _Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" m
 - axe on `/en/` and `/fr/` × dark/light × 360px/1280px: **0 violations**;
 - no horizontal scroll at 360px;
 - Lighthouse (Playwright's Chromium) on `/en/`, mobile and desktop: **Accessibility, Best Practices, SEO = 100; Performance ≥ 95**.
-It prints a pass/fail table, exits non-zero on any failure, and writes full reports to a git-ignored `reports/`. SEO checks that need a real domain (absolute canonical/hreflang) are listed and carried to M8 rather than faked.
+It prints a pass/fail table, exits non-zero on any failure, and writes full reports to a git-ignored `reports/`. SEO checks that need a real domain (absolute canonical/hreflang) are reported as "pending domain" and carried to M9 (deployment) rather than faked.
 
 **Tests.** Unit tests for the menu state function, the active-link logic and the French typography check; existing tests, `npm run check` and `npm run lint` stay clean. The M7 review guide includes the audit table and screenshots at each width.
 
