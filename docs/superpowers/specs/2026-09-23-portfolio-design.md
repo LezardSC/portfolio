@@ -11,7 +11,7 @@ Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, buil
 | Framework | SvelteKit (Svelte 5 runes) + `@sveltejs/adapter-static`, fully prerendered, TypeScript |
 | Languages | EN + FR toggle; routes `/en`, `/fr` |
 | Theme | Dark + light toggle, defaults to system preference |
-| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later — its own milestone (M9) once the site is polished |
+| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later — its own milestone (M10) once the site is polished |
 | Project click | Icon links (GitHub / demo) + clickable media, new tab; no detail pages/modals. Private projects have no link |
 | Sections | Hero, About, Projects, Skills, Experience/Education, Contact |
 | Filtering | Two combinable single-select chip groups: Context × Domain + sort |
@@ -47,7 +47,7 @@ static/  projects/* (images/videos), cv-en.pdf, cv-fr.pdf, photo.jpg
 - Single scrolling page, fixed nav with anchor links, language switch links to the other locale's URL (same hash).
 
 ## Projects (core feature)
-_Revised during Milestone 2 brainstorming (2026-09-30)._
+_Revised during Milestone 2 brainstorming (2026-09-30)._ Phone layout, media type and hover revised in Milestone 8 (see that section).
 ```ts
 type Context = 'professional' | 'personal' | 'school' | 'hackathon';
 type Domain  = 'web' | 'blockchain' | 'ai' | 'low-level' | 'games';
@@ -278,9 +278,50 @@ _Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" m
 - axe on `/en/` and `/fr/` × dark/light × 360px/1280px: **0 violations**;
 - no horizontal scroll at 360px;
 - Lighthouse (Playwright's Chromium) on `/en/`, mobile and desktop: **Accessibility, Best Practices, SEO = 100; Performance ≥ 95**.
-It prints a pass/fail table, exits non-zero on any failure, and writes full reports to a git-ignored `reports/`. SEO checks that need a real domain (absolute canonical/hreflang) are reported as "pending domain" and carried to M9 (deployment) rather than faked.
+It prints a pass/fail table, exits non-zero on any failure, and writes full reports to a git-ignored `reports/`. SEO checks that need a real domain (absolute canonical/hreflang) are reported as "pending domain" and carried to M10 (deployment) rather than faked.
 
 **Tests.** Unit tests for the menu state function, the active-link logic and the French typography check; existing tests, `npm run check` and `npm run lint` stay clean. The M7 review guide includes the audit table and screenshots at each width.
+
+## Milestone 8 — Layout & media
+_Settled during Milestone 8 brainstorming (2026-10-01 → 2026-10-02)._ After M7 the user found the site worked but needed visual work, mostly on phones: the phone page was ~13,600px tall against ~7,450px on desktop (Projects alone 7,263px; a large card ~600px, a small one ~300px). The old "Visual polish & SEO" milestone is split again: **M8 Layout & media** (this one), **M9 Finishing touches & SEO** (hero accent, section-heading accent, scroll-reveal, favicon, OG image, per-locale meta), **M10 Deployment**. A smaller About photo next to the title was considered and declined.
+
+**Approach.** One set of markup per component at every width; CSS media queries restyle it for phones, and scripts only decide whether a video plays. The site is prerendered without knowing the screen size, so choosing a phone or desktop component in JS would flash the wrong layout, and rendering both would duplicate content for screen readers. "Phone" below means under the existing `48rem` breakpoint (the one where both project grids drop to a single column).
+
+### Projects on phones
+- **Large cards → overlay cards.** The media fills the card (a 4:3 media area); a dark gradient (transparent → ~85% black) covers its lower part, and the text sits on it: year · context, title, award pill, description clamped to **2 lines**, tech tags, link icons. Overlay text is white on the gradient in both themes, so its contrast doesn't depend on the theme (axe checks it). Target height ~260px instead of ~600px. A card without media keeps the domain-coloured gradient placeholder as background, without the big placeholder title. The media stays a decorative link (`tabindex=-1 aria-hidden`) and the icon links stay the accessible ones. The clamp is visual only: the full description stays in the DOM.
+- **Small cards → compact rows** (~120px instead of ~300px): first line = domain icon, title, then year · context (muted), link icons on the right; then the description clamped to 2 lines. No tech tags on phones. The award shows as 🏆 after the year (`aria-hidden`) with a visually hidden award text for screen readers.
+- **Filters:** each chip group becomes one horizontally scrollable row (no wrap). The group label stays fixed on the left; the right edge fades out (mask) to hint at more chips. Chips keep their `--tap` height. The sort select stays on its own line. Scrolling happens inside each row, so the page itself never scrolls horizontally (the audit's 360px overflow check still applies).
+- **Desktop** (48rem and up) keeps the current layout: media on top (16:9), text below.
+
+### Media
+- **Data.** `Project.media` becomes a discriminated union:
+  ```ts
+  media?: { kind: 'image'; src: string } | { kind: 'video'; src: string; poster: string };
+  ```
+  Files stay in `static/projects/`, paths relative to `static/`. Real videos are **MP4**, supplied by Jocelyn; there is no conversion script. Every video has a required still `poster` (the review guide gives a one-line `ffmpeg` command to extract a frame). The test GIFs in the gitignored `tmp/` are converted to MP4 by hand for visual checks only and never committed.
+- **Rendering.** The card always renders an `<img>`: the image itself, or the video's poster (`loading="lazy"`, `decoding="async"`, `alt=""` since the title names the project). A `<video muted loop playsinline>` is added on top of it only while `shouldPlayVideo` is true, and once added it stays (paused when out of view, so scrolling back doesn't reload it). Phones, `prefers-reduced-motion`, and the prerendered HTML before hydration therefore never download video bytes. If the video fails, the poster stays visible.
+- **Logic.** Pure, unit-tested `shouldPlayVideo({ desktop, reducedMotion, inView }): boolean` in `src/lib/projects.ts` (true only when desktop and in view and not reduced motion). `desktop` comes from `matchMedia('(min-width: 48rem)')`, `inView` from an `IntersectionObserver` (threshold 0.25), `reducedMotion` from `prefersReducedMotion`; `ProjectMedia.svelte` only wires them. Videos play **while on screen** (not on hover).
+
+### Desktop hover
+Only under `(hover: hover) and (pointer: fine)`, so touch screens never get a stuck hover state; the same styles apply on `:focus-within` for keyboard users.
+- Large card: lifts 4px, soft shadow, border turns `--accent`, media zooms to 1.03×. The trigger is the whole card (today only the media zooms, on media hover).
+- Small card: lifts 2px, border turns `--accent`.
+- Under `prefers-reduced-motion`: no lift and no zoom, only the border colour.
+
+### Other sections on phones
+- **Spacing.** `Section` drops `min-height: 60vh` at every width (it only left a gap above the footer after Contact). On phones, section padding goes from `4rem` to `2.5rem` vertically and `h2` from `2rem` to `1.6rem`.
+- **Skills.** On phones, chips get `0.3rem 0.65rem` padding, `0.9rem` text and 18px logos, with tighter chip and group gaps (~400px saved). Desktop unchanged.
+- **Recommendation quotes.** Below `56.25rem` (where Experience is one column) a quote is clamped to 3 lines with a "Read more" / « Lire la suite » button below it, which reads "Show less" / « Réduire » when expanded (`aria-expanded`, `aria-controls` → the quote). The clamp is only applied after hydration, so visitors without JS read the whole quote. The button only appears when the quote actually overflows 3 lines (measured in the browser, re-measured on resize), so it never expands to nothing. At 56.25rem and up there is no clamp and no button. New keys `experience.readMore` / `experience.showLess` in both dicts.
+
+### Deferred minors folded in
+- The large-card placeholder title renders underlined (link default): remove the underline.
+- French strings in `src/lib/data/profile.ts` (pitch, bio) use straight apostrophes (`c'est`, `l'argent`): use ’ like the rest of the French text. Any other straight apostrophe found in French text gets the same fix.
+
+### Tests and verification
+- Unit: `shouldPlayVideo` (each input alone turns it off; all three → true); `data/projects.spec.ts` checks images are `.jpg`/`.jpeg`/`.png`/`.webp`, videos are `.mp4` with a poster image, and every `src` and `poster` exists in `static/`; i18n completeness covers the new keys.
+- `npm run check`, `npm test`, `npm run lint` clean; `npm run audit` passes (0 axe violations, no horizontal scroll at 360px, Lighthouse as in M7).
+- Visual check with the test media injected (images and MP4s): 360, 390, 768, 1024 and 1440px, both themes, both languages, including a large card without media, the hover state and an expanded quote.
+- The review guide reports page and section heights before and after. Expected: the phone page drops from ~13,600px to under ~9,000px (an estimate, not a gate).
 
 ## Testing
 - Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
@@ -295,8 +336,9 @@ It prints a pass/fail table, exits non-zero on any failure, and writes full repo
 5. **Experience / Education**
 6. **Contact + footer**
 7. **Fixes & accessibility** — mobile nav, active-section highlight, a11y, French typography, `/` redirect, deferred review minors, responsive pass, `npm run audit` (axe + Lighthouse).
-8. **Visual polish & SEO** — scroll-reveal animations, favicon, OG image and per-locale meta, project screenshots as media.
-9. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
+8. **Layout & media** — compact phone layout (overlay project cards, compact rows, scrollable filters, tighter sections and skill chips, clamped quotes), video and poster media, desktop card hover.
+9. **Finishing touches & SEO** — hero accent on wide screens, section-heading accent, scroll-reveal animations, favicon, OG image and per-locale meta.
+10. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
 
 ## Next steps after approval
 1. `git init` in `/home/lezard/portfolio`, save this spec to `docs/superpowers/specs/2026-09-23-portfolio-design.md`, commit.
