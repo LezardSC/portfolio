@@ -111,3 +111,20 @@ export function hackathonsNewestFirst(list: readonly Hackathon[]): Hackathon[] {
 export function yearOf(date: string): string {
 	return date.slice(0, 4);
 }
+
+/** Below this width Experience is one column, and long quotes get clamped. */
+export const ONE_COLUMN_QUERY = '(width < 56.25rem)';
+
+/**
+ * Whether a recommendation quote is clamped to 3 lines and whether its Read more / Show less
+ * button shows. `overflows` = the clamped quote is longer than 3 lines (measured in the browser).
+ */
+export function quoteView(s: { narrow: boolean; overflows: boolean; expanded: boolean }): {
+	clamp: boolean;
+	button: boolean;
+} {
+	return {
+		clamp: s.narrow && !s.expanded,
+		button: s.narrow && (s.expanded || s.overflows)
+	};
+}

@@ -70,6 +70,8 @@ export const en = {
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
+		readMore: 'Read more',
+		showLess: 'Show less',
 		places: { 1: '1st place:', 2: '2nd place:', 3: '3rd place:' } satisfies Record<Medal, string>
 	},
 	contact: {
