@@ -94,8 +94,8 @@
 			display: none;
 		}
 		.body {
-			/* Light-on-dark in both themes: the gradient is dark whatever the theme. */
-			--text: #fff;
+			/* Light-on-dark in both themes: the gradient is dark whatever the theme. Values mirror OVERLAY in src/lib/overlay.ts (tested for contrast). */
+			--text: #ffffff;
 			--muted: #d0d7de;
 			--accent: #79c0ff;
 			--border: rgb(255 255 255 / 0.35);
@@ -107,8 +107,8 @@
 			background: linear-gradient(
 				to bottom,
 				transparent,
-				rgb(0 0 0 / 0.65) 2.5rem,
-				rgb(0 0 0 / 0.8)
+				rgb(0 0 0 / 0.75) 2.5rem,
+				rgb(0 0 0 / 0.85)
 			);
 			color: var(--text);
 			/* Keeps text crisp where a bright image shows through the translucent gradient. */
