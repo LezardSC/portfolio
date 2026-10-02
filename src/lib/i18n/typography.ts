@@ -10,3 +10,8 @@ export function frenchSpacingIssues(text: string): string[] {
 		text.slice(Math.max(0, m.index - 12), m.index + 12)
 	);
 }
+
+/** Each straight apostrophe (U+0027) in a French text, with a little context; French uses ’ (U+2019). */
+export function straightApostrophes(text: string): string[] {
+	return [...text.matchAll(/'/g)].map((m) => text.slice(Math.max(0, m.index - 12), m.index + 12));
+}

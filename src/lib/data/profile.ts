@@ -28,20 +28,20 @@ export const PROFILE: Profile = {
 	},
 	pitch: {
 		en: 'I build the invisible part of products: APIs, services, data processing, automation and deployment. My field is backend and low-level — reliability and performance over UI.',
-		fr: "Je conçois la partie invisible des produits\u00a0: APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c'est le backend et le bas niveau — la fiabilité et la performance plutôt que l'interface."
+		fr: 'Je conçois la partie invisible des produits\u00a0: APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c’est le backend et le bas niveau — la fiabilité et la performance plutôt que l’interface.'
 	},
 	bio: [
 		{
 			en: 'I got into programming for the money. I stayed because I found out I love understanding how things work underneath: memory, processes, the network, the machine itself.',
-			fr: "Je me suis mis à la programmation pour l'argent. J'y suis resté parce que j'ai découvert que j'adore comprendre comment les choses fonctionnent en dessous\u00a0: la mémoire, les processus, le réseau, la machine elle-même."
+			fr: 'Je me suis mis à la programmation pour l’argent. J’y suis resté parce que j’ai découvert que j’adore comprendre comment les choses fonctionnent en dessous\u00a0: la mémoire, les processus, le réseau, la machine elle-même.'
 		},
 		{
 			en: 'I trained at 42 Lyon (RNCP 7 — Expert in computer architecture), then worked as a full-stack developer at Y247 Group and as a machine-learning developer at Sogeti (Capgemini), and won several hackathons along the way.',
-			fr: "Je me suis formé à 42 Lyon (RNCP 7 — Expert en architecture informatique), puis j'ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage."
+			fr: 'Je me suis formé à 42 Lyon (RNCP 7 — Expert en architecture informatique), puis j’ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage.'
 		},
 		{
 			en: 'Today I focus on backend and systems work — APIs, services, Rust, infrastructure — while staying at home with Web3 and AI when a project needs them.',
-			fr: "Aujourd'hui je me concentre sur le backend et les systèmes — APIs, services, Rust, infrastructure — tout en restant à l'aise avec le Web3 et l'IA quand un projet en a besoin."
+			fr: 'Aujourd’hui je me concentre sur le backend et les systèmes — APIs, services, Rust, infrastructure — tout en restant à l’aise avec le Web3 et l’IA quand un projet en a besoin.'
 		}
 	],
 	facts: [
