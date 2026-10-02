@@ -143,7 +143,7 @@ describe('quoteView', () => {
 			button: true
 		});
 	});
-	it('shows no button when the quote fits in 3 lines', () => {
+	it('shows no button when the quote fits in 2 lines', () => {
 		expect(quoteView({ narrow: true, overflows: false, expanded: false }).button).toBe(false);
 	});
 	it('neither clamps nor shows a button on the two-column layout, even if expanded before', () => {
