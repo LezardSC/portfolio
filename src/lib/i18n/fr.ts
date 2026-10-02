@@ -66,6 +66,8 @@ export const fr: Dict = {
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
+		readMore: 'Lire la suite',
+		showLess: 'Réduire',
 		places: { 1: '1re place\u00a0:', 2: '2e place\u00a0:', 3: '3e place\u00a0:' }
 	},
 	contact: {
