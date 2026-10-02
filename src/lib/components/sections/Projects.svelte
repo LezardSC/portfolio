@@ -75,7 +75,7 @@
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
-	@media (max-width: 48rem) {
+	@media (width < 48rem) {
 		.large,
 		.small {
 			grid-template-columns: minmax(0, 1fr);
