@@ -4,7 +4,7 @@ import { PROFILE } from '$lib/data/profile';
 import { PROJECTS } from '$lib/data/projects';
 import { SKILL_GROUPS } from '$lib/data/skills';
 import { dicts } from './index';
-import { frenchSpacingIssues } from './typography';
+import { frenchSpacingIssues, straightApostrophes } from './typography';
 
 /** Every string under an `fr` key, at any depth. */
 function frenchStrings(value: unknown): string[] {
@@ -41,6 +41,15 @@ describe('frenchSpacingIssues', () => {
 	});
 });
 
+describe('straightApostrophes', () => {
+	it('flags a straight apostrophe with some context', () => {
+		expect(straightApostrophes("pour l'argent")).toEqual(["pour l'argent"]);
+	});
+	it('accepts the typographic apostrophe', () => {
+		expect(straightApostrophes('pour l’argent')).toEqual([]);
+	});
+});
+
 describe('French content', () => {
 	const sources = {
 		dictionary: leaves(dicts.fr),
@@ -56,4 +65,7 @@ describe('French content', () => {
 			expect(texts.flatMap(frenchSpacingIssues)).toEqual([]);
 		}
 	);
+	it.each(Object.entries(sources))('%s uses ’ rather than a straight apostrophe', (_, texts) => {
+		expect(texts.flatMap(straightApostrophes)).toEqual([]);
+	});
 });
