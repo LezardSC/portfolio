@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { prefersReducedMotion } from 'svelte/motion';
-	import { primaryLink, type Domain, type Project } from '$lib/projects';
+	import { MediaQuery } from 'svelte/reactivity';
+	import {
+		DESKTOP_QUERY,
+		primaryLink,
+		shouldPlayVideo,
+		type Domain,
+		type Project
+	} from '$lib/projects';
 
 	let { project }: { project: Project } = $props();
 
@@ -16,44 +23,74 @@
 
 	const href = $derived(primaryLink(project));
 	const media = $derived(project.media);
+	/** False on the server, so the prerendered HTML never contains a video. */
+	const desktop = new MediaQuery(DESKTOP_QUERY, false);
+
+	let frame = $state<HTMLElement>();
 	let video = $state<HTMLVideoElement>();
+	let inView = $state(false);
+	/** Set the first time the video should play; it then stays (paused off-screen) so scrolling back doesn't reload it. */
+	let started = $state(false);
+	/** The video failed to load: keep showing the poster. */
+	let failed = $state(false);
+
+	const play = $derived(
+		shouldPlayVideo({
+			desktop: desktop.current,
+			reducedMotion: prefersReducedMotion.current,
+			inView
+		})
+	);
+
+	$effect(() => {
+		if (play) started = true;
+	});
+
+	$effect(() => {
+		const el = frame;
+		if (!el || media?.kind !== 'video') return;
+		const io = new IntersectionObserver(([entry]) => (inView = entry.isIntersecting), {
+			threshold: 0.25
+		});
+		io.observe(el);
+		return () => io.disconnect();
+	});
 
 	$effect(() => {
 		const v = video;
-		if (!v || prefersReducedMotion.current) return;
-		const io = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting) v.play().catch(() => {});
-				else v.pause();
-			},
-			{ threshold: 0.25 }
-		);
-		io.observe(v);
-		return () => {
-			io.disconnect();
-			v.pause();
-		};
+		if (!v) return;
+		if (play) v.play().catch(() => {});
+		else v.pause();
 	});
 </script>
 
 {#snippet content()}
-	{#if media?.kind === 'image'}
-		<img src="{base}/{media.src}" alt="" loading="lazy" decoding="async" />
-	{:else if media?.kind === 'video'}
-		<video
-			bind:this={video}
-			src="{base}/{media.src}"
-			poster={media.poster ? `${base}/${media.poster}` : undefined}
-			muted
-			loop
-			playsinline
-			preload="metadata"
-		></video>
-	{:else}
-		<div class="placeholder" style:--hue={HUE[project.domains[0]]}>
-			<span>{project.title}</span>
-		</div>
-	{/if}
+	<div class="frame" bind:this={frame}>
+		{#if media}
+			<img
+				src="{base}/{media.kind === 'video' ? media.poster : media.src}"
+				alt=""
+				loading="lazy"
+				decoding="async"
+			/>
+			{#if media.kind === 'video' && started && !failed}
+				<video
+					bind:this={video}
+					src="{base}/{media.src}"
+					poster="{base}/{media.poster}"
+					muted
+					loop
+					playsinline
+					preload="auto"
+					onerror={() => (failed = true)}
+				></video>
+			{/if}
+		{:else}
+			<div class="placeholder" style:--hue={HUE[project.domains[0]]}>
+				<span>{project.title}</span>
+			</div>
+		{/if}
+	</div>
 {/snippet}
 
 {#if href}
@@ -78,19 +115,23 @@
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		background: var(--border);
+		/* The placeholder title inside the link must not be underlined. */
+		text-decoration: none;
+	}
+	/* Cards scale this on hover (see ProjectCardLarge). */
+	.frame {
+		position: relative;
+		height: 100%;
+		transition: transform 0.3s;
 	}
 	img,
 	video {
+		position: absolute;
+		inset: 0;
 		display: block;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		transition: transform 0.3s;
-	}
-	a.media:hover img,
-	a.media:hover video,
-	a.media:hover .placeholder {
-		transform: scale(1.03);
 	}
 	.placeholder {
 		display: grid;
@@ -102,7 +143,6 @@
 			hsl(var(--hue) 65% 45%),
 			hsl(calc(var(--hue) + 40) 65% 28%)
 		);
-		transition: transform 0.3s;
 	}
 	.placeholder span {
 		color: #fff;
@@ -112,15 +152,8 @@
 		text-shadow: 0 2px 12px rgb(0 0 0 / 0.35);
 	}
 	@media (prefers-reduced-motion: reduce) {
-		img,
-		video,
-		.placeholder {
+		.frame {
 			transition: none;
-		}
-		a.media:hover img,
-		a.media:hover video,
-		a.media:hover .placeholder {
-			transform: none;
 		}
 	}
 </style>
