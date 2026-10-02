@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { CONTEXTS, DOMAINS } from '$lib/projects';
+import { CONTEXTS, DOMAINS, mediaIssues } from '$lib/projects';
 import { PROJECTS } from './projects';
 
 /** static/ at the repo root, found from this file so the test works from any cwd. */
@@ -63,15 +63,11 @@ describe('project data', () => {
 		for (const r of ranks) expect(Number.isInteger(r) && r > 0, String(r)).toBe(true);
 	});
 
-	it('points media at relative paths that exist in static/', () => {
-		const bad = PROJECTS.flatMap((p) =>
-			p.media
-				? [p.media.src, ...(p.media.poster ? [p.media.poster] : [])].map((src) => ({
-						id: p.id,
-						src
-					}))
-				: []
-		).filter(({ src }) => src.startsWith('/') || !existsSync(staticFile(src)));
-		expect(bad).toEqual([]);
+	it('has valid media files that exist in static/', () => {
+		const exists = (src: string) => existsSync(staticFile(src));
+		const issues = PROJECTS.flatMap((p) =>
+			p.media ? mediaIssues(p.media, exists).map((issue) => `${p.id}: ${issue}`) : []
+		);
+		expect(issues).toEqual([]);
 	});
 });
