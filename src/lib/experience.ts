@@ -116,8 +116,8 @@ export function yearOf(date: string): string {
 export const ONE_COLUMN_QUERY = '(width < 56.25rem)';
 
 /**
- * Whether a recommendation quote is clamped to 3 lines and whether its Read more / Show less
- * button shows. `overflows` = the clamped quote is longer than 3 lines (measured in the browser).
+ * Whether a recommendation quote is clamped to 2 lines and whether its Read more / Show less
+ * button shows. `overflows` = the clamped quote is longer than 2 lines (measured in the browser).
  */
 export function quoteView(s: { narrow: boolean; overflows: boolean; expanded: boolean }): {
 	clamp: boolean;
