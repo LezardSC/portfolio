@@ -11,7 +11,7 @@ Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, buil
 | Framework | SvelteKit (Svelte 5 runes) + `@sveltejs/adapter-static`, fully prerendered, TypeScript |
 | Languages | EN + FR toggle; routes `/en`, `/fr` |
 | Theme | Dark + light toggle, defaults to system preference |
-| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later — its own milestone (M10) once the site is polished |
+| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later — its own milestone (M11) once the site is polished |
 | Project click | Icon links (GitHub / demo) + clickable media, new tab; no detail pages/modals. Private projects have no link |
 | Sections | Hero, About, Projects, Skills, Experience/Education, Contact |
 | Filtering | Two combinable single-select chip groups: Context × Domain + sort |
@@ -278,19 +278,19 @@ _Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" m
 - axe on `/en/` and `/fr/` × dark/light × 360px/1280px: **0 violations**;
 - no horizontal scroll at 360px;
 - Lighthouse (Playwright's Chromium) on `/en/`, mobile and desktop: **Accessibility, Best Practices, SEO = 100; Performance ≥ 95**.
-It prints a pass/fail table, exits non-zero on any failure, and writes full reports to a git-ignored `reports/`. SEO checks that need a real domain (absolute canonical/hreflang) are reported as "pending domain" and carried to M10 (deployment) rather than faked.
+It prints a pass/fail table, exits non-zero on any failure, and writes full reports to a git-ignored `reports/`. SEO checks that need a real domain (absolute canonical/hreflang) are reported as "pending domain" and carried to M11 (deployment) rather than faked.
 
 **Tests.** Unit tests for the menu state function, the active-link logic and the French typography check; existing tests, `npm run check` and `npm run lint` stay clean. The M7 review guide includes the audit table and screenshots at each width.
 
 ## Milestone 8 — Layout & media
-_Settled during Milestone 8 brainstorming (2026-10-01 → 2026-10-02)._ After M7 the user found the site worked but needed visual work, mostly on phones: the phone page was ~13,600px tall against ~7,450px on desktop (Projects alone 7,263px; a large card ~600px, a small one ~300px). The old "Visual polish & SEO" milestone is split again: **M8 Layout & media** (this one), **M9 Finishing touches & SEO** (hero accent, section-heading accent, scroll-reveal, favicon, OG image, per-locale meta), **M10 Deployment**. A smaller About photo next to the title was considered and declined.
+_Settled during Milestone 8 brainstorming (2026-10-01 → 2026-10-02)._ After M7 the user found the site worked but needed visual work, mostly on phones: the phone page was ~13,600px tall against ~7,450px on desktop (Projects alone 7,263px; a large card ~600px, a small one ~300px). The old "Visual polish & SEO" milestone is split again: **M8 Layout & media** (this one), **M9 Finishing touches & SEO** (hero accent, section-heading accent, scroll-reveal, favicon, OG image, per-locale meta), **M10 Deployment**. A smaller About photo next to the title was considered and declined. _Revised after the M8 PR review (2026-10-02): the user's main concern is the readability of the information, so M9 becomes a desktop design pass, M10 the same for phones, M11 deployment (see "Milestones")._
 
 **Approach.** One set of markup per component at every width; CSS media queries restyle it for phones, and scripts only decide whether a video plays. The site is prerendered without knowing the screen size, so choosing a phone or desktop component in JS would flash the wrong layout, and rendering both would duplicate content for screen readers. "Phone" below means under the existing `48rem` breakpoint (the one where both project grids drop to a single column).
 
 ### Projects on phones
 - **Large cards → overlay cards.** The media fills the card (a 4:3 media area); a dark gradient (transparent → ~85% black) covers its lower part, and the text sits on it: year · context, title, award pill, description clamped to **2 lines**, tech tags, link icons. Overlay text is white on the gradient in both themes, so its contrast doesn't depend on the theme (axe checks it). Target height ~260px instead of ~600px. A card without media keeps the domain-coloured gradient placeholder as background, without the big placeholder title. The media stays a decorative link (`tabindex=-1 aria-hidden`) and the icon links stay the accessible ones. The clamp is visual only: the full description stays in the DOM.
 - **Small cards → compact rows** (~120px instead of ~300px): first line = domain icon, title, then year · context (muted), link icons on the right; then the description clamped to 2 lines. No tech tags on phones. The award shows as 🏆 after the year (`aria-hidden`) with a visually hidden award text for screen readers.
-- **Filters:** each chip group becomes one horizontally scrollable row (no wrap). The group label stays fixed on the left; the right edge fades out (mask) to hint at more chips. Chips keep their `--tap` height. The sort select stays on its own line. Scrolling happens inside each row, so the page itself never scrolls horizontally (the audit's 360px overflow check still applies).
+- **Filters:** _revised after the PR review (2026-10-02); the first version, one sideways-scrolling row of chips per group, hid chips off-screen and was rejected._ On phones the two chip groups are replaced by two dropdowns, Context and Domain, styled like the sort select: three full-width rows, label on the left (fixed width) and the dropdown filling the rest. Each option shows its count, e.g. "Hackathon (5)"; an option that would give 0 results is disabled unless it is the current one. Chips and dropdowns share the same filter state; CSS shows the chips at 48rem and up and the dropdowns below (the hidden set is `display: none`, so it is out of the accessibility tree and the tab order). Nothing scrolls sideways.
 - **Desktop** (48rem and up) keeps the current layout: media on top (16:9), text below.
 
 ### Media
@@ -337,8 +337,9 @@ Only under `(hover: hover) and (pointer: fine)`, so touch screens never get a st
 6. **Contact + footer**
 7. **Fixes & accessibility** — mobile nav, active-section highlight, a11y, French typography, `/` redirect, deferred review minors, responsive pass, `npm run audit` (axe + Lighthouse).
 8. **Layout & media** — compact phone layout (overlay project cards, compact rows, scrollable filters, tighter sections and skill chips, clamped quotes), video and poster media, desktop card hover.
-9. **Finishing touches & SEO** — hero accent on wide screens, section-heading accent, scroll-reveal animations, favicon, OG image and per-locale meta.
-10. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
+9. **Desktop design** — a design pass on the desktop version, readability of the information first. The M8 proposals left for later (hero accent on wide screens, section-heading accent, scroll-reveal animations, favicon, OG image and per-locale meta) are inputs to its brainstorming.
+10. **Phone design** — the same pass for phones, once the desktop version is settled (not both at once).
+11. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
 
 ## Next steps after approval
 1. `git init` in `/home/lezard/portfolio`, save this spec to `docs/superpowers/specs/2026-09-23-portfolio-design.md`, commit.
