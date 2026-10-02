@@ -12,6 +12,15 @@ export type SortKey = (typeof SORTS)[number];
 /** How many results get the large card layout. */
 export const LARGE_COUNT = 6;
 
+/**
+ * Card media. Paths are relative to `static/`, without a leading slash. A video always has a
+ * still `poster`: phones and reduced-motion visitors only ever get the poster.
+ */
+export type Media = { kind: 'image'; src: string } | { kind: 'video'; src: string; poster: string };
+
+/** At and above this width cards keep media on top and videos may play; below it is "phone". */
+export const DESKTOP_QUERY = '(min-width: 48rem)';
+
 export type Project = {
 	id: string;
 	title: string;
@@ -23,8 +32,7 @@ export type Project = {
 	tech: string[];
 	/** Both optional: a private project has neither. */
 	links: { repo?: string; demo?: string };
-	/** `src`/`poster` are relative to `static/`, without a leading slash. */
-	media?: { kind: 'image' | 'video'; src: string; poster?: string };
+	media?: Media;
 	award?: Localized;
 	/** Lower = earlier in the "Highlights" sort (key `featured`). */
 	featured?: number;
@@ -74,4 +82,36 @@ export function splitTiers(
 /** Where the media/title link points: the repo, else the demo, else nowhere. */
 export function primaryLink(p: Project): string | undefined {
 	return p.links.repo ?? p.links.demo;
+}
+
+/** A video plays only on a desktop-width screen, while in view, and never under reduced motion. */
+export function shouldPlayVideo(s: {
+	desktop: boolean;
+	reducedMotion: boolean;
+	inView: boolean;
+}): boolean {
+	return s.desktop && s.inView && !s.reducedMotion;
+}
+
+/** Every `static/` file a media entry needs, the poster included. */
+export function mediaFiles(media: Media): string[] {
+	return media.kind === 'video' ? [media.src, media.poster] : [media.src];
+}
+
+const IMAGE_FILE = /\.(jpe?g|png|webp)$/i;
+const VIDEO_FILE = /\.mp4$/i;
+
+/** What is wrong with a media entry (formats, paths, missing files). Empty when it is fine. */
+export function mediaIssues(media: Media, exists: (src: string) => boolean): string[] {
+	const issues: string[] = [];
+	const image = media.kind === 'image' ? media.src : media.poster;
+	if (!IMAGE_FILE.test(image)) issues.push(`"${image}": not a .jpg, .jpeg, .png or .webp image`);
+	if (media.kind === 'video' && !VIDEO_FILE.test(media.src))
+		issues.push(`"${media.src}": not an .mp4 video`);
+	for (const src of mediaFiles(media)) {
+		if (!src) continue;
+		if (src.startsWith('/')) issues.push(`"${src}": must be relative to static/`);
+		else if (!exists(src)) issues.push(`"${src}": missing from static/`);
+	}
+	return issues;
 }
