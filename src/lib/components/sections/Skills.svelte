@@ -103,4 +103,24 @@
 			grid-template-columns: minmax(0, 1fr);
 		}
 	}
+	@media (width < 48rem) {
+		.groups {
+			gap: 1.75rem;
+		}
+		h3 {
+			margin-bottom: 0.75rem;
+		}
+		ul {
+			gap: 0.4rem;
+		}
+		li {
+			gap: 0.4rem;
+			padding: 0.3rem 0.65rem;
+			font-size: 0.9rem;
+		}
+		li svg {
+			width: 18px;
+			height: 18px;
+		}
+	}
 </style>
