@@ -22,7 +22,15 @@
 			{project.title}
 		{/if}
 	</h3>
-	<p class="meta">{project.date.slice(0, 4)} · {t.contexts[project.context]}</p>
+	<p class="meta">
+		{project.date.slice(0, 4)} · {t.contexts[project.context]}
+		{#if project.award}
+			<!-- Phone only (the award line is hidden there); display: none elsewhere, so it is never read twice. -->
+			<span class="trophy"
+				><span aria-hidden="true">🏆</span><span class="sr-only">{project.award[lang]}</span></span
+			>
+		{/if}
+	</p>
 	{#if project.award}
 		<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
 	{/if}
@@ -67,6 +75,9 @@
 		font-size: 0.8rem;
 		color: var(--muted);
 	}
+	.trophy {
+		display: none;
+	}
 	.desc {
 		flex: 1;
 		margin: 0;
@@ -76,5 +87,70 @@
 		-webkit-line-clamp: 3;
 		line-clamp: 3;
 		overflow: hidden;
+	}
+
+	/* Phone: one compact row — icon | title over year · context | links, then two lines of text. */
+	@media (width < 48rem) {
+		.card {
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr) auto;
+			grid-template-areas:
+				'icon title links'
+				'icon meta links'
+				'desc desc desc';
+			align-items: center;
+			gap: 0 0.75rem;
+			height: auto;
+			padding: 0.9rem 1rem;
+		}
+		.top {
+			display: contents;
+		}
+		.icon {
+			grid-area: icon;
+			align-self: start;
+		}
+		.card :global(.links) {
+			grid-area: links;
+		}
+		h3 {
+			grid-area: title;
+			font-size: 1.05rem;
+		}
+		.meta {
+			grid-area: meta;
+		}
+		.trophy {
+			display: inline;
+		}
+		.award,
+		.card > :global(ul) {
+			display: none;
+		}
+		.desc {
+			grid-area: desc;
+			margin-top: 0.5rem;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+		}
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.card {
+			transition:
+				transform 0.2s,
+				border-color 0.2s;
+		}
+		.card:hover,
+		.card:focus-within {
+			transform: translateY(-2px);
+			border-color: var(--accent);
+		}
+	}
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+		.card:hover,
+		.card:focus-within {
+			transform: none;
+		}
 	}
 </style>

@@ -141,4 +141,33 @@
 		font: inherit;
 		font-size: 0.9rem;
 	}
+	/* Phone: each group is one row of chips that scrolls sideways; the label stays put. */
+	@media (width < 48rem) {
+		.group {
+			flex-wrap: nowrap;
+			overflow-x: auto;
+			scrollbar-width: none;
+			/* Room for the focus outline, and for the last chip to leave the faded edge. */
+			padding: 4px 2rem 4px 2px;
+			mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+			/* A chip focused with Tab scrolls clear of the faded edge. */
+			scroll-padding-inline-end: 2rem;
+		}
+		.group::-webkit-scrollbar {
+			display: none;
+		}
+		.label {
+			position: sticky;
+			left: 0;
+			z-index: 1;
+			flex-shrink: 0;
+			min-width: auto;
+			padding-right: 0.5rem;
+			background: var(--bg);
+		}
+		.chip {
+			flex-shrink: 0;
+			white-space: nowrap;
+		}
+	}
 </style>
