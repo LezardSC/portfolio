@@ -1,13 +1,46 @@
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { mkdirSync, mkdtempSync, readdirSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { CONTEXTS, DOMAINS, mediaIssues } from '$lib/projects';
 import { PROJECTS } from './projects';
 
 /** static/ at the repo root, found from this file so the test works from any cwd. */
-const staticFile = (src: string) =>
-	resolve(fileURLToPath(new URL('../../../static', import.meta.url)), src);
+const STATIC = fileURLToPath(new URL('../../../static', import.meta.url));
+
+/**
+ * Whether `src` exists under `root` spelled exactly, case included. macOS ignores case by
+ * default, but the Linux server doesn't: `Shot.jpg` referenced as `shot.jpg` would 404 there.
+ */
+function existsExactly(root: string, src: string): boolean {
+	let dir = root;
+	for (const part of src.split('/')) {
+		try {
+			if (!readdirSync(dir).includes(part)) return false;
+		} catch {
+			return false;
+		}
+		dir = join(dir, part);
+	}
+	return true;
+}
+
+describe('existsExactly', () => {
+	const root = mkdtempSync(join(tmpdir(), 'media-'));
+	mkdirSync(join(root, 'projects'));
+	writeFileSync(join(root, 'projects', 'Shot.jpg'), '');
+	it('finds a file spelled exactly as on disk', () => {
+		expect(existsExactly(root, 'projects/Shot.jpg')).toBe(true);
+	});
+	it('rejects a path whose case differs (it would 404 on the Linux server)', () => {
+		expect(existsExactly(root, 'projects/shot.jpg')).toBe(false);
+		expect(existsExactly(root, 'Projects/Shot.jpg')).toBe(false);
+	});
+	it('rejects a missing file', () => {
+		expect(existsExactly(root, 'projects/none.jpg')).toBe(false);
+	});
+});
 
 describe('project data', () => {
 	it('has unique kebab-case ids', () => {
@@ -64,7 +97,7 @@ describe('project data', () => {
 	});
 
 	it('has valid media files that exist in static/', () => {
-		const exists = (src: string) => existsSync(staticFile(src));
+		const exists = (src: string) => existsExactly(STATIC, src);
 		const issues = PROJECTS.flatMap((p) =>
 			p.media ? mediaIssues(p.media, exists).map((issue) => `${p.id}: ${issue}`) : []
 		);
