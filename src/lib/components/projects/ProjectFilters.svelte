@@ -24,18 +24,10 @@
 
 	const contextOptions = ['all', ...CONTEXTS] as const;
 	const domainOptions = ['all', ...DOMAINS] as const;
-
-	/**
-	 * On phones each group is a sideways-scrolling row. The browser only scrolls a focused chip
-	 * into view when it is completely hidden; this also reveals one half under the label or the fade.
-	 */
-	function revealChip(e: FocusEvent) {
-		(e.target as HTMLElement).scrollIntoView({ inline: 'nearest', block: 'nearest' });
-	}
 </script>
 
 <div class="filters">
-	<div class="group" role="group" aria-labelledby="filter-context-label" onfocusin={revealChip}>
+	<div class="group" role="group" aria-labelledby="filter-context-label">
 		<span id="filter-context-label" class="label">{t.contextLabel}</span>
 		{#each contextOptions as value (value)}
 			{@const count = countFor(projects, filters, 'context', value)}
@@ -53,7 +45,7 @@
 		{/each}
 	</div>
 
-	<div class="group" role="group" aria-labelledby="filter-domain-label" onfocusin={revealChip}>
+	<div class="group" role="group" aria-labelledby="filter-domain-label">
 		<span id="filter-domain-label" class="label">{t.domainLabel}</span>
 		{#each domainOptions as value (value)}
 			{@const count = countFor(projects, filters, 'domain', value)}
@@ -71,7 +63,42 @@
 		{/each}
 	</div>
 
-	<label class="sort">
+	<!-- Phones: the same two filters as dropdowns (CSS shows one set or the other, never both). -->
+	<label class="pick phone">
+		<span class="label">{t.contextLabel}</span>
+		<select
+			name="context"
+			value={filters.context}
+			onchange={(e) =>
+				(filters = { ...filters, context: e.currentTarget.value as Filters['context'] })}
+		>
+			{#each contextOptions as value (value)}
+				{@const count = countFor(projects, filters, 'context', value)}
+				<option {value} disabled={count === 0 && filters.context !== value}>
+					{value === 'all' ? t.all : t.contexts[value]} ({count})
+				</option>
+			{/each}
+		</select>
+	</label>
+
+	<label class="pick phone">
+		<span class="label">{t.domainLabel}</span>
+		<select
+			name="domain"
+			value={filters.domain}
+			onchange={(e) =>
+				(filters = { ...filters, domain: e.currentTarget.value as Filters['domain'] })}
+		>
+			{#each domainOptions as value (value)}
+				{@const count = countFor(projects, filters, 'domain', value)}
+				<option {value} disabled={count === 0 && filters.domain !== value}>
+					{value === 'all' ? t.all : t.domains[value]} ({count})
+				</option>
+			{/each}
+		</select>
+	</label>
+
+	<label class="pick">
 		<span class="label">{t.sortLabel}</span>
 		<select bind:value={sort}>
 			{#each SORTS as s (s)}
@@ -134,7 +161,7 @@
 	.chip[aria-pressed='true'] .count {
 		color: var(--text);
 	}
-	.sort {
+	.pick {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -149,39 +176,24 @@
 		font: inherit;
 		font-size: 0.9rem;
 	}
-	/* Phone: each group is one row of chips that scrolls sideways; the label stays put. */
+	.phone {
+		display: none;
+	}
+	/* Phone: one full-width row per filter (label, then a dropdown) instead of chip groups. */
 	@media (width < 48rem) {
 		.group {
-			flex-wrap: nowrap;
-			overflow-x: auto;
-			scrollbar-width: none;
-			/* Room for the focus outline, and for the last chip to leave the faded edge. */
-			padding: 4px 2rem 4px 2px;
-			mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
-			/* Chips revealed on focus stop clear of the sticky label and of the faded edge. */
-			scroll-padding-inline: calc(var(--label-w) + 4px) 2rem;
-		}
-		.group::-webkit-scrollbar {
 			display: none;
 		}
-		.group {
-			--label-w: 5rem;
+		.phone {
+			display: flex;
 		}
-		/* Fixed width, so the scroll padding above matches it in both languages. */
-		.group .label {
-			position: sticky;
-			left: 0;
-			z-index: 1;
+		.pick .label {
 			flex-shrink: 0;
-			width: var(--label-w);
+			width: 5.5rem;
+		}
+		.pick select {
+			flex: 1;
 			min-width: 0;
-			padding-right: 0.5rem;
-			white-space: nowrap;
-			background: var(--bg);
-		}
-		.chip {
-			flex-shrink: 0;
-			white-space: nowrap;
 		}
 	}
 </style>
