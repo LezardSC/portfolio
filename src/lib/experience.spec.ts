@@ -6,6 +6,7 @@ import {
 	newestFirst,
 	periodPoints,
 	quoted,
+	quoteView,
 	yearOf,
 	type Hackathon
 } from './experience';
@@ -126,5 +127,30 @@ describe('quoted', () => {
 	});
 	it('uses guillemets with narrow no-break spaces in French', () => {
 		expect(quoted('Sérieux et impliqué.', 'fr')).toBe('«\u202fSérieux et impliqué.\u202f»');
+	});
+});
+
+describe('quoteView', () => {
+	it('clamps a long quote on one column and offers to expand it', () => {
+		expect(quoteView({ narrow: true, overflows: true, expanded: false })).toEqual({
+			clamp: true,
+			button: true
+		});
+	});
+	it('keeps the button to collapse an expanded quote', () => {
+		expect(quoteView({ narrow: true, overflows: true, expanded: true })).toEqual({
+			clamp: false,
+			button: true
+		});
+	});
+	it('shows no button when the quote fits in 3 lines', () => {
+		expect(quoteView({ narrow: true, overflows: false, expanded: false }).button).toBe(false);
+	});
+	it('neither clamps nor shows a button on the two-column layout, even if expanded before', () => {
+		for (const expanded of [false, true])
+			expect(quoteView({ narrow: false, overflows: true, expanded })).toEqual({
+				clamp: false,
+				button: false
+			});
 	});
 });
