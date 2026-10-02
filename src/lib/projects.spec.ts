@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
 	countFor,
 	filterProjects,
+	mediaIssues,
 	NO_FILTERS,
 	primaryLink,
+	shouldPlayVideo,
 	sortProjects,
 	splitTiers,
 	type Project
@@ -119,5 +121,56 @@ describe('primaryLink', () => {
 	});
 	it('is undefined for a private project', () => {
 		expect(primaryLink(make({ id: 'p', links: {} }))).toBeUndefined();
+	});
+});
+
+describe('shouldPlayVideo', () => {
+	const on = { desktop: true, reducedMotion: false, inView: true };
+	it('plays on desktop, in view, without reduced motion', () => {
+		expect(shouldPlayVideo(on)).toBe(true);
+	});
+	it('never plays on a phone-width screen', () => {
+		expect(shouldPlayVideo({ ...on, desktop: false })).toBe(false);
+	});
+	it('never plays under prefers-reduced-motion', () => {
+		expect(shouldPlayVideo({ ...on, reducedMotion: true })).toBe(false);
+	});
+	it('does not play off-screen', () => {
+		expect(shouldPlayVideo({ ...on, inView: false })).toBe(false);
+	});
+});
+
+describe('mediaIssues', () => {
+	const all = () => true;
+	it('accepts an existing image and a video with an image poster', () => {
+		expect(mediaIssues({ kind: 'image', src: 'projects/a.webp' }, all)).toEqual([]);
+		expect(
+			mediaIssues({ kind: 'video', src: 'projects/a.mp4', poster: 'projects/a.jpg' }, all)
+		).toEqual([]);
+	});
+	it('rejects image formats it does not know, GIFs included', () => {
+		expect(mediaIssues({ kind: 'image', src: 'projects/a.gif' }, all)).toHaveLength(1);
+	});
+	it('rejects a video that is not MP4 and a poster that is not an image', () => {
+		const issues = mediaIssues(
+			{ kind: 'video', src: 'projects/a.webm', poster: 'projects/a.mp4' },
+			all
+		);
+		expect(issues).toHaveLength(2);
+	});
+	it('rejects an empty poster', () => {
+		expect(
+			mediaIssues({ kind: 'video', src: 'projects/a.mp4', poster: '' }, all).length
+		).toBeGreaterThan(0);
+	});
+	it('rejects absolute paths and names missing files', () => {
+		const exists = (src: string) => src !== 'projects/missing.jpg';
+		expect(mediaIssues({ kind: 'image', src: '/projects/a.jpg' }, exists)[0]).toContain('relative');
+		expect(
+			mediaIssues(
+				{ kind: 'video', src: 'projects/a.mp4', poster: 'projects/missing.jpg' },
+				exists
+			)[0]
+		).toContain('projects/missing.jpg');
 	});
 });
