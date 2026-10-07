@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { reveal } from '$lib/reveal-dom';
 	import { longestWordLength, sectionNumber, type SectionId } from '$lib/sections';
 
 	let {
@@ -10,7 +11,7 @@
 	}: { id: SectionId; title: string; lead?: string; children?: Snippet } = $props();
 </script>
 
-<section {id} aria-labelledby="{id}-title">
+<section {id} aria-labelledby="{id}-title" use:reveal>
 	<div class="inner">
 		<div class="head" style:--chars={longestWordLength(title)}>
 			<p class="num" aria-hidden="true">{sectionNumber(id)}</p>
