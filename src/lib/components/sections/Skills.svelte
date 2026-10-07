@@ -58,7 +58,8 @@
 					id="skills-panel-{group.id}"
 					role={enhanced ? 'tabpanel' : undefined}
 					aria-labelledby={enhanced ? `skills-tab-${group.id}` : undefined}
-					hidden={enhanced && selected !== i}
+					hidden={enhanced && selected !== i ? 'until-found' : undefined}
+					onbeforematch={() => (selected = i)}
 				>
 					<h3 id="skills-{group.id}">{group.title[lang]}</h3>
 					<p class="desc">{group.description[lang]}</p>
@@ -171,7 +172,7 @@
 	}
 	.tiles {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr));
 		gap: 0.625rem;
 		margin: 0;
 		padding: 0;
@@ -200,11 +201,24 @@
 			color: var(--logo-light);
 		}
 	}
-	/* Phone (M10 will design it): tabs above the panel, smaller tiles. */
-	@media (width < 48rem) {
+	/* Too narrow for tabs beside the panel (300px + a 200px tile + padding): tabs above it. */
+	@media (width < 60rem) {
 		.skills.enhanced {
 			grid-template-columns: minmax(0, 1fr);
 		}
+	}
+	/* Printed, every area shows (hidden panels and the tab list are screen-only). */
+	@media print {
+		.tablist {
+			display: none;
+		}
+		.panel[hidden] {
+			display: block;
+			content-visibility: visible;
+		}
+	}
+	/* Phone (M10 will design it): smaller tiles. */
+	@media (width < 48rem) {
 		.enhanced .panel {
 			min-height: 0;
 		}

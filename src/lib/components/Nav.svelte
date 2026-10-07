@@ -143,13 +143,14 @@
 		flex: 1;
 		min-width: 0;
 		overflow-x: auto;
-		display: flex;
-		justify-content: center;
 	}
 	ul {
 		display: flex;
 		gap: 1.5rem;
-		margin: 0;
+		/* Centred by auto margins, not justify-content: when the links overflow, the margins drop to
+		   0 and the row overflows to the right, where it can still be scrolled. */
+		width: max-content;
+		margin: 0 auto;
 		padding: 0;
 		list-style: none;
 		white-space: nowrap;
