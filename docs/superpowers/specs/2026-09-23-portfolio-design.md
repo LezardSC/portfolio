@@ -323,6 +323,124 @@ Only under `(hover: hover) and (pointer: fine)`, so touch screens never get a st
 - Visual check with the test media injected (images and MP4s): 360, 390, 768, 1024 and 1440px, both themes, both languages, including a large card without media, the hover state and an expanded quote.
 - The review guide reports page and section heights before and after. Expected: the phone page drops from ~13,600px to under ~9,000px (an estimate, not a gate).
 
+## Milestone 9 — Desktop design
+_Settled during Milestone 9 brainstorming (2026-10-07 → 2026-10-08), after a design exploration on a Claude Design canvas._
+
+**Goal.** Give the site its new visual identity on desktop, in both themes, with the readability of the information first: the audience is recruiters and clients, often not developers. This section **supersedes the desktop presentation** described in the Hero + About, Projects, Skills, Experience & Education and Contact & Footer sections above; data, logic and accessibility rules from those sections still apply unless changed here.
+
+**Source of truth.** The validated artboards on the canvas https://claude.ai/artifact/5rqhnCoS2tUFHpioTu8jZG (private to Jocelyn's claude.ai account): **A1·M3 révisée — clair** (`A1M3b-Clair`), **A1·M3 révisée — sombre** (`A1M3b-Sombre`) and **Compétences 4A** (`Skills-Idee4A`). Copies of their sources are in `docs/superpowers/designs/2026-10-07-m9-final/` (`.dc.html` design components: they only render inside the canvas, so use them as a value reference, not as code). Every value below comes from them; **the implementation must match them**, each section is screenshot-checked against them, and any deliberate deviation is listed in the review guide. Rejected directions (terminal/developer jokes, SaaS-style bento) stay rejected.
+
+**Scope.** Desktop only (48rem and up). Colours, font and shared styles apply at every width, but phones keep the M8 layouts and only get a "nothing breaks" check (no horizontal scroll at 360px, no overlap); the phone design is M10.
+
+### Foundations
+
+**Tokens** in `src/app.css`, existing names kept:
+
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `--bg` | `#FAF8F4` | `#121210` | page ground |
+| `--surface` | `#FFFFFF` | `#1A1916` | cards |
+| `--text` | `#141412` | `#F3F0E8` | headings, 2px strong borders, primary button fill |
+| `--on-text` (new) | `#FFFFFF` | `#121210` | text on a `--text` fill |
+| `--body` (new) | `#2B2A26` | `#D9D5CB` | running text |
+| `--muted` | `#56534C` | `#A9A498` | dates, captions, labels |
+| `--border` | `#E0DBD0` | `#2B2924` | card borders |
+| `--rule` (new) | `#DCD7CC` | `#2B2924` | separator lines |
+| `--tag` (new) | `#ECE8E0` | `#25231F` | tech tags, neutral icon tiles |
+| `--accent` | `#C2391B` | `#FF7F5E` | vermilion / coral |
+| `--on-accent` (new) | `#FFFFFF` | `#121210` | text on an accent fill |
+| `--tint` (new) | `color-mix(in srgb, var(--accent) 11%, var(--bg))` | same at 15% | icon tiles |
+| `--ok` / `--ok-dot` / `--ok-ring` | `#1F6B3A` / `#2E8B4E` / `rgba(46,139,78,.16)` | `#86DDA5` / `#4CC377` / `rgba(76,195,119,.2)` | "Available" badge |
+
+The same values go in the no-JS `prefers-color-scheme` block. `THEME_BG` in `src/lib/skills.ts` becomes `{ dark: '#121210', light: '#FAF8F4' }` (its sync test follows). Radii: `--radius: 6px` (cards, buttons), `--radius-sm: 4px` (tags, icon tiles); `--pill` goes. Hover effects stay under `(hover: hover) and (pointer: fine)`, mirrored on `:focus-within`/`:focus-visible`, and drop movement under `prefers-reduced-motion` (as in M8).
+
+**Font.** Schibsted Grotesk (variable, weights 400–900) from `@fontsource-variable/schibsted-grotesk`, latin subset only, self-hosted (no Google request), `font-display: swap`, woff2 preloaded. It replaces the system stack everywhere. Body text 18px, line-height 1.6. The canvas used IBM Plex Mono for the small nav numbers; it is dropped (Schibsted 13px, one font file less) — a deliberate deviation.
+
+**Page and sections.** Container max 1240px, 40px side padding. `Section.svelte` becomes a 12-column grid (column gap 32px, row gap 28px), 112px top and bottom padding, 2px `--text` top rule:
+- header, 3 columns: the section number ("01"–"05", from the order in `src/lib/sections.ts`, `aria-hidden`) at 112px, weight 900, letter-spacing −0.05em, line-height 0.82, transparent fill with a 2px `--accent` text stroke; then the `h2` at 46px, weight 800, letter-spacing −0.035em, 14px above; then an optional lead line, 17px `--muted`;
+- body, 9 columns.
+Under 48rem the header stacks above the body and the M8 phone paddings and heading sizes stay.
+
+**Nav.** Stays at the top while scrolling: 72px tall, background `--bg` at 86% opacity with a 14px backdrop blur, 1px `--rule` bottom border. Brand "Jocelyn Renault" 19px weight 800; links 16px weight 500, 24px apart, each prefixed by its number ("01 ") in `--accent` at 13px. Right side: theme toggle and language switch as 44px square buttons (1px `--rule`, 4px radius), then a new primary **CV** button (44px tall, opens `cv-{lang}.pdf` in a new tab). M7 behaviour (active-section underline, phone menu) is unchanged.
+
+**Buttons.** Shared `.btn` / `.btn-primary` classes in `app.css` (used by Hero, Nav, Contact): min-height 48px, padding 0 22px, 2px `--text` border, 6px radius, 16px weight 600; primary = `--text` fill and `--on-text` text, hover → `--accent` fill and border with `--on-accent` text; secondary = transparent, hover → `--accent` text and border.
+
+### Hero
+- Padding 64px top, 96px bottom; no longer `100svh`.
+- "Available" badge (when `PROFILE.available`, currently `false`): 15px weight 600 `--ok`, 10px dot `--ok-dot` with a 4px `--ok-ring` halo.
+- `h1` "Jocelyn Renault" on one line: 122px, weight 900, line-height 0.9, letter-spacing −0.055em, `white-space: nowrap`, followed by a full stop in `--accent` (`aria-hidden`).
+- Then a 2px `--text` rule (48px below the name, 32px above the content) and two columns (`repeat(auto-fit, minmax(min(100%, 460px), 1fr))`, gap 48px × 80px):
+  - left: role 28px, weight 800, `--accent`, letter-spacing −0.01em; pitch 19px `--body`, max 52ch; three buttons in one row, 12px apart: **See projects / Voir les projets** (primary, `#projects`), **View CV / Voir le CV** (document icon, opens the PDF in a new tab), **Malt profile / Profil Malt ↗** (Malt symbol in `#FC5757`, new tab). GitHub leaves the hero (it stays in Contact).
+  - right: the **At a glance / En bref** card: `--surface`, 2px `--text` border, 6px radius, padding 10px 28px; title 14px weight 600 `--accent`; a `<dl>` of 5 rows, grid `140px 1fr`, gap 16px, 13px vertical padding, 1px `--rule` between rows; `dt` 14px weight 600 `--muted`, `dd` weight 600.
+- **Data:** `PROFILE.facts` is replaced by `PROFILE.glance: { label: Localized; value: Localized }[]`:
+
+| EN label | EN value | FR label | FR value |
+|---|---|---|---|
+| Education | 42 Lyon — RNCP 7, expert in computer architecture | Formation | 42 Lyon — RNCP 7, expert en architecture informatique |
+| Latest role | ML & Computer Vision developer — Sogeti (Capgemini) | Dernier poste | Développeur ML & IA Vision — Sogeti (Capgemini) |
+| Stack | Python, Rust, C, Node.js, Docker | Stack | Python, Rust, C, Node.js, Docker |
+| Hackathons | 2 wins, 5 podiums | Hackathons | 2 victoires, 5 podiums |
+| Languages | French, English | Langues | Français, anglais |
+
+### About
+Photo left (240px wide, 4:5, 6px radius, `object-fit: cover` centred on the existing square `photo.jpg`, so the sides are cropped without editing the file), bio right (19px, line-height 1.65, max 62ch), 48px gap. The fact chips under the bio are removed (the hero card carries them).
+
+### Projects
+- **Lead:** "{total} projects, {featured} worth a look first" / « {total} projets, dont {featured} à voir en priorité », counts computed from the data.
+- **Filters:** three labelled groups (label 14px weight 600 `--muted`, 8px above): Context, Domain, Sort by. Each is a segmented bar: `--surface`, 2px `--text` border, 6px radius; buttons 15px, 42px tall, padding 0 15px, 1px `--rule` between them; the active one filled `--text` with `--on-text` text. **Deviation (chosen by Jocelyn):** each Context/Domain button keeps its result count, small and `--muted` (`--on-text` at reduced opacity when active), right of the label. Sort becomes a segmented bar on desktop instead of the select. Behaviour unchanged (combinable filters, zero-result options disabled unless active, empty state with reset); the M8 phone dropdowns stay.
+- **Featured cards:** grid `repeat(auto-fill, minmax(min(100%, 380px), 1fr))`, gap 56px × 32px. Top to bottom: media 16:9, 6px radius, zoom 1.05 on card hover (M8 video/poster logic unchanged); meta line 15px weight 500 `--muted` = domain icon + domain name in `--accent`, then "2024 · Hackathon"; title 32px weight 800, letter-spacing −0.025em, with a 3px `--accent` underline that grows from 0 to full width on hover (0.3s); award 16px weight 700 `--accent` with a trophy icon, no background; description 17px `--body`; footer above a 1px `--rule`: tech tags (14px, padding 7px 10px, 4px radius, `--tag`) left, **Source code ↗ / Code source ↗** link (15px weight 600) or "Private code / Code privé" (`--muted`) right. Icon links become these text links; **Live demo ↗ / Démo ↗** is added next to it when a project has a demo (none today).
+- **Other projects:** heading "More projects / Autres projets" 26px weight 800 (80px above), lead "Shorter school and game-jam projects." / « Projets d’école et de game jam, plus courts. » 16px `--muted`. Grid `repeat(auto-fill, minmax(min(100%, 270px), 1fr))`, gap 16px. Card: `--surface`, 2px `--border`, 6px radius, padding 22px, gap 8px: top row = domain icon in a 40px `--tint` tile (icon `--accent`) and **Code ↗** / "Private" right; title 19px weight 800; "2025 · School · AI" 14px `--muted`; description 15px, line-height 1.5, clamped to 3 lines; tags 13px (padding 5px 8px). Hover: border `--text`, lift 4px, `6px 6px 0 var(--accent)` shadow.
+
+### Skills (tabs)
+- **Lead:** "My core: backend, systems and tooling." / « Mon cœur de métier : backend, systèmes et outillage. »
+- **Layout** inside the section body: tab list 300px wide, then the panel (gap 28px).
+- **Tab:** a `<button>` 64px min-height, padding 10px 16px 10px 10px, 2px transparent border, 6px radius, 18px weight 700, gap 14px: group icon in a 44px `--tint` tile, group title, skill count right-aligned (14px weight 600 `--muted`). Hover: `--surface` background, `--border` border. Selected: `--surface`, 2px `--text` border, `5px 5px 0 var(--accent)` shadow.
+- **Panel:** `--surface`, 2px `--border`, 6px radius, padding 32px 34px, min-height 480px (so the page doesn't jump between tabs); group title 32px weight 800, letter-spacing −0.02em; description 18px `--body` (8px above, 24px below); skills as tiles in `repeat(auto-fill, minmax(200px, 1fr))`, gap 10px: `--bg` background, 6px radius, padding 16px 18px, gap 14px, 30px logo in its theme brand colour (M4 `logoColor` logic), name 18px weight 600. No "used in" line (tried and dropped: 14 of 32 skills have no project to point to).
+- **Default tab:** Backend.
+- **Data:** each `SKILL_GROUPS` entry gains `description: Localized`:
+
+| Group | EN | FR |
+|---|---|---|
+| Backend | APIs, databases, authentication and services. | APIs, bases de données, authentification et services. |
+| Systems & Low-level | Code close to the machine: memory, processes, performance. | Du code proche de la machine : mémoire, processus, performance. |
+| DevOps & Tools | Containers, deployment and continuous integration. | Conteneurs, déploiement et intégration continue. |
+| AI & ML | Vision models, training and LLM agents. | Modèles de vision, entraînement et agents LLM. |
+| Blockchain | Smart contracts, tokens and data anchored on-chain. | Smart contracts, tokens et données ancrées on-chain. |
+| Frontend | Web interfaces when a project calls for them. | Des interfaces web quand le projet le demande. |
+
+- **Accessibility:** ARIA tabs, vertical: `role="tablist"` (`aria-orientation="vertical"`, labelled), `role="tab"` with `aria-selected` / `aria-controls`, `role="tabpanel"` with `aria-labelledby`; roving `tabindex` (only the selected tab is in the tab order); ArrowDown/ArrowUp move and select (wrapping), Home/End go to the first/last. The key rule is a pure, unit-tested `nextTab(index: number, key: string, count: number): number | null` in `src/lib/skills.ts`; the component only wires it.
+- **No JS / before hydration (and for crawlers):** the prerendered HTML shows all six groups stacked, each with its title, description and tiles; the tab list only appears after hydration, which is also when non-selected panels get `hidden`. Nothing is lost without JS.
+- Under 48rem (until M10) the tab list stacks above the panel.
+
+### Experience & Education
+- Sub-heading "Experience / Expérience" 15px weight 600 `--accent`. One row per job: grid `190px 1fr`, gap 8px × 32px, 28px vertical padding, 1px `--rule` below. Left: dates 15px weight 500 `--muted`, "Jul 2025 → Jan 2026" then "Internship · 7 months" / « juil. 2025 → janv. 2026 », « Stage · 7 mois » (`<time>` elements kept). Right: title 24px weight 800; company weight 700 `--accent`; bullets `--body`; tech tags; the recommendation in a box: grid `36px 1fr`, gap 8px, padding 20px 24px 20px 16px, `--surface`, 2px `--border`, 6px radius; a 52px weight 800 `--accent` opening quote mark (`aria-hidden`); quote 17px, line-height 1.55; caption 15px `--muted` with the name in `--text` bold. "(translated from French)" stays on the English page.
+- **Quotes stay whole on desktop** (deviation from the canvas, which cut one for space); the M8 2-line clamp with Read more stays below 56.25rem.
+- Below the jobs (56px above), two columns `repeat(auto-fit, minmax(min(100%, 320px), 1fr))`, gap 48px:
+  - **Education / Formation:** rows with 18px vertical padding and a 1px `--rule`: dates 14px `--muted`, school 20px weight 800, diploma weight 600, details 16px `--body`; the CS50 certificate link.
+  - **Hackathons — {n} podiums** ({n} computed): rows grid `44px 1fr auto`, gap 14px, 12px vertical padding, 1px `--rule`: a 40px tile (4px radius) — trophy icon in `--accent` on `--tint` for a win, medal icon in `--muted` on `--tag` otherwise; event in bold with "project · year" below (15px `--muted`); the result right: **Winner / Vainqueur** (15px weight 800 `--accent`) or **2nd place / 2e place**, **3rd place / 3e place** (15px weight 700 `--body`). The labels come from a new `experience.results` dict entry (`{ 1: 'Winner', 2: '2nd place', 3: '3rd place' }` / `{ 1: 'Vainqueur', 2: '2e place', 3: '3e place' }`, typed `Record<Medal, string>`), replacing the `experience.places` "1st place:" keys; the title count comes from the hackathon data.
+
+### Contact & Footer
+- Intro 24px weight 600, max 40ch, 28px below.
+- Two equal blocks, `repeat(auto-fit, minmax(min(100%, 380px), 1fr))`, gap 20px, each `--surface` with a 2px `--text` border, 6px radius, padding 28px 32px:
+  - **Email:** label "By email / Par e-mail" (14px weight 600 `--muted`); the address as the `mailto:` link, 30px weight 800, letter-spacing −0.02em, `--text`; a primary **Copy address / Copier l’adresse** button. M7 copy behaviour kept (`aria-live` announcement, repeat re-announce, select-and-hint fallback).
+  - **Malt:** Malt symbol (30px, `#FC5757`) in a 48px tile (`#FFEDEC` light, `rgba(252,87,87,.14)` dark), label "Freelance"; title "Working through Malt? / Vous passez par Malt ?" 26px weight 800; text 17px `--body` "My profile, recommendations and mission requests are on Malt too." / « Mon profil, mes recommandations et la prise de contact pour une mission sont aussi sur Malt. »; secondary button **See my Malt profile ↗ / Voir mon profil Malt ↗** (new tab).
+- Below (20px), three tiles `repeat(auto-fit, minmax(min(100%, 200px), 1fr))`, gap 16px: **LinkedIn** (logo `#0A66C2` light, `#4A9FE8` dark), **GitHub** (logo `--text`), **CV (PDF)** (document line icon); 64px tall, padding 0 20px, `--surface`, 2px `--text` border, 6px radius, 18px weight 700, logo + label left, ↗ (↓ for the CV) right. Hover: `--text` fill, `--on-text` text, `6px 6px 0 var(--accent)` shadow, lift 4px. `contactLinks()` changes accordingly (email and Malt become their own blocks; the tiles are linkedin, github, cv) and its tests follow.
+- **Footer:** a full-width band, `#141412` (light) / `#0D0D0B` (dark) with `#FFFFFF` / `#F3F0E8` text, 88px tall: "© {year} Jocelyn Renault" (weight 700) left — the © year is a small deviation kept by choice — and "Back to top ↑ / Retour en haut ↑" (weight 600) right.
+
+### Favicon, share image, meta
+- **Favicon:** `static/favicon.svg`, white "JR" on `#C2391B`, rounded square (radius 12 on a 64 grid); the letters are outlined paths (an SVG favicon can't load a web font). Also `static/favicon.ico` (32px) and `static/apple-touch-icon.png` (180px). The `$lib/assets/favicon.svg` import in `+layout.svelte` and the downloaded icons8 files in `src/lib/assets/` are removed.
+- **Share (OG) image:** 1200×630, one per language (`static/og-en.png`, `static/og-fr.png`): `--bg` ground, the name with the accent full stop, the role in `--accent`, the JR mark. Generated, together with the favicon PNG/ICO, by `npm run og` (`scripts/og.ts`, Playwright rendering an HTML template with the site font and tokens); outputs are committed.
+- **Per-locale meta** in `[lang=lang]/+page.svelte` from the dicts: existing title and description, plus `og:title`, `og:description`, `og:image`, `og:type=website`, `og:locale` (`en_US` / `fr_FR`) and `og:locale:alternate`, `twitter:card=summary_large_image`, and `theme-color` for light and dark (`media` queries). `og:image` is relative until M11: link previews (LinkedIn, Malt, Slack) need an absolute URL and only work once the domain exists; the audit keeps reporting it as "pending domain".
+
+### Scroll reveal
+Each section except the hero fades in once, rising 16px, over ~500ms, when it enters the viewport: a `reveal` Svelte action using `IntersectionObserver`, unobserved after the first reveal. Nothing is ever hidden without JS, before hydration, under `prefers-reduced-motion`, or for a section already in view at hydration (so nothing flashes). The decision is a pure, unit-tested `shouldReveal({ supported, reducedMotion, inViewAtStart }): boolean` in `src/lib/reveal.ts` (true only when supported, not reduced motion and not in view at start).
+
+### Tests and verification
+- **Unit:** `nextTab`; `experience.results` labels for places 1–3; `PROFILE.glance` and skill-group descriptions non-empty in both languages (and French typography rules); `contactLinks` new shape; `THEME_BG` matches `app.css`; favicon, apple-touch-icon and both OG images exist in `static/`; i18n completeness for every new key; `shouldReveal`.
+- `npm run check`, `npm test`, `npm run lint` clean; `npm run audit` passes (0 axe violations in both themes and languages, no horizontal scroll at 360px, Lighthouse Accessibility / Best Practices / SEO 100 except the pending-domain items, Performance ≥ 95 with the web font).
+- **Fidelity:** Playwright screenshots of every section at 1440px and 1280px, both themes, both languages, checked against the artboard values; the canvas can't be rendered outside claude.ai, so the review guide puts the screenshots next to the canvas link for Jocelyn's own side-by-side check and lists every deviation. Quick check at 360px and 390px that nothing breaks.
+- **Review guide:** `docs/reviews/milestone-9-review-guide.md`.
+
 ## Testing
 - Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
 - `svelte-check` clean.
@@ -337,7 +455,7 @@ Only under `(hover: hover) and (pointer: fine)`, so touch screens never get a st
 6. **Contact + footer**
 7. **Fixes & accessibility** — mobile nav, active-section highlight, a11y, French typography, `/` redirect, deferred review minors, responsive pass, `npm run audit` (axe + Lighthouse).
 8. **Layout & media** — compact phone layout (overlay project cards, compact rows, scrollable filters, tighter sections and skill chips, clamped quotes), video and poster media, desktop card hover.
-9. **Desktop design** — a design pass on the desktop version, readability of the information first. The M8 proposals left for later (hero accent on wide screens, section-heading accent, scroll-reveal animations, favicon, OG image and per-locale meta) are inputs to its brainstorming.
+9. **Desktop design** — the new visual identity from the Claude Design canvas on desktop, both themes (see "Milestone 9 — Desktop design"): tokens and font, numbered section grid, hero with the at-a-glance card, restyled projects, skills as tabs, experience, contact with email and Malt blocks, favicon, OG images, per-locale meta, scroll reveal.
 10. **Phone design** — the same pass for phones, once the desktop version is settled (not both at once).
 11. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
 
