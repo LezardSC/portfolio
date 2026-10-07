@@ -74,7 +74,7 @@
 		font-size: 0.8rem;
 		color: var(--muted);
 		border: 1px solid var(--border);
-		border-radius: var(--pill);
+		border-radius: var(--radius-sm);
 		padding: 0.1rem 0.6rem;
 	}
 </style>

@@ -54,7 +54,7 @@
 		align-self: flex-start;
 		margin: 0;
 		padding: 0.15rem 0.7rem;
-		border-radius: var(--pill);
+		border-radius: var(--radius-sm);
 		font-size: 0.8rem;
 		font-weight: 600;
 		background: color-mix(in srgb, #e3b341 18%, transparent);
