@@ -87,10 +87,15 @@ export const fr: Dict = {
 	contact: {
 		intro: 'Ouvert aux opportunités. Le plus rapide pour me joindre, c’est l’e-mail.',
 		cv: 'CV (PDF)',
-		emailLabel: 'M’envoyer un e-mail',
-		copy: 'Copier',
+		byEmail: 'Par e-mail',
+		copy: 'Copier l’adresse',
 		copied: 'Copié\u00a0!',
-		copyHint: 'Appuyez sur Ctrl+C (⌘C sur Mac) pour copier.'
+		copyHint: 'Appuyez sur Ctrl+C (⌘C sur Mac) pour copier.',
+		maltLabel: 'Freelance',
+		maltTitle: 'Vous passez par Malt\u00a0?',
+		maltText:
+			'Mon profil, mes recommandations et la prise de contact pour une mission sont aussi sur Malt.',
+		maltCta: 'Voir mon profil Malt'
 	},
 	footer: {
 		backToTop: 'Retour en haut'

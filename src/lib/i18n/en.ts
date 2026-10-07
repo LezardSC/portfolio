@@ -91,10 +91,14 @@ export const en = {
 	contact: {
 		intro: 'Open to opportunities. Email is the fastest way to reach me.',
 		cv: 'CV (PDF)',
-		emailLabel: 'Send me an email',
-		copy: 'Copy',
+		byEmail: 'By email',
+		copy: 'Copy address',
 		copied: 'Copied!',
-		copyHint: 'Press Ctrl+C (⌘C on Mac) to copy.'
+		copyHint: 'Press Ctrl+C (⌘C on Mac) to copy.',
+		maltLabel: 'Freelance',
+		maltTitle: 'Working through Malt?',
+		maltText: 'My profile, recommendations and mission requests are on Malt too.',
+		maltCta: 'See my Malt profile'
 	},
 	footer: {
 		backToTop: 'Back to top'
