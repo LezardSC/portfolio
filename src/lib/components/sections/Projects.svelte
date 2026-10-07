@@ -4,8 +4,10 @@
 	import { fade } from 'svelte/transition';
 	import { PROJECTS } from '$lib/data/projects';
 	import type { Dict, Lang } from '$lib/i18n';
+	import { fill } from '$lib/i18n/format';
 	import {
 		filterProjects,
+		LARGE_COUNT,
 		NO_FILTERS,
 		sortProjects,
 		splitTiers,
@@ -23,16 +25,21 @@
 	let sort = $state<SortKey>('featured');
 
 	const tiers = $derived(splitTiers(sortProjects(filterProjects(PROJECTS, filters), sort)));
+	const lead = $derived(
+		fill(t.lead, { total: PROJECTS.length, featured: Math.min(LARGE_COUNT, PROJECTS.length) })
+	);
 	const ms = $derived(prefersReducedMotion.current ? 0 : 300);
 </script>
 
-<Section id="projects" {title}>
+<Section id="projects" {title} {lead}>
 	<ProjectFilters projects={PROJECTS} bind:filters bind:sort {t} />
 
 	{#if tiers.large.length === 0}
 		<div class="empty">
 			<p>{t.empty}</p>
-			<button type="button" onclick={() => (filters = { ...NO_FILTERS })}>{t.reset}</button>
+			<button type="button" class="btn" onclick={() => (filters = { ...NO_FILTERS })}
+				>{t.reset}</button
+			>
 		</div>
 	{:else}
 		<ul class="grid large" role="list">
@@ -44,7 +51,8 @@
 		</ul>
 
 		{#if tiers.small.length > 0}
-			<p class="divider">{t.more}</p>
+			<h3 class="more">{t.more}</h3>
+			<p class="more-lead">{t.moreLead}</p>
 			<ul class="grid small" role="list">
 				{#each tiers.small as project (project.id)}
 					<li animate:flip={{ duration: ms }} in:fade={{ duration: ms }}>
@@ -59,43 +67,37 @@
 <style>
 	.grid {
 		display: grid;
-		gap: 1.5rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 	.large {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 23.75rem), 1fr));
+		gap: 3.5rem 2rem;
 	}
 	.small {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.875rem), 1fr));
+		gap: 1rem;
 	}
-	@media (max-width: 64rem) {
-		.small {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
+	.more {
+		margin: 5rem 0 0.375rem;
+		font-size: 1.625rem;
+		font-weight: 800;
+	}
+	.more-lead {
+		margin: 0 0 1.5rem;
+		font-size: 1rem;
+		color: var(--muted);
 	}
 	@media (width < 48rem) {
 		.large,
 		.small {
 			grid-template-columns: minmax(0, 1fr);
+			gap: 1.5rem;
 		}
-	}
-	.divider {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		margin: 3rem 0 1.5rem;
-		color: var(--muted);
-		font-size: 0.9rem;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-	}
-	.divider::before,
-	.divider::after {
-		content: '';
-		flex: 1;
-		border-top: 1px solid var(--border);
+		.more {
+			margin-top: 2.5rem;
+		}
 	}
 	.empty {
 		display: grid;
@@ -108,15 +110,5 @@
 	}
 	.empty p {
 		margin: 0;
-	}
-	.empty button {
-		min-height: var(--tap);
-		padding: 0.4rem 1rem;
-		border: 1px solid var(--accent);
-		border-radius: var(--radius-sm);
-		background: transparent;
-		color: var(--accent);
-		font: inherit;
-		cursor: pointer;
 	}
 </style>

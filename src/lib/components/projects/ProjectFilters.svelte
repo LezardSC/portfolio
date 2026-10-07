@@ -29,41 +29,56 @@
 <div class="filters">
 	<div class="group" role="group" aria-labelledby="filter-context-label">
 		<span id="filter-context-label" class="label">{t.contextLabel}</span>
-		{#each contextOptions as value (value)}
-			{@const count = countFor(projects, filters, 'context', value)}
-			{@const active = filters.context === value}
-			<button
-				type="button"
-				class="chip"
-				aria-pressed={active}
-				disabled={count === 0 && !active}
-				onclick={() => (filters = { ...filters, context: value })}
-			>
-				{value === 'all' ? t.all : t.contexts[value]}
-				<span class="count">{count}</span>
-			</button>
-		{/each}
+		<div class="seg">
+			{#each contextOptions as value (value)}
+				{@const count = countFor(projects, filters, 'context', value)}
+				{@const active = filters.context === value}
+				<button
+					type="button"
+					class="opt"
+					aria-pressed={active}
+					disabled={count === 0 && !active}
+					onclick={() => (filters = { ...filters, context: value })}
+				>
+					{value === 'all' ? t.all : t.contexts[value]}
+					<span class="count">{count}</span>
+				</button>
+			{/each}
+		</div>
 	</div>
 
 	<div class="group" role="group" aria-labelledby="filter-domain-label">
 		<span id="filter-domain-label" class="label">{t.domainLabel}</span>
-		{#each domainOptions as value (value)}
-			{@const count = countFor(projects, filters, 'domain', value)}
-			{@const active = filters.domain === value}
-			<button
-				type="button"
-				class="chip"
-				aria-pressed={active}
-				disabled={count === 0 && !active}
-				onclick={() => (filters = { ...filters, domain: value })}
-			>
-				{value === 'all' ? t.all : t.domains[value]}
-				<span class="count">{count}</span>
-			</button>
-		{/each}
+		<div class="seg">
+			{#each domainOptions as value (value)}
+				{@const count = countFor(projects, filters, 'domain', value)}
+				{@const active = filters.domain === value}
+				<button
+					type="button"
+					class="opt"
+					aria-pressed={active}
+					disabled={count === 0 && !active}
+					onclick={() => (filters = { ...filters, domain: value })}
+				>
+					{value === 'all' ? t.all : t.domains[value]}
+					<span class="count">{count}</span>
+				</button>
+			{/each}
+		</div>
 	</div>
 
-	<!-- Phones: the same two filters as dropdowns (CSS shows one set or the other, never both). -->
+	<div class="group" role="group" aria-labelledby="filter-sort-label">
+		<span id="filter-sort-label" class="label">{t.sortLabel}</span>
+		<div class="seg">
+			{#each SORTS as s (s)}
+				<button type="button" class="opt" aria-pressed={sort === s} onclick={() => (sort = s)}>
+					{t.sort[s]}
+				</button>
+			{/each}
+		</div>
+	</div>
+
+	<!-- Phones: the same filters as dropdowns (CSS shows one set or the other, never both). -->
 	<label class="pick phone">
 		<span class="label">{t.contextLabel}</span>
 		<select
@@ -98,7 +113,7 @@
 		</select>
 	</label>
 
-	<label class="pick">
+	<label class="pick phone">
 		<span class="label">{t.sortLabel}</span>
 		<select bind:value={sort}>
 			{#each SORTS as s (s)}
@@ -110,46 +125,61 @@
 
 <style>
 	.filters {
-		display: grid;
-		gap: 0.75rem;
-		margin-bottom: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		gap: 1.25rem 1.75rem;
+		margin-bottom: 2.5rem;
 	}
 	.group {
 		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.5rem;
+		flex-direction: column;
+		min-width: 0;
+		max-width: 100%;
 	}
 	.label {
-		min-width: 5.5rem;
-		font-size: 0.85rem;
+		margin-bottom: 0.5rem;
+		font-size: 0.875rem;
+		font-weight: 600;
 		color: var(--muted);
 	}
-	.chip {
-		min-height: var(--tap);
+	.seg {
+		display: flex;
+		flex-wrap: wrap;
+		max-width: 100%;
+		overflow: hidden;
+		background: var(--surface);
+		border: 2px solid var(--text);
+		border-radius: var(--radius);
+	}
+	.opt {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4rem;
-		padding: 0.3rem 0.8rem;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-sm);
-		background: var(--surface);
+		min-height: 2.625rem;
+		padding: 0 0.9375rem;
+		border: 0;
+		border-right: 1px solid var(--rule);
+		background: transparent;
 		color: var(--text);
 		font: inherit;
-		font-size: 0.9rem;
+		font-size: 0.9375rem;
 		cursor: pointer;
-		transition:
-			border-color 0.15s,
-			background-color 0.15s;
 	}
-	.chip:hover:not(:disabled) {
-		border-color: var(--accent);
+	.opt:last-child {
+		border-right: 0;
 	}
-	.chip[aria-pressed='true'] {
-		border-color: var(--accent);
-		background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+	.opt:hover:not(:disabled):not([aria-pressed='true']) {
+		color: var(--accent);
 	}
-	.chip:disabled {
+	.opt:focus-visible {
+		outline-offset: -4px;
+	}
+	.opt[aria-pressed='true'] {
+		background: var(--text);
+		color: var(--on-text);
+	}
+	.opt:disabled {
 		opacity: 0.45;
 		cursor: default;
 	}
@@ -157,9 +187,9 @@
 		font-size: 0.75rem;
 		color: var(--muted);
 	}
-	/* --muted is too faint on the accent-tinted background of the active chip. */
-	.chip[aria-pressed='true'] .count {
-		color: var(--text);
+	.opt[aria-pressed='true'] .count {
+		color: var(--on-text);
+		opacity: 0.75;
 	}
 	.pick {
 		display: flex;
@@ -170,7 +200,7 @@
 		min-height: var(--tap);
 		padding: 0.3rem 0.6rem;
 		border: 1px solid var(--border);
-		border-radius: 0.5rem;
+		border-radius: var(--radius-sm);
 		background: var(--surface);
 		color: var(--text);
 		font: inherit;
@@ -179,8 +209,13 @@
 	.phone {
 		display: none;
 	}
-	/* Phone: one full-width row per filter (label, then a dropdown) instead of chip groups. */
+	/* Phone: one full-width row per filter (label, then a dropdown) instead of segmented bars. */
 	@media (width < 48rem) {
+		.filters {
+			display: grid;
+			gap: 0.75rem;
+			margin-bottom: 2rem;
+		}
 		.group {
 			display: none;
 		}
@@ -190,6 +225,8 @@
 		.pick .label {
 			flex-shrink: 0;
 			width: 5.5rem;
+			margin: 0;
+			font-weight: 400;
 		}
 		.pick select {
 			flex: 1;

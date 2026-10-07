@@ -63,7 +63,13 @@ export const en = {
 		more: 'More projects',
 		private: 'Private',
 		repo: 'Source code on GitHub',
-		demo: 'Live demo'
+		demo: 'Live demo',
+		lead: '{total} projects, {featured} worth a look first.',
+		moreLead: 'Shorter school and game-jam projects.',
+		sourceCode: 'Source code',
+		code: 'Code',
+		privateCode: 'Private code',
+		demoLink: 'Live demo'
 	},
 	experience: {
 		work: 'Experience',

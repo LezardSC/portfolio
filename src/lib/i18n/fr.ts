@@ -59,7 +59,13 @@ export const fr: Dict = {
 		more: 'Autres projets',
 		private: 'Privé',
 		repo: 'Code source sur GitHub',
-		demo: 'Démo en ligne'
+		demo: 'Démo en ligne',
+		lead: '{total}\u00a0projets, dont {featured} à voir en priorité.',
+		moreLead: 'Projets d’école et de game jam, plus courts.',
+		sourceCode: 'Code source',
+		code: 'Code',
+		privateCode: 'Code privé',
+		demoLink: 'Démo'
 	},
 	experience: {
 		work: 'Expérience',
