@@ -67,6 +67,10 @@ export const fr: Dict = {
 		privateCode: 'Code privé',
 		demoLink: 'Démo'
 	},
+	skills: {
+		lead: 'Mon cœur de métier\u00a0: backend, systèmes et outillage.',
+		tabsLabel: 'Domaines de compétences'
+	},
 	experience: {
 		work: 'Expérience',
 		education: 'Formation',

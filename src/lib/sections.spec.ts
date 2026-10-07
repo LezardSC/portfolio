@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	isAtBottom,
+	longestWordLength,
 	savePendingSection,
 	sectionInView,
 	sectionNumber,
@@ -112,5 +113,13 @@ describe('sectionNumber', () => {
 		expect(sectionNumber('about')).toBe('01');
 		expect(sectionNumber('projects')).toBe('02');
 		expect(sectionNumber('contact')).toBe('05');
+	});
+});
+
+describe('longestWordLength', () => {
+	it('counts the characters of the longest word', () => {
+		expect(longestWordLength('Compétences')).toBe(11);
+		expect(longestWordLength('Expérience & Formation')).toBe(10);
+		expect(longestWordLength('À propos de moi')).toBe(6);
 	});
 });

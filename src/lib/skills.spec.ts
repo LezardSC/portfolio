@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { contrastRatio, logoColor, skillName, THEME_BG, type Skill } from './skills';
+import { contrastRatio, logoColor, nextTab, skillName, THEME_BG, type Skill } from './skills';
 
 const icon = { path: 'M0 0h24v24H0z', hex: '000000' };
 
@@ -55,5 +55,22 @@ describe('THEME_BG', () => {
 				.toLowerCase();
 		expect(bgOf(':root {')).toBe(THEME_BG.dark);
 		expect(bgOf(":root[data-theme='light']")).toBe(THEME_BG.light);
+	});
+});
+
+describe('nextTab', () => {
+	it('moves down and up, wrapping at both ends', () => {
+		expect(nextTab(0, 'ArrowDown', 6)).toBe(1);
+		expect(nextTab(5, 'ArrowDown', 6)).toBe(0);
+		expect(nextTab(0, 'ArrowUp', 6)).toBe(5);
+		expect(nextTab(3, 'ArrowUp', 6)).toBe(2);
+	});
+	it('jumps to the first and last tab', () => {
+		expect(nextTab(3, 'Home', 6)).toBe(0);
+		expect(nextTab(3, 'End', 6)).toBe(5);
+	});
+	it('ignores other keys', () => {
+		for (const key of ['ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'a'])
+			expect(nextTab(2, key, 6)).toBeNull();
 	});
 });
