@@ -186,3 +186,23 @@ main:focus {
 	border-color: var(--accent);
 	color: var(--on-accent);
 }
+
+/* Scroll reveal (src/lib/reveal-dom.ts): only ever added after hydration, never on the hero. */
+.reveal {
+	transition:
+		opacity 0.5s ease-out,
+		transform 0.5s ease-out;
+}
+.reveal-pending {
+	opacity: 0;
+	transform: translateY(1rem);
+}
+@media print {
+	.reveal {
+		transition: none;
+	}
+	.reveal-pending {
+		opacity: 1;
+		transform: none;
+	}
+}
