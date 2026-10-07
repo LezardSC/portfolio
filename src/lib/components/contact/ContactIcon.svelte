@@ -16,7 +16,7 @@
 		height={size}
 		fill="currentColor"
 		aria-hidden="true"
-		style:--logo-dark={logoColor(brand.hex, THEME_BG.dark)}
+		style:--logo-dark={brand.dark ? `#${brand.dark}` : logoColor(brand.hex, THEME_BG.dark)}
 		style:--logo-light={logoColor(brand.hex, THEME_BG.light)}
 	>
 		<path d={brand.path} />

@@ -15,6 +15,7 @@
 	}: { lang: Lang; title: string; t: Dict['contact']; newTab: string } = $props();
 
 	const links = $derived(contactLinks(lang, base, t.cv));
+	const [local, domain] = PROFILE.email.split('@');
 
 	let copied = $state(false);
 	/** Copy failed: show the keyboard hint next to the selected address. */
@@ -56,34 +57,51 @@
 
 <Section id="contact" {title}>
 	<p class="intro">{t.intro}</p>
+	<div class="blocks">
+		<div class="block mail">
+			<p class="label">{t.byEmail}</p>
+			<!-- <wbr> lets a narrow screen break the address after the @, not mid-word. -->
+			<a class="address" href="mailto:{PROFILE.email}" bind:this={address}
+				>{local}@<wbr />{domain}</a
+			>
+			<button type="button" class="btn btn-primary" onclick={copy}>
+				<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+					<g
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<rect x="9" y="9" width="12" height="12" rx="2" />
+						<path d="M5 15V3h12" />
+					</g>
+				</svg>
+				{copied ? t.copied : t.copy}
+			</button>
+			{#if failed}<p class="hint">{t.copyHint}</p>{/if}
+		</div>
+		<div class="block malt">
+			<div class="malt-head">
+				<span class="malt-ic"><ContactIcon id="malt" size={30} /></span>
+				<span class="label">{t.maltLabel}</span>
+			</div>
+			<p class="malt-title">{t.maltTitle}</p>
+			<p class="malt-text">{t.maltText}</p>
+			<a class="btn" href={PROFILE.malt} target="_blank" rel="noopener noreferrer">
+				{t.maltCta} <span aria-hidden="true">↗</span>
+				<span class="sr-only">{newTab}</span>
+			</a>
+		</div>
+	</div>
 	<ul class="tiles" role="list">
 		{#each links as link (link.id)}
 			<li>
-				{#if link.id === 'email'}
-					{@const [local, domain] = link.label.split('@')}
-					<div class="tile">
-						<a class="mail" href={link.href} aria-label={t.emailLabel}>
-							<ContactIcon id="email" />
-						</a>
-						<!-- <wbr> lets a narrow screen break the address after the @, not mid-word. -->
-						<span class="label" bind:this={address}>{local}@<wbr />{domain}</span>
-						<button type="button" class="copy" onclick={copy}>
-							{copied ? t.copied : t.copy}
-						</button>
-					</div>
-					{#if failed}<p class="hint">{t.copyHint}</p>{/if}
-				{:else}
-					<a
-						class="tile"
-						href={link.href}
-						target={link.external ? '_blank' : undefined}
-						rel={link.external ? 'noopener noreferrer' : undefined}
-					>
-						<ContactIcon id={link.id} />
-						<span class="label">{link.label}</span>
-						{#if link.external}<span class="sr-only">{newTab}</span>{/if}
-					</a>
-				{/if}
+				<a class="tile" href={link.href} target="_blank" rel="noopener noreferrer">
+					<span class="tile-label"><ContactIcon id={link.id} size={22} />{link.label}</span>
+					<span aria-hidden="true">{link.id === 'cv' ? '↓' : '↗'}</span>
+					<span class="sr-only">{newTab}</span>
+				</a>
 			</li>
 		{/each}
 	</ul>
@@ -91,93 +109,148 @@
 </Section>
 
 <style>
-	.hint {
-		margin: 0.4rem 0 0;
-		font-size: 0.85rem;
-		color: var(--muted);
-		text-align: center;
-	}
 	.intro {
-		margin: -0.5rem 0 2rem;
-		text-align: center;
+		margin: 0 0 1.75rem;
+		max-width: 40ch;
+		font-size: 1.5rem;
+		font-weight: 600;
+		line-height: 1.4;
+	}
+	.blocks {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 23.75rem), 1fr));
+		gap: 1.25rem;
+	}
+	.block {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 1.75rem 2rem;
+		background: var(--surface);
+		border: 2px solid var(--text);
+		border-radius: var(--radius);
+	}
+	.mail {
+		justify-content: space-between;
+		gap: 1.125rem;
+	}
+	.malt {
+		gap: 0.875rem;
+	}
+	.label {
+		margin: 0;
+		font-size: 0.875rem;
+		font-weight: 600;
 		color: var(--muted);
+	}
+	.address {
+		max-width: 100%;
+		font-size: 1.875rem;
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: -0.02em;
+		color: var(--text);
+		text-decoration: none;
+		overflow-wrap: anywhere;
+	}
+	.address:hover {
+		color: var(--accent);
+	}
+	.hint {
+		margin: 0;
+		font-size: 0.875rem;
+		color: var(--muted);
+	}
+	.malt-head {
+		display: flex;
+		align-items: center;
+		gap: 0.875rem;
+	}
+	.malt-ic {
+		display: inline-grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+		border-radius: var(--radius-sm);
+		background: var(--malt-tile);
+	}
+	.malt-title {
+		margin: 0;
+		font-size: 1.625rem;
+		font-weight: 800;
+		line-height: 1.2;
+		letter-spacing: -0.015em;
+	}
+	.malt-text {
+		margin: 0;
+		font-size: 1.0625rem;
+		color: var(--body);
 	}
 	.tiles {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
 		gap: 1rem;
+		margin: 1.25rem 0 0;
+		padding: 0;
+		list-style: none;
 	}
 	.tile {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		gap: 0.75rem;
-		height: 100%;
-		padding: 0.75rem 1.1rem;
-		border: 1px solid var(--border);
+		min-height: 4rem;
+		padding: 0 1.25rem;
+		background: var(--surface);
+		border: 2px solid var(--text);
 		border-radius: var(--radius);
 		color: var(--text);
-		font-weight: 500;
+		font-size: 1.125rem;
+		font-weight: 700;
 		text-decoration: none;
-		transition:
-			border-color 0.15s,
-			transform 0.15s;
 	}
-	.tile:hover,
-	a.tile:focus-visible,
-	.tile:has(:focus-visible) {
-		border-color: var(--accent);
-		transform: translateY(-2px);
-	}
-	.mail {
-		display: flex;
-		min-width: var(--tap);
-		min-height: var(--tap);
+	.tile-label {
+		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		border-radius: 0.25rem;
+		gap: 0.75rem;
 	}
-	.label {
-		min-width: 0;
-		overflow-wrap: anywhere;
-	}
-	.copy {
-		flex-shrink: 0;
-		min-height: var(--tap);
-		min-width: 4.5rem;
-		margin-left: auto;
-		padding: 0.2rem 0.7rem;
-		font: inherit;
-		font-size: 0.85rem;
-		color: var(--muted);
-		background: none;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-sm);
-		cursor: pointer;
-		transition:
-			color 0.15s,
-			border-color 0.15s;
-	}
-	.copy:hover {
-		color: var(--accent);
-		border-color: var(--accent);
-	}
-	@media (prefers-reduced-motion: reduce) {
+	@media (hover: hover) and (pointer: fine) {
 		.tile {
-			transition: border-color 0.15s;
+			transition:
+				background-color 0.2s,
+				color 0.2s,
+				transform 0.2s,
+				box-shadow 0.2s;
 		}
 		.tile:hover,
-		a.tile:focus-visible,
-		.tile:has(:focus-visible) {
+		.tile:focus-visible {
+			background: var(--text);
+			color: var(--on-text);
+			transform: translateY(-4px);
+			box-shadow: 6px 6px 0 var(--accent);
+		}
+		/* Logos take the tile's text colour on the filled tile (a dark logo would vanish). !important
+		   because ContactIcon's per-theme brand colour rule is more specific. */
+		.tile:hover :global(svg),
+		.tile:focus-visible :global(svg) {
+			color: var(--on-text) !important;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.tile:hover,
+		.tile:focus-visible {
 			transform: none;
 		}
 	}
-	@media (max-width: 40rem) {
-		.tiles {
-			flex-direction: column;
+	@media (width < 48rem) {
+		.intro {
+			font-size: 1.125rem;
+		}
+		.block {
+			padding: 1.25rem;
+		}
+		.address {
+			font-size: 1.375rem;
 		}
 	}
 </style>
