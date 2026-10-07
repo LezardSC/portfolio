@@ -12,18 +12,20 @@
 
 <article class="card">
 	<div class="top">
-		<span class="icon"><DomainIcon domain={project.domains[0]} /></span>
-		<ProjectLinks {project} {t} />
+		<span class="icon"><DomainIcon domain={project.domains[0]} size={22} /></span>
+		<ProjectLinks {project} {t} compact />
 	</div>
-	<h3>
+	<h4>
 		{#if href}
 			<a {href} target="_blank" rel="noopener noreferrer">{project.title}</a>
 		{:else}
 			{project.title}
 		{/if}
-	</h3>
+	</h4>
 	<p class="meta">
-		{project.date.slice(0, 4)} · {t.contexts[project.context]}
+		{project.date.slice(0, 4)} · {t.contexts[project.context]}<span class="dom-name"
+			>{' · '}{t.domains[project.domains[0]]}</span
+		>
 		{#if project.award}
 			<!-- Phone only (the award line is hidden there); display: none elsewhere, so it is never read twice. -->
 			<span class="trophy"
@@ -35,7 +37,7 @@
 		<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
 	{/if}
 	<p class="desc">{project.description[lang]}</p>
-	<TechTags tech={project.tech} />
+	<TechTags tech={project.tech} small />
 </article>
 
 <style>
@@ -44,8 +46,8 @@
 		flex-direction: column;
 		gap: 0.5rem;
 		height: 100%;
-		padding: 1.5rem;
-		border: 1px solid var(--border);
+		padding: 1.375rem;
+		border: 2px solid var(--border);
 		border-radius: var(--radius);
 		background: var(--surface);
 	}
@@ -53,40 +55,55 @@
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
-		margin-bottom: 0.5rem;
+		gap: 0.75rem;
 	}
 	.icon {
+		display: inline-grid;
+		place-items: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		flex: none;
+		border-radius: var(--radius-sm);
+		background: var(--tint);
 		color: var(--accent);
 	}
-	h3 {
-		margin: 0;
-		font-size: 1.15rem;
+	h4 {
+		margin: 0.25rem 0 0;
+		font-size: 1.1875rem;
+		font-weight: 800;
+		line-height: 1.25;
 	}
-	h3 a {
+	h4 a {
 		color: inherit;
 		text-decoration: none;
 	}
-	h3 a:hover {
+	h4 a:hover {
 		color: var(--accent);
 	}
 	.meta,
 	.award {
 		margin: 0;
-		font-size: 0.8rem;
+		font-size: 0.875rem;
+		font-weight: 500;
 		color: var(--muted);
 	}
 	.trophy {
 		display: none;
 	}
 	.desc {
-		flex: 1;
 		margin: 0;
-		color: var(--muted);
+		font-size: 0.9375rem;
+		line-height: 1.5;
+		color: var(--body);
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;
 		line-clamp: 3;
 		overflow: hidden;
+	}
+	.card > :global(ul) {
+		margin-top: auto;
+		padding-top: 0.375rem;
 	}
 
 	/* Phone: one compact row — icon | title over year · context | links, then two lines of text. */
@@ -113,7 +130,7 @@
 		.card :global(.links) {
 			grid-area: links;
 		}
-		h3 {
+		h4 {
 			grid-area: title;
 			font-size: 1.05rem;
 		}
@@ -133,18 +150,31 @@
 			-webkit-line-clamp: 2;
 			line-clamp: 2;
 		}
+		.card {
+			border-width: 1px;
+		}
+		.dom-name {
+			display: none;
+		}
+		.icon {
+			width: auto;
+			height: auto;
+			background: none;
+		}
 	}
 
 	@media (hover: hover) and (pointer: fine) {
 		.card {
 			transition:
 				transform 0.2s,
-				border-color 0.2s;
+				border-color 0.2s,
+				box-shadow 0.2s;
 		}
 		.card:hover,
 		.card:focus-within {
-			transform: translateY(-2px);
-			border-color: var(--accent);
+			transform: translateY(-4px);
+			border-color: var(--text);
+			box-shadow: 6px 6px 0 var(--accent);
 		}
 	}
 	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
