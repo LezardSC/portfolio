@@ -1,6 +1,7 @@
 import type { Lang, Localized } from '$lib/i18n/lang';
 
-export type Fact = { icon: string; text: Localized };
+/** One row of the hero's "At a glance" card. */
+export type GlanceRow = { label: Localized; value: Localized };
 
 export type Profile = {
 	name: string;
@@ -8,7 +9,7 @@ export type Profile = {
 	pitch: Localized;
 	/** About paragraphs, in order. */
 	bio: Localized[];
-	facts: Fact[];
+	glance: GlanceRow[];
 	email: string;
 	linkedin: string;
 	github: string;
@@ -44,9 +45,33 @@ export const PROFILE: Profile = {
 			fr: 'Aujourd’hui je me concentre sur le backend et les systèmes — APIs, services, Rust, infrastructure — tout en restant à l’aise avec le Web3 et l’IA quand un projet en a besoin.'
 		}
 	],
-	facts: [
-		{ icon: '🎓', text: { en: '42 Lyon (RNCP 7)', fr: '42 Lyon (RNCP 7)' } },
-		{ icon: '🗣', text: { en: 'French / English', fr: 'Français / Anglais' } }
+	glance: [
+		{
+			label: { en: 'Education', fr: 'Formation' },
+			value: {
+				en: '42 Lyon — RNCP 7, expert in computer architecture',
+				fr: '42 Lyon — RNCP 7, expert en architecture informatique'
+			}
+		},
+		{
+			label: { en: 'Latest role', fr: 'Dernier poste' },
+			value: {
+				en: 'ML & Computer Vision developer — Sogeti (Capgemini)',
+				fr: 'Développeur ML & IA Vision — Sogeti (Capgemini)'
+			}
+		},
+		{
+			label: { en: 'Stack', fr: 'Stack' },
+			value: { en: 'Python, Rust, C, Node.js, Docker', fr: 'Python, Rust, C, Node.js, Docker' }
+		},
+		{
+			label: { en: 'Hackathons', fr: 'Hackathons' },
+			value: { en: '2 wins, 5 podiums', fr: '2 victoires, 5 podiums' }
+		},
+		{
+			label: { en: 'Languages', fr: 'Langues' },
+			value: { en: 'French, English', fr: 'Français, anglais' }
+		}
 	],
 	email: 'jocelynrenaultpro@gmail.com',
 	linkedin: 'https://www.linkedin.com/in/jocelyn-renault/',
