@@ -78,13 +78,15 @@ export const en = {
 	experience: {
 		work: 'Experience',
 		education: 'Education',
-		hackathons: 'Hackathons',
+		hackathonsTitle: 'Hackathons — {n} podiums',
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
 		readMore: 'Read more',
 		showLess: 'Show less',
-		places: { 1: '1st place:', 2: '2nd place:', 3: '3rd place:' } satisfies Record<Medal, string>
+		results: { 1: 'Winner', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>,
+		months: { one: '{n} month', other: '{n} months' },
+		certificate: 'View certificate'
 	},
 	contact: {
 		intro: 'Open to opportunities. Email is the fastest way to reach me.',

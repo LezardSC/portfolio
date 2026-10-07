@@ -51,8 +51,11 @@
 		line-height: 0.82;
 		font-weight: 900;
 		letter-spacing: -0.05em;
-		color: transparent;
-		-webkit-text-stroke: 2px var(--accent);
+		/* Outline only: a 4px stroke painted under a background-coloured fill leaves a 2px outer
+		   line and hides the variable font's overlapping contours (visible in a bare stroke). */
+		color: var(--bg);
+		-webkit-text-stroke: 4px var(--accent);
+		paint-order: stroke fill;
 	}
 	h2 {
 		margin: 0.875rem 0 0;
