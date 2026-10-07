@@ -158,6 +158,16 @@
 	.enhanced .panel {
 		min-height: 30rem;
 	}
+	/* A closed panel is hidden="until-found": its content is skipped but its box stays, so it has no
+	   size of its own (and no gap), or the six panels would stack as empty frames. */
+	.enhanced .panels {
+		gap: 0;
+	}
+	.panel[hidden] {
+		min-height: 0;
+		padding: 0;
+		border: 0;
+	}
 	h3 {
 		margin: 0;
 		font-size: 2rem;

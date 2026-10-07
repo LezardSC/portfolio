@@ -190,12 +190,12 @@ main:focus {
 /* Scroll reveal (src/lib/reveal-dom.ts): only ever added after hydration, never on the hero. */
 .reveal {
 	transition:
-		opacity 0.5s ease-out,
-		transform 0.5s ease-out;
+		opacity 0.9s ease-out,
+		transform 0.9s ease-out;
 }
 .reveal-pending {
 	opacity: 0;
-	transform: translateY(1rem);
+	transform: translateY(2rem);
 }
 @media print {
 	.reveal {
