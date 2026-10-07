@@ -56,3 +56,8 @@ export function sectionInView(
 export function isAtBottom(scrollY: number, viewportHeight: number, pageHeight: number): boolean {
 	return scrollY + viewportHeight >= pageHeight - 2;
 }
+
+/** Two-digit number shown before a section title and its nav link: 'about' → '01'. */
+export function sectionNumber(id: SectionId): string {
+	return String(SECTIONS.indexOf(id) + 1).padStart(2, '0');
+}

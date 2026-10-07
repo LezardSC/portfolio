@@ -51,11 +51,12 @@
 	.lang {
 		display: grid;
 		place-items: center;
-		height: var(--tap);
-		padding: 0 0.75rem;
-		border: 1px solid var(--border);
+		min-width: 2.75rem;
+		height: 2.75rem;
+		padding: 0 0.5rem;
+		border: 1px solid var(--rule);
 		border-radius: var(--radius-sm);
-		background: var(--surface);
+		background: transparent;
 		color: var(--text);
 		font-weight: 600;
 		font-size: 0.85rem;

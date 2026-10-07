@@ -15,6 +15,7 @@ export const fr: Dict = {
 	about: {
 		photoAlt: 'Photo de Jocelyn Renault'
 	},
+	navCv: 'CV',
 	navLabel: 'Principale',
 	skipToContent: 'Aller au contenu',
 	menu: 'Menu',

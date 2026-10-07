@@ -69,11 +69,11 @@
 	.icon-btn {
 		display: grid;
 		place-items: center;
-		width: var(--tap);
-		height: var(--tap);
-		border: 1px solid var(--border);
-		border-radius: 50%;
-		background: var(--surface);
+		width: 2.75rem;
+		height: 2.75rem;
+		border: 1px solid var(--rule);
+		border-radius: var(--radius-sm);
+		background: transparent;
 		color: var(--text);
 		cursor: pointer;
 	}
