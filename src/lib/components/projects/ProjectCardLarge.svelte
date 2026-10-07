@@ -91,15 +91,23 @@
 		font-size: 1.0625rem;
 		color: var(--body);
 	}
+	/* Same height in every card (room for two rows of tags), with the link on the first row, so
+	   the separator lines up across a row whatever the number of tags. */
 	.footer {
 		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 		gap: 0.75rem;
+		/* padding 10 + tag offset 8 + two 28px tag rows + 6px gap. */
+		min-height: 5rem;
 		margin-top: auto;
 		padding-top: 0.625rem;
 		border-top: 1px solid var(--rule);
+	}
+	.footer > :global(ul) {
+		flex: 1;
+		min-width: 0;
+		padding-top: 0.5rem;
 	}
 
 	/* Phone: the media fills the card and the text sits on a dark gradient over it. */
@@ -172,8 +180,13 @@
 			color: var(--muted);
 		}
 		.footer {
+			align-items: center;
+			min-height: 0;
 			padding-top: 0;
 			border-top: 0;
+		}
+		.footer > :global(ul) {
+			padding-top: 0;
 		}
 		.title {
 			background: none;

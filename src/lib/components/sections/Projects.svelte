@@ -74,6 +74,9 @@
 	.large {
 		/* 20rem rather than the canvas's 23.75rem: same 2 columns at 1440px, and still 2 at 1024px. */
 		grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+		/* Every row as tall as the tallest card, so all featured cards have the same size; each
+		   card pins its footer (techs + link) to the bottom, so footers line up too. */
+		grid-auto-rows: 1fr;
 		gap: 3.5rem 2rem;
 	}
 	.small {
@@ -94,6 +97,7 @@
 		.large,
 		.small {
 			grid-template-columns: minmax(0, 1fr);
+			grid-auto-rows: auto;
 			gap: 1.5rem;
 		}
 		.more {
