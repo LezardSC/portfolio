@@ -32,6 +32,7 @@ describe('skill data', () => {
 		for (const group of SKILL_GROUPS) {
 			for (const lang of LANGS) {
 				expect(group.title[lang].trim(), group.id).not.toBe('');
+				expect(group.description[lang].trim(), `${group.id} description`).not.toBe('');
 				for (const skill of group.skills)
 					expect(skillName(skill, lang).trim(), JSON.stringify(skill.name)).not.toBe('');
 			}

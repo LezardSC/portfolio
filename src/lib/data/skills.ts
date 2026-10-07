@@ -35,6 +35,10 @@ export const SKILL_GROUPS: SkillGroup[] = [
 	{
 		id: 'backend',
 		title: { en: 'Backend', fr: 'Backend' },
+		description: {
+			en: 'APIs, databases, authentication and services.',
+			fr: 'APIs, bases de données, authentification et services.'
+		},
 		skills: [
 			{ name: 'Python', icon: siPython },
 			{ name: 'Node.js', icon: siNodedotjs },
@@ -48,6 +52,10 @@ export const SKILL_GROUPS: SkillGroup[] = [
 	{
 		id: 'systems',
 		title: { en: 'Systems & Low-level', fr: 'Systèmes & bas niveau' },
+		description: {
+			en: 'Code close to the machine: memory, processes, performance.',
+			fr: 'Du code proche de la machine\u00a0: mémoire, processus, performance.'
+		},
 		skills: [
 			{ name: 'Rust', icon: siRust },
 			{ name: 'C', icon: siC },
@@ -58,6 +66,10 @@ export const SKILL_GROUPS: SkillGroup[] = [
 	{
 		id: 'devops',
 		title: { en: 'DevOps & Tools', fr: 'DevOps & outils' },
+		description: {
+			en: 'Containers, deployment and continuous integration.',
+			fr: 'Conteneurs, déploiement et intégration continue.'
+		},
 		skills: [
 			{ name: 'Docker', icon: siDocker },
 			{ name: 'Kubernetes', icon: siKubernetes },
@@ -69,6 +81,10 @@ export const SKILL_GROUPS: SkillGroup[] = [
 	{
 		id: 'ai',
 		title: { en: 'AI & ML', fr: 'IA & ML' },
+		description: {
+			en: 'Vision models, training and LLM agents.',
+			fr: 'Modèles de vision, entraînement et agents LLM.'
+		},
 		skills: [
 			{ name: 'PyTorch', icon: siPytorch },
 			{ name: 'scikit-learn', icon: siScikitlearn },
@@ -81,6 +97,10 @@ export const SKILL_GROUPS: SkillGroup[] = [
 	{
 		id: 'blockchain',
 		title: { en: 'Blockchain', fr: 'Blockchain' },
+		description: {
+			en: 'Smart contracts, tokens and data anchored on-chain.',
+			fr: 'Smart contracts, tokens et données ancrées on-chain.'
+		},
 		skills: [
 			{ name: 'Solidity', icon: siSolidity },
 			{ name: 'Hardhat', icon: HARDHAT },
@@ -92,6 +112,10 @@ export const SKILL_GROUPS: SkillGroup[] = [
 	{
 		id: 'frontend',
 		title: { en: 'Frontend', fr: 'Frontend' },
+		description: {
+			en: 'Web interfaces when a project calls for them.',
+			fr: 'Des interfaces web quand le projet le demande.'
+		},
 		skills: [
 			{ name: 'TypeScript', icon: siTypescript },
 			{ name: 'JavaScript', icon: siJavascript },

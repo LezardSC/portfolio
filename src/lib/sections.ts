@@ -61,3 +61,11 @@ export function isAtBottom(scrollY: number, viewportHeight: number, pageHeight: 
 export function sectionNumber(id: SectionId): string {
 	return String(SECTIONS.indexOf(id) + 1).padStart(2, '0');
 }
+
+/**
+ * Characters in the longest word of a title. Section titles shrink below their design size only
+ * when this word wouldn't fit the narrow title column (see Section.svelte).
+ */
+export function longestWordLength(text: string): number {
+	return Math.max(0, ...text.split(/\s+/).map((w) => [...w].length));
+}

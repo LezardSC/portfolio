@@ -11,7 +11,13 @@ export type Skill = {
 
 export type SkillGroupId = 'backend' | 'systems' | 'devops' | 'ai' | 'blockchain' | 'frontend';
 
-export type SkillGroup = { id: SkillGroupId; title: Localized; skills: Skill[] };
+export type SkillGroup = {
+	id: SkillGroupId;
+	title: Localized;
+	/** One line shown under the title in the skills panel. */
+	description: Localized;
+	skills: Skill[];
+};
 
 export function skillName(skill: Skill, lang: Lang): string {
 	return typeof skill.name === 'string' ? skill.name : skill.name[lang];
@@ -41,4 +47,23 @@ export function contrastRatio(a: string, b: string): number {
 /** CSS colour for a logo on `bg`: its brand colour, or the theme text colour if it would vanish. */
 export function logoColor(hex: string, bg: string): string {
 	return contrastRatio(hex, bg) >= MIN_LOGO_CONTRAST ? `#${hex}` : 'var(--text)';
+}
+
+/**
+ * Keyboard rule of the vertical skills tab list: the tab to select and focus after `key`, or
+ * null when the key isn't handled. Arrows wrap around; Home/End go to the ends.
+ */
+export function nextTab(index: number, key: string, count: number): number | null {
+	switch (key) {
+		case 'ArrowDown':
+			return (index + 1) % count;
+		case 'ArrowUp':
+			return (index - 1 + count) % count;
+		case 'Home':
+			return 0;
+		case 'End':
+			return count - 1;
+		default:
+			return null;
+	}
 }
