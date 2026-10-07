@@ -2,6 +2,8 @@ import type { Dict } from './en';
 
 export const fr: Dict = {
 	meta: {
+		locale: 'fr_FR',
+		altLocale: 'en_US',
 		title: 'Jocelyn Renault — Ingénieur logiciel',
 		description:
 			'Portfolio de Jocelyn Renault, ingénieur logiciel issu de 42\u00a0: projets backend, systèmes, web, blockchain et IA.'
