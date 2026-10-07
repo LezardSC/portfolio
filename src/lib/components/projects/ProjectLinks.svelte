@@ -35,6 +35,7 @@
 <style>
 	.links {
 		display: flex;
+		flex: none;
 		align-items: center;
 		gap: 1rem;
 	}
@@ -51,6 +52,9 @@
 		color: var(--accent);
 	}
 	.private {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
 		font-size: 0.875rem;
 		color: var(--muted);
 	}
