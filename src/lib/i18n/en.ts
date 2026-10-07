@@ -4,6 +4,8 @@ import type { Medal } from '$lib/experience';
 
 export const en = {
 	meta: {
+		locale: 'en_US',
+		altLocale: 'fr_FR',
 		title: 'Jocelyn Renault — Software Engineer',
 		description:
 			'Portfolio of Jocelyn Renault, software engineer from 42 School: backend, systems, web, blockchain and AI projects.'

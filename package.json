@@ -14,7 +14,8 @@
 		"format": "prettier --write .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
-		"audit": "node scripts/audit.ts"
+		"audit": "node scripts/audit.ts",
+		"og": "node scripts/og.ts"
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "^4.13.0",
