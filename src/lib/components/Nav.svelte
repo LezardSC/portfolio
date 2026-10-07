@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 	import { PROFILE } from '$lib/data/profile';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { MENU_BREAKPOINT, nextMenu, type MenuEvent } from '$lib/nav-menu';
-	import { SECTIONS, type SectionId } from '$lib/sections';
+	import { assetHref } from '$lib/paths';
+	import { SECTIONS, sectionNumber, type SectionId } from '$lib/sections';
 	import { currentSection } from '$lib/sections-dom';
 	import LangSwitch from './LangSwitch.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
@@ -97,15 +99,22 @@
 					<a
 						href="#{id}"
 						aria-current={active === id ? 'true' : undefined}
-						onclick={() => send('link')}>{t.nav[id]}</a
+						onclick={() => send('link')}
+						><span class="n" aria-hidden="true">{sectionNumber(id)}</span>{t.nav[id]}</a
 					>
 				</li>
 			{/each}
 		</ul>
 	</nav>
 	<div class="actions">
-		<LangSwitch {lang} t={t.langSwitch} />
 		<ThemeToggle t={t.theme} />
+		<LangSwitch {lang} t={t.langSwitch} />
+		<a
+			class="btn btn-primary cv"
+			href={assetHref(base, PROFILE.cv[lang])}
+			target="_blank"
+			rel="noopener noreferrer">{t.navCv} <span class="sr-only">{t.newTab}</span></a
+		>
 	</div>
 </header>
 
@@ -118,13 +127,14 @@
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		padding: 0 1rem;
-		background: color-mix(in srgb, var(--bg) 85%, transparent);
-		backdrop-filter: blur(8px);
-		border-bottom: 1px solid var(--border);
+		padding: 0 max(2.5rem, calc((100% - 77.5rem) / 2 + 2.5rem));
+		background: color-mix(in srgb, var(--bg) 86%, transparent);
+		backdrop-filter: blur(14px);
+		border-bottom: 1px solid var(--rule);
 	}
 	.brand {
-		font-weight: 700;
+		font-size: 1.1875rem;
+		font-weight: 800;
 		color: var(--text);
 		text-decoration: none;
 		white-space: nowrap;
@@ -133,30 +143,48 @@
 		flex: 1;
 		min-width: 0;
 		overflow-x: auto;
+		display: flex;
+		justify-content: center;
 	}
 	ul {
 		display: flex;
-		gap: 1.25rem;
+		gap: 1.5rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 		white-space: nowrap;
 	}
 	nav a {
-		color: var(--muted);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		min-height: 2.5rem;
+		color: var(--text);
+		font-size: 1rem;
+		font-weight: 500;
 		text-decoration: none;
 	}
 	nav a:hover {
-		color: var(--text);
+		color: var(--accent);
 	}
 	nav a[aria-current] {
-		color: var(--text);
 		text-decoration: underline 2px var(--accent);
 		text-underline-offset: 0.4em;
 	}
+	.n {
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: var(--accent);
+	}
 	.actions {
 		display: flex;
+		align-items: center;
 		gap: 0.5rem;
+	}
+	.cv {
+		min-height: 2.75rem;
+		padding: 0 1.125rem;
+		font-size: 0.9375rem;
 	}
 	.menu-btn {
 		display: none;
@@ -174,6 +202,12 @@
 	}
 	/* Below 47.5rem (MENU_BREAKPOINT), once hydrated: links collapse into a panel under the bar. */
 	@media (max-width: 47.49rem) {
+		.nav {
+			padding: 0 1rem;
+		}
+		.cv {
+			display: none;
+		}
 		.enhanced nav {
 			display: flex;
 			justify-content: flex-end;
