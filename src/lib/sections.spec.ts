@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { isAtBottom, savePendingSection, sectionInView, takePendingSection } from './sections';
+import {
+	isAtBottom,
+	savePendingSection,
+	sectionInView,
+	sectionNumber,
+	takePendingSection
+} from './sections';
 
 // Viewport-relative tops of each section, as getBoundingClientRect().top would report them.
 const tops = (about: number) => ({
@@ -98,5 +104,13 @@ describe('pending section hand-off', () => {
 	it('never throws when merely accessing storage throws', () => {
 		expect(() => savePendingSection(fail, 'about')).not.toThrow();
 		expect(takePendingSection(fail)).toBeNull();
+	});
+});
+
+describe('sectionNumber', () => {
+	it('numbers sections from 01 in nav order', () => {
+		expect(sectionNumber('about')).toBe('01');
+		expect(sectionNumber('projects')).toBe('02');
+		expect(sectionNumber('contact')).toBe('05');
 	});
 });
