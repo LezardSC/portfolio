@@ -1,9 +1,12 @@
 <script lang="ts">
 	import type { Dict } from '$lib/i18n';
 	import type { Project } from '$lib/projects';
-	import GitHubIcon from '../icons/GitHubIcon.svelte';
 
-	let { project, t }: { project: Project; t: Dict['projects'] } = $props();
+	let {
+		project,
+		t,
+		compact = false
+	}: { project: Project; t: Dict['projects']; compact?: boolean } = $props();
 </script>
 
 <div class="links">
@@ -13,40 +16,19 @@
 			target="_blank"
 			rel="noopener noreferrer"
 			aria-label="{t.repo}: {project.title}"
-			title={t.repo}
+			>{compact ? t.code : t.sourceCode} <span aria-hidden="true">↗</span></a
 		>
-			<GitHubIcon />
-		</a>
 	{/if}
 	{#if project.links.demo}
 		<a
 			href={project.links.demo}
 			target="_blank"
 			rel="noopener noreferrer"
-			aria-label="{t.demo}: {project.title}"
-			title={t.demo}
+			aria-label="{t.demo}: {project.title}">{t.demoLink} <span aria-hidden="true">↗</span></a
 		>
-			<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-				<path
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linejoin="round"
-					d="M7 4v16l13-8z"
-				/>
-			</svg>
-		</a>
 	{/if}
 	{#if !project.links.repo && !project.links.demo}
-		<span class="private">
-			<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-				<g fill="none" stroke="currentColor" stroke-width="2">
-					<rect x="5" y="11" width="14" height="10" rx="2" />
-					<path d="M8 11V7a4 4 0 0 1 8 0v4" />
-				</g>
-			</svg>
-			{t.private}
-		</span>
+		<span class="private">{compact ? t.private : t.privateCode}</span>
 	{/if}
 </div>
 
@@ -54,27 +36,22 @@
 	.links {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 1rem;
 	}
 	a {
-		min-width: var(--tap);
-		min-height: var(--tap);
-		display: grid;
-		place-items: center;
-		color: var(--muted);
-		transition: color 0.15s;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		min-height: 2.75rem;
+		color: var(--text);
+		font-size: 0.9375rem;
+		font-weight: 600;
 	}
 	a:hover {
 		color: var(--accent);
 	}
 	.private {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.3rem;
-		font-size: 0.8rem;
+		font-size: 0.875rem;
 		color: var(--muted);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-sm);
-		padding: 0.1rem 0.6rem;
 	}
 </style>

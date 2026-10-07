@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Dict, Lang } from '$lib/i18n';
 	import type { Project } from '$lib/projects';
+	import TrophyIcon from '../icons/TrophyIcon.svelte';
+	import DomainIcon from './DomainIcon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
 	import ProjectMedia from './ProjectMedia.svelte';
 	import TechTags from './TechTags.svelte';
@@ -11,10 +13,15 @@
 <article class="card">
 	<ProjectMedia {project} />
 	<div class="body">
-		<p class="meta">{project.date.slice(0, 4)} · {t.contexts[project.context]}</p>
-		<h3>{project.title}</h3>
+		<p class="meta">
+			<span class="dom"
+				><DomainIcon domain={project.domains[0]} size={18} />{t.domains[project.domains[0]]}</span
+			>
+			<span>{project.date.slice(0, 4)} · {t.contexts[project.context]}</span>
+		</p>
+		<h3><span class="title">{project.title}</span></h3>
 		{#if project.award}
-			<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
+			<p class="award"><TrophyIcon /> {project.award[lang]}</p>
 		{/if}
 		<p class="desc">{project.description[lang]}</p>
 		<div class="footer">
@@ -28,49 +35,71 @@
 	.card {
 		display: flex;
 		flex-direction: column;
+		gap: 1.125rem;
 		height: 100%;
-		overflow: hidden;
-		border: 1px solid var(--border);
+	}
+	.card > :global(.media) {
 		border-radius: var(--radius);
-		background: var(--surface);
 	}
 	.body {
 		display: flex;
 		flex-direction: column;
 		flex: 1;
-		gap: 0.5rem;
-		padding: 1.25rem 1.5rem 1.5rem;
+		gap: 0.75rem;
 	}
 	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.875rem;
 		margin: 0;
-		font-size: 0.85rem;
+		font-size: 0.9375rem;
+		font-weight: 500;
+		color: var(--muted);
+	}
+	.dom {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
 		color: var(--accent);
 	}
 	h3 {
 		margin: 0;
-		font-size: 1.4rem;
+		font-size: 2rem;
+		line-height: 1.15;
+		font-weight: 800;
+		letter-spacing: -0.025em;
+	}
+	.title {
+		background-image: linear-gradient(var(--accent), var(--accent));
+		background-size: 0 3px;
+		background-repeat: no-repeat;
+		background-position: 0 100%;
+		transition: background-size 0.3s;
 	}
 	.award {
-		align-self: flex-start;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
 		margin: 0;
-		padding: 0.15rem 0.7rem;
-		border-radius: var(--radius-sm);
-		font-size: 0.8rem;
-		font-weight: 600;
-		background: color-mix(in srgb, #e3b341 18%, transparent);
-		color: var(--text);
+		font-size: 1rem;
+		font-weight: 700;
+		color: var(--accent);
 	}
 	.desc {
-		flex: 1;
 		margin: 0;
-		color: var(--muted);
+		font-size: 1.0625rem;
+		color: var(--body);
 	}
 	.footer {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
-		margin-top: 0.5rem;
+		gap: 0.75rem;
+		margin-top: auto;
+		padding-top: 0.625rem;
+		border-top: 1px solid var(--rule);
 	}
 
 	/* Phone: the media fills the card and the text sits on a dark gradient over it. */
@@ -128,30 +157,42 @@
 		.footer {
 			margin-top: 0.25rem;
 		}
+		/* M9: restore the M8 phone card look the desktop base no longer gives. */
+		.card {
+			gap: 0;
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			background: var(--surface);
+		}
+		.dom {
+			display: none;
+		}
+		.desc {
+			font-size: inherit;
+			color: var(--muted);
+		}
+		.footer {
+			padding-top: 0;
+			border-top: 0;
+		}
+		.title {
+			background: none;
+		}
 	}
 
 	@media (hover: hover) and (pointer: fine) {
-		.card {
-			transition:
-				transform 0.2s,
-				box-shadow 0.2s,
-				border-color 0.2s;
-		}
-		.card:hover,
-		.card:focus-within {
-			transform: translateY(-4px);
-			border-color: var(--accent);
-			box-shadow: 0 12px 28px rgb(0 0 0 / 0.25);
+		.card:hover .title,
+		.card:focus-within .title {
+			background-size: 100% 3px;
 		}
 		.card:hover :global(.frame),
 		.card:focus-within :global(.frame) {
-			transform: scale(1.03);
+			transform: scale(1.05);
 		}
 	}
-	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
-		.card:hover,
-		.card:focus-within {
-			transform: none;
+	@media (prefers-reduced-motion: reduce) {
+		.title {
+			transition: none;
 		}
 		.card:hover :global(.frame),
 		.card:focus-within :global(.frame) {
