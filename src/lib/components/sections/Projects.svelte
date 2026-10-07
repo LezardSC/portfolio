@@ -72,7 +72,8 @@
 		list-style: none;
 	}
 	.large {
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, 23.75rem), 1fr));
+		/* 20rem rather than the canvas's 23.75rem: same 2 columns at 1440px, and still 2 at 1024px. */
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
 		gap: 3.5rem 2rem;
 	}
 	.small {
