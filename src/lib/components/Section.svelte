@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { sectionNumber, type SectionId } from '$lib/sections';
+	import { longestWordLength, sectionNumber, type SectionId } from '$lib/sections';
 
 	let {
 		id,
@@ -12,7 +12,7 @@
 
 <section {id} aria-labelledby="{id}-title">
 	<div class="inner">
-		<div class="head">
+		<div class="head" style:--chars={longestWordLength(title)}>
 			<p class="num" aria-hidden="true">{sectionNumber(id)}</p>
 			<h2 id="{id}-title">{title}</h2>
 			{#if lead}<p class="lead">{lead}</p>{/if}
@@ -39,6 +39,7 @@
 	}
 	.head {
 		grid-column: span 3;
+		container-type: inline-size;
 	}
 	.body {
 		grid-column: span 9;
@@ -55,7 +56,8 @@
 	}
 	h2 {
 		margin: 0.875rem 0 0;
-		font-size: 2.875rem;
+		/* 46px, or less when the longest word wouldn't fit the column (~0.6em per character). */
+		font-size: min(2.875rem, calc(100cqi / (var(--chars) * 0.6)));
 		line-height: 1.08;
 		font-weight: 800;
 		letter-spacing: -0.035em;

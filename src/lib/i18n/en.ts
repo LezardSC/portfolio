@@ -71,6 +71,10 @@ export const en = {
 		privateCode: 'Private code',
 		demoLink: 'Live demo'
 	},
+	skills: {
+		lead: 'My core: backend, systems and tooling.',
+		tabsLabel: 'Skill areas'
+	},
 	experience: {
 		work: 'Experience',
 		education: 'Education',
