@@ -179,6 +179,10 @@
 		background: var(--text);
 		color: var(--on-text);
 	}
+	/* The accent ring is too faint on the --text fill in dark mode (2.2:1). */
+	.opt[aria-pressed='true']:focus-visible {
+		outline-color: var(--on-text);
+	}
 	.opt:disabled {
 		opacity: 0.45;
 		cursor: default;
