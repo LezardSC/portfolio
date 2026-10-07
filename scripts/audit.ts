@@ -74,7 +74,10 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 			for (const width of [360, 1280]) {
 				const context = await browser.newContext({
 					viewport: { width, height: 800 },
-					colorScheme: theme
+					colorScheme: theme,
+					// Scroll reveal keeps off-screen sections at opacity 0, and axe skips invisible
+					// text: reduced motion shows every section, so its contrast is checked too.
+					reducedMotion: 'reduce'
 				});
 				const page = await context.newPage();
 				await page.goto(`${ORIGIN}/${lang}/`, { waitUntil: 'networkidle' });
@@ -112,7 +115,10 @@ async function screenshots(browser: Browser): Promise<void> {
 			for (const width of SCREEN_WIDTHS) {
 				const context = await browser.newContext({
 					viewport: { width, height: 900 },
-					colorScheme: theme
+					colorScheme: theme,
+					// Scroll reveal keeps off-screen sections at opacity 0, and axe skips invisible
+					// text: reduced motion shows every section, so its contrast is checked too.
+					reducedMotion: 'reduce'
 				});
 				const page = await context.newPage();
 				await page.goto(`${ORIGIN}/${lang}/`, { waitUntil: 'networkidle' });
