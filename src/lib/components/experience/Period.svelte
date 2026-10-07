@@ -4,6 +4,6 @@
 	let { points }: { points: PeriodPoint[] } = $props();
 </script>
 
-{#each points as point, i (i)}{#if i > 0}{' – '}{/if}{#if point.datetime}<time
+{#each points as point, i (i)}{#if i > 0}{' → '}{/if}{#if point.datetime}<time
 			datetime={point.datetime}>{point.text}</time
 		>{:else}{point.text}{/if}{/each}

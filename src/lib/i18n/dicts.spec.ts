@@ -41,8 +41,8 @@ describe('dictionaries', () => {
 		for (const s of SORTS) expect(p.sort[s], s).toBeTruthy();
 	});
 
-	it.each(LANGS)('%s labels every hackathon medal', (lang) => {
-		for (const m of MEDALS) expect(dicts[lang].experience.places[m], String(m)).toBeTruthy();
+	it.each(LANGS)('%s labels every hackathon result', (lang) => {
+		for (const m of MEDALS) expect(dicts[lang].experience.results[m], String(m)).toBeTruthy();
 	});
 
 	it.each(LANGS)('%s has a single top-level "opens in a new tab" text', (lang) => {

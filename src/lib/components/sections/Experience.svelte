@@ -1,15 +1,12 @@
 <script lang="ts">
 	import { EDUCATION, HACKATHONS, JOBS } from '$lib/data/experience';
-	import {
-		hackathonsNewestFirst,
-		localize,
-		MEDAL_EMOJI,
-		newestFirst,
-		yearOf
-	} from '$lib/experience';
+	import { hackathonsNewestFirst, localize, newestFirst, yearOf } from '$lib/experience';
 	import type { Dict, Lang } from '$lib/i18n';
+	import { fill } from '$lib/i18n/format';
 	import EducationItem from '../experience/EducationItem.svelte';
 	import JobItem from '../experience/JobItem.svelte';
+	import MedalIcon from '../icons/MedalIcon.svelte';
+	import TrophyIcon from '../icons/TrophyIcon.svelte';
 	import Section from '../Section.svelte';
 
 	let {
@@ -25,33 +22,43 @@
 </script>
 
 <Section id="experience" {title}>
-	<div class="columns">
+	<h3 id="experience-work" class="sub">{t.work}</h3>
+	<ol role="list" class="list" aria-labelledby="experience-work">
+		{#each jobs as job (job.company + job.start)}
+			<li><JobItem {job} {lang} {t} /></li>
+		{/each}
+	</ol>
+	<div class="lower">
 		<div>
-			<h3 id="experience-work">{t.work}</h3>
-			<ol role="list" class="timeline" aria-labelledby="experience-work">
-				{#each jobs as job (job.company + job.start)}
-					<li><JobItem {job} {lang} {t} /></li>
-				{/each}
-			</ol>
-		</div>
-		<div>
-			<h3 id="experience-education">{t.education}</h3>
-			<ol role="list" class="timeline" aria-labelledby="experience-education">
+			<h3 id="experience-education" class="sub">{t.education}</h3>
+			<ol role="list" class="list" aria-labelledby="experience-education">
 				{#each education as item (item.school + item.end)}
 					<li><EducationItem {item} {lang} {t} {newTab} /></li>
 				{/each}
 			</ol>
-			<h3 id="experience-hackathons" class="later">{t.hackathons}</h3>
-			<ol role="list" class="timeline compact" aria-labelledby="experience-hackathons">
+		</div>
+		<div>
+			<h3 id="experience-hackathons" class="sub">
+				{fill(t.hackathonsTitle, { n: hackathons.length })}
+			</h3>
+			<ol role="list" class="list" aria-labelledby="experience-hackathons">
 				{#each hackathons as h (h.event + h.date)}
-					<li>
-						<span class="medal" aria-hidden="true">{MEDAL_EMOJI[h.medal]}</span>
+					<li class="hk">
+						<span class="tile" class:win={h.medal === 1}>
+							{#if h.medal === 1}<TrophyIcon size={20} />{:else}<MedalIcon />{/if}
+						</span>
 						<p class="event">
-							<span class="sr-only">{t.places[h.medal]}</span>
-							{#if h.fullName}<abbr title={h.fullName}>{h.event}</abbr>{:else}{h.event}{/if}
-							<time datetime={h.date}>{yearOf(h.date)}</time>
+							<strong
+								>{#if h.fullName}<abbr title={h.fullName}>{h.event}</abbr
+									>{:else}{h.event}{/if}</strong
+							>
+							<span class="detail"
+								>{#if h.project}{localize(h.project, lang)}{' · '}{/if}<time datetime={h.date}
+									>{yearOf(h.date)}</time
+								></span
+							>
 						</p>
-						{#if h.project}<p class="project">{localize(h.project, lang)}</p>{/if}
+						<span class="res" class:win={h.medal === 1}>{t.results[h.medal]}</span>
 					</li>
 				{/each}
 			</ol>
@@ -60,74 +67,73 @@
 </Section>
 
 <style>
-	.columns {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: 2.5rem;
+	.sub {
+		margin: 0 0 0.25rem;
+		font-size: 0.9375rem;
+		font-weight: 600;
+		color: var(--accent);
 	}
-	@media (min-width: 56.25rem) {
-		.columns {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 3rem;
-		}
-	}
-	h3 {
-		margin: 0 0 1.25rem;
-		font-size: 1.3rem;
-	}
-	h3.later {
-		margin-top: 2.5rem;
-	}
-	.timeline {
+	.list {
 		margin: 0;
 		padding: 0;
 		list-style: none;
-		border-left: 2px solid var(--border);
 	}
-	.timeline > li {
-		position: relative;
-		padding: 0 0 2rem 1.5rem;
+	.lower {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+		gap: 3rem;
+		margin-top: 3.5rem;
 	}
-	.timeline > li:last-child {
-		padding-bottom: 0;
+	.hk {
+		display: grid;
+		grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+		gap: 0.875rem;
+		align-items: center;
+		padding: 0.75rem 0;
+		border-bottom: 1px solid var(--rule);
 	}
-	/* Dot centred on the 2px line: 12px dot, shifted left by half its width plus half the line. */
-	.timeline > li::before {
-		content: '';
-		position: absolute;
-		left: -7px;
-		top: 0.35rem;
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		background: var(--accent);
-		box-shadow: 0 0 0 3px var(--bg);
+	.tile {
+		display: inline-grid;
+		place-items: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: var(--radius-sm);
+		background: var(--tag);
+		color: var(--muted);
 	}
-	/* Hackathons: tighter entries, and the medal replaces the dot, centred on the line. */
-	.compact > li {
-		padding-bottom: 1rem;
-	}
-	.compact > li::before {
-		content: none;
-	}
-	.medal {
-		position: absolute;
-		left: calc(-0.8rem - 1px);
-		top: 0;
-		width: 1.6rem;
-		text-align: center;
-		line-height: 1.6;
-		background: var(--bg);
-	}
-	.event,
-	.project {
-		margin: 0;
+	.tile.win {
+		background: var(--tint);
+		color: var(--accent);
 	}
 	.event {
-		font-weight: 600;
+		margin: 0;
+		min-width: 0;
+		line-height: 1.35;
 	}
-	.project {
-		font-size: 0.9rem;
+	.event strong,
+	.detail {
+		display: block;
+	}
+	.detail {
+		font-size: 0.9375rem;
 		color: var(--muted);
+	}
+	abbr {
+		text-decoration: none;
+	}
+	.res {
+		font-size: 0.9375rem;
+		font-weight: 700;
+		color: var(--body);
+		white-space: nowrap;
+	}
+	.res.win {
+		font-weight: 800;
+		color: var(--accent);
+	}
+	@media (width < 48rem) {
+		.lower {
+			margin-top: 2rem;
+		}
 	}
 </style>

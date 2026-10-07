@@ -1,3 +1,4 @@
+import { fill } from '$lib/i18n/format';
 import type { Lang, Localized } from '$lib/i18n/lang';
 
 /** 'YYYY-MM' */
@@ -37,7 +38,6 @@ export type Education = {
 
 export const MEDALS = [1, 2, 3] as const;
 export type Medal = (typeof MEDALS)[number];
-export const MEDAL_EMOJI: Record<Medal, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
 
 export type Hackathon = {
 	medal: Medal;
@@ -52,11 +52,6 @@ export type Hackathon = {
 
 export function localize(value: string | Localized, lang: Lang): string {
 	return typeof value === 'string' ? value : value[lang];
-}
-
-/** Wraps a quotation in the language's quotation marks: “…” in English, « … » in French. */
-export function quoted(text: string, lang: Lang): string {
-	return lang === 'fr' ? `« ${text} »` : `“${text}”`;
 }
 
 /** 'YYYY' stays as is; 'YYYY-MM' becomes "Jul 2025" / "juil. 2025". UTC, so the month never shifts. */
@@ -127,4 +122,16 @@ export function quoteView(s: { narrow: boolean; overflows: boolean; expanded: bo
 		clamp: s.narrow && !s.expanded,
 		button: s.narrow && (s.expanded || s.overflows)
 	};
+}
+
+/** Months covered by a period, both ends included: 2025-07 → 2026-01 is 7. */
+export function durationMonths(start: Month, end: Month): number {
+	const [y1, m1] = start.split('-').map(Number);
+	const [y2, m2] = end.split('-').map(Number);
+	return (y2 - y1) * 12 + (m2 - m1) + 1;
+}
+
+/** "1 month" / "7 months" from the dictionary's `{n}` templates. */
+export function durationLabel(months: number, forms: { one: string; other: string }): string {
+	return fill(months === 1 ? forms.one : forms.other, { n: months });
 }
