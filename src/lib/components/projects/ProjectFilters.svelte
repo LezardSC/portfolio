@@ -132,7 +132,7 @@
 		gap: 0.4rem;
 		padding: 0.3rem 0.8rem;
 		border: 1px solid var(--border);
-		border-radius: var(--pill);
+		border-radius: var(--radius-sm);
 		background: var(--surface);
 		color: var(--text);
 		font: inherit;

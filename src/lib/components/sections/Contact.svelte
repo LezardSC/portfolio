@@ -155,7 +155,7 @@
 		color: var(--muted);
 		background: none;
 		border: 1px solid var(--border);
-		border-radius: var(--pill);
+		border-radius: var(--radius-sm);
 		cursor: pointer;
 		transition:
 			color 0.15s,
