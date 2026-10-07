@@ -39,6 +39,8 @@ npm ci
 | `fix: keep two featured project columns at 1024px` | Task 10 |
 | `docs: add Milestone 9 review guide` | this file |
 | `fix: no sideways scroll or clipped nav link on small desktops; searchable, printable skills` | final review |
+| `fix: closed skill areas take no space; slower, more visible section fade` | your first review |
+| `feat: featured project cards all the same size, footers aligned` | your first review |
 
 ## 1. Automated checks
 
@@ -150,3 +152,9 @@ Left for later (minors, mostly for M10):
 - The theme-token test lists the themed tokens by hand.
 
 After the fixes: 243 tests, 0 svelte-check problems, audit 25/25, design values all match.
+
+## After your first review
+
+- **Skills showed empty frames** above the selected area: a closed area is `hidden="until-found"` (so Ctrl+F reaches it), which hides its content but keeps its box. Closed areas now take no space. My check after the final-review fix was functional only; this one compares the panel heights (5 closed panels at 0px).
+- **The fade-in was too fast**: 0.9s instead of 0.5s, rising 32px instead of 16px.
+- **Featured cards are all the same size** (your choice: same height + alignment): every row is as tall as the tallest card, and the footer keeps room for two rows of techs with the link on the first, so the separator lines and the "Code source" links line up across each row, whatever the description length, also when filtered. The text size doesn't change. Checked at 1024, 1280 and 1440px in both languages (heights equal, separators within 2px of sub-pixel rounding).
