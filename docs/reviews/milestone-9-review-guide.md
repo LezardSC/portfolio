@@ -38,6 +38,7 @@ npm ci
 | `fix: audit pages with reduced motion so axe checks every section` | Task 10 |
 | `fix: keep two featured project columns at 1024px` | Task 10 |
 | `docs: add Milestone 9 review guide` | this file |
+| `fix: no sideways scroll or clipped nav link on small desktops; searchable, printable skills` | final review |
 
 ## 1. Automated checks
 
@@ -94,6 +95,7 @@ Taken during the build, each because the canvas value broke something:
 - **Section titles shrink only when their longest word doesn't fit** the narrow title column: "Compétences" is 40px (it was 300px wide in a 266px column and touched the tab list; the canvas has the same flaw), "Expérience & Formation" / "Experience & Education" 44px. All other titles stay 46px.
 - **Section numbers** keep the same 2px outline, drawn differently (a 4px stroke under a fill): the bare outline showed the font's inner overlapping lines in "4".
 - **Featured project cards** keep 2 columns down to 1024px (minimum card width 320px instead of 380px). Nothing changes at 1280 and 1440.
+- **Skills tabs go above the panel below 960px wide** (the canvas only shows 1440px; side by side they no longer fit and the page scrolled sideways at 768–880px).
 - **Hackathons stay newest first** (the canvas listed the wins first).
 - The skills panel isn't a separate Tab stop (its text follows the tabs in reading order); Tab goes from the selected tab to the next control.
 - **Share images only show once the site has a domain** (M11): LinkedIn, Malt and Slack need an absolute image URL. The images are already in `static/og-en.png` / `og-fr.png`.
@@ -106,6 +108,7 @@ Taken during the build, each because the canvas value broke something:
 - [ ] Nav: numbers in accent, the current section underlined while you scroll, the CV button opens the PDF.
 - [ ] Projects: each filter combination works, counts update, zero-result options are disabled, the empty state's reset button works. Hover a featured card (image zoom + accent underline under the title) and a small card (lift + accent shadow).
 - [ ] Skills: click each area; with the keyboard, Tab to the selected area, then ↑/↓ (wraps around), Home/End.
+- [ ] Ctrl+F « Kubernetes » while Backend is open: the browser finds it and switches to the DevOps tab. Print preview (Ctrl+P) shows all six areas.
 - [ ] Contact: "Copier l'adresse" → "Copié !"; hover the LinkedIn/GitHub/CV tiles (filled tile, accent shadow, logo still visible).
 - [ ] Sections fade in once as you scroll down. With **Reduce motion** turned on in your OS, nothing fades (everything is just there).
 - [ ] The tab shows the JR favicon.
@@ -127,3 +130,23 @@ Taken during the build, each because the canvas value broke something:
 - `scripts/audit.ts`: pages now use reduced motion, otherwise axe skipped the contrast of every section below the fold (they were still at opacity 0).
 
 Your main checkout still has the downloaded icons8 files and a deleted `src/lib/assets/favicon.svg` (not part of this branch): `git restore src/lib/assets/favicon.svg` there and delete the icons8 files, or let the merge replace them.
+
+## Final review
+
+An independent reviewer (most capable model) read the whole branch and ran the built site. 0 Critical, 2 Important, 9 Minor. Fixed, each with a browser check that failed first and passes now:
+
+- **The page scrolled sideways at 768–880px**: the Skills tabs plus the panel needed 600px in a 508px column. Tabs now go above the panel under 960px and tiles can shrink.
+- **The first nav link was cut off and unreachable at about 760–1010px** (a regression from centring the links). The row is now centred with auto margins, so it overflows to the right where it can be scrolled.
+- **Ctrl+F and printing couldn't reach the closed skill areas** (I raised this one: a recruiter searching for "Docker" found nothing). Closed areas are now `hidden="until-found"` (the browser finds the text and opens that tab) and print in full.
+- **The focus ring on the active filter was 2.2:1 in dark mode**; it now uses the fill's text colour.
+
+Left for later (minors, mostly for M10):
+
+- After an instant jump (find-in-page, script scroll) onto a section that hasn't faded in yet, the nav highlight can point at the previous section until you scroll.
+- Some hover styles (buttons, tabs, filter options, nav links, email) also apply on touch screens and have no keyboard-focus twin; to tidy in M10.
+- "2 wins, 5 podiums" in the at-a-glance card is typed by hand (the hackathons title counts from the data).
+- On phones, the project overlay still uses the M8 light blue for links and awards, tags are light chips on the dark gradient, and the nav is 72px tall instead of 56px.
+- The small project card's award line still uses the 🏆 emoji (no small card has an award today).
+- The theme-token test lists the themed tokens by hand.
+
+After the fixes: 243 tests, 0 svelte-check problems, audit 25/25, design values all match.
