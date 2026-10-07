@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+	durationLabel,
+	durationMonths,
 	formatPeriod,
 	hackathonsNewestFirst,
 	localize,
 	newestFirst,
 	periodPoints,
-	quoted,
 	quoteView,
 	yearOf,
 	type Hackathon
@@ -121,15 +122,6 @@ describe('yearOf', () => {
 	});
 });
 
-describe('quoted', () => {
-	it('uses curly quotes in English', () => {
-		expect(quoted('Serious and committed.', 'en')).toBe('“Serious and committed.”');
-	});
-	it('uses guillemets with narrow no-break spaces in French', () => {
-		expect(quoted('Sérieux et impliqué.', 'fr')).toBe('«\u202fSérieux et impliqué.\u202f»');
-	});
-});
-
 describe('quoteView', () => {
 	it('clamps a long quote on one column and offers to expand it', () => {
 		expect(quoteView({ narrow: true, overflows: true, expanded: false })).toEqual({
@@ -152,5 +144,23 @@ describe('quoteView', () => {
 				clamp: false,
 				button: false
 			});
+	});
+});
+
+describe('durationMonths', () => {
+	it('counts both end months', () => {
+		expect(durationMonths('2025-07', '2026-01')).toBe(7);
+		expect(durationMonths('2024-10', '2025-04')).toBe(7);
+	});
+	it('is 1 for a single month', () => {
+		expect(durationMonths('2024-03', '2024-03')).toBe(1);
+	});
+});
+
+describe('durationLabel', () => {
+	const forms = { one: '{n} month', other: '{n} months' };
+	it('uses the singular for 1 and the plural otherwise', () => {
+		expect(durationLabel(1, forms)).toBe('1 month');
+		expect(durationLabel(7, forms)).toBe('7 months');
 	});
 });

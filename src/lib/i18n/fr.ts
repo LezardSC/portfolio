@@ -74,13 +74,15 @@ export const fr: Dict = {
 	experience: {
 		work: 'Expérience',
 		education: 'Formation',
-		hackathons: 'Hackathons',
+		hackathonsTitle: 'Hackathons — {n}\u00a0podiums',
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
 		readMore: 'Lire la suite',
 		showLess: 'Réduire',
-		places: { 1: '1re place\u00a0:', 2: '2e place\u00a0:', 3: '3e place\u00a0:' }
+		results: { 1: 'Vainqueur', 2: '2e place', 3: '3e place' },
+		months: { one: '{n}\u00a0mois', other: '{n}\u00a0mois' },
+		certificate: 'Voir le certificat'
 	},
 	contact: {
 		intro: 'Ouvert aux opportunités. Le plus rapide pour me joindre, c’est l’e-mail.',
