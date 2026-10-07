@@ -14,8 +14,8 @@
 			class="photo"
 			src={assetHref(base, PROFILE.photo)}
 			alt={t.photoAlt}
-			width="200"
-			height="200"
+			width="240"
+			height="300"
 			loading="lazy"
 			decoding="async"
 		/>
@@ -23,11 +23,6 @@
 			{#each PROFILE.bio as paragraph, i (i)}
 				<p>{paragraph[lang]}</p>
 			{/each}
-			<ul class="facts" role="list">
-				{#each PROFILE.facts as fact, i (i)}
-					<li><span aria-hidden="true">{fact.icon}</span> {fact.text[lang]}</li>
-				{/each}
-			</ul>
 		</div>
 	</div>
 </Section>
@@ -35,43 +30,39 @@
 <style>
 	.about {
 		display: grid;
-		grid-template-columns: 200px minmax(0, 1fr);
-		gap: 2.5rem;
+		grid-template-columns: 15rem minmax(0, 1fr);
+		gap: 3rem;
 		align-items: start;
 	}
 	.photo {
-		width: 200px;
-		height: 200px;
-		border-radius: 50%;
+		width: 15rem;
+		height: auto;
+		aspect-ratio: 4 / 5;
 		object-fit: cover;
-		border: 3px solid var(--border);
+		border-radius: var(--radius);
 	}
 	.text {
-		max-width: 65ch;
+		max-width: 62ch;
+		font-size: 1.1875rem;
+		line-height: 1.65;
 	}
 	p {
-		margin: 0 0 1rem;
+		margin: 0 0 1.125rem;
 	}
-	.facts {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin: 1.5rem 0 0;
-		padding: 0;
-		list-style: none;
-	}
-	.facts li {
-		padding: 0.2rem 0.8rem;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-sm);
-		font-size: 0.9rem;
-		color: var(--muted);
+	p:last-child {
+		margin-bottom: 0;
 	}
 	@media (max-width: 40rem) {
 		.about {
 			grid-template-columns: minmax(0, 1fr);
 			justify-items: center;
 			gap: 1.5rem;
+		}
+		.photo {
+			width: 12rem;
+		}
+		.text {
+			font-size: 1.0625rem;
 		}
 	}
 </style>

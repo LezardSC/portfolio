@@ -19,16 +19,21 @@ describe('profile data', () => {
 			PROFILE.role,
 			PROFILE.pitch,
 			...PROFILE.bio,
-			...PROFILE.facts.map((f) => f.text)
+			...PROFILE.glance.flatMap((r) => [r.label, r.value])
 		];
 		for (const text of texts)
 			for (const lang of LANGS) expect(text[lang].trim(), JSON.stringify(text)).not.toBe('');
 	});
 
-	it('has three bio paragraphs and at least one fact with an icon', () => {
+	it('has three bio paragraphs and the five at-a-glance rows', () => {
 		expect(PROFILE.bio).toHaveLength(3);
-		expect(PROFILE.facts.length).toBeGreaterThan(0);
-		for (const f of PROFILE.facts) expect(f.icon.trim()).not.toBe('');
+		expect(PROFILE.glance.map((r) => r.label.en)).toEqual([
+			'Education',
+			'Latest role',
+			'Stack',
+			'Hackathons',
+			'Languages'
+		]);
 	});
 
 	it('links GitHub over https', () => {

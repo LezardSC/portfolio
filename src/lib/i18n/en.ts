@@ -11,8 +11,9 @@ export const en = {
 	hero: {
 		available: 'Available for work',
 		projects: 'See projects',
-		cv: 'Download CV',
-		github: 'GitHub'
+		cv: 'View CV',
+		malt: 'Malt profile',
+		glance: 'At a glance'
 	},
 	about: {
 		photoAlt: 'Photo of Jocelyn Renault'
