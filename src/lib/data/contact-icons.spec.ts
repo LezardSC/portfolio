@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { siMalt } from 'simple-icons';
-import { logoColor, THEME_BG } from '$lib/skills';
+import { contrastRatio, logoColor, THEME_BG } from '$lib/skills';
 import { CONTACT_BRANDS } from './contact-icons';
 
 describe('contact brand icons', () => {
@@ -31,5 +31,11 @@ describe('contact brand icons', () => {
 		const wordmark = siMalt.path.split(/(?=M)/)[0];
 		expect(CONTACT_BRANDS.malt.path).not.toContain(wordmark);
 		expect(CONTACT_BRANDS.malt.viewBox).toBeDefined();
+	});
+
+	it('gives LinkedIn a lighter blue on the dark theme', () => {
+		const dark = CONTACT_BRANDS.linkedin.dark ?? '';
+		expect(dark).toMatch(/^[0-9A-F]{6}$/i);
+		expect(contrastRatio(dark, THEME_BG.dark)).toBeGreaterThanOrEqual(4.5);
 	});
 });
