@@ -18,7 +18,7 @@ export function skillName(skill: Skill, lang: Lang): string {
 }
 
 /** Page background per theme. Keep in sync with `--bg` in src/app.css (a test checks it). */
-export const THEME_BG = { dark: '#0d1117', light: '#ffffff' } as const;
+export const THEME_BG = { dark: '#121210', light: '#faf8f4' } as const;
 
 /** Below this contrast with the page background, a brand colour is replaced by the text colour. */
 export const MIN_LOGO_CONTRAST = 2.2;

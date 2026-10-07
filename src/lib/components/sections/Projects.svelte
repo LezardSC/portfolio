@@ -113,7 +113,7 @@
 		min-height: var(--tap);
 		padding: 0.4rem 1rem;
 		border: 1px solid var(--accent);
-		border-radius: var(--pill);
+		border-radius: var(--radius-sm);
 		background: transparent;
 		color: var(--accent);
 		font: inherit;

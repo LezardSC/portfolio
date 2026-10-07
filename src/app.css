@@ -1,18 +1,28 @@
 :root {
-	--nav-h: 3.5rem;
-	--radius: 0.75rem;
+	--nav-h: 4.5rem;
+	--radius: 6px;
+	--radius-sm: 4px;
 	--tap: 2.25rem;
-	/* Pill radius: a full pill up to ~40px tall; a rounded rectangle (not a lozenge) if the content ever wraps. */
-	--pill: 1.25rem;
-	--font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--font: 'Schibsted Grotesk Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 	color-scheme: dark;
-	--bg: #0d1117;
-	--surface: #161b22;
-	--text: #e6edf3;
-	--muted: #8b949e;
-	--accent: #58a6ff;
-	--border: #30363d;
-	--ok: #3fb950;
+	--bg: #121210;
+	--surface: #1a1916;
+	--text: #f3f0e8;
+	--on-text: #121210;
+	--body: #d9d5cb;
+	--muted: #a9a498;
+	--border: #2b2924;
+	--rule: #2b2924;
+	--tag: #25231f;
+	--accent: #ff7f5e;
+	--on-accent: #121210;
+	--tint: color-mix(in srgb, var(--accent) 15%, var(--bg));
+	--ok: #86dda5;
+	--ok-dot: #4cc377;
+	--ok-ring: rgb(76 195 119 / 0.2);
+	--footer-bg: #0d0d0b;
+	--footer-text: #f3f0e8;
+	--malt-tile: rgb(252 87 87 / 0.14);
 }
 
 /* Touch screens: controls at least 44px so they are easy to hit. */
@@ -24,13 +34,24 @@
 
 :root[data-theme='light'] {
 	color-scheme: light;
-	--bg: #ffffff;
-	--surface: #f6f8fa;
-	--text: #1f2328;
-	--muted: #59636e;
-	--accent: #0969da;
-	--border: #d1d9e0;
-	--ok: #1a7f37;
+	--bg: #faf8f4;
+	--surface: #ffffff;
+	--text: #141412;
+	--on-text: #ffffff;
+	--body: #2b2a26;
+	--muted: #56534c;
+	--border: #e0dbd0;
+	--rule: #dcd7cc;
+	--tag: #ece8e0;
+	--accent: #c2391b;
+	--on-accent: #ffffff;
+	--tint: color-mix(in srgb, var(--accent) 11%, var(--bg));
+	--ok: #1f6b3a;
+	--ok-dot: #2e8b4e;
+	--ok-ring: rgb(46 139 78 / 0.16);
+	--footer-bg: #141412;
+	--footer-text: #ffffff;
+	--malt-tile: #ffedec;
 }
 
 /* No-JS visitors: default tokens are dark, so follow the system preference
@@ -38,13 +59,24 @@
 @media (prefers-color-scheme: light) {
 	:root:not([data-theme]) {
 		color-scheme: light;
-		--bg: #ffffff;
-		--surface: #f6f8fa;
-		--text: #1f2328;
-		--muted: #59636e;
-		--accent: #0969da;
-		--border: #d1d9e0;
-		--ok: #1a7f37;
+		--bg: #faf8f4;
+		--surface: #ffffff;
+		--text: #141412;
+		--on-text: #ffffff;
+		--body: #2b2a26;
+		--muted: #56534c;
+		--border: #e0dbd0;
+		--rule: #dcd7cc;
+		--tag: #ece8e0;
+		--accent: #c2391b;
+		--on-accent: #ffffff;
+		--tint: color-mix(in srgb, var(--accent) 11%, var(--bg));
+		--ok: #1f6b3a;
+		--ok-dot: #2e8b4e;
+		--ok-ring: rgb(46 139 78 / 0.16);
+		--footer-bg: #141412;
+		--footer-text: #ffffff;
+		--malt-tile: #ffedec;
 	}
 }
 
@@ -68,6 +100,7 @@ html {
 body {
 	margin: 0;
 	font-family: var(--font);
+	font-size: 1.125rem;
 	line-height: 1.6;
 	background: var(--bg);
 	color: var(--text);
@@ -105,7 +138,7 @@ a {
 	padding: 0.5rem 1rem;
 	border-radius: var(--radius);
 	background: var(--accent);
-	color: var(--bg);
+	color: var(--on-accent);
 	font-weight: 600;
 	transform: translateY(-200%);
 }
@@ -116,4 +149,40 @@ a {
 /* <main> takes focus from the skip link; the outline would frame the whole page. */
 main:focus {
 	outline: none;
+}
+
+/* Shared buttons (Hero, Nav, Contact, empty states). */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.625rem;
+	min-height: 3rem;
+	padding: 0 1.375rem;
+	border: 2px solid var(--text);
+	border-radius: var(--radius);
+	background: transparent;
+	color: var(--text);
+	font: inherit;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		color 0.2s,
+		background-color 0.2s,
+		border-color 0.2s;
+}
+.btn:hover {
+	color: var(--accent);
+	border-color: var(--accent);
+}
+.btn-primary {
+	background: var(--text);
+	color: var(--on-text);
+}
+.btn-primary:hover {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: var(--on-accent);
 }

@@ -54,7 +54,7 @@
 		height: var(--tap);
 		padding: 0 0.75rem;
 		border: 1px solid var(--border);
-		border-radius: var(--pill);
+		border-radius: var(--radius-sm);
 		background: var(--surface);
 		color: var(--text);
 		font-weight: 600;
