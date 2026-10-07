@@ -9,8 +9,9 @@ export const fr: Dict = {
 	hero: {
 		available: 'Disponible',
 		projects: 'Voir les projets',
-		cv: 'Télécharger le CV',
-		github: 'GitHub'
+		cv: 'Voir le CV',
+		malt: 'Profil Malt',
+		glance: 'En bref'
 	},
 	about: {
 		photoAlt: 'Photo de Jocelyn Renault'
