@@ -1,5 +1,5 @@
 import type { SectionId } from '$lib/sections';
-import type { Context, Domain, SortKey } from '$lib/projects';
+import type { SortKey } from '$lib/projects';
 import type { Medal } from '$lib/experience';
 
 export const en = {
@@ -49,19 +49,6 @@ export const en = {
 		contextLabel: 'Context',
 		domainLabel: 'Domain',
 		all: 'All',
-		contexts: {
-			professional: 'Professional',
-			personal: 'Personal',
-			school: 'School',
-			hackathon: 'Hackathon'
-		} satisfies Record<Context, string>,
-		domains: {
-			web: 'Web',
-			blockchain: 'Blockchain',
-			ai: 'AI',
-			'low-level': 'Low-level',
-			games: 'Games'
-		} satisfies Record<Domain, string>,
 		sortLabel: 'Sort by',
 		sort: { featured: 'Highlights', newest: 'Newest' } satisfies Record<SortKey, string>,
 		empty: 'No project matches these filters.',

@@ -1,24 +1,25 @@
 <script lang="ts">
+	import { CONTEXTS, DOMAINS } from '$lib/data/categories';
 	import type { Dict, Lang } from '$lib/i18n';
-	import { DOMAIN_COLOR, mainDomain, primaryLink, type Project } from '$lib/projects';
-	import DomainIcon from './DomainIcon.svelte';
+	import { mainDomain, primaryLink, type Project } from '$lib/projects';
+	import Icon from '../Icon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
 	import TechTags from './TechTags.svelte';
 
 	let { project, lang, t }: { project: Project; lang: Lang; t: Dict['projects'] } = $props();
 
 	const href = $derived(primaryLink(project));
-	const domain = $derived(mainDomain(project));
+	const domain = $derived(DOMAINS[mainDomain(project)]);
 	const year = $derived(project.date.slice(0, 4));
 </script>
 
-<article class="card" style:--dc={DOMAIN_COLOR[domain]}>
+<article class="card" style:--dc={domain.color}>
 	<div class="top">
-		<span class="icon"><DomainIcon {domain} size={22} /></span>
+		<span class="icon"><Icon path={domain.icon} size={22} /></span>
 		<ProjectLinks {project} {t} compact />
 	</div>
 	<!-- Phone only: label, summary and context (CSS shows one set of texts per width). -->
-	<p class="label">{t.domains[domain]} · {year}</p>
+	<p class="label">{domain.label[lang]} · {year}</p>
 	<h4>
 		{#if href}
 			<a {href} target="_blank" rel="noopener noreferrer">{project.title}</a>
@@ -26,14 +27,14 @@
 			{project.title}
 		{/if}
 	</h4>
-	<p class="meta">{year} · {t.contexts[project.context]} · {t.domains[domain]}</p>
+	<p class="meta">{year} · {CONTEXTS[project.context].label[lang]} · {domain.label[lang]}</p>
 	{#if project.award}
 		<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
 	{/if}
 	<p class="desc">{project.description[lang]}</p>
 	<p class="summary">{project.summary[lang]}</p>
 	<TechTags tech={project.tech} small />
-	<p class="ctx">{t.contexts[project.context]}</p>
+	<p class="ctx">{CONTEXTS[project.context].label[lang]}</p>
 </article>
 
 <style>

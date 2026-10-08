@@ -1,26 +1,27 @@
 <script lang="ts">
+	import { CONTEXTS, DOMAINS } from '$lib/data/categories';
 	import type { Dict, Lang } from '$lib/i18n';
-	import { DOMAIN_COLOR, mainDomain, type Project } from '$lib/projects';
+	import { mainDomain, type Project } from '$lib/projects';
+	import Icon from '../Icon.svelte';
 	import TrophyIcon from '../icons/TrophyIcon.svelte';
-	import DomainIcon from './DomainIcon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
 	import ProjectMedia from './ProjectMedia.svelte';
 	import TechTags from './TechTags.svelte';
 
 	let { project, lang, t }: { project: Project; lang: Lang; t: Dict['projects'] } = $props();
 
-	const domain = $derived(mainDomain(project));
+	const domain = $derived(DOMAINS[mainDomain(project)]);
 </script>
 
-<article class="card" class:has-media={!!project.media} style:--dc={DOMAIN_COLOR[domain]}>
+<article class="card" class:has-media={!!project.media} style:--dc={domain.color}>
 	<ProjectMedia {project} />
 	{#if !project.media}
-		<span class="wm"><DomainIcon {domain} size={160} /></span>
+		<span class="wm"><Icon path={domain.icon} size={160} /></span>
 	{/if}
 	<div class="body">
 		<p class="meta">
-			<span class="dom"><DomainIcon {domain} size={18} />{t.domains[domain]}</span>
-			<span>{project.date.slice(0, 4)} · {t.contexts[project.context]}</span>
+			<span class="dom"><Icon path={domain.icon} size={18} />{domain.label[lang]}</span>
+			<span>{project.date.slice(0, 4)} · {CONTEXTS[project.context].label[lang]}</span>
 		</p>
 		<h3><span class="title">{project.title}</span></h3>
 		{#if project.award}

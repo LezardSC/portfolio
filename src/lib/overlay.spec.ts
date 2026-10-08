@@ -3,14 +3,14 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { mixHex } from './color';
 import { OVERLAY } from './overlay';
-import { DOMAIN_COLOR, DOMAINS } from './projects';
+import { DOMAIN_IDS, DOMAINS } from './data/categories';
 import { contrastRatio } from './skills';
 
 const TEXTS = ['text', 'meta', 'domain', 'award', 'desc'] as const;
 
 describe('phone featured cards without media', () => {
-	it.each(DOMAINS)('%s: every text colour reaches 4.5:1 on the veiled domain colour', (d) => {
-		const ground = mixHex(OVERLAY.veil, DOMAIN_COLOR[d], OVERLAY.veilPlain);
+	it.each(DOMAIN_IDS)('%s: every text colour reaches 4.5:1 on the veiled domain colour', (d) => {
+		const ground = mixHex(OVERLAY.veil, DOMAINS[d].color, OVERLAY.veilPlain);
 		for (const key of TEXTS)
 			expect(contrastRatio(OVERLAY[key], ground), key).toBeGreaterThanOrEqual(4.5);
 		const tagGround = mixHex('#ffffff', ground, OVERLAY.tagBg);
