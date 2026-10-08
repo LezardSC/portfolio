@@ -441,6 +441,146 @@ Each section except the hero fades in once, rising 16px, over ~500ms, when it en
 - **Fidelity:** Playwright screenshots of every section at 1440px and 1280px, both themes, both languages, checked against the artboard values; the canvas can't be rendered outside claude.ai, so the review guide puts the screenshots next to the canvas link for Jocelyn's own side-by-side check and lists every deviation. Quick check at 360px and 390px that nothing breaks.
 - **Review guide:** `docs/reviews/milestone-9-review-guide.md`.
 
+## Milestone 10 — Phone design
+_Settled during Milestone 10 brainstorming (2026-10-08), after a design session on a Claude Design canvas._
+
+**Goal.** Give phones the M9 visual identity with layouts made for a 390px screen: less scrolling, information readable at a glance, nothing that scrolls sideways, touch targets ≥ 44px. This section **supersedes the phone presentation** of Milestone 8 ("Projects on phones", "Other sections on phones") and the phone menu of Milestone 7; data, logic and accessibility rules from earlier sections still apply unless changed here.
+
+**Source of truth.** The validated boards on the canvas "Portfolio — Mobile" https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59 (private to Jocelyn's claude.ai account): **Mobile — clair** (`Mix.dc.html`) and **Mobile — sombre** (`MixSombre.dc.html`, the same board with `theme="Sombre"`). A snapshot is in `docs/superpowers/designs/2026-10-08-m10-final/` (`Mobile-Clair.dc.html`, `Mobile-Sombre.dc.html`, `skill-logos.json`, and a `README.md` with the choice made for each section). Like the M9 boards they only render inside the canvas: use them as a value reference. Values below come from them; the implementation must match them, each section is screenshot-checked against them, and every deliberate deviation is listed in the review guide. Colours, font, borders and radii are the M9 tokens.
+
+**Scope.** "Phone" = `width < 48rem` (the existing breakpoint, `DESKTOP_QUERY` in `src/lib/projects.ts`). At 48rem and up the M9 desktop layout is unchanged (it was checked down to 768px in M9); tablets get no design of their own. Desktop gets a no-regression check only.
+
+**Approach.** As in M8: one set of markup per component, restyled for phones by `@media (width < 48rem)`. Where phone and desktop need different interactive controls (skills tabs vs accordion, filter segmented bars vs selects, the phone-only "Read more" and "See N other projects" buttons), both sets of controls exist and CSS shows one set per width with `display: none`, which also takes the hidden set out of the accessibility tree and tab order. Choosing components in JS by screen width was rejected (the prerendered page would flash the wrong layout and break without JS), and so was rendering two complete layouts (double HTML, every heading and link twice).
+
+**Collapsibles (shared rule).** Everything the phone design folds away (About paragraphs, recommendation quotes, other projects beyond 6, closed skill groups) is folded **only after hydration**: without JS, before hydration and for crawlers everything is visible and the toggle buttons are absent. Toggle buttons are real `<button>`s with `aria-expanded` and `aria-controls`. The shared strings `experience.readMore` / `experience.showLess` move to a shared dict group (e.g. `common.readMore` / `common.showLess`), used by About and anywhere else they are needed.
+
+### Foundations (phone)
+- Side padding 20px; body text 17px, line-height 1.6.
+- `Section`: 48px vertical padding, 2px `--text` top rule kept. Header on one line (`display: flex; align-items: flex-end; gap: 14px`): the outlined number 46px, weight 900, line-height 0.8, letter-spacing −0.05em, transparent fill with a **1.5px** `--accent` stroke; the `h2` 29px, weight 800, line-height 1.05, letter-spacing −0.03em. Lead 15px `--muted`, line-height 1.5, 10px above. Body starts ~20px below the header.
+- Buttons on phones: `.btn` min-height 48px, padding 0 16px (M9 desktop keeps 22px).
+
+### Header
+- Sticky, min-height 60px, background `--bg` at **92%** opacity with a 14px backdrop blur, 1px `--rule` bottom border.
+- Left: "Jocelyn Renault" 18px weight 800 (link to the top). Right, 6px apart: theme toggle and language switch as 44px square buttons (1px `--rule`, 4px radius), then a primary **Contact** button (44px tall, padding 0 14px, 15px; links to `#contact`). New key `nav.contact` ("Contact" in both languages).
+- On phones the section links and the desktop **CV** button are hidden (the CV is in the hero). **The M7 phone menu goes:** burger button, panel, `src/lib/nav-menu.ts` and its tests, and the phone-only nav CSS. Desktop nav (links, active-section underline, CV button) is unchanged.
+
+### Hero
+- Padding 28px top, 40px bottom.
+- "Available" badge as on desktop (14px below it), when `PROFILE.available`.
+- `h1` on two lines, "Jocelyn" / "Renault" + accent full stop: 58px at 390px and above, scaling down below (`font-size: min(3.625rem, 14.8vw)`, ≈53px at 360px), weight 900, line-height 0.88, letter-spacing −0.055em. The line break is phone-only (desktop stays one line).
+- Role 20px weight 800 `--accent`, line-height 1.25, 20px above, 8px below.
+- Pitch 16px, line-height 1.55, `--body`, **first sentence only** on phones. Data: `PROFILE.pitch` is split into `pitch` (first sentence) and `pitchMore` (the rest); desktop shows both (no visible change there).
+
+| | EN | FR |
+|---|---|---|
+| `pitch` | I build the invisible part of products: APIs, services, data processing, automation and deployment. | Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production. |
+| `pitchMore` | My field is backend and low-level — reliability and performance over UI. | Mon terrain, c’est le backend et le bas niveau — la fiabilité et la performance plutôt que l’interface. |
+
+- **At a glance → tiles:** the same `<dl>`, restyled as a 2-column grid, gap 8px, 20px below. Tile: padding 12px 14px, `--surface`, 2px `--border`, 6px radius; `dt` 12px weight 600 uppercase, letter-spacing 0.05em, `--muted`; `dd` 15px weight 700, line-height 1.35, 2px above. Phone order: Education, Latest role, Hackathons, Languages, then **Stack across both columns** (CSS `order`). Data: `GlanceRow` gains `short?: Localized` (shown on phones instead of `value` when present; CSS shows one of the two) and `wide?: true` (full-width tile on phones):
+
+| Row | `short` EN | `short` FR |
+|---|---|---|
+| Education | 42 Lyon · RNCP 7 | 42 Lyon · RNCP 7 |
+| Latest role | Sogeti (Capgemini) | Sogeti (Capgemini) |
+| Stack | — (`wide: true`) | — |
+
+- **Buttons:** 2-column grid, gap 8px: **See projects / Voir les projets** + down-arrow icon (primary, both columns), then **View CV / Voir le CV** and **Malt ↗** (Malt symbol). The phone Malt label comes from a new key `hero.maltShort` ("Malt" in both languages); CSS shows one label per width.
+
+### About
+- Grid `88px 1fr`, gap 16px, aligned to the top: photo 88px wide, 4:5, 6px radius (same `photo.jpg`, `object-fit: cover`); first paragraph 16px, line-height 1.55.
+- The other paragraphs (16px, line-height 1.6, 14px above) are folded behind a **Read more / Lire la suite** button that reads **Show less / Réduire** when open: 48px tall, inline (not full width), padding 0 14px, `--surface`, 1.5px `--text` border, 6px radius, 15px weight 600, 12px above. Collapsibles rule applies. Desktop: all paragraphs, no button.
+
+### Projects
+**Filters.** The M8 selects, laid out as on the board: grid of 2 columns, gap 12px, 20px above and 24px below; each a `<label>` with the label text above (13px weight 600 `--muted`, 6px gap): **Context** and **Domain** side by side, **Sort by** across both columns. Select: full width, min-height 48px, padding 0 40px 0 14px, 16px weight 600, `--surface`, 2px `--text` border, 6px radius, `appearance: none` with the board's two-triangle chevron. **Deviation (kept by Jocelyn):** options keep their result count ("Hackathon (5)") and zero-result options stay disabled unless current (M8 behaviour); the board shows plain labels.
+
+**Main domain.** A project's **main domain is `domains[0]`**: it sets the domain icon, label and colour on every card. Filtering still matches every domain in the list (KAYP stays under Blockchain and Web). This is already how the code reads it; the spec makes it a rule, the data order matters, and a test checks every project has at least one domain.
+
+**Domain colours.** One typed map `DOMAIN_COLOR: Record<Domain, string>` in `src/lib/projects.ts`:
+
+| Domain | Colour |
+|---|---|
+| AI / IA | `#0B6E6E` |
+| Blockchain | `#24408E` |
+| Low-level / Bas niveau | `#C2391B` |
+| Games / Jeux | `#7A2E5E` |
+| Web | `#5B3FA0` (new; the board reused the low-level red) |
+
+Components pass it as `--dc`; the theme mix happens in CSS (light and dark values defined in every theme block, including the no-JS `prefers-color-scheme` one):
+- tile background: light `color-mix(in srgb, var(--dc) 11%, #FFFFFF)`, dark `color-mix(in srgb, var(--dc) 24%, #121210)`;
+- tile foreground (label, watermark, rule): light `var(--dc)`, dark `color-mix(in srgb, var(--dc) 45%, #FFFFFF)`.
+
+Checked in brainstorming: label contrast ≥ 4.58:1 (light) and ≥ 7.18:1 (dark) for all five; a unit test recomputes it (pure contrast helper, ≥ 4.5:1 both themes).
+
+**Featured cards** (the large tier; stacked, gap 14px):
+- Card: `position: relative`, `isolation: isolate`, `overflow: hidden`, 2px `--text` border, 6px radius, min-height 300px, flex column justified to the end, gap 8px, padding 18px 18px 8px. Text is light on a dark ground **in both themes**.
+- **With media:** the existing `ProjectMedia` element becomes the background (no second image): `position: absolute; inset: -16px` (so the blur has no soft edge), `object-fit: cover`, `filter: blur(6px)`, under a `#10100E` veil at **62%** opacity. It shows the image, or a video's poster (phones never play video, M8 rule unchanged). The media link stays decorative (`tabindex=-1`, `aria-hidden`). Blur and veil are CSS custom properties so they can be tuned once real photos exist.
+- **Without media** (every project today): background = main domain colour under a `#10100E` veil at **35%**, plus the domain icon as a watermark, 160px, white at ~15% opacity, top right, partly off the card. With that veil every text colour below passes AA on all five domains (worst: `#FFA58C` on low-level, 4.73:1). The M8 gradient placeholder is not used on phones.
+- Content, top to bottom: meta line 13px weight 500 `#D6D1C6`, gap 4px 10px = domain icon (16px) + domain name in `#FFA58C` weight 600, then "2024 · Hackathon"; title `h3` 23px weight 800, line-height 1.15, letter-spacing −0.02em, `#FFFFFF`; award 14px weight 700 `#FFB59F`, line-height 1.35, trophy icon 17px; description 15px, line-height 1.5, `#ECE8DF`, clamped to 3 lines (visual only, the full text stays in the DOM); footer with a 1px `rgba(255,255,255,.2)` top border, 6px padding top: tech tags (12px, padding 5px 8px, 4px radius, `rgba(255,255,255,.16)` background, `#F3F0E8`) left, **Code ↗** (15px weight 700 `#FFFFFF`, min-height 44px) or **Private code / Code privé** (13px `#D6D1C6`) right. New key `projects.code` ("Code" in both languages); the link's accessible name includes the project title (existing pattern).
+- Desktop hover styles stay under `(hover: hover) and (pointer: fine)` and don't apply on phones.
+
+**Other projects** (the small tier):
+- Heading "More projects / Autres projets" 21px weight 800, 40px above, 2px below; lead 14px `--muted`, 8px below. Grid of **2 columns**, gap 10px, 14px above.
+- Tile: `position: relative`, flex column, gap 6px, min-height 200px, padding 14px 12px 4px, tile background (above), 6px radius, no border, `overflow: hidden`. Watermark: domain icon 110px, stroke 1.2, tile foreground at 20% opacity, top right at −26px, `aria-hidden`. Then: label "AI · 2025" (main domain · year) 11px weight 700 uppercase, letter-spacing 0.07em, tile foreground; title 17px weight 800, line-height 1.15, letter-spacing −0.01em, `overflow-wrap: anywhere` (so `ft_linear_regression` never overflows); **summary** 13px, line-height 1.4, `--body`; footer (`margin-top: auto`) with a 1.5px top border in the tile foreground at 35%: context 12px weight 600 `--muted` left, **Code ↗** (13px weight 700, min-height 44px, accessible name with the title) or **Private / Privé** (12px `--muted`) right. No tech tags on phones.
+- **6 shown, then a button:** full-width `.btn`, 12px above, **See the {n} other projects / Voir les {n} autres projets** (singular when n = 1: **See 1 other project / Voir 1 autre projet**), **Show fewer / Réduire la liste** when open. n is computed (small-tier count − 6); no button when the small tier has 6 or fewer. Any filter or sort change folds the list back. Collapsibles rule applies; folded tiles get `display: none` on phones only, so desktop always shows every card. The count is a pure, tested `hiddenCount(total, shown = 6)`. New keys `projects.showMore`, `projects.showMoreOne`, `projects.showFewer`.
+- **Desktop small cards** keep the long description (3-line clamp); the summary is phone-only (CSS shows one of the two).
+
+**Data: `summary`.** Every project gets `summary: Localized`, one sentence (any project can land in the small tier after filtering). Drafts below, to be reviewed by Jocelyn before implementation (FR for the small projects comes from the board):
+
+| Project | EN | FR |
+|---|---|---|
+| KAYP | Maritime bills of lading as electronic documents, encrypted and anchored on the XRP Ledger. | Des connaissements maritimes électroniques, chiffrés et ancrés sur le XRP Ledger. |
+| KAYP — H-W3B Paris | The weekend prototype of KAYP: bills of lading secured on the blockchain. | Le prototype de KAYP, en un week-end : des connaissements sécurisés sur la blockchain. |
+| ft_transcendence | Online multiplayer Pong with tournaments, 3D rendering and an AI opponent. | Un Pong multijoueur en ligne avec tournois, rendu 3D et IA adverse. |
+| microcode | An AI agent written from scratch on a local Ollama model. | Un agent IA écrit de zéro, sur un modèle Ollama local. |
+| Bahapad | A launchpad to deploy your own ERC-20 token on Bahamut. | Un launchpad pour déployer son propre token ERC-20 sur Bahamut. |
+| GoldenEye — data augmentation | Data augmentation for a SogetiLabs computer-vision project. | Augmentation de données pour un projet de vision par ordinateur de SogetiLabs. |
+| Leaffliction | Leaf disease detection with a convolutional neural network. | Détection de maladies des feuilles par un réseau de neurones convolutif. |
+| DSLR | A hand-coded one-vs-all logistic regression, Hogwarts sorting hat style. | Régression logistique one-vs-all recodée à la main, façon Choixpeau de Poudlard. |
+| ft_linear_regression | A from-scratch linear regression that predicts a car’s price. | Régression linéaire écrite de zéro qui prédit le prix d’une voiture. |
+| tokenizArt | A one-of-a-kind ERC-721 NFT on Sepolia, with its metadata on IPFS. | Un NFT ERC-721 unique sur Sepolia, avec ses métadonnées sur IPFS. |
+| tokenizer | A multisig-approved ERC-20 token for 42’s wallet. | Un token ERC-20 à validation multisignature pour le porte-monnaie de 42. |
+| libasm | Standard C functions rewritten in x86-64 assembly. | Des fonctions C standard réécrites en assembleur x86-64. |
+| libft | My own C standard library, validated at 125%. | Ma propre bibliothèque standard C, validée à 125 %. |
+| ft_printf | A re-implementation of printf, as a static library. | Une réimplémentation de printf, en bibliothèque statique. |
+| get_next_line | Reading a file line by line, whatever the buffer size. | Lire un fichier ligne par ligne, quelle que soit la taille du buffer. |
+| Confiture de Jeu #1 | A 48-hour platformer where a mask reveals hidden platforms. | Un jeu de plateforme en 48 h où un masque révèle des plateformes cachées. |
+| Love Takedown | A game made as a team during a game jam. | Un jeu réalisé en équipe lors d’une game jam. |
+
+(French text uses U+00A0 before `:` and `%` and in "48 h", and ’ apostrophes, per the typography tests.)
+
+**Media.** No project has media in the repo yet; real photos come later from Jocelyn (a featured project with a video already has its photo: the poster). For visual checks, the stock photos in the gitignored `tmp/` are injected at screenshot time (Playwright `page.route`, as in M8) and never committed.
+
+### Skills (accordion)
+- Phones replace the tab list with an accordion; the six panels are shared with desktop.
+- One `<button>` per group, stacked, gap 10px, 20px below the lead: full width, min-height 64px, padding 10px 14px 10px 10px, transparent, 2px `--border`, 6px radius, 17px weight 700, gap 14px: group icon in a 40px `--tint` tile (`--accent` icon, 4px radius), group title, count right-aligned (14px weight 600 `--muted`, `aria-hidden` as on desktop), chevron 18px (down when closed, up when open). Open: `--surface` background, 2px `--text` border, `5px 5px 0 var(--accent)` shadow.
+- Open panel below its button: padding 18px 2px 8px; description 16px `--body`, 14px below; skills in 2 columns, gap 8px; skill item: flex, gap 10px, padding 12px, `--surface`, 1px `--border`, 6px radius, 15px weight 600, line-height 1.25, 24px logo (M4 `logoColor` logic, so black logos follow the text colour in dark mode). The panel's own `h3` is visually hidden on phones (the button names it) and the desktop `min-height` does not apply.
+- **One group open at a time**; Backend open by default; tapping the open group closes it (all closed is allowed). Desktop tab selection and phone accordion state are separate.
+- Buttons: `aria-expanded`, `aria-controls` → the panel. The tab list is `display: none` on phones and the accordion buttons on desktop, so each width has one consistent pattern. Which panels are hidden is a pure, unit-tested `panelHidden({ enhanced, desktop, selected, open }, index): boolean` in `src/lib/skills.ts`; `desktop` comes from `matchMedia(DESKTOP_QUERY)`. Before hydration / without JS all groups show, as today.
+
+### Experience & Education
+- Sub-headings ("Experience", "Education", "Hackathons — {n} podiums") 14px weight 600 `--accent`; 22px above the first, 32px above the others.
+- **Job:** padding 20px 0, 1px `--rule` below. Dates on one line: "Jul 2025 → Jan 2026 · Internship · 7 months" 13px weight 500 `--muted` (`<time>` kept); title 20px weight 800, line-height 1.25; company 16px weight 700 `--accent`, 10px below; bullets 15px, line-height 1.55, `--body`, 18px indent; tags 12px (padding 5px 8px).
+- **Recommendation:** a full-width button, min-height 48px, 12px above, padding 0 14px, `--surface`, 1.5px `--border`, 6px radius, 15px weight 600: a 30px weight 800 `--accent` opening quote mark (`aria-hidden`), **Recommendation — {name} / Recommandation — {name}** (new key `experience.recommendation`, filled with `fill()`), chevron right. Open: the quote below (8px above) in a box: padding 16px, `--surface`, 1.5px `--border`, 6px radius; quote 15px, line-height 1.55; caption 13px `--muted`, name bold `--text`; "(translated from French)" kept on the English page. Collapsibles rule applies. The whole quote shows when open (the board cut one quote with a "Read more" inside, for space).
+- **This replaces the M8 quote clamp:** the 2-line clamp, its overflow measuring and its Read more button go. At 48rem and up the quote is always whole, with no button (so the 48–56.25rem clamp disappears too).
+- **Education:** rows with 12px vertical padding and a 1px `--rule`: dates 13px `--muted`; school 18px weight 800 with the diploma inline after " · " (15px weight 600 `--body`); details 14px `--muted`, line-height 1.45. CS50 row: "Certificate ↗ / Certificat ↗" right (14px weight 600, min-height 44px).
+- **Hackathons:** rows grid `36px 1fr auto`, gap 12px, 10px vertical padding, 1px `--rule`: 36px tile (trophy `--accent` on `--tint` for a win, medal `--muted` on `--tag` otherwise); event bold 15px with "project · year" below (13px `--muted`); result 13px weight 700 `--body`, `nowrap` (wins weight 800 `--accent`).
+
+### Contact
+- Intro 18px weight 600, line-height 1.4, 16px above, 18px below. Blocks stacked, gap 12px.
+- **E-mail card:** flex column, gap 12px, padding 20px 18px, `--surface`, 2px `--text` border, 6px radius: label 13px weight 600 `--muted`; the address on **one line** (`white-space: nowrap`), 19px weight 800, letter-spacing −0.02em, line-height 1.2, scaled down below 390px so it still fits at 360px (`font-size: min(1.1875rem, Nvw)`, N chosen in the plan by measuring the rendered address at 360px); primary **Copy address** button full width. M7 copy behaviour unchanged.
+- **Malt card:** the whole card is one link (new tab), row layout, gap 14px, same card style: 40px tile (`#FFEDEC` / `rgba(252,87,87,.14)`) with the 26px Malt symbol; title "Working through Malt? / Vous passez par Malt ?" 18px weight 800, line-height 1.25; short text 14px `--body` from a new key `contact.maltShort`: "Profile, recommendations and mission requests." / « Profil, recommandations et contact pour une mission. »; ↗ right (`aria-hidden`).
+- **LinkedIn / GitHub / CV:** 3 equal columns, gap 8px; each a column-flex link, min-height 72px, gap 4px, centred, `--surface`, 2px `--text` border, 6px radius, 14px weight 700, 22px icon above the label (LinkedIn in `#0A66C2` / `#4A9FE8`). Desktop hover styles don't apply on phones.
+
+### Footer
+Min-height 76px, padding 0 20px, flex with wrap, gap 12px: "© {year} Jocelyn Renault" weight 700 left, "Back to top ↑ / Retour en haut ↑" weight 600 right (min-height 44px). **Deviation (kept by choice):** the © year stays, as on desktop; the board shows the name alone. It may wrap to two lines at 360px.
+
+### Tests and verification
+- **Unit:** every project has ≥ 1 domain and a non-empty `summary` in both languages (French typography tests cover it); `DOMAIN_COLOR` has all five domains and the tile label contrast is ≥ 4.5:1 in both themes; `hiddenCount`; `panelHidden`; glance `short` values non-empty when present and exactly one `wide` row; `pitch` + `pitchMore` non-empty; i18n completeness for every new key (`nav.contact`, `hero.maltShort`, `projects.code`, `projects.showMore`, `projects.showMoreOne`, `projects.showFewer`, `experience.recommendation`, `contact.maltShort`, the shared read more / show less); `nav-menu` tests removed with the module.
+- `npm run check`, `npm test`, `npm run lint` clean. `npm run audit` passes: 0 axe violations in both themes and languages at 360px and 1280px, also with every collapsible opened (About, a skill group, a recommendation, all other projects); no horizontal scroll at 360px; Lighthouse as in M9.
+- **Fidelity:** Playwright screenshots of every section at 390px and 360px, both themes, both languages, with and without the injected stock photos, checked against the board values; the review guide puts them next to the canvas link and lists every deviation. Desktop at 1280px and 1440px: no-regression screenshots against M9. Page height at 390px before and after goes in the review guide (an estimate, not a gate).
+- **Manual (review guide):** real-phone feel (touch targets, sticky header, select pickers); featured-card text contrast over real photos once they exist (axe can't measure text over images).
+- **Review guide:** `docs/reviews/milestone-10-review-guide.md`.
+
 ## Testing
 - Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
 - `svelte-check` clean.
@@ -456,7 +596,7 @@ Each section except the hero fades in once, rising 16px, over ~500ms, when it en
 7. **Fixes & accessibility** — mobile nav, active-section highlight, a11y, French typography, `/` redirect, deferred review minors, responsive pass, `npm run audit` (axe + Lighthouse).
 8. **Layout & media** — compact phone layout (overlay project cards, compact rows, scrollable filters, tighter sections and skill chips, clamped quotes), video and poster media, desktop card hover.
 9. **Desktop design** — the new visual identity from the Claude Design canvas on desktop, both themes (see "Milestone 9 — Desktop design"): tokens and font, numbered section grid, hero with the at-a-glance card, restyled projects, skills as tabs, experience, contact with email and Malt blocks, favicon, OG images, per-locale meta, scroll reveal.
-10. **Phone design** — the same pass for phones, once the desktop version is settled (not both at once).
+10. **Phone design** — the same pass for phones, once the desktop version is settled (see "Milestone 10 — Phone design"): sticky header with a Contact button (no burger), compact hero tiles, folded About, blurred-photo featured cards, domain-tinted project tiles with one-sentence summaries, skills accordion, collapsed recommendations, compact contact.
 11. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
 
 ## Next steps after approval
