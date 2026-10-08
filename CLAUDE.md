@@ -27,6 +27,7 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - Content (projects, skills, experience) goes in typed data files in `src/lib/data/`, with `{ en, fr }` text fields. Components only render it.
 - Put logic in pure functions with unit tests (`*.spec.ts` next to the file). Keep components thin.
 - `docs/` and `.superpowers/` are in `.prettierignore`, so docs are never reformatted.
+- How to edit each kind of content is documented in `docs/content-guide.md`; keep it in sync when a data type or file changes.
 
 ## Workflow (superpowers plugin)
 
