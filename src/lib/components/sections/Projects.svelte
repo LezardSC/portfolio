@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
@@ -7,8 +8,10 @@
 	import { fill } from '$lib/i18n/format';
 	import {
 		filterProjects,
+		hiddenCount,
 		LARGE_COUNT,
 		NO_FILTERS,
+		PHONE_OTHERS,
 		sortProjects,
 		splitTiers,
 		type Filters,
@@ -29,6 +32,23 @@
 		fill(t.lead, { total: PROJECTS.length, featured: Math.min(LARGE_COUNT, PROJECTS.length) })
 	);
 	const ms = $derived(prefersReducedMotion.current ? 0 : 300);
+
+	/** False in the prerendered HTML: without JS every tile shows and there is no button. */
+	let ready = $state(false);
+	let showAll = $state(false);
+	const hidden = $derived(hiddenCount(tiers.small.length));
+
+	onMount(() => {
+		ready = true;
+	});
+
+	// Any filter or sort change folds the phone list back.
+	$effect(() => {
+		void filters.context;
+		void filters.domain;
+		void sort;
+		showAll = false;
+	});
 </script>
 
 <Section id="projects" {title} {lead}>
@@ -53,13 +73,28 @@
 		{#if tiers.small.length > 0}
 			<h3 class="more">{t.more}</h3>
 			<p class="more-lead">{t.moreLead}</p>
-			<ul class="grid small" role="list">
-				{#each tiers.small as project (project.id)}
-					<li animate:flip={{ duration: ms }} in:fade={{ duration: ms }}>
+			<ul id="more-projects" class="grid small" role="list">
+				{#each tiers.small as project, i (project.id)}
+					<li
+						class:folded={ready && !showAll && i >= PHONE_OTHERS}
+						animate:flip={{ duration: ms }}
+						in:fade={{ duration: ms }}
+					>
 						<ProjectCardSmall {project} {lang} {t} />
 					</li>
 				{/each}
 			</ul>
+			{#if ready && hidden > 0}
+				<button
+					type="button"
+					class="btn show-more"
+					aria-expanded={showAll}
+					aria-controls="more-projects"
+					onclick={() => (showAll = !showAll)}
+				>
+					{showAll ? t.showFewer : hidden === 1 ? t.showMoreOne : fill(t.showMore, { n: hidden })}
+				</button>
+			{/if}
 		{/if}
 	{/if}
 </Section>
@@ -93,11 +128,35 @@
 		font-size: 1rem;
 		color: var(--muted);
 	}
+	.show-more {
+		display: none;
+	}
 	@media (width < 48rem) {
 		.large {
 			grid-template-columns: minmax(0, 1fr);
 			grid-auto-rows: auto;
 			gap: 0.875rem;
+		}
+		.small {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.625rem;
+		}
+		.more {
+			margin: 2.5rem 0 0.125rem;
+			font-size: 1.3125rem;
+		}
+		.more-lead {
+			margin: 0 0 1.375rem;
+			font-size: 0.875rem;
+		}
+		.folded {
+			display: none;
+		}
+		.show-more {
+			display: flex;
+			justify-content: center;
+			width: 100%;
+			margin-top: 0.75rem;
 		}
 	}
 	.empty {

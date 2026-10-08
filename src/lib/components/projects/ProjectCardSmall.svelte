@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Dict, Lang } from '$lib/i18n';
-	import { primaryLink, type Project } from '$lib/projects';
+	import { DOMAIN_COLOR, mainDomain, primaryLink, type Project } from '$lib/projects';
 	import DomainIcon from './DomainIcon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
 	import TechTags from './TechTags.svelte';
@@ -8,13 +8,17 @@
 	let { project, lang, t }: { project: Project; lang: Lang; t: Dict['projects'] } = $props();
 
 	const href = $derived(primaryLink(project));
+	const domain = $derived(mainDomain(project));
+	const year = $derived(project.date.slice(0, 4));
 </script>
 
-<article class="card">
+<article class="card" style:--dc={DOMAIN_COLOR[domain]}>
 	<div class="top">
-		<span class="icon"><DomainIcon domain={project.domains[0]} size={22} /></span>
+		<span class="icon"><DomainIcon {domain} size={22} /></span>
 		<ProjectLinks {project} {t} compact />
 	</div>
+	<!-- Phone only: label, summary and context (CSS shows one set of texts per width). -->
+	<p class="label">{t.domains[domain]} · {year}</p>
 	<h4>
 		{#if href}
 			<a {href} target="_blank" rel="noopener noreferrer">{project.title}</a>
@@ -22,22 +26,14 @@
 			{project.title}
 		{/if}
 	</h4>
-	<p class="meta">
-		{project.date.slice(0, 4)} · {t.contexts[project.context]}<span class="dom-name"
-			>{' · '}{t.domains[project.domains[0]]}</span
-		>
-		{#if project.award}
-			<!-- Phone only (the award line is hidden there); display: none elsewhere, so it is never read twice. -->
-			<span class="trophy"
-				><span aria-hidden="true">🏆</span><span class="sr-only">{project.award[lang]}</span></span
-			>
-		{/if}
-	</p>
+	<p class="meta">{year} · {t.contexts[project.context]} · {t.domains[domain]}</p>
 	{#if project.award}
 		<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
 	{/if}
 	<p class="desc">{project.description[lang]}</p>
+	<p class="summary">{project.summary[lang]}</p>
 	<TechTags tech={project.tech} small />
+	<p class="ctx">{t.contexts[project.context]}</p>
 </article>
 
 <style>
@@ -87,9 +83,6 @@
 		font-weight: 500;
 		color: var(--muted);
 	}
-	.trophy {
-		display: none;
-	}
 	.desc {
 		margin: 0;
 		font-size: 0.9375rem;
@@ -101,65 +94,121 @@
 		line-clamp: 3;
 		overflow: hidden;
 	}
+	.label,
+	.summary,
+	.ctx {
+		display: none;
+	}
 	.card > :global(ul) {
 		margin-top: auto;
 		padding-top: 0.375rem;
 	}
 
-	/* Phone: one compact row — icon | title over year · context | links, then two lines of text. */
+	/* Phone: tile tinted by the main domain, big domain icon as a watermark, one-sentence summary,
+	   context and link at the bottom. Colours from the --tile-* tokens (DOMAIN_TILE, tested). */
 	@media (width < 48rem) {
 		.card {
+			--dfg: color-mix(in srgb, var(--dc) var(--tile-fg), #ffffff);
+			position: relative;
+			overflow: hidden;
 			display: grid;
-			grid-template-columns: auto minmax(0, 1fr) auto;
+			grid-template-columns: minmax(0, 1fr) auto;
+			grid-template-rows: auto auto auto 1fr;
 			grid-template-areas:
-				'icon title links'
-				'icon meta links'
-				'desc desc desc';
-			align-items: center;
-			gap: 0 0.75rem;
-			height: auto;
-			padding: 0.9rem 1rem;
+				'label label'
+				'title title'
+				'summary summary'
+				'ctx links';
+			gap: 0.375rem 0;
+			min-height: 12.5rem;
+			padding: 0.875rem 0.75rem 0.25rem;
+			border: 0;
+			background: color-mix(in srgb, var(--dc) var(--tile-pct), var(--tile-base));
 		}
 		.top {
 			display: contents;
 		}
 		.icon {
-			grid-area: icon;
-			align-self: start;
-		}
-		.card :global(.links) {
-			grid-area: links;
-		}
-		h4 {
-			grid-area: title;
-			font-size: 1.05rem;
-		}
-		.meta {
-			grid-area: meta;
-		}
-		.trophy {
-			display: inline;
-		}
-		.award,
-		.card > :global(ul) {
-			display: none;
-		}
-		.desc {
-			grid-area: desc;
-			margin-top: 0.5rem;
-			-webkit-line-clamp: 2;
-			line-clamp: 2;
-		}
-		.card {
-			border-width: 1px;
-		}
-		.dom-name {
-			display: none;
-		}
-		.icon {
+			position: absolute;
+			top: -1.625rem;
+			right: -1.625rem;
 			width: auto;
 			height: auto;
 			background: none;
+			color: var(--dfg);
+			opacity: 0.2;
+			pointer-events: none;
+		}
+		.icon :global(svg) {
+			width: 6.875rem;
+			height: 6.875rem;
+			stroke-width: 1.2;
+		}
+		/* Positioned so they paint above the (positioned) watermark. */
+		.label,
+		h4,
+		.summary,
+		.ctx,
+		.card :global(.links) {
+			position: relative;
+		}
+		.label {
+			grid-area: label;
+			display: block;
+			margin: 0;
+			font-size: 0.6875rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.07em;
+			color: var(--dfg);
+		}
+		h4 {
+			grid-area: title;
+			margin: 0.25rem 0 0;
+			font-size: 1.0625rem;
+			line-height: 1.15;
+			letter-spacing: -0.01em;
+			overflow-wrap: anywhere;
+		}
+		.summary {
+			grid-area: summary;
+			display: block;
+			margin: 0;
+			font-size: 0.8125rem;
+			line-height: 1.4;
+			color: var(--body);
+		}
+		.meta,
+		.award,
+		.desc,
+		.card > :global(ul) {
+			display: none;
+		}
+		.ctx,
+		.card :global(.links) {
+			align-self: end;
+			border-top: 1.5px solid color-mix(in srgb, var(--dfg) 35%, transparent);
+		}
+		.ctx {
+			grid-area: ctx;
+			display: flex;
+			align-items: center;
+			min-height: 2.75rem;
+			margin: 0;
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: var(--muted);
+		}
+		.card :global(.links) {
+			grid-area: links;
+			padding-left: 0.375rem;
+		}
+		.card :global(.links a) {
+			font-size: 0.8125rem;
+			font-weight: 700;
+		}
+		.card :global(.private) {
+			font-size: 0.75rem;
 		}
 	}
 

@@ -23,6 +23,10 @@
 	--footer-bg: #0d0d0b;
 	--footer-text: #f3f0e8;
 	--malt-tile: rgb(252 87 87 / 0.14);
+	/* Phone project tiles (DOMAIN_TILE in src/lib/projects.ts). */
+	--tile-base: #121210;
+	--tile-pct: 24%;
+	--tile-fg: 45%;
 }
 
 /* Touch screens: controls at least 44px so they are easy to hit. */
@@ -52,6 +56,9 @@
 	--footer-bg: #141412;
 	--footer-text: #ffffff;
 	--malt-tile: #ffedec;
+	--tile-base: #ffffff;
+	--tile-pct: 11%;
+	--tile-fg: 100%;
 }
 
 /* No-JS visitors: default tokens are dark, so follow the system preference
@@ -77,6 +84,9 @@
 		--footer-bg: #141412;
 		--footer-text: #ffffff;
 		--malt-tile: #ffedec;
+		--tile-base: #ffffff;
+		--tile-pct: 11%;
+		--tile-fg: 100%;
 	}
 }
 
