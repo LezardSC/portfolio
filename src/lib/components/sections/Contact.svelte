@@ -88,8 +88,9 @@
 			</div>
 			<p class="malt-title">{t.maltTitle}</p>
 			<p class="malt-text">{t.maltText}</p>
-			<a class="btn" href={PROFILE.malt} target="_blank" rel="noopener noreferrer">
-				{t.maltCta} <span aria-hidden="true">↗</span>
+			<p class="malt-short">{t.maltShort}</p>
+			<a class="btn malt-cta" href={PROFILE.malt} target="_blank" rel="noopener noreferrer">
+				<span class="cta-text">{t.maltCta}</span> <span aria-hidden="true">↗</span>
 				<span class="sr-only">{newTab}</span>
 			</a>
 		</div>
@@ -99,7 +100,7 @@
 			<li>
 				<a class="tile" href={link.href} target="_blank" rel="noopener noreferrer">
 					<span class="tile-label"><ContactIcon id={link.id} size={22} />{link.label}</span>
-					<span aria-hidden="true">{link.id === 'cv' ? '↓' : '↗'}</span>
+					<span class="arrow" aria-hidden="true">{link.id === 'cv' ? '↓' : '↗'}</span>
 					<span class="sr-only">{newTab}</span>
 				</a>
 			</li>
@@ -186,6 +187,9 @@
 		font-size: 1.0625rem;
 		color: var(--body);
 	}
+	.malt-short {
+		display: none;
+	}
 	.tiles {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
@@ -242,15 +246,126 @@
 			transform: none;
 		}
 	}
+	/* Phone: compact e-mail card, the Malt card as one tappable row, three equal buttons. */
 	@media (width < 48rem) {
 		.intro {
+			margin: 0 0 1.125rem;
 			font-size: 1.125rem;
 		}
-		.block {
-			padding: 1.25rem;
+		.blocks {
+			gap: 0.75rem;
 		}
+		.block {
+			padding: 1.25rem 1.125rem;
+		}
+		.mail {
+			align-items: stretch;
+			gap: 0.75rem;
+		}
+		.label {
+			font-size: 0.8125rem;
+		}
+		/* One line; 19px from 390px wide, smaller below (divisor measured on the rendered address). */
 		.address {
-			font-size: 1.375rem;
+			font-size: min(1.1875rem, calc((100vw - 5rem) / 15.3));
+			line-height: 1.2;
+			white-space: nowrap;
+			overflow-wrap: normal;
+		}
+		.mail .btn {
+			justify-content: center;
+		}
+		.malt {
+			position: relative;
+			display: grid;
+			grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+			column-gap: 0.875rem;
+			row-gap: 0;
+			align-items: center;
+		}
+		.malt-head {
+			grid-column: 1;
+			grid-row: 1 / span 2;
+		}
+		.malt-head .label,
+		.malt-text {
+			display: none;
+		}
+		.malt-ic {
+			width: 2.5rem;
+			height: 2.5rem;
+		}
+		.malt-ic :global(svg) {
+			width: 26px;
+			height: 26px;
+		}
+		.malt-title {
+			grid-column: 2;
+			grid-row: 1;
+			font-size: 1.125rem;
+			line-height: 1.25;
+			letter-spacing: 0;
+		}
+		.malt-short {
+			grid-column: 2;
+			grid-row: 2;
+			display: block;
+			margin: 0;
+			font-size: 0.875rem;
+			line-height: 1.45;
+			color: var(--body);
+		}
+		.malt-cta {
+			grid-column: 3;
+			grid-row: 1 / span 2;
+			min-height: 0;
+			padding: 0;
+			border: 0;
+			background: none;
+			font-weight: 700;
+		}
+		/* The link's text stays its accessible name; only ↗ shows. */
+		.cta-text {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+		/* The whole card is the link. */
+		.malt-cta::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+		}
+		.malt:has(.malt-cta:focus-visible) {
+			outline: 2px solid var(--accent);
+			outline-offset: 2px;
+		}
+		.malt-cta:focus-visible {
+			outline: none;
+		}
+		.tiles {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 0.5rem;
+			margin-top: 0.75rem;
+		}
+		.tile {
+			flex-direction: column;
+			justify-content: center;
+			gap: 0.25rem;
+			min-height: 4.5rem;
+			padding: 0 0.25rem;
+			font-size: 0.875rem;
+		}
+		.tile-label {
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+		.arrow {
+			display: none;
 		}
 	}
 </style>
