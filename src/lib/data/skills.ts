@@ -28,6 +28,7 @@ import {
 	siXrp
 } from 'simple-icons';
 import type { SkillGroup } from '$lib/skills';
+import { ICONS } from './icons';
 import { CHAT, CPU, DATABASE, HARDHAT, NEURAL_NET } from './skill-icons';
 import { typeset } from '$lib/i18n/typography';
 
@@ -37,6 +38,7 @@ import { typeset } from '$lib/i18n/typography';
 export const SKILL_GROUPS: SkillGroup[] = typeset([
 	{
 		id: 'backend',
+		icon: ICONS.server,
 		title: { en: 'Backend', fr: 'Backend' },
 		description: {
 			en: 'APIs, databases, authentication and services.',
@@ -54,6 +56,7 @@ export const SKILL_GROUPS: SkillGroup[] = typeset([
 	},
 	{
 		id: 'systems',
+		icon: ICONS.chip,
 		title: { en: 'Systems & Low-level', fr: 'Systèmes & bas niveau' },
 		description: {
 			en: 'Code close to the machine: memory, processes, performance.',
@@ -68,6 +71,7 @@ export const SKILL_GROUPS: SkillGroup[] = typeset([
 	},
 	{
 		id: 'devops',
+		icon: ICONS.cycle,
 		title: { en: 'DevOps & Tools', fr: 'DevOps & outils' },
 		description: {
 			en: 'Containers, deployment and continuous integration.',
@@ -83,6 +87,7 @@ export const SKILL_GROUPS: SkillGroup[] = typeset([
 	},
 	{
 		id: 'ai',
+		icon: ICONS.sparkles,
 		title: { en: 'AI & ML', fr: 'IA & ML' },
 		description: {
 			en: 'Vision models, training and LLM agents.',
@@ -99,6 +104,7 @@ export const SKILL_GROUPS: SkillGroup[] = typeset([
 	},
 	{
 		id: 'blockchain',
+		icon: ICONS.cube,
 		title: { en: 'Blockchain', fr: 'Blockchain' },
 		description: {
 			en: 'Smart contracts, tokens and data anchored on-chain.',
@@ -114,6 +120,7 @@ export const SKILL_GROUPS: SkillGroup[] = typeset([
 	},
 	{
 		id: 'frontend',
+		icon: ICONS.code,
 		title: { en: 'Frontend', fr: 'Frontend' },
 		description: {
 			en: 'Web interfaces when a project calls for them.',
