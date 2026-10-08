@@ -1,7 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { contrastRatio, logoColor, nextTab, skillName, THEME_BG, type Skill } from './skills';
+import {
+	contrastRatio,
+	logoColor,
+	nextTab,
+	panelHidden,
+	skillName,
+	THEME_BG,
+	type Skill
+} from './skills';
 
 const icon = { path: 'M0 0h24v24H0z', hex: '000000' };
 
@@ -72,5 +80,26 @@ describe('nextTab', () => {
 	it('ignores other keys', () => {
 		for (const key of ['ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'a'])
 			expect(nextTab(2, key, 6)).toBeNull();
+	});
+});
+
+describe('panelHidden', () => {
+	const base = { enhanced: true, desktop: true, selected: 2, open: 0 };
+	it('hides nothing before hydration', () => {
+		for (const i of [0, 1, 2]) expect(panelHidden({ ...base, enhanced: false }, i)).toBe(false);
+	});
+	it('shows only the selected tab on desktop, whatever the accordion state', () => {
+		expect(panelHidden(base, 2)).toBe(false);
+		expect(panelHidden(base, 0)).toBe(true);
+		expect(panelHidden({ ...base, open: -1 }, 2)).toBe(false);
+	});
+	it('shows only the open group on phones', () => {
+		const phone = { ...base, desktop: false };
+		expect(panelHidden(phone, 0)).toBe(false);
+		expect(panelHidden(phone, 2)).toBe(true);
+	});
+	it('hides every group on phones when all are closed', () => {
+		const closed = { ...base, desktop: false, open: -1 };
+		for (const i of [0, 1, 2]) expect(panelHidden(closed, i)).toBe(true);
 	});
 });
