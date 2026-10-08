@@ -1,12 +1,25 @@
-import type { Project } from '$lib/projects';
+import { visibleProjects, type Project } from '$lib/projects';
 import { typeset } from '$lib/i18n/typography';
 
 // French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
 
 const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
 
-/** Portfolio projects. Order here doesn't matter: the page sorts them. */
-export const PROJECTS: Project[] = typeset([
+/**
+ * "Highlights" order: these projects come first, in this order (the first 6 get the big cards).
+ * Move a line to reorder. Every id must exist and not be hidden (a test checks it).
+ */
+export const FEATURED: string[] = [
+	'kayp-pbw-2024',
+	'kayp-h-web3-paris',
+	'ft-transcendence',
+	'microcode',
+	'bahapad',
+	'goldeneye-data-augmentation'
+];
+
+/** Every project, hidden ones included. Order here doesn't matter: the page sorts them. */
+export const ALL_PROJECTS: Project[] = typeset([
 	{
 		id: 'kayp-pbw-2024',
 		title: 'KAYP',
@@ -26,8 +39,7 @@ export const PROJECTS: Project[] = typeset([
 		award: {
 			en: 'Winner — Paris Blockchain Week 2024 (XRPL track)',
 			fr: 'Vainqueur — Paris Blockchain Week 2024 (track XRPL)'
-		},
-		featured: 1
+		}
 	},
 	{
 		id: 'kayp-h-web3-paris',
@@ -45,8 +57,7 @@ export const PROJECTS: Project[] = typeset([
 		domains: ['blockchain', 'web'],
 		tech: ['TypeScript', 'React', 'Tailwind CSS', 'Python'],
 		links: { repo: gh('KAYP-H-WEB3PARIS') },
-		award: { en: 'Winner — H-W3B Paris 2024', fr: 'Vainqueur — H-W3B Paris 2024' },
-		featured: 2
+		award: { en: 'Winner — H-W3B Paris 2024', fr: 'Vainqueur — H-W3B Paris 2024' }
 	},
 	{
 		id: 'ft-transcendence',
@@ -63,8 +74,7 @@ export const PROJECTS: Project[] = typeset([
 		context: 'school',
 		domains: ['web', 'games'],
 		tech: ['Python', 'JavaScript', 'Bootstrap', 'Docker'],
-		links: { repo: gh('42-ft_transcendence') },
-		featured: 3
+		links: { repo: gh('42-ft_transcendence') }
 	},
 	{
 		id: 'microcode',
@@ -81,8 +91,7 @@ export const PROJECTS: Project[] = typeset([
 		context: 'personal',
 		domains: ['ai'],
 		tech: ['Python', 'Ollama', 'LLM agents'],
-		links: { repo: gh('microcode') },
-		featured: 4
+		links: { repo: gh('microcode') }
 	},
 	{
 		id: 'bahapad',
@@ -103,8 +112,7 @@ export const PROJECTS: Project[] = typeset([
 		award: {
 			en: '3rd place — Paris Blockchain Week 2025',
 			fr: '3e place — Paris Blockchain Week 2025'
-		},
-		featured: 5
+		}
 	},
 	{
 		id: 'goldeneye-data-augmentation',
@@ -121,8 +129,7 @@ export const PROJECTS: Project[] = typeset([
 		context: 'professional',
 		domains: ['ai'],
 		tech: ['Python'],
-		links: {},
-		featured: 6
+		links: {}
 	},
 	{
 		id: 'tokenizart',
@@ -312,3 +319,6 @@ export const PROJECTS: Project[] = typeset([
 		links: { repo: gh('Love_Takedown') }
 	}
 ]);
+
+/** What the site shows. */
+export const PROJECTS = visibleProjects(ALL_PROJECTS);
