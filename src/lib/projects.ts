@@ -25,6 +25,8 @@ export type Project = {
 	id: string;
 	title: string;
 	description: Localized;
+	/** One sentence for the phone tiles (any project can land in the small tier after filtering). */
+	summary: Localized;
 	/** 'YYYY-MM' */
 	date: string;
 	context: Context;
@@ -37,6 +39,38 @@ export type Project = {
 	/** Lower = earlier in the "Highlights" sort (key `featured`). */
 	featured?: number;
 };
+
+/** A project's main domain: the first of its list. It sets the card icon, label and colour; filters still match every domain. */
+export function mainDomain(p: Project): Domain {
+	return p.domains[0];
+}
+
+/** Base colour per domain: phone project tiles, and phone featured cards without media. */
+export const DOMAIN_COLOR: Record<Domain, string> = {
+	web: '#5b3fa0',
+	blockchain: '#24408e',
+	ai: '#0b6e6e',
+	'low-level': '#c2391b',
+	games: '#7a2e5e'
+};
+
+/**
+ * Phone tile colours per theme: background = domain colour at `pct` over `base`; label, rule and
+ * watermark = domain colour mixed `fg` with white. Keep in sync with `--tile-*` in src/app.css
+ * (theme-tokens.spec.ts checks it).
+ */
+export const DOMAIN_TILE = {
+	light: { base: '#ffffff', pct: 0.11, fg: 1 },
+	dark: { base: '#121210', pct: 0.24, fg: 0.45 }
+} as const;
+
+/** Small project tiles shown on phones before the "See N other projects" button. */
+export const PHONE_OTHERS = 6;
+
+/** How many small tiles the phone folds behind the button. */
+export function hiddenCount(total: number, shown = PHONE_OTHERS): number {
+	return Math.max(0, total - shown);
+}
 
 export type Filters = { context: Context | 'all'; domain: Domain | 'all' };
 export const NO_FILTERS: Filters = { context: 'all', domain: 'all' };
