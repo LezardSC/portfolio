@@ -11,6 +11,8 @@ export const JOBS: Job[] = typeset([
 			en: 'Machine Learning & Computer Vision developer',
 			fr: 'Développeur Machine Learning & IA Vision'
 		},
+		roleShort: { en: 'ML & Computer Vision developer', fr: 'Développeur ML & IA Vision' },
+		companyShort: 'Sogeti (Capgemini)',
 		start: '2025-07',
 		end: '2026-01',
 		internship: true,

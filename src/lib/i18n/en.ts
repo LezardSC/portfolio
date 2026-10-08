@@ -16,7 +16,11 @@ export const en = {
 		cv: 'View CV',
 		malt: 'Malt profile',
 		maltShort: 'Malt',
-		glance: 'At a glance'
+		glance: 'At a glance',
+		/** "At a glance" hackathon tally, from the data. */
+		glanceTally: '{wins}, {podiums}',
+		glanceWins: { one: '{n} win', other: '{n} wins' },
+		glancePodiums: { one: '{n} podium', other: '{n} podiums' }
 	},
 	about: {
 		photoAlt: 'Photo of Jocelyn Renault'

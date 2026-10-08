@@ -1,12 +1,21 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { CONTACT_BRANDS } from '$lib/data/contact-icons';
+	import { HACKATHONS, JOBS } from '$lib/data/experience';
 	import { PROFILE } from '$lib/data/profile';
+	import { glanceRows } from '$lib/glance';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { assetHref } from '$lib/paths';
 
 	let { lang, t, newTab }: { lang: Lang; t: Dict['hero']; newTab: string } = $props();
 
+	const glance = $derived(
+		glanceRows(PROFILE.glance, { jobs: JOBS, hackathons: HACKATHONS }, lang, {
+			tally: t.glanceTally,
+			wins: t.glanceWins,
+			podiums: t.glancePodiums
+		})
+	);
 	const malt = CONTACT_BRANDS.malt;
 	/** First name and the rest: two lines on phones, one on desktop. */
 	const [first, ...others] = PROFILE.name.split(' ');
@@ -72,13 +81,13 @@
 		<div class="glance">
 			<p class="glance-title">{t.glance}</p>
 			<dl>
-				{#each PROFILE.glance as row, i (i)}
+				{#each glance as row, i (i)}
 					<div class="row" class:wide={row.wide}>
-						<dt>{row.label[lang]}</dt>
+						<dt>{row.label}</dt>
 						<dd>
-							{#if row.short}<span class="full">{row.value[lang]}</span><span class="short"
-									>{row.short[lang]}</span
-								>{:else}{row.value[lang]}{/if}
+							{#if row.short}<span class="full">{row.value}</span><span class="short"
+									>{row.short}</span
+								>{:else}{row.value}{/if}
 						</dd>
 					</div>
 				{/each}
