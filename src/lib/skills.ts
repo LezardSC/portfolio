@@ -9,10 +9,11 @@ export type Skill = {
 	icon: SkillIcon;
 };
 
-export type SkillGroupId = 'backend' | 'systems' | 'devops' | 'ai' | 'blockchain' | 'frontend';
-
 export type SkillGroup = {
-	id: SkillGroupId;
+	/** Unique, kebab-case; used in element ids. */
+	id: string;
+	/** Stroke icon path, usually one of `ICONS` in `$lib/data/icons`. */
+	icon: string;
 	title: Localized;
 	/** One line shown under the title in the skills panel. */
 	description: Localized;
