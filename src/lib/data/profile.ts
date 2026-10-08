@@ -2,7 +2,9 @@ import type { GlanceEntry } from '$lib/glance';
 import type { Lang, Localized } from '$lib/i18n/lang';
 import { typeset } from '$lib/i18n/typography';
 
-// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’
+// (docs/content-guide.md). Always give typeset its type, typeset<X[]>(…): it keeps TypeScript's check
+// of misspelled field names.
 
 export type Profile = {
 	name: string;
@@ -25,7 +27,7 @@ export type Profile = {
 	available: boolean;
 };
 
-export const PROFILE: Profile = typeset({
+export const PROFILE = typeset<Profile>({
 	name: 'Jocelyn Renault',
 	role: {
 		en: 'Software Engineer · Backend & Systems',

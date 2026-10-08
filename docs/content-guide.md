@@ -19,7 +19,7 @@ Each recipe gives the file, a snippet to copy, and what to check.
 
 Text that changes with the language is written `{ en: '…', fr: '…' }`. Names that don't translate (Rust, Docker, a company name) are plain strings.
 
-**French is typed naturally.** Plain spaces before `:` `;` `!` `?` `%` `»` (and after `«`) and straight apostrophes `'` are fixed automatically when the site is built. A French string containing `'` must use double quotes (`"l'IA"`); `npm run format` switches the quotes for you.
+**French is typed naturally.** Plain spaces before `:` `;` `!` `?` `%` `»` (and after `«`) and straight apostrophes `'` are fixed automatically when the site is built. A string containing `'` can't sit inside single quotes as is: write it in double quotes (`"l'IA"`), or escape it (`'l\'IA'`) and `npm run format` turns it into `"l'IA"`. A bare `'l'IA'` is a syntax error that `npm run check` and `npm run format` both point at.
 
 After any edit, run the checks at the end of this guide ([Check your edit](#check-your-edit)).
 
@@ -173,7 +173,7 @@ In `src/lib/data/categories.ts`. The key order is the filter order.
 ```
 
 - **key** (`devops`): lowercase-with-dashes, used in projects' `domains`.
-- **color**: `#rrggbb`. It tints the phone tiles and the cards without media, so it must be fairly dark: `npm test` checks contrast in both themes and fails with "label" / "body" / "muted" if it's too light. Darken it until it passes. Each domain needs its own colour.
+- **color**: `#rrggbb`. It tints the phone tiles and the phone cards without media, so it must be fairly dark: `npm test` checks contrast in both themes and fails if it's too light (in `categories.spec.ts`, with "label", "body" or "muted"; in `overlay.spec.ts`, with "text", "meta", "domain", "award", "desc" or "tag"). Darken it until it passes. Each domain needs its own colour.
 - **icon**: one of `ICONS` in `icons.ts`, or a new one (below).
 
 The domain shows up in the filters as soon as a visible project uses it.
@@ -183,11 +183,13 @@ The domain shows up in the filters as soon as a visible project uses it.
 - **Rename** the label only: change `label`. Changing the key means changing it in every project too; `npm run check` lists the projects to fix.
 - **Remove**: delete the line; `npm run check` lists the projects that still use it.
 
-### Add a context
+### Add, rename or remove a context
 
 ```ts
 	freelance: { label: { en: 'Freelance', fr: 'Freelance' } },
 ```
+
+As for domains: to rename, change `label`; changing the key or deleting the line makes `npm run check` list the projects to update.
 
 ### Add an icon
 
@@ -198,7 +200,7 @@ Icons are line drawings on a 24×24 grid. The easiest source is [lucide.dev](htt
 	rocket: 'M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91…' + 'M12 15l-3-3…',
 ```
 
-`<rect>` and `<circle>` elements have no `d`: convert them to path data first (a circle at `cx, cy` with radius `r` is `M{cx-r} {cy}a{r} {r} 0 1 0 {2r} 0a{r} {r} 0 1 0 {-2r} 0z`), or pick another icon. `npm test` checks every icon is valid path data.
+If a `d` starts with a lowercase `m`, make it an uppercase `M` before joining (a lowercase one would move relative to the end of the previous piece and shift the drawing). `<rect>` and `<circle>` elements have no `d`: convert them to path data first (a circle at `cx, cy` with radius `r` is `M{cx-r} {cy}a{r} {r} 0 1 0 {2r} 0a{r} {r} 0 1 0 {-2r} 0z`), or pick another icon. `npm test` checks every icon is valid path data.
 
 ---
 
@@ -333,13 +335,14 @@ Buttons, headings and labels live in `src/lib/i18n/en.ts` and `fr.ts`. Both file
 
 From the repo root:
 
-1. `npm run format`: tidies the files (and fixes quotes around French apostrophes).
+1. `npm run format`: tidies the files (and turns `'l\'IA'` into `"l'IA"`).
 2. `npm test`: checks the data. A failure names the project or field. Common messages:
    - `"projects/x/cover.webp": missing from static/`: wrong path or file name (case included).
    - `my-project en: short enough for a tile`: the summary is over 100 characters.
    - `my-project fr: one sentence ending with a full stop`: the summary needs exactly one sentence, ending with `.`.
    - `"the-id": no project has this id` / `is hidden`: fix `FEATURED`.
-   - `light label` / `dark body` … `expected … to be greater than or equal to 4.5`: a domain colour is too light; darken it.
-3. `npm run check`: catches typos in field names and category keys.
+   - `light label` / `dark body` / `desc` … `expected … to be greater than or equal to 4.5`: a domain colour is too light; darken it.
+   - `export const X: … = typeset(`: write `typeset<Type>(…)` instead (it keeps the check of misspelled field names).
+3. `npm run check`: catches typos in field names (`hiden: true` → "Did you mean to write 'hidden'?") and in category keys.
 4. `npm run dev`: look at the site (http://localhost:5173), on a narrow window too.
 5. Before publishing: `npm run audit` (accessibility and Lighthouse; reports in `reports/`).
