@@ -1,14 +1,8 @@
 <script lang="ts">
-	import { MediaQuery } from 'svelte/reactivity';
+	import { onMount } from 'svelte';
 	import type { Dict, Lang } from '$lib/i18n';
-	import {
-		durationLabel,
-		durationMonths,
-		ONE_COLUMN_QUERY,
-		periodPoints,
-		quoteView,
-		type Job
-	} from '$lib/experience';
+	import { fill } from '$lib/i18n/format';
+	import { durationLabel, durationMonths, periodPoints, type Job } from '$lib/experience';
 	import TechTags from '../projects/TechTags.svelte';
 	import Period from './Period.svelte';
 
@@ -16,31 +10,15 @@
 
 	const uid = $props.id();
 	const quoteId = `${uid}-quote`;
-	const narrow = new MediaQuery(ONE_COLUMN_QUERY, false);
-	/** False in the prerendered HTML: without JS the whole quote shows and there is no button. */
+	/** False in the prerendered HTML: without JS the quote shows and there is no button. */
 	let ready = $state(false);
-	let expanded = $state(false);
-	let overflows = $state(false);
-	let quoteEl = $state<HTMLElement>();
-
-	const view = $derived(quoteView({ narrow: narrow.current, overflows, expanded }));
-	const clamp = $derived(ready && view.clamp);
+	let open = $state(false);
 	const months = $derived(
 		job.end ? durationLabel(durationMonths(job.start, job.end), t.months) : ''
 	);
 
-	$effect(() => {
+	onMount(() => {
 		ready = true;
-	});
-
-	// Measure while clamped (on first clamp and on every resize): does the quote need the button?
-	$effect(() => {
-		const el = quoteEl;
-		if (!el || !clamp) return;
-		const measure = () => (overflows = el.scrollHeight > el.clientHeight + 1);
-		const ro = new ResizeObserver(measure);
-		ro.observe(el);
-		return () => ro.disconnect();
 	});
 </script>
 
@@ -48,7 +26,9 @@
 	<p class="when">
 		<Period points={periodPoints(job.start, job.end, lang, t.present)} />
 		{#if job.internship || months}
-			<br />{[job.internship ? t.internship : '', months].filter(Boolean).join(' · ')}
+			<br /><span class="dur"
+				>{[job.internship ? t.internship : '', months].filter(Boolean).join(' · ')}</span
+			>
 		{/if}
 	</p>
 	<div class="what">
@@ -61,27 +41,39 @@
 		</ul>
 		<TechTags tech={job.tech} />
 		{#if job.quote}
-			<figure class="quote">
+			{#if ready}
+				<!-- Phone only (CSS): on desktop the quote is always shown. -->
+				<button
+					type="button"
+					class="rec"
+					aria-expanded={open}
+					aria-controls={quoteId}
+					onclick={() => (open = !open)}
+				>
+					<span class="rec-mark" aria-hidden="true">“</span>
+					<span class="rec-label">{fill(t.recommendation, { name: job.quote.author })}</span>
+					<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+						<path
+							d={open ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6'}
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+				</button>
+			{/if}
+			<figure id={quoteId} class="quote" class:folded={ready && !open}>
 				<span class="mark" aria-hidden="true">“</span>
 				<blockquote>
-					<p id={quoteId} class:clamp bind:this={quoteEl}>{job.quote.text[lang]}</p>
+					<p>{job.quote.text[lang]}</p>
 				</blockquote>
 				<figcaption>
 					<strong>{job.quote.author}</strong> — {job.quote.role[lang]}
 					{#if job.quote.original !== lang}<span class="note">{t.translated}</span>{/if}
 				</figcaption>
 			</figure>
-			{#if ready && view.button}
-				<button
-					type="button"
-					class="more"
-					aria-expanded={expanded}
-					aria-controls={quoteId}
-					onclick={() => (expanded = !expanded)}
-				>
-					{expanded ? t.showLess : t.readMore}
-				</button>
-			{/if}
 		{/if}
 	</div>
 </article>
@@ -163,33 +155,86 @@
 	.note {
 		display: block;
 	}
-	.clamp {
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		overflow: hidden;
+	.rec {
+		display: none;
 	}
-	.more {
-		min-height: var(--tap);
-		padding: 0;
-		border: none;
-		background: none;
-		color: var(--accent);
-		font: inherit;
-		font-size: 0.9375rem;
-		font-weight: 600;
-		cursor: pointer;
-	}
-	.more:hover {
-		text-decoration: underline;
-	}
+	/* Phone: dates on one line; the recommendation folded behind a button. */
 	@media (width < 48rem) {
 		.job {
 			grid-template-columns: minmax(0, 1fr);
+			gap: 0;
+			padding: 1.25rem 0;
+		}
+		.when {
+			font-size: 0.8125rem;
+		}
+		.when br {
+			display: none;
+		}
+		.dur::before {
+			content: ' · ';
+		}
+		h4 {
+			margin-top: 0.25rem;
+			font-size: 1.25rem;
+		}
+		.org {
+			margin: 0 0 0.625rem;
+			font-size: 1rem;
+		}
+		.points {
+			margin: 0 0 0.75rem;
+			padding-left: 1.125rem;
+			font-size: 0.9375rem;
+			line-height: 1.55;
+		}
+		.rec {
+			display: flex;
+			align-items: center;
+			gap: 0.625rem;
+			width: 100%;
+			min-height: 3rem;
+			margin-top: 0.75rem;
+			padding: 0 0.875rem;
+			background: var(--surface);
+			border: 1.5px solid var(--border);
+			border-radius: var(--radius);
+			color: var(--text);
+			font: inherit;
+			font-size: 0.9375rem;
+			font-weight: 600;
+			text-align: left;
+			cursor: pointer;
+		}
+		.rec:hover {
+			border-color: var(--text);
+		}
+		.rec-mark {
+			height: 1.25rem;
+			font-size: 1.875rem;
+			line-height: 1;
+			font-weight: 800;
+			color: var(--accent);
+		}
+		.rec-label {
+			flex: 1;
 		}
 		.quote {
+			display: block;
+			margin: 0.5rem 0 0;
 			padding: 1rem;
+			border-width: 1.5px;
+		}
+		.quote.folded,
+		.mark {
+			display: none;
+		}
+		blockquote p {
+			font-size: 0.9375rem;
+		}
+		figcaption {
+			margin-top: 0.5rem;
+			font-size: 0.8125rem;
 		}
 	}
 </style>

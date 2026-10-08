@@ -13,8 +13,10 @@
 
 <article class="edu">
 	<p class="when"><Period points={periodPoints(item.start, item.end, lang, t.present)} /></p>
-	<h4>{item.school}</h4>
-	<p class="title">{item.title[lang]}</p>
+	<div class="name">
+		<h4>{item.school}</h4>
+		<p class="title">{item.title[lang]}</p>
+	</div>
 	{#if item.points.length > 0}
 		<ul class="points" role="list">
 			{#each item.points as point, i (i)}
@@ -67,5 +69,57 @@
 	}
 	.cert:hover {
 		color: var(--accent);
+	}
+	/* Phone: school and diploma on one line, details joined by dots, certificate link on the right. */
+	@media (width < 48rem) {
+		.edu {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			column-gap: 0.75rem;
+			align-items: center;
+			padding: 0.75rem 0;
+		}
+		.edu > * {
+			grid-column: 1;
+		}
+		.when {
+			font-size: 0.8125rem;
+		}
+		.name {
+			line-height: 1.35;
+		}
+		h4,
+		.title {
+			display: inline;
+		}
+		h4 {
+			font-size: 1.125rem;
+		}
+		.title {
+			font-size: 0.9375rem;
+			font-weight: 600;
+			color: var(--body);
+		}
+		.title::before {
+			content: ' · ';
+		}
+		.points {
+			margin-top: 0.125rem;
+			font-size: 0.875rem;
+			line-height: 1.45;
+			color: var(--muted);
+		}
+		.points li {
+			display: inline;
+		}
+		.points li + li::before {
+			content: ' · ';
+		}
+		.edu > .cert {
+			grid-column: 2;
+			grid-row: 1 / span 2;
+			min-height: 2.75rem;
+			font-size: 0.875rem;
+		}
 	}
 </style>

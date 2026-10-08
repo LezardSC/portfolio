@@ -132,8 +132,37 @@
 		color: var(--accent);
 	}
 	@media (width < 48rem) {
+		.sub {
+			margin: 2rem 0 0.25rem;
+			font-size: 0.875rem;
+		}
+		.sub:first-child {
+			margin-top: 0;
+		}
 		.lower {
-			margin-top: 2rem;
+			gap: 0;
+			margin-top: 0;
+		}
+		.hk {
+			grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+			gap: 0.75rem;
+			padding: 0.625rem 0;
+		}
+		.tile {
+			width: 2.25rem;
+			height: 2.25rem;
+		}
+		.tile :global(svg) {
+			width: 18px;
+			height: 18px;
+		}
+		.event {
+			font-size: 0.9375rem;
+			line-height: 1.3;
+		}
+		.detail,
+		.res {
+			font-size: 0.8125rem;
 		}
 	}
 </style>
