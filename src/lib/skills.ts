@@ -67,3 +67,16 @@ export function nextTab(index: number, key: string, count: number): number | nul
 			return null;
 	}
 }
+
+/**
+ * Whether a skills panel is hidden. Before hydration (and without JS) none is. On desktop the
+ * selected tab shows its panel; on phones the open accordion group does (`open` -1: all closed).
+ * The two states are separate, so crossing the breakpoint never loses either.
+ */
+export function panelHidden(
+	s: { enhanced: boolean; desktop: boolean; selected: number; open: number },
+	index: number
+): boolean {
+	if (!s.enhanced) return false;
+	return (s.desktop ? s.selected : s.open) !== index;
+}

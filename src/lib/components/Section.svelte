@@ -94,7 +94,10 @@
 			/* Half of it shows outside the fill: a 1.5px outline. */
 			-webkit-text-stroke-width: 3px;
 		}
+		/* A long title wraps beside the number rather than dropping below it. */
 		h2 {
+			flex: 1 1 0;
+			min-width: 0;
 			margin: 0;
 			font-size: 1.8125rem;
 			line-height: 1.05;

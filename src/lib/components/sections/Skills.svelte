@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
+	import { MediaQuery } from 'svelte/reactivity';
 	import { SKILL_GROUPS } from '$lib/data/skills';
 	import type { Dict, Lang } from '$lib/i18n';
-	import { logoColor, nextTab, skillName, THEME_BG } from '$lib/skills';
+	import { DESKTOP_QUERY } from '$lib/projects';
+	import { logoColor, nextTab, panelHidden, skillName, THEME_BG } from '$lib/skills';
 	import Section from '../Section.svelte';
 	import SkillGroupIcon from '../skills/SkillGroupIcon.svelte';
 
@@ -11,6 +13,10 @@
 	/** False in the prerendered HTML: without JS every group shows, stacked, and there are no tabs. */
 	let enhanced = $state(false);
 	let selected = $state(0);
+	/** Phone accordion: the open group (Backend first), -1 when all are closed. */
+	let open = $state(0);
+	/** False on the server; before hydration nothing is hidden anyway. */
+	const desktop = new MediaQuery(DESKTOP_QUERY, false);
 	const tabs: HTMLButtonElement[] = [];
 
 	onMount(() => {
@@ -53,13 +59,46 @@
 		{/if}
 		<div class="panels">
 			{#each SKILL_GROUPS as group, i (group.id)}
+				{@const hidden = panelHidden({ enhanced, desktop: desktop.current, selected, open }, i)}
+				{#if enhanced}
+					<!-- Phone only (CSS): the tab list is hidden there, these buttons on desktop. -->
+					<button
+						type="button"
+						class="acc"
+						id="skills-acc-{group.id}"
+						aria-expanded={open === i}
+						aria-controls="skills-panel-{group.id}"
+						onclick={() => (open = open === i ? -1 : i)}
+					>
+						<span class="ic"><SkillGroupIcon id={group.id} size={22} /></span>
+						<span>{group.title[lang]}</span>
+						<span class="count" aria-hidden="true">{group.skills.length}</span>
+						<svg class="chev" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+							<path
+								d={open === i ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6'}
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2.2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</button>
+				{/if}
 				<div
 					class="panel"
 					id="skills-panel-{group.id}"
-					role={enhanced ? 'tabpanel' : undefined}
-					aria-labelledby={enhanced ? `skills-tab-${group.id}` : undefined}
-					hidden={enhanced && selected !== i ? 'until-found' : undefined}
-					onbeforematch={() => (selected = i)}
+					role={enhanced && desktop.current ? 'tabpanel' : undefined}
+					aria-labelledby={!enhanced
+						? undefined
+						: desktop.current
+							? `skills-tab-${group.id}`
+							: `skills-acc-${group.id}`}
+					hidden={hidden ? 'until-found' : undefined}
+					onbeforematch={() => {
+						selected = i;
+						open = i;
+					}}
 				>
 					<h3 id="skills-{group.id}">{group.title[lang]}</h3>
 					<p class="desc">{group.description[lang]}</p>
@@ -149,6 +188,9 @@
 		font-weight: 600;
 		color: var(--muted);
 	}
+	.acc {
+		display: none;
+	}
 	.panel {
 		padding: 2rem 2.125rem;
 		background: var(--surface);
@@ -219,7 +261,8 @@
 	}
 	/* Printed, every area shows (hidden panels and the tab list are screen-only). */
 	@media print {
-		.tablist {
+		.tablist,
+		.acc {
 			display: none;
 		}
 		.panel[hidden] {
@@ -227,26 +270,85 @@
 			content-visibility: visible;
 		}
 	}
-	/* Phone (M10 will design it): smaller tiles. */
+	/* Phone: an accordion (one group open at a time) instead of the tabs. */
 	@media (width < 48rem) {
-		.enhanced .panel {
-			min-height: 0;
+		.tablist {
+			display: none;
+		}
+		.acc {
+			display: flex;
+			align-items: center;
+			gap: 0.875rem;
+			width: 100%;
+			min-height: 4rem;
+			margin-top: 0.625rem;
+			padding: 0.625rem 0.875rem 0.625rem 0.625rem;
+			border: 2px solid var(--border);
+			border-radius: var(--radius);
+			background: transparent;
+			color: var(--text);
+			font: inherit;
+			font-size: 1.0625rem;
+			font-weight: 700;
+			text-align: left;
+			cursor: pointer;
+		}
+		.acc:first-child {
+			margin-top: 0;
+		}
+		.acc[aria-expanded='true'] {
+			background: var(--surface);
+			border-color: var(--text);
+			box-shadow: 5px 5px 0 var(--accent);
+		}
+		.acc .ic {
+			width: 2.5rem;
+			height: 2.5rem;
+		}
+		.chev {
+			flex: none;
 		}
 		.panel {
 			padding: 1.25rem;
 		}
+		.enhanced .panel {
+			min-height: 0;
+			padding: 1.125rem 0.125rem 0.5rem;
+			background: none;
+			border: 0;
+		}
+		.enhanced .panel[hidden] {
+			padding: 0;
+		}
+		/* The accordion button names the group; the heading stays for screen readers. */
+		.enhanced h3 {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+		.desc {
+			margin: 0 0 0.875rem;
+			font-size: 1rem;
+		}
 		.tiles {
-			grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 			gap: 0.5rem;
 		}
 		.tiles li {
-			gap: 0.5rem;
-			padding: 0.625rem 0.75rem;
-			font-size: 1rem;
+			gap: 0.625rem;
+			padding: 0.75rem;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			font-size: 0.9375rem;
+			line-height: 1.25;
 		}
 		.tiles svg {
-			width: 22px;
-			height: 22px;
+			width: 24px;
+			height: 24px;
 		}
 	}
 </style>
