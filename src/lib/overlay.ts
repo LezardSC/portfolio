@@ -1,19 +1,19 @@
 /**
- * Phone overlay on large project cards (`ProjectCardLarge.svelte`): the text colours, and the
- * gradient's alpha where text starts (it only gets darker below). A test keeps these in sync
- * with the component's CSS and checks their contrast over the worst case, a white image.
+ * Phone featured cards (`ProjectCardLarge.svelte`): light text over a `veil` laid on the project
+ * photo (`veilPhoto`) or, without one, on its domain colour (`veilPlain`). A test checks the text
+ * contrast on every domain colour and keeps these values in sync with the component's CSS. Over
+ * a photo the contrast depends on the image: checked by eye (see the review guide).
  */
 export const OVERLAY = {
-	alpha: 0.75,
+	veil: '#10100e',
+	veilPhoto: 0.62,
+	veilPlain: 0.35,
 	text: '#ffffff',
-	muted: '#d0d7de',
-	accent: '#79c0ff'
+	meta: '#d6d1c6',
+	domain: '#ffa58c',
+	award: '#ffb59f',
+	desc: '#ece8df',
+	tag: '#f3f0e8',
+	/** White at this alpha behind each tech tag. */
+	tagBg: 0.16
 } as const;
-
-/** The colour behind the overlay text when the image under it is pure white. */
-export function overlayBackdrop(alpha: number): string {
-	const v = Math.round(255 * (1 - alpha))
-		.toString(16)
-		.padStart(2, '0');
-	return `#${v}${v}${v}`;
-}

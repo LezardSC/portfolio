@@ -94,14 +94,10 @@
 		color: var(--muted);
 	}
 	@media (width < 48rem) {
-		.large,
-		.small {
+		.large {
 			grid-template-columns: minmax(0, 1fr);
 			grid-auto-rows: auto;
-			gap: 1.5rem;
-		}
-		.more {
-			margin-top: 2.5rem;
+			gap: 0.875rem;
 		}
 	}
 	.empty {

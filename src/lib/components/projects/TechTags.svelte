@@ -30,4 +30,11 @@
 		padding: 0.3125rem 0.5rem;
 		font-size: 0.8125rem;
 	}
+	@media (width < 48rem) {
+		li,
+		.small li {
+			padding: 0.3125rem 0.5rem;
+			font-size: 0.75rem;
+		}
+	}
 </style>
