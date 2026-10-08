@@ -5,7 +5,10 @@ import {
 	hiddenCount,
 	mainDomain,
 	PHONE_OTHERS,
+	mediaFiles,
 	mediaIssues,
+	PHONE_QUERY,
+	DESKTOP_QUERY,
 	NO_FILTERS,
 	primaryLink,
 	shouldPlayVideo,
@@ -189,6 +192,26 @@ describe('mediaIssues', () => {
 			)[0]
 		).toContain('projects/missing.jpg');
 	});
+	it('checks the phone image like the others', () => {
+		const exists = (src: string) => src !== 'projects/missing.jpg';
+		expect(
+			mediaIssues({ kind: 'image', src: 'projects/a.jpg', phone: 'projects/p.webp' }, exists)
+		).toEqual([]);
+		expect(
+			mediaIssues({ kind: 'image', src: 'projects/a.jpg', phone: 'projects/p.gif' }, exists)
+		).toEqual(['"projects/p.gif": phone image is not a .jpg, .jpeg, .png or .webp image']);
+		expect(
+			mediaIssues(
+				{
+					kind: 'video',
+					src: 'projects/v.mp4',
+					poster: 'projects/a.jpg',
+					phone: 'projects/missing.jpg'
+				},
+				exists
+			)
+		).toEqual(['"projects/missing.jpg": missing from static/']);
+	});
 });
 
 describe('mainDomain', () => {
@@ -211,5 +234,22 @@ describe('hiddenCount', () => {
 	});
 	it('takes another number of shown tiles', () => {
 		expect(hiddenCount(4, 2)).toBe(2);
+	});
+});
+
+describe('mediaFiles', () => {
+	it('lists the phone image after the others', () => {
+		expect(mediaFiles({ kind: 'video', src: 'v.mp4', poster: 'p.jpg', phone: 'm.jpg' })).toEqual([
+			'v.mp4',
+			'p.jpg',
+			'm.jpg'
+		]);
+		expect(mediaFiles({ kind: 'image', src: 'a.jpg' })).toEqual(['a.jpg']);
+	});
+});
+
+describe('PHONE_QUERY', () => {
+	it('is exactly the complement of DESKTOP_QUERY', () => {
+		expect(PHONE_QUERY).toBe(`not all and ${DESKTOP_QUERY}`);
 	});
 });
