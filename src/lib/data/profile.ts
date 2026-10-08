@@ -1,12 +1,21 @@
 import type { Lang, Localized } from '$lib/i18n/lang';
 
 /** One row of the hero's "At a glance" card. */
-export type GlanceRow = { label: Localized; value: Localized };
+export type GlanceRow = {
+	label: Localized;
+	value: Localized;
+	/** Shorter value for the phone tiles. */
+	short?: Localized;
+	/** Full-width tile on phones. */
+	wide?: true;
+};
 
 export type Profile = {
 	name: string;
 	role: Localized;
 	pitch: Localized;
+	/** Rest of the pitch: desktop only (phones show the first sentence). */
+	pitchMore: Localized;
 	/** About paragraphs, in order. */
 	bio: Localized[];
 	glance: GlanceRow[];
@@ -28,8 +37,12 @@ export const PROFILE: Profile = {
 		fr: 'Ingénieur logiciel · Backend & Systèmes'
 	},
 	pitch: {
-		en: 'I build the invisible part of products: APIs, services, data processing, automation and deployment. My field is backend and low-level — reliability and performance over UI.',
-		fr: 'Je conçois la partie invisible des produits\u00a0: APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c’est le backend et le bas niveau — la fiabilité et la performance plutôt que l’interface.'
+		en: 'I build the invisible part of products: APIs, services, data processing, automation and deployment.',
+		fr: 'Je conçois la partie invisible des produits\u00a0: APIs, services, traitement de données, automatisation et mise en production.'
+	},
+	pitchMore: {
+		en: 'My field is backend and low-level — reliability and performance over UI.',
+		fr: 'Mon terrain, c’est le backend et le bas niveau — la fiabilité et la performance plutôt que l’interface.'
 	},
 	bio: [
 		{
@@ -51,18 +64,21 @@ export const PROFILE: Profile = {
 			value: {
 				en: '42 Lyon — RNCP 7, expert in computer architecture',
 				fr: '42 Lyon — RNCP 7, expert en architecture informatique'
-			}
+			},
+			short: { en: '42 Lyon · RNCP 7', fr: '42 Lyon · RNCP 7' }
 		},
 		{
 			label: { en: 'Latest role', fr: 'Dernier poste' },
 			value: {
 				en: 'ML & Computer Vision developer — Sogeti (Capgemini)',
 				fr: 'Développeur ML & IA Vision — Sogeti (Capgemini)'
-			}
+			},
+			short: { en: 'Sogeti (Capgemini)', fr: 'Sogeti (Capgemini)' }
 		},
 		{
 			label: { en: 'Stack', fr: 'Stack' },
-			value: { en: 'Python, Rust, C, Node.js, Docker', fr: 'Python, Rust, C, Node.js, Docker' }
+			value: { en: 'Python, Rust, C, Node.js, Docker', fr: 'Python, Rust, C, Node.js, Docker' },
+			wide: true
 		},
 		{
 			label: { en: 'Hackathons', fr: 'Hackathons' },

@@ -18,7 +18,9 @@
 	<div class="grid">
 		<div>
 			<p class="role">{PROFILE.role[lang]}</p>
-			<p class="pitch">{PROFILE.pitch[lang]}</p>
+			<p class="pitch">
+				{PROFILE.pitch[lang]}<span class="pitch-more"> {PROFILE.pitchMore[lang]}</span>
+			</p>
 			<div class="ctas">
 				<a class="btn btn-primary" href="#projects">
 					{t.projects}
