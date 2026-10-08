@@ -89,6 +89,12 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 						() => document.documentElement.scrollWidth - window.innerWidth
 					);
 					checks.push(overflowCheck(label, overflow));
+					// Phone collapsibles: open each kind once, then check what they reveal.
+					await page.click('#about .read-more');
+					await page.click('#projects .show-more');
+					await page.locator('#skills .acc').nth(1).click();
+					await page.locator('#experience .rec').first().click();
+					checks.push(await axe(page, `${label} collapsibles open`, `${file}-open`));
 				}
 				await context.close();
 			}
