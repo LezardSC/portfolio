@@ -107,23 +107,6 @@ export function yearOf(date: string): string {
 	return date.slice(0, 4);
 }
 
-/** Below this width Experience is one column, and long quotes get clamped. */
-export const ONE_COLUMN_QUERY = '(width < 56.25rem)';
-
-/**
- * Whether a recommendation quote is clamped to 2 lines and whether its Read more / Show less
- * button shows. `overflows` = the clamped quote is longer than 2 lines (measured in the browser).
- */
-export function quoteView(s: { narrow: boolean; overflows: boolean; expanded: boolean }): {
-	clamp: boolean;
-	button: boolean;
-} {
-	return {
-		clamp: s.narrow && !s.expanded,
-		button: s.narrow && (s.expanded || s.overflows)
-	};
-}
-
 /** Months covered by a period, both ends included: 2025-07 → 2026-01 is 7. */
 export function durationMonths(start: Month, end: Month): number {
 	const [y1, m1] = start.split('-').map(Number);
