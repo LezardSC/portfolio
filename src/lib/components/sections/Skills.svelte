@@ -6,7 +6,7 @@
 	import { DESKTOP_QUERY } from '$lib/projects';
 	import { logoColor, nextTab, panelHidden, skillName, THEME_BG } from '$lib/skills';
 	import Section from '../Section.svelte';
-	import SkillGroupIcon from '../skills/SkillGroupIcon.svelte';
+	import Icon from '../Icon.svelte';
 
 	let { lang, title, t }: { lang: Lang; title: string; t: Dict['skills'] } = $props();
 
@@ -50,7 +50,7 @@
 						onclick={() => (selected = i)}
 						onkeydown={(e) => onKeydown(e, i)}
 					>
-						<span class="ic"><SkillGroupIcon id={group.id} size={22} /></span>
+						<span class="ic"><Icon path={group.icon} size={22} /></span>
 						<span>{group.title[lang]}</span>
 						<span class="count" aria-hidden="true">{group.skills.length}</span>
 					</button>
@@ -70,7 +70,7 @@
 						aria-controls="skills-panel-{group.id}"
 						onclick={() => (open = open === i ? -1 : i)}
 					>
-						<span class="ic"><SkillGroupIcon id={group.id} size={22} /></span>
+						<span class="ic"><Icon path={group.icon} size={22} /></span>
 						<span>{group.title[lang]}</span>
 						<span class="count" aria-hidden="true">{group.skills.length}</span>
 						<svg class="chev" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
