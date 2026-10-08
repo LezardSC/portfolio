@@ -33,8 +33,8 @@ export type Project = {
 	links: { repo?: string; demo?: string };
 	media?: Media;
 	award?: Localized;
-	/** Lower = earlier in the "Highlights" sort (key `featured`). */
-	featured?: number;
+	/** Takes the project off the site while keeping its text here. */
+	hidden?: true;
 };
 
 /** A project's main domain: the first of its list. It sets the card icon, label and colour; filters still match every domain. */
@@ -84,14 +84,29 @@ export function countFor<G extends keyof Filters>(
 const byNewest = (a: Project, b: Project) =>
 	b.date.localeCompare(a.date) || a.id.localeCompare(b.id);
 
-const byFeatured = (a: Project, b: Project) => {
-	const fa = a.featured ?? Infinity;
-	const fb = b.featured ?? Infinity;
-	return fa === fb ? byNewest(a, b) : fa - fb;
-};
+/**
+ * `featured`: ids in "Highlights" order (FEATURED in $lib/data/projects), then everything else
+ * newest first. Unknown ids are ignored.
+ */
+export function sortProjects(
+	list: readonly Project[],
+	sort: SortKey,
+	featured: readonly string[] = []
+): Project[] {
+	if (sort === 'newest') return [...list].sort(byNewest);
+	const rank = (p: Project) => {
+		const i = featured.indexOf(p.id);
+		return i < 0 ? Infinity : i;
+	};
+	return [...list].sort((a, b) => {
+		const [ra, rb] = [rank(a), rank(b)];
+		return ra === rb ? byNewest(a, b) : ra - rb;
+	});
+}
 
-export function sortProjects(list: readonly Project[], sort: SortKey): Project[] {
-	return [...list].sort(sort === 'featured' ? byFeatured : byNewest);
+/** Projects shown on the site: everything not marked `hidden`. */
+export function visibleProjects(list: readonly Project[]): Project[] {
+	return list.filter((p) => !p.hidden);
 }
 
 export function splitTiers(

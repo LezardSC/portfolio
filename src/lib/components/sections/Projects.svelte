@@ -3,7 +3,7 @@
 	import { flip } from 'svelte/animate';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
-	import { PROJECTS } from '$lib/data/projects';
+	import { FEATURED, PROJECTS } from '$lib/data/projects';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { fill } from '$lib/i18n/format';
 	import {
@@ -27,7 +27,9 @@
 	let filters = $state<Filters>({ ...NO_FILTERS });
 	let sort = $state<SortKey>('featured');
 
-	const tiers = $derived(splitTiers(sortProjects(filterProjects(PROJECTS, filters), sort)));
+	const tiers = $derived(
+		splitTiers(sortProjects(filterProjects(PROJECTS, filters), sort, FEATURED))
+	);
 	const lead = $derived(
 		fill(t.lead, { total: PROJECTS.length, featured: Math.min(LARGE_COUNT, PROJECTS.length) })
 	);
