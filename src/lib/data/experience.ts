@@ -1,7 +1,10 @@
 import type { Education, Hackathon, Job } from '$lib/experience';
+import { typeset } from '$lib/i18n/typography';
+
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
 
 /** Work experience. Order here doesn't matter: the page sorts newest first. */
-export const JOBS: Job[] = [
+export const JOBS: Job[] = typeset([
 	{
 		company: 'Sogeti, part of Capgemini',
 		role: {
@@ -63,10 +66,10 @@ export const JOBS: Job[] = [
 			original: 'fr'
 		}
 	}
-];
+]);
 
 /** Education. Order here doesn't matter: the page sorts newest first. */
-export const EDUCATION: Education[] = [
+export const EDUCATION: Education[] = typeset([
 	{
 		school: '42 Lyon',
 		title: { en: 'Expert in computer architecture', fr: 'Expert en architecture informatique' },
@@ -93,10 +96,10 @@ export const EDUCATION: Education[] = [
 		points: [],
 		link: 'https://certificates.cs50.io/b9c16727-3912-4e88-ac47-07ed9a982bc5.pdf?size=letter'
 	}
-];
+]);
 
 /** Hackathon results. Order here doesn't matter: the page sorts newest first. */
-export const HACKATHONS: Hackathon[] = [
+export const HACKATHONS: Hackathon[] = typeset([
 	{ medal: 1, event: 'Paris Blockchain Week', date: '2024-04', project: 'KAYP' },
 	{ medal: 1, event: 'H-W3B Paris', date: '2024-03', project: 'KAYP' },
 	{ medal: 2, event: 'H-W3B Super Finale', date: '2024-11', project: 'KAYP' },
@@ -108,4 +111,4 @@ export const HACKATHONS: Hackathon[] = [
 		date: '2025-11',
 		project: { en: 'Firewall log triage', fr: 'Tri de logs pare-feu' }
 	}
-];
+]);

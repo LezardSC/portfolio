@@ -4,7 +4,7 @@ import { PROFILE } from '$lib/data/profile';
 import { PROJECTS } from '$lib/data/projects';
 import { SKILL_GROUPS } from '$lib/data/skills';
 import { dicts } from './index';
-import { frenchSpacingIssues, straightApostrophes } from './typography';
+import { frenchSpacingIssues, straightApostrophes, typeset, typesetFrench } from './typography';
 
 /** Every string under an `fr` key, at any depth. */
 function frenchStrings(value: unknown): string[] {
@@ -67,5 +67,47 @@ describe('French content', () => {
 	);
 	it.each(Object.entries(sources))('%s uses ’ rather than a straight apostrophe', (_, texts) => {
 		expect(texts.flatMap(straightApostrophes)).toEqual([]);
+	});
+});
+
+describe('typesetFrench', () => {
+	it('puts a no-break space before : ; ! ? % » and after «', () => {
+		expect(typesetFrench('a : b ; c ! d ? 125 % « e »')).toBe('a : b ; c ! d ? 125 % « e »');
+	});
+	it('turns straight apostrophes into ’', () => {
+		expect(typesetFrench("l'argent d'abord")).toBe('l’argent d’abord');
+	});
+	it('leaves clean text, URLs and times alone', () => {
+		for (const text of ['Copié !', 'https://x.fr 12:30', 'l’argent', 'Copié !'])
+			expect(typesetFrench(text), text).toBe(text);
+	});
+	it('produces text the checks accept', () => {
+		const out = typesetFrench("Mon terrain : l'IA, à 100 % !");
+		expect(frenchSpacingIssues(out)).toEqual([]);
+		expect(straightApostrophes(out)).toEqual([]);
+	});
+});
+
+describe('typeset', () => {
+	it('fixes strings under fr keys at any depth and leaves everything else as written', () => {
+		const data = [
+			{ title: "l'a : b", text: { en: "it's : ok", fr: "l'a : b" }, list: [{ fr: 'x !' }] }
+		];
+		expect(typeset(data)).toEqual([
+			{ title: "l'a : b", text: { en: "it's : ok", fr: 'l’a : b' }, list: [{ fr: 'x !' }] }
+		]);
+	});
+	it('keeps numbers, booleans and undefined values', () => {
+		expect(typeset({ n: 1, b: true, u: undefined, fr: 'a' })).toEqual({
+			n: 1,
+			b: true,
+			u: undefined,
+			fr: 'a'
+		});
+	});
+	it('does not mutate its input', () => {
+		const data = { fr: "l'a" };
+		typeset(data);
+		expect(data.fr).toBe("l'a");
 	});
 });

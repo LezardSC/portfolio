@@ -1,9 +1,12 @@
 import type { Project } from '$lib/projects';
+import { typeset } from '$lib/i18n/typography';
+
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
 
 const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
 
 /** Portfolio projects. Order here doesn't matter: the page sorts them. */
-export const PROJECTS: Project[] = [
+export const PROJECTS: Project[] = typeset([
 	{
 		id: 'kayp-pbw-2024',
 		title: 'KAYP',
@@ -308,4 +311,4 @@ export const PROJECTS: Project[] = [
 		tech: ['C#', 'Unity'],
 		links: { repo: gh('Love_Takedown') }
 	}
-];
+]);
