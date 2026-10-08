@@ -1,29 +1,38 @@
 <script lang="ts">
-	import type { Dict } from '$lib/i18n';
-	import {
-		CONTEXTS,
-		DOMAINS,
-		SORTS,
-		countFor,
-		type Filters,
-		type Project,
-		type SortKey
-	} from '$lib/projects';
+	import { usedCategories } from '$lib/categories';
+	import { CONTEXT_IDS, CONTEXTS, DOMAIN_IDS, DOMAINS } from '$lib/data/categories';
+	import type { Dict, Lang } from '$lib/i18n';
+	import { SORTS, countFor, type Filters, type Project, type SortKey } from '$lib/projects';
 
 	let {
 		projects,
 		filters = $bindable(),
 		sort = $bindable(),
+		lang,
 		t
 	}: {
 		projects: readonly Project[];
 		filters: Filters;
 		sort: SortKey;
+		lang: Lang;
 		t: Dict['projects'];
 	} = $props();
 
-	const contextOptions = ['all', ...CONTEXTS] as const;
-	const domainOptions = ['all', ...DOMAINS] as const;
+	/** Only categories that at least one project uses, in category order. */
+	const contextOptions = $derived([
+		'all' as const,
+		...usedCategories(
+			CONTEXT_IDS,
+			projects.map((p) => p.context)
+		)
+	]);
+	const domainOptions = $derived([
+		'all' as const,
+		...usedCategories(
+			DOMAIN_IDS,
+			projects.flatMap((p) => p.domains)
+		)
+	]);
 </script>
 
 <div class="filters">
@@ -40,7 +49,7 @@
 					disabled={count === 0 && !active}
 					onclick={() => (filters = { ...filters, context: value })}
 				>
-					{value === 'all' ? t.all : t.contexts[value]}
+					{value === 'all' ? t.all : CONTEXTS[value].label[lang]}
 					<span class="count">{count}</span>
 				</button>
 			{/each}
@@ -60,7 +69,7 @@
 					disabled={count === 0 && !active}
 					onclick={() => (filters = { ...filters, domain: value })}
 				>
-					{value === 'all' ? t.all : t.domains[value]}
+					{value === 'all' ? t.all : DOMAINS[value].label[lang]}
 					<span class="count">{count}</span>
 				</button>
 			{/each}
@@ -90,7 +99,7 @@
 			{#each contextOptions as value (value)}
 				{@const count = countFor(projects, filters, 'context', value)}
 				<option {value} disabled={count === 0 && filters.context !== value}>
-					{value === 'all' ? t.all : t.contexts[value]}
+					{value === 'all' ? t.all : CONTEXTS[value].label[lang]}
 				</option>
 			{/each}
 		</select>
@@ -107,7 +116,7 @@
 			{#each domainOptions as value (value)}
 				{@const count = countFor(projects, filters, 'domain', value)}
 				<option {value} disabled={count === 0 && filters.domain !== value}>
-					{value === 'all' ? t.all : t.domains[value]}
+					{value === 'all' ? t.all : DOMAINS[value].label[lang]}
 				</option>
 			{/each}
 		</select>

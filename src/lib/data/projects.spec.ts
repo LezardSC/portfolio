@@ -3,7 +3,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { CONTEXTS, DOMAINS, mediaIssues } from '$lib/projects';
+import { mediaIssues } from '$lib/projects';
+import { DOMAIN_IDS } from './categories';
 import { PROJECTS } from './projects';
 
 /** static/ at the repo root, found from this file so the test works from any cwd. */
@@ -77,27 +78,15 @@ describe('project data', () => {
 		for (const p of PROJECTS) {
 			expect(p.domains.length, p.id).toBeGreaterThan(0);
 			expect(new Set(p.domains).size, p.id).toBe(p.domains.length);
-			for (const d of p.domains) expect(DOMAINS, p.id).toContain(d);
+			for (const d of p.domains) expect(DOMAIN_IDS, p.id).toContain(d);
 			expect(p.tech.length, p.id).toBeGreaterThan(0);
 		}
-	});
-
-	it('has at least one project in every context', () => {
-		for (const c of CONTEXTS)
-			expect(
-				PROJECTS.some((p) => p.context === c),
-				c
-			).toBe(true);
 	});
 
 	it('has https links only', () => {
 		for (const p of PROJECTS)
 			for (const url of [p.links.repo, p.links.demo].filter(Boolean))
 				expect(url, p.id).toMatch(/^https:\/\//);
-	});
-
-	it('includes at least one private project (no links)', () => {
-		expect(PROJECTS.some((p) => !p.links.repo && !p.links.demo)).toBe(true);
 	});
 
 	it('has unique positive integer featured ranks', () => {

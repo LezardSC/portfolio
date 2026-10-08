@@ -1,10 +1,7 @@
+import type { Context, Domain } from '$lib/data/categories';
 import type { Localized } from '$lib/i18n/lang';
 
-export const CONTEXTS = ['professional', 'personal', 'school', 'hackathon'] as const;
-export type Context = (typeof CONTEXTS)[number];
-
-export const DOMAINS = ['web', 'blockchain', 'ai', 'low-level', 'games'] as const;
-export type Domain = (typeof DOMAINS)[number];
+export type { Context, Domain };
 
 export const SORTS = ['featured', 'newest'] as const;
 export type SortKey = (typeof SORTS)[number];
@@ -45,17 +42,8 @@ export function mainDomain(p: Project): Domain {
 	return p.domains[0];
 }
 
-/** Base colour per domain: phone project tiles, and phone featured cards without media. */
-export const DOMAIN_COLOR: Record<Domain, string> = {
-	web: '#5b3fa0',
-	blockchain: '#24408e',
-	ai: '#0b6e6e',
-	'low-level': '#c2391b',
-	games: '#7a2e5e'
-};
-
 /**
- * Phone tile colours per theme: background = domain colour at `pct` over `base`; label, rule and
+ * Phone tile colours per theme (the domain colour is `DOMAINS[d].color` in $lib/data/categories): background = domain colour at `pct` over `base`; label, rule and
  * watermark = domain colour mixed `fg` with white. Keep in sync with `--tile-*` in src/app.css
  * (theme-tokens.spec.ts checks it).
  */

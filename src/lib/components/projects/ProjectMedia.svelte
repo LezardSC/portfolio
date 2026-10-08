@@ -2,24 +2,16 @@
 	import { base } from '$app/paths';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { MediaQuery } from 'svelte/reactivity';
+	import { DOMAINS } from '$lib/data/categories';
 	import {
 		DESKTOP_QUERY,
+		mainDomain,
 		primaryLink,
 		shouldPlayVideo,
-		type Domain,
 		type Project
 	} from '$lib/projects';
 
 	let { project }: { project: Project } = $props();
-
-	/** Placeholder gradient hue per (first) domain. */
-	const HUE: Record<Domain, number> = {
-		web: 210,
-		blockchain: 265,
-		ai: 150,
-		'low-level': 25,
-		games: 330
-	};
 
 	const href = $derived(primaryLink(project));
 	const media = $derived(project.media);
@@ -86,7 +78,7 @@
 				></video>
 			{/if}
 		{:else}
-			<div class="placeholder" style:--hue={HUE[project.domains[0]]}>
+			<div class="placeholder" style:--dc={DOMAINS[mainDomain(project)].color}>
 				<span>{project.title}</span>
 			</div>
 		{/if}
@@ -138,10 +130,11 @@
 		place-items: center;
 		height: 100%;
 		padding: 1rem;
+		/* From the main domain colour (the one intended visual change of M11). */
 		background: linear-gradient(
 			135deg,
-			hsl(var(--hue) 65% 45%),
-			hsl(calc(var(--hue) + 40) 65% 28%)
+			color-mix(in srgb, var(--dc) 80%, #ffffff),
+			color-mix(in srgb, var(--dc) 60%, #000000)
 		);
 	}
 	.placeholder span {
