@@ -8,10 +8,11 @@ import { typeset } from '$lib/i18n/typography';
 const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
 
 /**
- * "Highlights" order: these projects come first, in this order (the first 6 get the big cards).
- * Move a line to reorder. Every id must exist and not be hidden (a test checks it).
+ * Priority order: these projects come first, in this order; every other project follows, newest
+ * first. Not a separate category: the first 6 of whatever list is displayed (filters included)
+ * get the big cards. Move a line to reorder. Every id must exist and not be hidden (a test checks it).
  */
-export const FEATURED: string[] = [
+export const PRIORITY: string[] = [
 	'kayp-pbw-2024',
 	'kayp-h-web3-paris',
 	'ft-transcendence',

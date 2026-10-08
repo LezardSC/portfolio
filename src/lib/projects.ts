@@ -3,10 +3,10 @@ import type { Localized } from '$lib/i18n/lang';
 
 export type { Context, Domain };
 
-export const SORTS = ['featured', 'newest'] as const;
+export const SORTS = ['priority', 'newest'] as const;
 export type SortKey = (typeof SORTS)[number];
 
-/** How many results get the large card layout. */
+/** How many results get the large card layout: the first ones of the displayed list, whatever they are. */
 export const LARGE_COUNT = 6;
 
 /**
@@ -92,17 +92,17 @@ const byNewest = (a: Project, b: Project) =>
 	b.date.localeCompare(a.date) || a.id.localeCompare(b.id);
 
 /**
- * `featured`: ids in "Highlights" order (FEATURED in $lib/data/projects), then everything else
- * newest first. Unknown ids are ignored.
+ * `priority`: the `priority` ids first, in that order (PRIORITY in $lib/data/projects), then
+ * everything else newest first. Unknown ids are ignored.
  */
 export function sortProjects(
 	list: readonly Project[],
 	sort: SortKey,
-	featured: readonly string[] = []
+	priority: readonly string[] = []
 ): Project[] {
 	if (sort === 'newest') return [...list].sort(byNewest);
 	const rank = (p: Project) => {
-		const i = featured.indexOf(p.id);
+		const i = priority.indexOf(p.id);
 		return i < 0 ? Infinity : i;
 	};
 	return [...list].sort((a, b) => {
