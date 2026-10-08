@@ -10,6 +10,7 @@ import {
 	primaryLink,
 	shouldPlayVideo,
 	sortProjects,
+	visibleProjects,
 	splitTiers,
 	type Project
 } from './projects';
@@ -34,10 +35,9 @@ const list: Project[] = [
 		id: 'b',
 		context: 'hackathon',
 		domains: ['web', 'blockchain'],
-		date: '2024-04',
-		featured: 2
+		date: '2024-04'
 	}),
-	make({ id: 'c', context: 'personal', domains: ['ai'], date: '2026-05', featured: 1 }),
+	make({ id: 'c', context: 'personal', domains: ['ai'], date: '2026-05' }),
 	make({ id: 'd', context: 'school', domains: ['blockchain'], date: '2024-12' }),
 	make({ id: 'e', context: 'professional', domains: ['ai'], date: '2025-07' })
 ];
@@ -79,23 +79,35 @@ describe('sortProjects', () => {
 	it('newest: date descending', () => {
 		expect(ids(sortProjects(list, 'newest'))).toEqual(['c', 'e', 'd', 'b', 'a']);
 	});
-	it('featured: featured ascending first, then the rest newest first', () => {
-		expect(ids(sortProjects(list, 'featured'))).toEqual(['c', 'b', 'e', 'd', 'a']);
+	it('featured: the FEATURED order first, then the rest newest first', () => {
+		expect(ids(sortProjects(list, 'featured', ['c', 'b']))).toEqual(['c', 'b', 'e', 'd', 'a']);
 	});
-	it('breaks ties deterministically by id', () => {
+	it('featured: ignores ids that are not in the list', () => {
+		expect(ids(sortProjects(list, 'featured', ['zzz', 'b']))).toEqual(['b', 'c', 'e', 'd', 'a']);
+	});
+	it('featured with no list is newest first', () => {
+		expect(ids(sortProjects(list, 'featured'))).toEqual(ids(sortProjects(list, 'newest')));
+	});
+	it('breaks date ties deterministically by id', () => {
 		const tied = [
-			make({ id: 'z', date: '2024-01', featured: 1 }),
-			make({ id: 'y', date: '2024-01', featured: 1 }),
-			make({ id: 'x', date: '2024-01' }),
-			make({ id: 'w', date: '2024-01' })
+			make({ id: 'z', date: '2024-01' }),
+			make({ id: 'y', date: '2024-01' }),
+			make({ id: 'x', date: '2023-01' })
 		];
-		expect(ids(sortProjects(tied, 'featured'))).toEqual(['y', 'z', 'w', 'x']);
-		expect(ids(sortProjects(tied, 'newest'))).toEqual(['w', 'x', 'y', 'z']);
+		expect(ids(sortProjects(tied, 'featured', []))).toEqual(['y', 'z', 'x']);
+		expect(ids(sortProjects(tied, 'newest'))).toEqual(['y', 'z', 'x']);
 	});
 	it('does not mutate its input', () => {
 		const copy = [...list];
 		sortProjects(list, 'newest');
 		expect(list).toEqual(copy);
+	});
+});
+
+describe('visibleProjects', () => {
+	it('drops hidden projects and keeps the order', () => {
+		const withHidden = [list[0], make({ id: 'h', hidden: true }), list[1]];
+		expect(ids(visibleProjects(withHidden))).toEqual(['a', 'b']);
 	});
 });
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { EDUCATION, HACKATHONS, JOBS } from '$lib/data/experience';
 import { PROFILE } from '$lib/data/profile';
-import { PROJECTS } from '$lib/data/projects';
+import { ALL_PROJECTS } from '$lib/data/projects';
 import { SKILL_GROUPS } from '$lib/data/skills';
 import { dicts } from './index';
 import { frenchSpacingIssues, straightApostrophes, typeset, typesetFrench } from './typography';
@@ -54,7 +54,7 @@ describe('French content', () => {
 	const sources = {
 		dictionary: leaves(dicts.fr),
 		profile: frenchStrings(PROFILE),
-		projects: frenchStrings(PROJECTS),
+		projects: frenchStrings(ALL_PROJECTS),
 		experience: frenchStrings([JOBS, EDUCATION, HACKATHONS]),
 		skills: frenchStrings(SKILL_GROUPS)
 	};
