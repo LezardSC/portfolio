@@ -86,12 +86,19 @@
 				<span class="malt-ic"><ContactIcon id="malt" size={30} /></span>
 				<span class="label">{t.maltLabel}</span>
 			</div>
-			<p class="malt-title">{t.maltTitle}</p>
+			<p id="malt-title" class="malt-title">{t.maltTitle}</p>
 			<p class="malt-text">{t.maltText}</p>
 			<p class="malt-short">{t.maltShort}</p>
-			<a class="btn malt-cta" href={PROFILE.malt} target="_blank" rel="noopener noreferrer">
-				<span class="cta-text">{t.maltCta}</span> <span aria-hidden="true">↗</span>
-				<span class="sr-only">{newTab}</span>
+			<!-- Named by the title too: on phones the title is the visible label of the whole-card link. -->
+			<a
+				class="btn malt-cta"
+				href={PROFILE.malt}
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-labelledby="malt-title malt-cta malt-new-tab"
+			>
+				<span id="malt-cta" class="cta-text">{t.maltCta}</span> <span aria-hidden="true">↗</span>
+				<span id="malt-new-tab" class="sr-only">{newTab}</span>
 			</a>
 		</div>
 	</div>
