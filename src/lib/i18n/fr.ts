@@ -21,7 +21,6 @@ export const fr: Dict = {
 	navCv: 'CV',
 	navLabel: 'Principale',
 	skipToContent: 'Aller au contenu',
-	menu: 'Menu',
 	newTab: '(s’ouvre dans un nouvel onglet)',
 	nav: {
 		about: 'À propos',
