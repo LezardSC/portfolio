@@ -3,13 +3,12 @@
 	import { flip } from 'svelte/animate';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
-	import { FEATURED, PROJECTS } from '$lib/data/projects';
+	import { PRIORITY, PROJECTS } from '$lib/data/projects';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { fill } from '$lib/i18n/format';
 	import {
 		filterProjects,
 		hiddenCount,
-		LARGE_COUNT,
 		NO_FILTERS,
 		PHONE_OTHERS,
 		sortProjects,
@@ -25,14 +24,12 @@
 	let { lang, title, t }: { lang: Lang; title: string; t: Dict['projects'] } = $props();
 
 	let filters = $state<Filters>({ ...NO_FILTERS });
-	let sort = $state<SortKey>('featured');
+	let sort = $state<SortKey>('priority');
 
 	const tiers = $derived(
-		splitTiers(sortProjects(filterProjects(PROJECTS, filters), sort, FEATURED))
+		splitTiers(sortProjects(filterProjects(PROJECTS, filters), sort, PRIORITY))
 	);
-	const lead = $derived(
-		fill(t.lead, { total: PROJECTS.length, featured: Math.min(LARGE_COUNT, PROJECTS.length) })
-	);
+	const lead = $derived(fill(t.lead, { total: PROJECTS.length }));
 	const ms = $derived(prefersReducedMotion.current ? 0 : 300);
 
 	/** False in the prerendered HTML: without JS every tile shows and there is no button. */
@@ -74,7 +71,6 @@
 
 		{#if tiers.small.length > 0}
 			<h3 class="more">{t.more}</h3>
-			<p class="more-lead">{t.moreLead}</p>
 			<ul id="more-projects" class="grid small" role="list">
 				{#each tiers.small as project, i (project.id)}
 					<li
@@ -121,14 +117,9 @@
 		gap: 1rem;
 	}
 	.more {
-		margin: 5rem 0 0.375rem;
+		margin: 5rem 0 1.5rem;
 		font-size: 1.625rem;
 		font-weight: 800;
-	}
-	.more-lead {
-		margin: 0 0 1.5rem;
-		font-size: 1rem;
-		color: var(--muted);
 	}
 	.show-more {
 		display: none;
@@ -144,12 +135,8 @@
 			gap: 0.625rem;
 		}
 		.more {
-			margin: 2.5rem 0 0.125rem;
+			margin: 2.5rem 0 1.375rem;
 			font-size: 1.3125rem;
-		}
-		.more-lead {
-			margin: 0 0 1.375rem;
-			font-size: 0.875rem;
 		}
 		.folded {
 			display: none;

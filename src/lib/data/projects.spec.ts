@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { mediaIssues } from '$lib/projects';
 import { DOMAIN_IDS } from './categories';
-import { ALL_PROJECTS, FEATURED } from './projects';
+import { ALL_PROJECTS, PRIORITY } from './projects';
 
 /** static/ at the repo root, found from this file so the test works from any cwd. */
 const STATIC = fileURLToPath(new URL('../../../static', import.meta.url));
@@ -89,13 +89,13 @@ describe('project data', () => {
 				expect(url, p.id).toMatch(/^https:\/\//);
 	});
 
-	it('lists existing, visible, distinct projects in FEATURED', () => {
+	it('lists existing, visible, distinct projects in PRIORITY', () => {
 		const byId = new Map(ALL_PROJECTS.map((p) => [p.id, p]));
-		const problems = FEATURED.flatMap((id, i) => {
+		const problems = PRIORITY.flatMap((id, i) => {
 			const p = byId.get(id);
 			if (!p) return [`"${id}": no project has this id`];
-			if (p.hidden) return [`"${id}": is hidden, remove it from FEATURED or unhide it`];
-			if (FEATURED.indexOf(id) !== i) return [`"${id}": listed twice`];
+			if (p.hidden) return [`"${id}": is hidden, remove it from PRIORITY or unhide it`];
+			if (PRIORITY.indexOf(id) !== i) return [`"${id}": listed twice`];
 			return [];
 		});
 		expect(problems).toEqual([]);
