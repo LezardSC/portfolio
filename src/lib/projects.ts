@@ -11,12 +11,19 @@ export const LARGE_COUNT = 6;
 
 /**
  * Card media. Paths are relative to `static/`, without a leading slash. A video always has a
- * still `poster`: phones and reduced-motion visitors only ever get the poster.
+ * still `poster`: phones and reduced-motion visitors only ever get the poster. `phone` is an
+ * optional image for phones only (the blurred card background); without it phones use the
+ * image or poster. Desktop never downloads it.
  */
-export type Media = { kind: 'image'; src: string } | { kind: 'video'; src: string; poster: string };
+export type Media =
+	| { kind: 'image'; src: string; phone?: string }
+	| { kind: 'video'; src: string; poster: string; phone?: string };
 
 /** At and above this width cards keep media on top and videos may play; below it is "phone". */
 export const DESKTOP_QUERY = '(min-width: 48rem)';
+
+/** Phone screens, for `<source media>`: exactly the screens DESKTOP_QUERY doesn't match. */
+export const PHONE_QUERY = `not all and ${DESKTOP_QUERY}`;
 
 export type Project = {
 	id: string;
@@ -132,7 +139,8 @@ export function shouldPlayVideo(s: {
 
 /** Every `static/` file a media entry needs, the poster included. */
 export function mediaFiles(media: Media): string[] {
-	return media.kind === 'video' ? [media.src, media.poster] : [media.src];
+	const main = media.kind === 'video' ? [media.src, media.poster] : [media.src];
+	return media.phone === undefined ? main : [...main, media.phone];
 }
 
 const IMAGE_FILE = /\.(jpe?g|png|webp)$/i;
@@ -145,6 +153,8 @@ export function mediaIssues(media: Media, exists: (src: string) => boolean): str
 	if (!IMAGE_FILE.test(image)) issues.push(`"${image}": not a .jpg, .jpeg, .png or .webp image`);
 	if (media.kind === 'video' && !VIDEO_FILE.test(media.src))
 		issues.push(`"${media.src}": not an .mp4 video`);
+	if (media.phone !== undefined && !IMAGE_FILE.test(media.phone))
+		issues.push(`"${media.phone}": phone image is not a .jpg, .jpeg, .png or .webp image`);
 	for (const src of mediaFiles(media)) {
 		if (!src) continue;
 		if (src.startsWith('/')) issues.push(`"${src}": must be relative to static/`);
