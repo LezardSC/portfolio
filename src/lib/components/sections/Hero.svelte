@@ -8,21 +8,27 @@
 	let { lang, t, newTab }: { lang: Lang; t: Dict['hero']; newTab: string } = $props();
 
 	const malt = CONTACT_BRANDS.malt;
+	/** First name and the rest: two lines on phones, one on desktop. */
+	const [first, ...others] = PROFILE.name.split(' ');
+	const last = others.join(' ');
 </script>
 
 <section id="hero" class="hero">
 	{#if PROFILE.available}
 		<p class="available"><span class="dot" aria-hidden="true"></span>{t.available}</p>
 	{/if}
-	<h1>{PROFILE.name}<span class="stop" aria-hidden="true">.</span></h1>
+	<h1>
+		<span class="line">{first}</span>
+		<span class="line">{last}<span class="stop" aria-hidden="true">.</span></span>
+	</h1>
 	<div class="grid">
-		<div>
+		<div class="intro">
 			<p class="role">{PROFILE.role[lang]}</p>
 			<p class="pitch">
 				{PROFILE.pitch[lang]}<span class="pitch-more">{' '}{PROFILE.pitchMore[lang]}</span>
 			</p>
 			<div class="ctas">
-				<a class="btn btn-primary" href="#projects">
+				<a class="btn btn-primary see" href="#projects">
 					{t.projects}
 					<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
 						<path
@@ -36,7 +42,7 @@
 					</svg>
 				</a>
 				<a
-					class="btn"
+					class="btn cv"
 					href={assetHref(base, PROFILE.cv[lang])}
 					target="_blank"
 					rel="noopener noreferrer"
@@ -53,11 +59,12 @@
 					</svg>
 					{t.cv} <span class="sr-only">{newTab}</span>
 				</a>
-				<a class="btn" href={PROFILE.malt} target="_blank" rel="noopener noreferrer">
+				<a class="btn malt" href={PROFILE.malt} target="_blank" rel="noopener noreferrer">
 					<svg viewBox={malt.viewBox} width="18" height="18" fill="#{malt.hex}" aria-hidden="true">
 						<path d={malt.path} />
 					</svg>
-					{t.malt} <span aria-hidden="true">↗</span>
+					<span class="long">{t.malt}</span><span class="short">{t.maltShort}</span>
+					<span aria-hidden="true">↗</span>
 					<span class="sr-only">{newTab}</span>
 				</a>
 			</div>
@@ -66,9 +73,13 @@
 			<p class="glance-title">{t.glance}</p>
 			<dl>
 				{#each PROFILE.glance as row, i (i)}
-					<div class="row">
+					<div class="row" class:wide={row.wide}>
 						<dt>{row.label[lang]}</dt>
-						<dd>{row.value[lang]}</dd>
+						<dd>
+							{#if row.short}<span class="full">{row.value[lang]}</span><span class="short"
+									>{row.short[lang]}</span
+								>{:else}{row.value[lang]}{/if}
+						</dd>
 					</div>
 				{/each}
 			</dl>
@@ -178,18 +189,108 @@
 		margin: 0;
 		font-weight: 600;
 	}
-	/* Phone (M10 will design it): the name wraps and shrinks. */
+	.short {
+		display: none;
+	}
+	/* Phone: name on two lines, then role, first pitch sentence, glance tiles, buttons. */
 	@media (width < 48rem) {
 		.hero {
-			padding: calc(var(--nav-h) + 2rem) 1rem 2.5rem;
+			padding: calc(var(--nav-h) + 1.75rem) 1.25rem 2.5rem;
+		}
+		.available {
+			margin-bottom: 0.875rem;
 		}
 		h1 {
-			font-size: clamp(2.75rem, 13vw, 4rem);
+			/* 58px from 390px wide, smaller below so "Renault." always fits. */
+			font-size: min(3.625rem, 14.8vw);
+			line-height: 0.88;
 			white-space: normal;
 		}
-		.row {
-			grid-template-columns: minmax(0, 1fr);
-			gap: 0.125rem;
+		.line {
+			display: block;
+		}
+		.grid {
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0;
+			margin-top: 0;
+			padding-top: 0;
+			border-top: 0;
+		}
+		.intro {
+			display: contents;
+		}
+		.role {
+			order: 1;
+			margin: 1.25rem 0 0.5rem;
+			font-size: 1.25rem;
+		}
+		.pitch {
+			order: 2;
+			margin: 0 0 1.25rem;
+			font-size: 1rem;
+			line-height: 1.55;
+		}
+		.pitch-more,
+		.glance-title,
+		.full,
+		.long,
+		.cv svg {
+			display: none;
+		}
+		.short {
+			display: inline;
+		}
+		.glance {
+			order: 3;
+			margin-bottom: 1.25rem;
+			padding: 0;
+			background: none;
+			border: 0;
+		}
+		dl {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.5rem;
+		}
+		.row,
+		.row:last-child {
+			display: block;
+			min-width: 0;
+			padding: 0.75rem 0.875rem;
+			background: var(--surface);
+			border: 2px solid var(--border);
+			border-radius: var(--radius);
+		}
+		.row.wide {
+			grid-column: 1 / -1;
+			order: 1;
+		}
+		dt {
+			padding: 0;
+			font-size: 0.75rem;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+		dd {
+			margin-top: 0.125rem;
+			font-size: 0.9375rem;
+			font-weight: 700;
+			line-height: 1.35;
+		}
+		.ctas {
+			order: 4;
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0.5rem;
+		}
+		.ctas .btn {
+			justify-content: center;
+			padding: 0 1rem;
+		}
+		.see {
+			grid-column: 1 / -1;
 		}
 	}
 </style>

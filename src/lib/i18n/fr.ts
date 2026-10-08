@@ -13,10 +13,15 @@ export const fr: Dict = {
 		projects: 'Voir les projets',
 		cv: 'Voir le CV',
 		malt: 'Profil Malt',
+		maltShort: 'Malt',
 		glance: 'En bref'
 	},
 	about: {
 		photoAlt: 'Photo de Jocelyn Renault'
+	},
+	common: {
+		readMore: 'Lire la suite',
+		showLess: 'Réduire'
 	},
 	navCv: 'CV',
 	navLabel: 'Principale',
