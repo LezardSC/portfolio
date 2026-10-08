@@ -15,10 +15,16 @@ export const en = {
 		projects: 'See projects',
 		cv: 'View CV',
 		malt: 'Malt profile',
+		maltShort: 'Malt',
 		glance: 'At a glance'
 	},
 	about: {
 		photoAlt: 'Photo of Jocelyn Renault'
+	},
+	/** Shared toggle labels for folded text. */
+	common: {
+		readMore: 'Read more',
+		showLess: 'Show less'
 	},
 	navCv: 'CV',
 	navLabel: 'Main',
