@@ -202,7 +202,7 @@
 		}
 		h1 {
 			/* 58px from 390px wide, smaller below so "Renault." always fits. */
-			font-size: min(3.625rem, 14.8vw);
+			font-size: min(3.625rem, 14.9vw);
 			line-height: 0.88;
 			white-space: normal;
 		}
