@@ -6,6 +6,7 @@
 	import {
 		DESKTOP_QUERY,
 		mainDomain,
+		PHONE_QUERY,
 		primaryLink,
 		shouldPlayVideo,
 		type Project
@@ -59,12 +60,17 @@
 {#snippet content()}
 	<div class="frame" bind:this={frame}>
 		{#if media}
-			<img
-				src="{base}/{media.kind === 'video' ? media.poster : media.src}"
-				alt=""
-				loading="lazy"
-				decoding="async"
-			/>
+			<picture>
+				{#if media.phone}
+					<source media={PHONE_QUERY} srcset="{base}/{media.phone}" />
+				{/if}
+				<img
+					src="{base}/{media.kind === 'video' ? media.poster : media.src}"
+					alt=""
+					loading="lazy"
+					decoding="async"
+				/>
+			</picture>
 			{#if media.kind === 'video' && started && !failed}
 				<video
 					bind:this={video}
