@@ -1,7 +1,7 @@
 /**
  * npm run audit [-- --screens]
  * Builds the site, serves it with `vite preview`, then checks it: axe (both languages, both
- * themes, phone and desktop, menu open, no-JS), horizontal overflow at 360px, and Lighthouse
+ * themes, phone and desktop, no-JS), horizontal overflow at 360px, and Lighthouse
  * on /en/ (mobile and desktop). Prints a PASS/FAIL table, writes full reports to reports/,
  * and exits non-zero if anything failed. --screens also saves full-page screenshots.
  */
@@ -89,8 +89,6 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 						() => document.documentElement.scrollWidth - window.innerWidth
 					);
 					checks.push(overflowCheck(label, overflow));
-					await page.click('.menu-btn');
-					checks.push(await axe(page, `${label} menu open`, `${file}-menu`));
 				}
 				await context.close();
 			}

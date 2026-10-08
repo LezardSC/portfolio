@@ -72,27 +72,38 @@
 		line-height: 1.5;
 		color: var(--muted);
 	}
-	/* Phone (M10 will design it): heading block above the content, M8 sizes. */
+	/* Phone: outlined number and title on one line, lead below. */
 	@media (width < 48rem) {
 		section {
-			padding: 0 1rem;
+			padding: 0 1.25rem;
 		}
 		.inner {
 			display: block;
-			padding: 2.5rem 0;
-		}
-		.num {
-			font-size: 3.5rem;
-		}
-		h2 {
-			margin: 0.5rem 0 0;
-			font-size: 1.6rem;
-		}
-		.lead {
-			margin-top: 0.5rem;
+			padding: 3rem 0;
 		}
 		.head {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: flex-end;
+			column-gap: 0.875rem;
 			margin-bottom: 1.25rem;
+		}
+		.num {
+			font-size: 2.875rem;
+			line-height: 0.8;
+			/* Half of it shows outside the fill: a 1.5px outline. */
+			-webkit-text-stroke-width: 3px;
+		}
+		h2 {
+			margin: 0;
+			font-size: 1.8125rem;
+			line-height: 1.05;
+			letter-spacing: -0.03em;
+		}
+		.lead {
+			flex-basis: 100%;
+			margin-top: 0.625rem;
+			font-size: 0.9375rem;
 		}
 	}
 </style>

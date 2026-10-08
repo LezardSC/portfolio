@@ -187,6 +187,19 @@ main:focus {
 	color: var(--on-accent);
 }
 
+/* Phone (M10): shorter header bar, 17px text, narrower button padding. */
+@media (width < 48rem) {
+	:root {
+		--nav-h: 3.75rem;
+	}
+	body {
+		font-size: 1.0625rem;
+	}
+	.btn {
+		padding: 0 1rem;
+	}
+}
+
 /* Scroll reveal (src/lib/reveal-dom.ts): only ever added after hydration, never on the hero. */
 .reveal {
 	transition:
