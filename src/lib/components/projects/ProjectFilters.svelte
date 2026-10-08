@@ -90,7 +90,7 @@
 			{#each contextOptions as value (value)}
 				{@const count = countFor(projects, filters, 'context', value)}
 				<option {value} disabled={count === 0 && filters.context !== value}>
-					{value === 'all' ? t.all : t.contexts[value]} ({count})
+					{value === 'all' ? t.all : t.contexts[value]}
 				</option>
 			{/each}
 		</select>
@@ -107,13 +107,13 @@
 			{#each domainOptions as value (value)}
 				{@const count = countFor(projects, filters, 'domain', value)}
 				<option {value} disabled={count === 0 && filters.domain !== value}>
-					{value === 'all' ? t.all : t.domains[value]} ({count})
+					{value === 'all' ? t.all : t.domains[value]}
 				</option>
 			{/each}
 		</select>
 	</label>
 
-	<label class="pick phone">
+	<label class="pick phone sort">
 		<span class="label">{t.sortLabel}</span>
 		<select bind:value={sort}>
 			{#each SORTS as s (s)}
@@ -213,12 +213,13 @@
 	.phone {
 		display: none;
 	}
-	/* Phone: one full-width row per filter (label, then a dropdown) instead of segmented bars. */
+	/* Phone: Context and Domain side by side, Sort by below; labels above the selects. */
 	@media (width < 48rem) {
 		.filters {
 			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 			gap: 0.75rem;
-			margin-bottom: 2rem;
+			margin: 0 0 1.5rem;
 		}
 		.group {
 			display: none;
@@ -226,15 +227,46 @@
 		.phone {
 			display: flex;
 		}
-		.pick .label {
-			flex-shrink: 0;
-			width: 5.5rem;
-			margin: 0;
-			font-weight: 400;
-		}
-		.pick select {
-			flex: 1;
+		.pick {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.375rem;
 			min-width: 0;
+		}
+		.sort {
+			grid-column: 1 / -1;
+		}
+		.pick .label {
+			margin: 0;
+			font-size: 0.8125rem;
+		}
+		/* 16px text: smaller makes iOS zoom in on focus. */
+		select {
+			width: 100%;
+			min-height: 3rem;
+			padding: 0 2.5rem 0 0.875rem;
+			border: 2px solid var(--text);
+			border-radius: var(--radius);
+			font-size: 1rem;
+			font-weight: 600;
+			appearance: none;
+			background-image:
+				linear-gradient(45deg, transparent 50%, currentColor 50%),
+				linear-gradient(135deg, currentColor 50%, transparent 50%);
+			background-position:
+				calc(100% - 20px) 21px,
+				calc(100% - 14px) 21px;
+			background-size: 6px 6px;
+			background-repeat: no-repeat;
+		}
+	}
+	/* Narrow phones: "Professionnel" needs the room; the padding gives, never the font. */
+	@media (width < 24.375rem) {
+		select {
+			padding: 0 2rem 0 0.625rem;
+			background-position:
+				calc(100% - 16px) 21px,
+				calc(100% - 10px) 21px;
 		}
 	}
 </style>

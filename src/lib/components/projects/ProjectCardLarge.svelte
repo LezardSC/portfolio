@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Dict, Lang } from '$lib/i18n';
-	import type { Project } from '$lib/projects';
+	import { DOMAIN_COLOR, mainDomain, type Project } from '$lib/projects';
 	import TrophyIcon from '../icons/TrophyIcon.svelte';
 	import DomainIcon from './DomainIcon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
@@ -8,15 +8,18 @@
 	import TechTags from './TechTags.svelte';
 
 	let { project, lang, t }: { project: Project; lang: Lang; t: Dict['projects'] } = $props();
+
+	const domain = $derived(mainDomain(project));
 </script>
 
-<article class="card">
+<article class="card" class:has-media={!!project.media} style:--dc={DOMAIN_COLOR[domain]}>
 	<ProjectMedia {project} />
+	{#if !project.media}
+		<span class="wm"><DomainIcon {domain} size={160} /></span>
+	{/if}
 	<div class="body">
 		<p class="meta">
-			<span class="dom"
-				><DomainIcon domain={project.domains[0]} size={18} />{t.domains[project.domains[0]]}</span
-			>
+			<span class="dom"><DomainIcon {domain} size={18} />{t.domains[domain]}</span>
 			<span>{project.date.slice(0, 4)} · {t.contexts[project.context]}</span>
 		</p>
 		<h3><span class="title">{project.title}</span></h3>
@@ -40,6 +43,9 @@
 	}
 	.card > :global(.media) {
 		border-radius: var(--radius);
+	}
+	.wm {
+		display: none;
 	}
 	.body {
 		display: flex;
@@ -110,86 +116,127 @@
 		padding-top: 0.5rem;
 	}
 
-	/* Phone: the media fills the card and the text sits on a dark gradient over it. */
+	/* Phone: the photo (or the domain colour) fills the card under a dark veil; text at the bottom.
+	   Light text in both themes; colours mirror OVERLAY in src/lib/overlay.ts (tested). */
 	@media (width < 48rem) {
 		.card {
+			--veil: 0.35;
 			position: relative;
+			isolation: isolate;
+			overflow: hidden;
 			justify-content: flex-end;
+			gap: 0;
 			height: auto;
-			/* At least 4:3; grows with its text (needs overflow visible). */
-			aspect-ratio: 4 / 3;
-			overflow: visible;
+			min-height: 18.75rem;
+			padding: 1.125rem 1.125rem 0.5rem;
+			border: 2px solid var(--text);
+			border-radius: var(--radius);
+			background: var(--dc);
+			color: #f3f0e8;
 		}
-		.card > :global(.media) {
+		.card.has-media {
+			--veil: 0.62;
+		}
+		.card::before {
+			content: '';
 			position: absolute;
 			inset: 0;
-			aspect-ratio: auto;
-			border-radius: calc(var(--radius) - 1px);
+			z-index: -1;
+			background: #10100e;
+			opacity: var(--veil);
 		}
-		/* The card title is already on the card; the big placeholder title would be repeated. */
-		.card :global(.placeholder span) {
+		/* Bigger than the card so the blur has no soft edge. */
+		.card > :global(.media) {
+			position: absolute;
+			inset: -1rem;
+			z-index: -2;
+			aspect-ratio: auto;
+			border-radius: 0;
+			filter: blur(var(--blur, 6px));
+		}
+		/* No photo: the domain colour is the ground (the empty media box would cover it). */
+		.card:not(.has-media) > :global(.media) {
 			display: none;
+		}
+		.wm {
+			display: block;
+			position: absolute;
+			top: -1.75rem;
+			right: -1.75rem;
+			z-index: -1;
+			color: #ffffff;
+			opacity: 0.15;
+			pointer-events: none;
 		}
 		.body {
-			/* Light-on-dark in both themes: the gradient is dark whatever the theme. Values mirror OVERLAY in src/lib/overlay.ts (tested for contrast). */
 			--text: #ffffff;
-			--muted: #d0d7de;
-			--accent: #79c0ff;
-			--border: rgb(255 255 255 / 0.35);
-			position: relative;
+			--muted: #d6d1c6;
 			flex: none;
-			gap: 0.35rem;
-			padding: 2.5rem 1rem 1rem;
-			border-radius: 0 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px);
-			background: linear-gradient(
-				to bottom,
-				transparent,
-				rgb(0 0 0 / 0.75) 2.5rem,
-				rgb(0 0 0 / 0.85)
-			);
-			color: var(--text);
-			/* Keeps text crisp where a bright image shows through the translucent gradient. */
-			text-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
+			gap: 0.5rem;
 		}
-		h3 {
-			font-size: 1.2rem;
-		}
-		.desc {
-			flex: none;
-			display: -webkit-box;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 2;
-			line-clamp: 2;
-			overflow: hidden;
-		}
-		.footer {
-			margin-top: 0.25rem;
-		}
-		/* M9: restore the M8 phone card look the desktop base no longer gives. */
-		.card {
-			gap: 0;
-			border: 1px solid var(--border);
-			border-radius: var(--radius);
-			background: var(--surface);
+		.meta {
+			gap: 0.25rem 0.625rem;
+			font-size: 0.8125rem;
+			color: #d6d1c6;
 		}
 		.dom {
-			display: none;
+			font-weight: 600;
+			color: #ffa58c;
+		}
+		.dom :global(svg) {
+			width: 1rem;
+			height: 1rem;
+		}
+		h3 {
+			font-size: 1.4375rem;
+			letter-spacing: -0.02em;
+			color: #ffffff;
+		}
+		.title {
+			background: none;
+		}
+		.award {
+			align-items: flex-start;
+			font-size: 0.875rem;
+			line-height: 1.35;
+			color: #ffb59f;
+		}
+		.award :global(svg) {
+			flex: none;
 		}
 		.desc {
-			font-size: inherit;
-			color: var(--muted);
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 3;
+			line-clamp: 3;
+			overflow: hidden;
+			font-size: 0.9375rem;
+			line-height: 1.5;
+			color: #ece8df;
 		}
 		.footer {
+			flex-wrap: wrap;
 			align-items: center;
+			gap: 0.375rem;
 			min-height: 0;
-			padding-top: 0;
-			border-top: 0;
+			margin-top: 0.125rem;
+			padding-top: 0.375rem;
+			border-top: 1px solid rgb(255 255 255 / 0.2);
 		}
 		.footer > :global(ul) {
 			padding-top: 0;
 		}
-		.title {
-			background: none;
+		.footer :global(li) {
+			background: rgb(255 255 255 / 0.16);
+			color: #f3f0e8;
+		}
+		.footer :global(a) {
+			font-weight: 700;
+			color: #ffffff;
+		}
+		.footer :global(.private) {
+			font-size: 0.8125rem;
+			color: #d6d1c6;
 		}
 	}
 
