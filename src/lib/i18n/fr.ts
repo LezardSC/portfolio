@@ -14,7 +14,10 @@ export const fr: Dict = {
 		cv: 'Voir le CV',
 		malt: 'Profil Malt',
 		maltShort: 'Malt',
-		glance: 'En bref'
+		glance: 'En bref',
+		glanceTally: '{wins}, {podiums}',
+		glanceWins: { one: '{n} victoire', other: '{n} victoires' },
+		glancePodiums: { one: '{n} podium', other: '{n} podiums' }
 	},
 	about: {
 		photoAlt: 'Photo de Jocelyn Renault'

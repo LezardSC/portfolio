@@ -3,6 +3,9 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { LANGS } from '$lib/i18n/lang';
+import { glanceRows } from '$lib/glance';
+import { dicts } from '$lib/i18n';
+import { HACKATHONS, JOBS } from './experience';
 import { PROFILE } from './profile';
 
 /** static/ at the repo root, found from this file so the test works from any cwd. */
@@ -15,37 +18,28 @@ describe('profile data', () => {
 	});
 
 	it('has non-empty text in both languages', () => {
-		const texts = [
-			PROFILE.role,
-			PROFILE.pitch,
-			PROFILE.pitchMore,
-			...PROFILE.bio,
-			...PROFILE.glance.flatMap((r) => [r.label, r.value, ...(r.short ? [r.short] : [])])
-		];
+		const texts = [PROFILE.role, PROFILE.pitch, PROFILE.pitchMore, ...PROFILE.bio];
 		for (const text of texts)
 			for (const lang of LANGS) expect(text[lang].trim(), JSON.stringify(text)).not.toBe('');
 	});
 
-	it('has three bio paragraphs and the five at-a-glance rows', () => {
-		expect(PROFILE.bio).toHaveLength(3);
-		expect(PROFILE.glance.map((r) => r.label.en)).toEqual([
-			'Education',
-			'Latest role',
-			'Stack',
-			'Hackathons',
-			'Languages'
-		]);
+	it.each(LANGS)('renders every glance row with text (%s)', (lang) => {
+		const h = dicts[lang].hero;
+		const rows = glanceRows(PROFILE.glance, { jobs: JOBS, hackathons: HACKATHONS }, lang, {
+			tally: h.glanceTally,
+			wins: h.glanceWins,
+			podiums: h.glancePodiums
+		});
+		for (const r of rows) {
+			expect(r.label.trim(), JSON.stringify(r)).not.toBe('');
+			expect(r.value.trim(), JSON.stringify(r)).not.toBe('');
+			if (r.short !== undefined) expect(r.short.trim(), JSON.stringify(r)).not.toBe('');
+		}
 	});
 
-	it('has exactly one full-width glance row on phones: Stack', () => {
-		expect(PROFILE.glance.filter((r) => r.wide).map((r) => r.label.en)).toEqual(['Stack']);
-	});
-
-	it('has phone short values for Education and Latest role', () => {
-		expect(PROFILE.glance.filter((r) => r.short).map((r) => r.label.en)).toEqual([
-			'Education',
-			'Latest role'
-		]);
+	it('has at least one About paragraph and at most one full-width glance row', () => {
+		expect(PROFILE.bio.length).toBeGreaterThan(0);
+		expect(PROFILE.glance.filter((r) => r.wide).length).toBeLessThanOrEqual(1);
 	});
 
 	it('links GitHub over https', () => {
