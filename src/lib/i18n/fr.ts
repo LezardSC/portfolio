@@ -103,6 +103,7 @@ export const fr: Dict = {
 		maltTitle: 'Vous passez par Malt\u00a0?',
 		maltText:
 			'Mon profil, mes recommandations et la prise de contact pour une mission sont aussi sur Malt.',
+		maltShort: 'Profil, recommandations et contact pour une mission.',
 		maltCta: 'Voir mon profil Malt'
 	},
 	footer: {
