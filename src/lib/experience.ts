@@ -17,6 +17,10 @@ export type Quote = {
 export type Job = {
 	company: string;
 	role: Localized;
+	/** Shorter role for the hero's "Latest role" (defaults to `role`). */
+	roleShort?: Localized;
+	/** Shorter company name for the hero's "Latest role" (defaults to `company`). */
+	companyShort?: string;
 	start: Month;
 	/** No end = ongoing, shown as "Present". */
 	end?: Month;

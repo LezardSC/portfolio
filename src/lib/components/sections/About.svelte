@@ -42,7 +42,7 @@
 					<p>{paragraph[lang]}</p>
 				{/each}
 			</div>
-			{#if ready}
+			{#if ready && rest.length > 0}
 				<button
 					type="button"
 					class="read-more"

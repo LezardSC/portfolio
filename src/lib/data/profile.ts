@@ -1,17 +1,8 @@
+import type { GlanceEntry } from '$lib/glance';
 import type { Lang, Localized } from '$lib/i18n/lang';
 import { typeset } from '$lib/i18n/typography';
 
 // French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
-
-/** One row of the hero's "At a glance" card. */
-export type GlanceRow = {
-	label: Localized;
-	value: Localized;
-	/** Shorter value for the phone tiles. */
-	short?: Localized;
-	/** Full-width tile on phones. */
-	wide?: true;
-};
 
 export type Profile = {
 	name: string;
@@ -21,7 +12,8 @@ export type Profile = {
 	pitchMore: Localized;
 	/** About paragraphs, in order. */
 	bio: Localized[];
-	glance: GlanceRow[];
+	/** Hero "At a glance" rows, in order: hand-written, or { auto } computed from the data. */
+	glance: GlanceEntry[];
 	email: string;
 	linkedin: string;
 	github: string;
@@ -70,23 +62,13 @@ export const PROFILE: Profile = typeset({
 			},
 			short: { en: '42 Lyon · RNCP 7', fr: '42 Lyon · RNCP 7' }
 		},
-		{
-			label: { en: 'Latest role', fr: 'Dernier poste' },
-			value: {
-				en: 'ML & Computer Vision developer — Sogeti (Capgemini)',
-				fr: 'Développeur ML & IA Vision — Sogeti (Capgemini)'
-			},
-			short: { en: 'Sogeti (Capgemini)', fr: 'Sogeti (Capgemini)' }
-		},
+		{ label: { en: 'Latest role', fr: 'Dernier poste' }, auto: 'latestRole' },
 		{
 			label: { en: 'Stack', fr: 'Stack' },
 			value: { en: 'Python, Rust, C, Node.js, Docker', fr: 'Python, Rust, C, Node.js, Docker' },
 			wide: true
 		},
-		{
-			label: { en: 'Hackathons', fr: 'Hackathons' },
-			value: { en: '2 wins, 5 podiums', fr: '2 victoires, 5 podiums' }
-		},
+		{ label: { en: 'Hackathons', fr: 'Hackathons' }, auto: 'hackathons' },
 		{
 			label: { en: 'Languages', fr: 'Langues' },
 			value: { en: 'French, English', fr: 'Français, anglais' }
