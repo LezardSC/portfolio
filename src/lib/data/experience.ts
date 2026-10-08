@@ -1,10 +1,12 @@
 import type { Education, Hackathon, Job } from '$lib/experience';
 import { typeset } from '$lib/i18n/typography';
 
-// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’
+// (docs/content-guide.md). Always give typeset its type, typeset<X[]>(…): it keeps TypeScript's check
+// of misspelled field names.
 
 /** Work experience. Order here doesn't matter: the page sorts newest first. */
-export const JOBS: Job[] = typeset([
+export const JOBS = typeset<Job[]>([
 	{
 		company: 'Sogeti, part of Capgemini',
 		role: {
@@ -71,7 +73,7 @@ export const JOBS: Job[] = typeset([
 ]);
 
 /** Education. Order here doesn't matter: the page sorts newest first. */
-export const EDUCATION: Education[] = typeset([
+export const EDUCATION = typeset<Education[]>([
 	{
 		school: '42 Lyon',
 		title: { en: 'Expert in computer architecture', fr: 'Expert en architecture informatique' },
@@ -101,7 +103,7 @@ export const EDUCATION: Education[] = typeset([
 ]);
 
 /** Hackathon results. Order here doesn't matter: the page sorts newest first. */
-export const HACKATHONS: Hackathon[] = typeset([
+export const HACKATHONS = typeset<Hackathon[]>([
 	{ medal: 1, event: 'Paris Blockchain Week', date: '2024-04', project: 'KAYP' },
 	{ medal: 1, event: 'H-W3B Paris', date: '2024-03', project: 'KAYP' },
 	{ medal: 2, event: 'H-W3B Super Finale', date: '2024-11', project: 'KAYP' },

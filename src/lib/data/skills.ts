@@ -32,10 +32,12 @@ import { ICONS } from './icons';
 import { CHAT, CPU, DATABASE, HARDHAT, NEURAL_NET } from './skill-icons';
 import { typeset } from '$lib/i18n/typography';
 
-// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’
+// (docs/content-guide.md). Always give typeset its type, typeset<X[]>(…): it keeps TypeScript's check
+// of misspelled field names.
 
 /** Group and chip order is display order. Each skill belongs to exactly one group. */
-export const SKILL_GROUPS: SkillGroup[] = typeset([
+export const SKILL_GROUPS = typeset<SkillGroup[]>([
 	{
 		id: 'backend',
 		icon: ICONS.server,
