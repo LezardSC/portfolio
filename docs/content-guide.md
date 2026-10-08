@@ -7,7 +7,7 @@ Each recipe gives the file, a snippet to copy, and what to check.
 
 | File | What it holds |
 |---|---|
-| `src/lib/data/projects.ts` | Every project, the **FEATURED** list (Highlights order) |
+| `src/lib/data/projects.ts` | Every project, and the **PRIORITY** list (which come first) |
 | `src/lib/data/categories.ts` | Project **domains** (Web, AI…) and **contexts** (School, Hackathon…): label, colour, icon |
 | `src/lib/data/skills.ts` | Skill groups and the skills in them |
 | `src/lib/data/skill-icons.ts` | Hand-made skill logos (when simple-icons has none) |
@@ -60,29 +60,29 @@ All in `src/lib/data/projects.ts`, inside `ALL_PROJECTS`. The order of entries d
 
 ### Add a project
 
-Copy the block above into `ALL_PROJECTS`, fill it in, delete the optional lines you don't need. It appears under "More projects" unless you add its id to `FEATURED`.
+Copy the block above into `ALL_PROJECTS`, fill it in, delete the optional lines you don't need. It is placed by date among the projects that aren't in `PRIORITY`; add its id there to move it up.
 
 ### Remove a project
 
-Delete its entry. If its id is in `FEATURED`, delete it there too (a test reminds you).
+Delete its entry. If its id is in `PRIORITY`, delete it there too (a test reminds you).
 
 ### Hide a project (and bring it back later)
 
-Add `hidden: true,` to the entry. Delete the line to show it again. A hidden project can't be in `FEATURED`.
+Add `hidden: true,` to the entry. Delete the line to show it again. A hidden project can't be in `PRIORITY`.
 
-### Choose and order the highlighted projects
+### Choose which projects come first
 
 At the top of `projects.ts`:
 
 ```ts
-export const FEATURED: string[] = [
+export const PRIORITY: string[] = [
 	'kayp-pbw-2024',
 	'microcode',
 	// …
 ];
 ```
 
-In the default "Highlights" sort, these come first in this order, then every other project newest first. The **first 6** of the sorted list get the big cards (with image or video), the rest get small cards. To reorder, move a line. A typo in an id makes `npm test` fail with `"the-id": no project has this id`.
+In the default "Relevance" sort, these come first in this order, then every other project newest first. It's an order, not a category: the list can be as long as you like. The **first 6 of whatever is displayed** get the big cards (with image or video) and the rest small cards, so with 9 priority projects the last 3 lead the small cards, and filtering on School gives big cards to the 6 best-ranked school projects. To reorder, move a line. A typo in an id makes `npm test` fail with `"the-id": no project has this id`.
 
 ### Add a live demo link
 
@@ -340,7 +340,7 @@ From the repo root:
    - `"projects/x/cover.webp": missing from static/`: wrong path or file name (case included).
    - `my-project en: short enough for a tile`: the summary is over 100 characters.
    - `my-project fr: one sentence ending with a full stop`: the summary needs exactly one sentence, ending with `.`.
-   - `"the-id": no project has this id` / `is hidden`: fix `FEATURED`.
+   - `"the-id": no project has this id` / `is hidden`: fix `PRIORITY`.
    - `light label` / `dark body` / `desc` … `expected … to be greater than or equal to 4.5`: a domain colour is too light; darken it.
    - `export const X: … = typeset(`: write `typeset<Type>(…)` instead (it keeps the check of misspelled field names).
 3. `npm run check`: catches typos in field names (`hiden: true` → "Did you mean to write 'hidden'?") and in category keys.

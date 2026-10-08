@@ -82,14 +82,14 @@ describe('sortProjects', () => {
 	it('newest: date descending', () => {
 		expect(ids(sortProjects(list, 'newest'))).toEqual(['c', 'e', 'd', 'b', 'a']);
 	});
-	it('featured: the FEATURED order first, then the rest newest first', () => {
-		expect(ids(sortProjects(list, 'featured', ['c', 'b']))).toEqual(['c', 'b', 'e', 'd', 'a']);
+	it('priority: the PRIORITY ids first, in order, then the rest newest first', () => {
+		expect(ids(sortProjects(list, 'priority', ['c', 'b']))).toEqual(['c', 'b', 'e', 'd', 'a']);
 	});
-	it('featured: ignores ids that are not in the list', () => {
-		expect(ids(sortProjects(list, 'featured', ['zzz', 'b']))).toEqual(['b', 'c', 'e', 'd', 'a']);
+	it('priority: ignores ids that are not in the list', () => {
+		expect(ids(sortProjects(list, 'priority', ['zzz', 'b']))).toEqual(['b', 'c', 'e', 'd', 'a']);
 	});
-	it('featured with no list is newest first', () => {
-		expect(ids(sortProjects(list, 'featured'))).toEqual(ids(sortProjects(list, 'newest')));
+	it('priority with no list is newest first', () => {
+		expect(ids(sortProjects(list, 'priority'))).toEqual(ids(sortProjects(list, 'newest')));
 	});
 	it('breaks date ties deterministically by id', () => {
 		const tied = [
@@ -97,7 +97,7 @@ describe('sortProjects', () => {
 			make({ id: 'y', date: '2024-01' }),
 			make({ id: 'x', date: '2023-01' })
 		];
-		expect(ids(sortProjects(tied, 'featured', []))).toEqual(['y', 'z', 'x']);
+		expect(ids(sortProjects(tied, 'priority', []))).toEqual(['y', 'z', 'x']);
 		expect(ids(sortProjects(tied, 'newest'))).toEqual(['y', 'z', 'x']);
 	});
 	it('does not mutate its input', () => {
