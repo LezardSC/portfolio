@@ -21,7 +21,7 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - SvelteKit config lives **inside `vite.config.ts`** (`sveltekit({ ... })`). There is no `svelte.config.js`; don't create one.
 - Everything is prerendered: `prerender = true` and `trailingSlash = 'always'` in `src/routes/+layout.ts`. No server or backend.
 - Locales are exactly `en` and `fr`, in `src/lib/i18n/lang.ts`. That file must not import the dictionaries.
-- UI text lives only in `src/lib/i18n/en.ts` and `fr.ts`. `fr` is typed `Dict` (= `typeof en`), so every key must exist in both files.
+- UI text (buttons, headings, labels) lives only in `src/lib/i18n/en.ts` and `fr.ts`. `fr` is typed `Dict` (= `typeof en`), so every key must exist in both files. Category labels (project domains and contexts, skill groups) are content: they live with their entry in `src/lib/data/`.
 - Build locale URLs with `localeHref(base, lang)` and `base` from `$app/paths`. Never hardcode `/en/`, because the site must work under a sub-path.
 - Theme: `data-theme` on `<html>` is set by the inline script in `src/app.html`, which duplicates `resolveTheme` in `src/lib/theme.ts` on purpose. Keep the two in sync.
 - Content (projects, skills, experience) goes in typed data files in `src/lib/data/`, with `{ en, fr }` text fields. Components only render it.

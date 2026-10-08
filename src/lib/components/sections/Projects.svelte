@@ -52,7 +52,7 @@
 </script>
 
 <Section id="projects" {title} {lead}>
-	<ProjectFilters projects={PROJECTS} bind:filters bind:sort {t} />
+	<ProjectFilters projects={PROJECTS} bind:filters bind:sort {lang} {t} />
 
 	{#if tiers.large.length === 0}
 		<div class="empty">

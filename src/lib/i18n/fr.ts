@@ -45,19 +45,6 @@ export const fr: Dict = {
 		contextLabel: 'Contexte',
 		domainLabel: 'Domaine',
 		all: 'Tous',
-		contexts: {
-			professional: 'Professionnel',
-			personal: 'Personnel',
-			school: 'École',
-			hackathon: 'Hackathon'
-		},
-		domains: {
-			web: 'Web',
-			blockchain: 'Blockchain',
-			ai: 'IA',
-			'low-level': 'Bas niveau',
-			games: 'Jeux'
-		},
 		sortLabel: 'Trier par',
 		sort: { featured: 'Incontournables', newest: 'Plus récents' },
 		empty: 'Aucun projet ne correspond à ces filtres.',
