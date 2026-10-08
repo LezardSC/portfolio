@@ -581,6 +581,75 @@ Min-height 76px, padding 0 20px, flex with wrap, gap 12px: "© {year} Jocelyn Re
 - **Manual (review guide):** real-phone feel (touch targets, sticky header, select pickers); featured-card text contrast over real photos once they exist (axe can't measure text over images).
 - **Review guide:** `docs/reviews/milestone-10-review-guide.md`.
 
+## Milestone 11 — Content-ready refactor
+_Settled during Milestone 11 brainstorming (2026-10-08)._
+
+**Goal.** Before deployment, Jocelyn rewrites the content: picks the projects worth showing (not everything on GitHub), records videos, makes phone images, rewrites descriptions and the About in their own words. This milestone makes every such edit **as convenient as possible, now and later**: each kind of change touches one place, mistakes are caught by the type checker or by a test whose message names the project and field, and a guide explains every edit. **No visible change:** the site renders exactly as before.
+
+**Decisions.** Content stays in typed TypeScript data files (Markdown files and a CMS were considered and rejected: a loader and validation layer for little gain at this size). Phone images are optional per project, falling back to the poster. Media files are prepared by hand with ffmpeg commands given in the guide (no helper script). Writing the actual content is out of scope (Jocelyn's next step).
+
+### Categories: one entry each
+New `src/lib/data/categories.ts`. A project domain or context is **one entry holding everything about it**; key order is display order (filters):
+
+```ts
+export const DOMAINS = {
+	web: { label: { en: 'Web', fr: 'Web' }, color: '#5b3fa0', icon: ICONS.code },
+	blockchain: { label: { en: 'Blockchain', fr: 'Blockchain' }, color: '#24408e', icon: ICONS.cube },
+	ai: { label: { en: 'AI', fr: 'IA' }, color: '#0b6e6e', icon: ICONS.sparkles },
+	'low-level': { label: { en: 'Low-level', fr: 'Bas niveau' }, color: '#c2391b', icon: ICONS.chip },
+	games: { label: { en: 'Games', fr: 'Jeux' }, color: '#7a2e5e', icon: ICONS.gamepad }
+} satisfies Record<string, DomainDef>;
+export type Domain = keyof typeof DOMAINS;
+
+export const CONTEXTS = {
+	professional: { label: { en: 'Professional', fr: 'Professionnel' } },
+	/* personal, school, hackathon */
+} satisfies Record<string, ContextDef>;
+export type Context = keyof typeof CONTEXTS;
+```
+
+(Labels are today's dictionary values, copied exactly.)
+
+- `Domain` and `Context` stay literal unions, so a project's `domains` / `context` keep autocomplete and type errors.
+- **Icons:** the stroke icons of domains and skill groups become plain SVG path strings (24×24 viewBox, stroke-drawn) in `src/lib/data/icons.ts`, named by shape (`code`, `cube`, `sparkles`, `chip`, `gamepad`, `server`, `cycle`). Shapes made of `rect`/`circle` elements today are converted to equivalent path data; the rendered icons must look the same. `DomainIcon.svelte` and `SkillGroupIcon.svelte` are replaced by one generic `Icon.svelte` (`path`, `size`, `stroke` width props). A new category picks an existing icon or pastes a 24×24 stroke path (e.g. from Lucide, which uses the same viewBox and style).
+- **Labels move out of the dictionaries:** `projects.contexts` and `projects.domains` leave `en.ts` / `fr.ts`; components read `DOMAINS[d].label[lang]` / `CONTEXTS[c].label[lang]`. CLAUDE.md's convention is updated: UI strings live in the dictionaries, **category labels are content** and live with their category.
+- **Colours:** `DOMAIN_COLOR` is removed (the colour lives in the entry). The M8 desktop gradient placeholder (`HUE` table in `ProjectMedia.svelte`) derives from the main domain's colour instead of a separate hue table; the placeholder must keep a white title readable (the domain colours are all dark enough; the AA test below covers it).
+- **Skill groups** get an `icon` field (a path from `icons.ts`). The `SkillGroupId` union, the icon branches of `SkillGroupIcon.svelte` and the test pinning the six-group order are removed; group `id` becomes a plain string (unique, kebab-case, tested), array order stays display order. Adding a group = one entry in `SKILL_GROUPS`.
+- **Filters show only categories that have at least one visible project**, in category order (pure tested helper `usedCategories`). So removing projects never leaves an empty filter option, and a new category appears once a project uses it. The data tests "at least one project in every context" and "at least one private project" are removed (they constrained content, not integrity).
+
+### Projects
+- **Featured order is a list** at the top of `src/lib/data/projects.ts`: `export const FEATURED: string[] = ['kayp-pbw-2024', 'kayp-h-web3-paris', 'ft-transcendence', 'microcode', 'bahapad', 'goldeneye-data-augmentation'];` (today's order). Reordering = moving a line. The `featured?: number` field is removed; the "Highlights" sort ranks by position in `FEATURED`, then newest (unchanged otherwise). Test: every id in `FEATURED` exists, is not hidden, and appears once.
+- **`hidden?: true`** takes a project off the site while keeping its text in the file. Hidden projects are filtered out once, at the data boundary (`visibleProjects`), so nothing downstream (counts, lead "{total} projects", filters, tiers) sees them. Data checks still run on hidden projects.
+- **Media:** `{ kind: 'image'; src; phone? }` | `{ kind: 'video'; src; poster; phone? }`. On phones (`width < 48rem`) the featured card's blurred background uses `phone` when present, else the image or poster (unchanged when absent). Implemented with `<picture>` + `<source media="(width < 48rem)">` so only one image is downloaded and the prerendered HTML is right before hydration. `mediaFiles` / `mediaIssues` include `phone` (same format, relative-path and exact-case existence checks).
+- Unchanged: `summary` (one sentence, ≤ 100 chars), `links.repo` / `links.demo`, `award`, main domain = `domains[0]`.
+
+### Experience and hero "At a glance"
+- `PROFILE.glance` rows stay editable in order, but two rows can be **derived** instead of typed: `{ auto: 'latestRole' }` and `{ auto: 'hackathons' }`.
+  - `latestRole`: the newest job (`newestFirst(JOBS)[0]`); value = `"{roleShort ?? role} — {companyShort ?? company}"`, phone `short` = `companyShort ?? company`. New optional `Job` fields `roleShort?: Localized` and `companyShort?: string`; the Sogeti job gets `roleShort` "ML & Computer Vision developer" / "Développeur ML & IA Vision" and `companyShort` "Sogeti (Capgemini)", so the text is identical to today.
+  - `hackathons`: counted from `HACKATHONS` (wins = medal 1, podiums = all), with dictionary templates and one/other forms: EN "{wins} wins, {podiums} podiums", FR "{wins} victoires, {podiums} podiums" → "2 wins, 5 podiums" today. The "Hackathons — {n} podiums" heading already counts.
+  - One pure tested function `glanceRows(profile, jobs, hackathons, lang, t)` returns `{ label, value, short?, wide? }` rows; `Hero.svelte` only renders them.
+- Jobs, education, certificates and hackathons are otherwise unchanged (already one entry each, sorted by the page).
+
+### French typography applied automatically
+Content can be written with plain spaces and straight apostrophes (Prettier switches a string containing `'` to double quotes, so no escaping is needed). A pure tested `typesetFrench(text)` turns a plain space before `: ; ! ? % »` and after `«` into U+00A0 and `'` into `’`; it never touches `://` or `12:30` (no space). A deep helper `typeset(data)` applies it to every string under an `fr` key; each data file wraps its export (`export const PROJECTS = typeset([...])`, same for skills, experience, profile, categories). The dictionaries `fr.ts` are already correct and not wrapped. The existing typography tests keep running on the exported data as a safety net. English text is left as written.
+
+### The editing guide
+`docs/content-guide.md`, linked from `README.md` (and from CLAUDE.md). One recipe per edit, each with the file, a copy-paste snippet and what to check:
+- Projects: add, remove, hide, reorder the featured list; write the long description and the one-sentence summary; add a demo or repo link; mark an award; choose the main domain.
+- Media: add an image; add a video + poster; add a phone image. **ffmpeg commands** to copy: compress a screen recording to a muted web mp4 (H.264, ~1280px wide, no audio, `+faststart`, target a few MB), extract a poster frame at a chosen second as `.webp`/`.jpg`, crop/resize a phone image. Recommended sizes and weights, file naming (`static/projects/<id>/…`), install note (`brew install ffmpeg` on the Mac).
+- Categories: add/rename/remove a domain (label, colour + the contrast rule, icon) or a context.
+- Skills: add a skill (finding its logo in simple-icons, or a custom path in `skill-icons.ts`), add/reorder a skill group.
+- Experience: add a job (incl. `roleShort` / `companyShort`, recommendation quote), a school or certificate, a hackathon result.
+- Profile: edit pitch, About paragraphs (the first one is what phones show before "Read more"), glance rows, availability pill, links; replace the CV PDFs and the photo.
+- UI text: where button labels and headings live (`en.ts` / `fr.ts`, same keys in both).
+- "Check your edit": `npm test` (what a red test means), `npm run check`, `npm run dev`, and `npm run audit` before a release.
+
+### Tests and verification
+- **Unit:** `typesetFrench` / `typeset`; `usedCategories`; `visibleProjects`; featured ranking by `FEATURED`; `glanceRows` (derived latest role and counts, one/other forms, hand-written rows untouched); media with `phone` in `mediaFiles` / `mediaIssues`; category data: unique keys, non-empty EN/FR labels, well-formed icon paths, 6-digit colours, **tile label contrast ≥ 4.5:1 in both themes for every domain** (existing check, now over `DOMAINS`); skill group ids unique and kebab-case; i18n completeness after the key moves.
+- `npm run check`, `npm test`, `npm run lint` clean; `npm run build` OK; `npm run audit`: 0 axe violations, Lighthouse as in M10.
+- **No visible change:** Playwright full-page screenshots of `/en/` and `/fr/` at 360px and 1280px, both themes, taken on `master` before the work and on the branch after, compared pixel by pixel; any difference is explained in the review guide or fixed. Plus one check with an injected test phone image (from `tmp/`, never committed) showing phones use it and desktop doesn't.
+- **Review guide:** `docs/reviews/milestone-11-review-guide.md`, including a walk-through of the content guide (try one recipe).
+
 ## Testing
 - Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
 - `svelte-check` clean.
@@ -597,7 +666,8 @@ Min-height 76px, padding 0 20px, flex with wrap, gap 12px: "© {year} Jocelyn Re
 8. **Layout & media** — compact phone layout (overlay project cards, compact rows, scrollable filters, tighter sections and skill chips, clamped quotes), video and poster media, desktop card hover.
 9. **Desktop design** — the new visual identity from the Claude Design canvas on desktop, both themes (see "Milestone 9 — Desktop design"): tokens and font, numbered section grid, hero with the at-a-glance card, restyled projects, skills as tabs, experience, contact with email and Malt blocks, favicon, OG images, per-locale meta, scroll reveal.
 10. **Phone design** — the same pass for phones, once the desktop version is settled (see "Milestone 10 — Phone design"): sticky header with a Contact button (no burger), compact hero tiles, folded About, blurred-photo featured cards, domain-tinted project tiles with one-sentence summaries, skills accordion, collapsed recommendations, compact contact.
-11. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
+11. **Content-ready refactor** — see "Milestone 11 — Content-ready refactor": each category (domain, context, skill group) defined in one entry, featured list, hidden projects, optional phone images, derived glance rows, automatic French typography, editing guide `docs/content-guide.md`. No visible change.
+12. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
 
 ## Next steps after approval
 1. `git init` in `/home/lezard/portfolio`, save this spec to `docs/superpowers/specs/2026-09-23-portfolio-design.md`, commit.
