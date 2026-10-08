@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { DOMAIN_TILE } from './projects';
 
 const css = readFileSync(resolve(fileURLToPath(new URL('../app.css', import.meta.url))), 'utf8');
 
@@ -35,10 +36,23 @@ const THEMED = [
 	'--ok-ring',
 	'--footer-bg',
 	'--footer-text',
-	'--malt-tile'
+	'--malt-tile',
+	'--tile-base',
+	'--tile-pct',
+	'--tile-fg'
 ];
 
 describe('theme tokens in src/app.css', () => {
+	it('has the phone tile values of DOMAIN_TILE', () => {
+		const pct = (n: number) => `${Math.round(n * 100)}%`;
+		expect(light.get('--tile-base')).toBe(DOMAIN_TILE.light.base);
+		expect(light.get('--tile-pct')).toBe(pct(DOMAIN_TILE.light.pct));
+		expect(light.get('--tile-fg')).toBe(pct(DOMAIN_TILE.light.fg));
+		expect(dark.get('--tile-base')).toBe(DOMAIN_TILE.dark.base);
+		expect(dark.get('--tile-pct')).toBe(pct(DOMAIN_TILE.dark.pct));
+		expect(dark.get('--tile-fg')).toBe(pct(DOMAIN_TILE.dark.fg));
+	});
+
 	it.each(THEMED)('%s is set in the dark, light and no-JS light blocks', (name) => {
 		expect(dark.get(name), `dark ${name}`).toBeTruthy();
 		expect(light.get(name), `light ${name}`).toBeTruthy();
