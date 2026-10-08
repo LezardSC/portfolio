@@ -87,8 +87,7 @@ export const fr: Dict = {
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
-		readMore: 'Lire la suite',
-		showLess: 'Réduire',
+		recommendation: 'Recommandation — {name}',
 		results: { 1: 'Vainqueur', 2: '2e place', 3: '3e place' },
 		months: { one: '{n}\u00a0mois', other: '{n}\u00a0mois' },
 		certificate: 'Voir le certificat'

@@ -91,8 +91,7 @@ export const en = {
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
-		readMore: 'Read more',
-		showLess: 'Show less',
+		recommendation: 'Recommendation — {name}',
 		results: { 1: 'Winner', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>,
 		months: { one: '{n} month', other: '{n} months' },
 		certificate: 'View certificate'
