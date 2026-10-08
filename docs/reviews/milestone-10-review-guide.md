@@ -36,6 +36,7 @@ npm ci
 | `feat: phone experience with recommendations behind a button; compact education and hackathons` | Task 7 |
 | `feat: compact phone contact with a one-row Malt card and three equal buttons; phone footer` | Task 8 |
 | `docs: add Milestone 10 review guide; audit opens the phone collapsibles` | Task 9 |
+| `fix: Malt card link named by its visible title on phones` | final review |
 
 ## 1. Automated checks
 
@@ -116,6 +117,7 @@ Taken during the build, each because the board value broke something:
 - [ ] Experience: each "Recommandation — …" button opens its quote.
 - [ ] Contact: "Copier l'adresse" → "Copié !"; tapping anywhere on the Malt card opens Malt; the three buttons are easy to hit.
 - [ ] Rotate to landscape / widen past 768px: the desktop layout comes back with every project and the selected skills tab; nothing is lost.
+- [ ] On an iPhone (Safari): "Réduire", "Réduire la liste" and closing a recommendation don't make the page jump (Safari has no scroll anchoring; I couldn't test WebKit).
 - [ ] Once real photos exist: is the text on the featured cards readable over each photo? (axe can't measure text over an image.)
 
 ## 3. Code review
@@ -127,3 +129,22 @@ Taken during the build, each because the board value broke something:
 - Data: `summary` on every project; `PROFILE.pitch` split into `pitch` + `pitchMore`; glance rows gain `short` / `wide`.
 - Removed: the M7 phone menu (`nav-menu.ts` and its tests, the burger, `menu` key) and the M8 quote clamp (`quoteView`, `ONE_COLUMN_QUERY`, the overflow measuring, `experience.readMore/showLess`; the read-more strings now live in `common`).
 - `scripts/audit.ts`: the menu step is gone; at 360px the audit now opens About, the other projects, a skill group and a recommendation, then runs axe again.
+
+## Final review
+
+An independent reviewer (most capable model) read the whole branch and drove the built site. It found 0 Critical, 0 Important and 5 Minor issues. It confirmed:
+
+- every focus item: no-JS content, crossing 768px with state, French at 360px, filters folding the tiles back, find-in-page in skills;
+- axe 0 violations with every collapsible opened;
+- **desktop pixel-identical to M9** at 1280 and 1440px in both themes and languages (at 768px only Experience is taller, because the quote clamp is gone as the spec asks).
+
+Fixed, with a browser check that failed first and passes now:
+
+- **The Malt card link wasn't named by what it shows on phones** (its name was "Voir mon profil Malt", its visible text "Vous passez par Malt ?"), so a voice-control user saying the visible words couldn't open it. It's now named by the title, then the action: "Vous passez par Malt ? Voir mon profil Malt (s'ouvre dans un nouvel onglet)".
+
+Left for later (minors):
+
+- A shared link that jumps to a text fragment (`#:~:text=Linux`) for a skill outside the open group lands on an empty spot when the page first loads: hydration hides that group after the browser scrolled to it. Same as M9's desktop tabs; Ctrl+F after load works.
+- On phones, Ctrl+F doesn't find folded text in About, the folded project tiles or closed recommendations (only skills use the searchable "until-found" hiding, as the spec asks).
+- Project tile titles are ~21px tall tap targets on phones (the "Code ↗" link next to them is 44px; WCAG passes through spacing).
+- Folding content back on iOS Safari may make the page jump (added to the manual checks above).
