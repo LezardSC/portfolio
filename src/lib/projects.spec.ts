@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
+import { mixHex } from './color';
 import {
 	countFor,
+	DOMAIN_COLOR,
+	DOMAIN_TILE,
+	DOMAINS,
 	filterProjects,
+	hiddenCount,
+	mainDomain,
+	PHONE_OTHERS,
 	mediaIssues,
 	NO_FILTERS,
 	primaryLink,
@@ -10,11 +17,13 @@ import {
 	splitTiers,
 	type Project
 } from './projects';
+import { contrastRatio } from './skills';
 
 function make(p: Partial<Project> & Pick<Project, 'id'>): Project {
 	return {
 		title: p.id,
 		description: { en: 'en', fr: 'fr' },
+		summary: { en: 'en.', fr: 'fr.' },
 		date: '2024-01',
 		context: 'school',
 		domains: ['web'],
@@ -172,5 +181,49 @@ describe('mediaIssues', () => {
 				exists
 			)[0]
 		).toContain('projects/missing.jpg');
+	});
+});
+
+describe('mainDomain', () => {
+	it('is the first domain of the list', () => {
+		const p = { domains: ['blockchain', 'web'] } as Project;
+		expect(mainDomain(p)).toBe('blockchain');
+	});
+});
+
+describe('hiddenCount', () => {
+	it('counts the tiles past the first PHONE_OTHERS', () => {
+		expect(PHONE_OTHERS).toBe(6);
+		expect(hiddenCount(11)).toBe(5);
+		expect(hiddenCount(7)).toBe(1);
+	});
+	it('is 0 when everything fits', () => {
+		expect(hiddenCount(6)).toBe(0);
+		expect(hiddenCount(3)).toBe(0);
+		expect(hiddenCount(0)).toBe(0);
+	});
+	it('takes another number of shown tiles', () => {
+		expect(hiddenCount(4, 2)).toBe(2);
+	});
+});
+
+describe('domain tiles (phone)', () => {
+	// Page text colours per theme (src/app.css).
+	const TEXT = {
+		light: { body: '#2b2a26', muted: '#56534c' },
+		dark: { body: '#d9d5cb', muted: '#a9a498' }
+	};
+	it.each(DOMAINS)('%s has a colour whose tile reads at 4.5:1 in both themes', (d) => {
+		for (const theme of ['light', 'dark'] as const) {
+			const { base, pct, fg } = DOMAIN_TILE[theme];
+			const bg = mixHex(DOMAIN_COLOR[d], base, pct);
+			const label = mixHex(DOMAIN_COLOR[d], '#ffffff', fg);
+			expect(contrastRatio(label, bg), `${theme} label`).toBeGreaterThanOrEqual(4.5);
+			expect(contrastRatio(TEXT[theme].body, bg), `${theme} body`).toBeGreaterThanOrEqual(4.5);
+			expect(contrastRatio(TEXT[theme].muted, bg), `${theme} muted`).toBeGreaterThanOrEqual(4.5);
+		}
+	});
+	it('gives every domain its own colour', () => {
+		expect(new Set(Object.values(DOMAIN_COLOR)).size).toBe(DOMAINS.length);
 	});
 });

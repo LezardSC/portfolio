@@ -18,8 +18,9 @@ describe('profile data', () => {
 		const texts = [
 			PROFILE.role,
 			PROFILE.pitch,
+			PROFILE.pitchMore,
 			...PROFILE.bio,
-			...PROFILE.glance.flatMap((r) => [r.label, r.value])
+			...PROFILE.glance.flatMap((r) => [r.label, r.value, ...(r.short ? [r.short] : [])])
 		];
 		for (const text of texts)
 			for (const lang of LANGS) expect(text[lang].trim(), JSON.stringify(text)).not.toBe('');
@@ -33,6 +34,17 @@ describe('profile data', () => {
 			'Stack',
 			'Hackathons',
 			'Languages'
+		]);
+	});
+
+	it('has exactly one full-width glance row on phones: Stack', () => {
+		expect(PROFILE.glance.filter((r) => r.wide).map((r) => r.label.en)).toEqual(['Stack']);
+	});
+
+	it('has phone short values for Education and Latest role', () => {
+		expect(PROFILE.glance.filter((r) => r.short).map((r) => r.label.en)).toEqual([
+			'Education',
+			'Latest role'
 		]);
 	});
 

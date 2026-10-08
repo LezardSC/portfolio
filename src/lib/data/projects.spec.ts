@@ -49,6 +49,16 @@ describe('project data', () => {
 		for (const id of ids) expect(id, id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
 	});
 
+	it('has a one-sentence summary in both languages', () => {
+		for (const p of PROJECTS)
+			for (const lang of ['en', 'fr'] as const) {
+				const s = p.summary[lang];
+				expect(s.trim(), `${p.id} ${lang}`).not.toBe('');
+				expect(s, `${p.id} ${lang}: one sentence ending with a full stop`).toMatch(/^[^.]+\.$/);
+				expect(s.length, `${p.id} ${lang}: short enough for a tile`).toBeLessThanOrEqual(100);
+			}
+	});
+
 	it('has YYYY-MM dates with a real month', () => {
 		for (const p of PROJECTS) expect(p.date, p.id).toMatch(/^\d{4}-(0[1-9]|1[0-2])$/);
 	});
