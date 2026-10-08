@@ -29,9 +29,12 @@ import {
 } from 'simple-icons';
 import type { SkillGroup } from '$lib/skills';
 import { CHAT, CPU, DATABASE, HARDHAT, NEURAL_NET } from './skill-icons';
+import { typeset } from '$lib/i18n/typography';
+
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
 
 /** Group and chip order is display order. Each skill belongs to exactly one group. */
-export const SKILL_GROUPS: SkillGroup[] = [
+export const SKILL_GROUPS: SkillGroup[] = typeset([
 	{
 		id: 'backend',
 		title: { en: 'Backend', fr: 'Backend' },
@@ -124,4 +127,4 @@ export const SKILL_GROUPS: SkillGroup[] = [
 			{ name: 'Tailwind CSS', icon: siTailwindcss }
 		]
 	}
-];
+]);

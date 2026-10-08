@@ -1,4 +1,7 @@
 import type { Lang, Localized } from '$lib/i18n/lang';
+import { typeset } from '$lib/i18n/typography';
+
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
 
 /** One row of the hero's "At a glance" card. */
 export type GlanceRow = {
@@ -30,7 +33,7 @@ export type Profile = {
 	available: boolean;
 };
 
-export const PROFILE: Profile = {
+export const PROFILE: Profile = typeset({
 	name: 'Jocelyn Renault',
 	role: {
 		en: 'Software Engineer · Backend & Systems',
@@ -96,4 +99,4 @@ export const PROFILE: Profile = {
 	cv: { en: 'cv-en.pdf', fr: 'cv-fr.pdf' },
 	photo: 'photo.jpg',
 	available: false
-};
+});
