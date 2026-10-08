@@ -16,7 +16,9 @@
 			target="_blank"
 			rel="noopener noreferrer"
 			aria-label="{t.repo}: {project.title}"
-			>{compact ? t.code : t.sourceCode} <span aria-hidden="true">↗</span></a
+			>{#if compact}{t.code}{:else}<span class="long">{t.sourceCode}</span><span class="short"
+					>{t.code}</span
+				>{/if} <span aria-hidden="true">↗</span></a
 		>
 	{/if}
 	{#if project.links.demo}
@@ -57,5 +59,16 @@
 		min-height: 2.75rem;
 		font-size: 0.875rem;
 		color: var(--muted);
+	}
+	.short {
+		display: none;
+	}
+	@media (width < 48rem) {
+		.long {
+			display: none;
+		}
+		.short {
+			display: inline;
+		}
 	}
 </style>
