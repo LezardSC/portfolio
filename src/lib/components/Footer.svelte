@@ -45,12 +45,13 @@
 	a:hover {
 		opacity: 0.8;
 	}
-	@media (max-width: 40rem) {
+	/* Phone: name left, back-to-top right; may wrap to two lines at 360px. */
+	@media (width < 48rem) {
 		.inner {
-			flex-direction: column;
-			justify-content: center;
-			padding: 1.5rem 1rem;
-			text-align: center;
+			flex-wrap: wrap;
+			min-height: 4.75rem;
+			padding: 0.5rem 1.25rem;
+			gap: 0 0.75rem;
 		}
 	}
 </style>

@@ -106,6 +106,7 @@ export const en = {
 		maltLabel: 'Freelance',
 		maltTitle: 'Working through Malt?',
 		maltText: 'My profile, recommendations and mission requests are on Malt too.',
+		maltShort: 'Profile, recommendations and mission requests.',
 		maltCta: 'See my Malt profile'
 	},
 	footer: {
