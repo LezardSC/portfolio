@@ -1,7 +1,9 @@
 import { visibleProjects, type Project } from '$lib/projects';
 import { typeset } from '$lib/i18n/typography';
 
-// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’ (docs/content-guide.md).
+// French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’
+// (docs/content-guide.md). Always give typeset its type, typeset<X[]>(…): it keeps TypeScript's check
+// of misspelled field names.
 
 const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
 
@@ -19,7 +21,7 @@ export const FEATURED: string[] = [
 ];
 
 /** Every project, hidden ones included. Order here doesn't matter: the page sorts them. */
-export const ALL_PROJECTS: Project[] = typeset([
+export const ALL_PROJECTS = typeset<Project[]>([
 	{
 		id: 'kayp-pbw-2024',
 		title: 'KAYP',
