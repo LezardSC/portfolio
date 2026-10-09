@@ -20,12 +20,12 @@ export const JOBS = typeset<Job[]>([
 		internship: true,
 		points: [
 			{
-				en: 'Built an automated pipeline to test data augmentations on a Faster R-CNN model detecting marine animals in underwater and aerial images: training, evaluation and results tracking, run in batches on a remote GPU server and resumable after an interruption.',
-				fr: 'Mise en place d’un pipeline automatisé de test d’augmentations de données pour un modèle Faster R-CNN détectant des animaux marins sur des images sous-marines et aériennes : de l’entraînement à l’évaluation et au suivi des résultats, exécuté par lots sur un serveur GPU distant avec reprise après interruption.'
+				en: 'Built an automated pipeline to test data augmentations for a marine-animal detector (Faster R-CNN): training, evaluation and results tracking, on a remote GPU server.',
+				fr: 'Mise en place d’un pipeline automatisé de test d’augmentations de données pour un détecteur d’animaux marins (Faster R-CNN) : entraînement, évaluation et suivi des résultats, sur un serveur GPU distant.'
 			},
 			{
-				en: 'These experiments led to a method that raised the model’s recall on an image domain it was not trained on from 5.4% to 58.3%, without retraining.',
-				fr: 'Ces expériences ont abouti à une méthode qui fait passer le rappel du modèle de 5,4 % à 58,3 % sur un domaine d’images absent de l’entraînement, sans réentraînement.'
+				en: 'These experiments led to a method that raised the aerial-image recall of a model trained on underwater images from 5.4% to 58.3%, without retraining.',
+				fr: 'Ces expériences ont abouti à une méthode qui fait passer de 5,4 % à 58,3 % le rappel sur images aériennes d’un modèle entraîné sur images sous-marines, sans réentraînement.'
 			},
 			{
 				en: 'Co-authored a paper accepted at IEEE ICIP 2026: “Improving Cross-Domain Marine Animal Detection with Class-Agnostic Object Detectors”.',
