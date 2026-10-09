@@ -56,7 +56,7 @@ describe('glanceRows', () => {
 		];
 		expect(row(glanceRows(entries, { jobs, hackathons: [] }, 'en', T), 'Latest role')).toEqual({
 			label: 'Latest role',
-			value: 'ML dev - Sogeti (Capgemini)',
+			value: 'ML dev | Sogeti (Capgemini)',
 			short: 'Sogeti (Capgemini)',
 			wide: false
 		});
@@ -65,7 +65,7 @@ describe('glanceRows', () => {
 	it('falls back to the full role and company, and treats a job with no end as the newest', () => {
 		const jobs = [job('2025-07', '2026-01'), job('2020-01', undefined)];
 		const r = row(glanceRows(entries, { jobs, hackathons: [] }, 'en', T), 'Latest role');
-		expect(r.value).toBe('Role 2020-01 - Co 2020-01');
+		expect(r.value).toBe('Role 2020-01 | Co 2020-01');
 		expect(r.short).toBe('Co 2020-01');
 	});
 
