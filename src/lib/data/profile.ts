@@ -34,12 +34,12 @@ export const PROFILE = typeset<Profile>({
 		fr: 'Ingénieur logiciel · Backend & Systèmes'
 	},
 	pitch: {
-		en: 'I build the invisible part of products: APIs, services, data processing, automation and deployment.',
-		fr: 'Je conçois la partie invisible des produits\u00a0: APIs, services, traitement de données, automatisation et mise en production.'
+		en: 'I build APIs, services and automation tools, from the first line of code to production.',
+		fr: 'Je construis des API, des services et des outils d’automatisation, de la première ligne jusqu’à la mise en production.'
 	},
 	pitchMore: {
-		en: 'My field is backend and low-level — reliability and performance over UI.',
-		fr: 'Mon terrain, c’est le backend et le bas niveau — la fiabilité et la performance plutôt que l’interface.'
+		en: 'What I care about is code that lasts: easy to maintain, fast, and steady in production.',
+		fr: 'Ce qui m’intéresse, c’est le code qui tient dans la durée\u00a0: simple à maintenir, rapide, et qui ne casse pas en production.'
 	},
 	bio: [
 		{
