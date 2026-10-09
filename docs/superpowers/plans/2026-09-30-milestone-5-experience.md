@@ -1,4 +1,4 @@
-# Milestone 5 — Experience & Education Implementation Plan
+# Milestone 5 - Experience & Education Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -594,7 +594,7 @@ Delete the `.sr-only { ... }` rule at the end of the `<style>` block in `src/lib
 		<blockquote>
 			<p>“{job.quote.text[lang]}”</p>
 			<footer>
-				— {job.quote.author}, {job.quote.role[lang]}
+				- {job.quote.author}, {job.quote.role[lang]}
 				{#if job.quote.original !== lang}<span class="note">{t.translated}</span>{/if}
 			</footer>
 		</blockquote>

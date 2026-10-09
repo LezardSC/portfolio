@@ -1,4 +1,4 @@
-# Milestone 11 — Content-ready refactor Implementation Plan
+# Milestone 11 - Content-ready refactor Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** SvelteKit 2 + Svelte 5 runes, adapter-static (prerendered), TypeScript, Vitest, Playwright (screenshots, audit), ffmpeg (only in the guide and for the pixel diff).
 
-**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section **"Milestone 11 — Content-ready refactor"**.
+**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section **"Milestone 11 - Content-ready refactor"**.
 
 ## Global Constraints
 
@@ -223,7 +223,7 @@ Add `import { typeset } from '$lib/i18n/typography';` to each file and wrap the 
 - `src/lib/data/experience.ts`: `JOBS`, `EDUCATION`, `HACKATHONS` each `= typeset([ ... ]);`
 - `src/lib/data/profile.ts`: `export const PROFILE: Profile = typeset({ ... });`
 
-Existing French text is already typeset, so the output is unchanged; the existing typography tests on the data keep passing. Add one line to each file's top doc comment where there is one, or above the export: `/** French text may use plain spaces and ' — typeset() fixes them (see docs/content-guide.md). */`.
+Existing French text is already typeset, so the output is unchanged; the existing typography tests on the data keep passing. Add one line to each file's top doc comment where there is one, or above the export: `/** French text may use plain spaces and ' - typeset() fixes them (see docs/content-guide.md). */`.
 
 - [ ] **Step 6: Full check and commit**
 
@@ -1074,7 +1074,7 @@ describe('glanceRows', () => {
 		];
 		expect(row(glanceRows(entries, { jobs, hackathons: [] }, 'en', T), 'Latest role')).toEqual({
 			label: 'Latest role',
-			value: 'ML dev — Sogeti (Capgemini)',
+			value: 'ML dev - Sogeti (Capgemini)',
 			short: 'Sogeti (Capgemini)',
 			wide: false
 		});
@@ -1083,7 +1083,7 @@ describe('glanceRows', () => {
 	it('falls back to the full role and company, and treats a job with no end as the newest', () => {
 		const jobs = [job('2025-07', '2026-01'), job('2020-01', undefined)];
 		const r = row(glanceRows(entries, { jobs, hackathons: [] }, 'en', T), 'Latest role');
-		expect(r.value).toBe('Role 2020-01 — Co 2020-01');
+		expect(r.value).toBe('Role 2020-01 - Co 2020-01');
 		expect(r.short).toBe('Co 2020-01');
 	});
 
@@ -1128,7 +1128,7 @@ export type GlanceRow = {
 };
 
 /**
- * A row computed from the data: `latestRole` = the newest job ("role — company", short =
+ * A row computed from the data: `latestRole` = the newest job ("role - company", short =
  * company; `roleShort` / `companyShort` win when set), `hackathons` = "2 wins, 5 podiums".
  * Left out when there is no job / no hackathon.
  */
@@ -1162,7 +1162,7 @@ export function glanceRows(
 			if (!job) return [];
 			const company = job.companyShort ?? job.company;
 			const role = (job.roleShort ?? job.role)[lang];
-			return [{ label, value: `${role} — ${company}`, short: company, wide }];
+			return [{ label, value: `${role} - ${company}`, short: company, wide }];
 		}
 		const podiums = data.hackathons.length;
 		if (podiums === 0) return [];
@@ -1304,8 +1304,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 Audience: Jocelyn, editing alone in an editor, months from now. Every recipe = **file**, **copy-paste snippet with today's real field names**, **what to check**. Before writing each recipe, re-read the file it describes so field names and comments match exactly. Required content, in this order:
 
-1. **Intro (5 lines):** everything editable lives in `src/lib/data/` (table: file → what it holds: `projects.ts`, `categories.ts`, `skills.ts`, `skill-icons.ts`, `icons.ts`, `experience.ts`, `profile.ts`) plus `static/` (CV, photo, project media) and `src/lib/i18n/en.ts` / `fr.ts` (UI text only). Text is `{ en: '…', fr: '…' }`. French can be typed naturally: plain spaces before `: ; ! ? %` and straight apostrophes are fixed automatically; if a French string contains `'`, write it in double quotes (`"l'IA"`) — Prettier (`npm run format`) does this for you.
-2. **Projects:** full annotated example entry (every field: `id` kebab-case and stable, `title`, `description` long text for the big cards, `summary` one sentence ≤ 100 chars ending with a full stop for the small tiles, `date` `'YYYY-MM'`, `context`, `domains` main one first, `tech`, `links: { repo?, demo? }` — none = shown as private, `award?`, `media?`, `hidden?`). Recipes: add; remove (delete the entry, and its id from `FEATURED`); hide/unhide; reorder or change the highlighted projects (`FEATURED`, the first 6 visible in "Highlights" order get big cards); add a live demo link; mark an award.
+1. **Intro (5 lines):** everything editable lives in `src/lib/data/` (table: file → what it holds: `projects.ts`, `categories.ts`, `skills.ts`, `skill-icons.ts`, `icons.ts`, `experience.ts`, `profile.ts`) plus `static/` (CV, photo, project media) and `src/lib/i18n/en.ts` / `fr.ts` (UI text only). Text is `{ en: '…', fr: '…' }`. French can be typed naturally: plain spaces before `: ; ! ? %` and straight apostrophes are fixed automatically; if a French string contains `'`, write it in double quotes (`"l'IA"`) - Prettier (`npm run format`) does this for you.
+2. **Projects:** full annotated example entry (every field: `id` kebab-case and stable, `title`, `description` long text for the big cards, `summary` one sentence ≤ 100 chars ending with a full stop for the small tiles, `date` `'YYYY-MM'`, `context`, `domains` main one first, `tech`, `links: { repo?, demo? }` - none = shown as private, `award?`, `media?`, `hidden?`). Recipes: add; remove (delete the entry, and its id from `FEATURED`); hide/unhide; reorder or change the highlighted projects (`FEATURED`, the first 6 visible in "Highlights" order get big cards); add a live demo link; mark an award.
 3. **Media:** formats (desktop 16:9, e.g. 1280×720; video `.mp4`; images `.jpg`/`.png`/`.webp`), folder convention `static/projects/<id>/`, the three `media` shapes (image; video + poster; either + `phone`), how each is shown (desktop video plays muted in view, never on phones or with reduced motion; phones show the phone image, else the poster/image, blurred under the text). ffmpeg, with a note "macOS: `brew install ffmpeg`":
    - compress and trim a recording:
      `ffmpeg -ss 3 -t 20 -i recording.mov -an -vf "scale=1280:-2,fps=30" -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p -movflags +faststart static/projects/<id>/demo.mp4` (explain `-ss` start second, `-t` duration, `-crf` quality 23 better/bigger … 32 smaller; aim ≤ 5 MB);
@@ -1313,18 +1313,18 @@ Audience: Jocelyn, editing alone in an editor, months from now. Every recipe = *
    - 16:9 desktop image from a screenshot: `ffmpeg -i shot.png -vf "crop=iw:iw*9/16,scale=1280:-2" -c:v libwebp -quality 80 static/projects/<id>/cover.webp`;
    - 4:5 phone image (centre crop): `ffmpeg -i shot.png -vf "crop=ih*4/5:ih,scale=800:-2" -c:v libwebp -quality 80 static/projects/<id>/phone.webp`; tip: the text sits at the bottom of the card over a dark veil and blur, so pick an image whose interesting part is in the top half; blur/veil strength are `--blur` / veil variables in `ProjectCardLarge.svelte`.
    - file names are case-sensitive on the server (the test checks exact case).
-4. **Categories** (`categories.ts`): add a domain (key, `label`, `color` — must pass the contrast test; if it fails, darken it; `icon` from `ICONS` or a new one); rename (label only; renaming the key means updating projects); remove (no project may still use it — the type checker lists them); add a context. Filters show a category only when a visible project uses it. Adding a new icon in `icons.ts`: copy a Lucide icon's `d` attributes (lucide.dev, 24×24, stroke), convert `<rect>`/`<circle>` to path data, join.
-5. **Skills** (`skills.ts`): add a skill — find the logo in simple-icons (simpleicons.org, import `siName` from `'simple-icons'`), or add a custom `{ path, hex }` in `skill-icons.ts`; translated names `{ en, fr }`; add/reorder/remove a group (`id`, `icon`, `title`, `description`, `skills`).
+4. **Categories** (`categories.ts`): add a domain (key, `label`, `color` - must pass the contrast test; if it fails, darken it; `icon` from `ICONS` or a new one); rename (label only; renaming the key means updating projects); remove (no project may still use it - the type checker lists them); add a context. Filters show a category only when a visible project uses it. Adding a new icon in `icons.ts`: copy a Lucide icon's `d` attributes (lucide.dev, 24×24, stroke), convert `<rect>`/`<circle>` to path data, join.
+5. **Skills** (`skills.ts`): add a skill - find the logo in simple-icons (simpleicons.org, import `siName` from `'simple-icons'`), or add a custom `{ path, hex }` in `skill-icons.ts`; translated names `{ en, fr }`; add/reorder/remove a group (`id`, `icon`, `title`, `description`, `skills`).
 6. **Experience** (`experience.ts`): add a job (all fields, `end` omitted = "Present", `roleShort`/`companyShort` for the hero, optional recommendation `quote` with `original` language); add a school or certificate (`link` makes the title a link); add a hackathon result (`medal` 1–3, `fullName` tooltip for acronyms, `project`). The hero's "Latest role" and hackathon tally update by themselves.
 7. **Profile** (`profile.ts`): role, pitch (`pitch` first sentence shown on phones, `pitchMore` desktop only), About paragraphs `bio` (phones show the first, then "Read more"), glance rows (hand-written `{ label, value, short?, wide? }` or `{ label, auto }`), `available` pill, links, email. Replace the CV (`static/cv-en.pdf`, `static/cv-fr.pdf`, same names) and the photo (`static/photo.jpg`, portrait 4:5, e.g. 480×600).
 8. **UI text** (`en.ts` / `fr.ts`): same keys in both files (a test checks it); `{name}` placeholders.
-9. **Check your edit:** `npm run format`, `npm test` (a red test names the project/field and what is wrong — list the common messages: missing file in `static/`, summary too long, FEATURED id unknown or hidden, contrast too low), `npm run check` (typos in category names), `npm run dev` to look at it, `npm run audit` before publishing.
+9. **Check your edit:** `npm run format`, `npm test` (a red test names the project/field and what is wrong - list the common messages: missing file in `static/`, summary too long, FEATURED id unknown or hidden, contrast too low), `npm run check` (typos in category names), `npm run dev` to look at it, `npm run audit` before publishing.
 
 - [ ] **Step 2: Link it**
 
 `README.md`, after the commands list: `Editing content (projects, media, skills, experience, About): see [docs/content-guide.md](docs/content-guide.md).` In `CLAUDE.md`, add under "Conventions": `- How to edit each kind of content is documented in \`docs/content-guide.md\`; keep it in sync when a data type or file changes.`
 
-- [ ] **Step 3: Walk-through** — follow two recipes literally on a scratch edit (add a project with a demo link and a new domain "DevOps" with icon `cycle` and colour `#1f5f3a`; then hide it): `npm test`, `npm run check`, `npm run build`, check the filter shows "DevOps" and the card renders. Fix any step of the guide that was wrong or missing. Revert the scratch edit (`git checkout -- src/lib/data/`).
+- [ ] **Step 3: Walk-through** - follow two recipes literally on a scratch edit (add a project with a demo link and a new domain "DevOps" with icon `cycle` and colour `#1f5f3a`; then hide it): `npm test`, `npm run check`, `npm run build`, check the filter shows "DevOps" and the card renders. Fix any step of the guide that was wrong or missing. Revert the scratch edit (`git checkout -- src/lib/data/`).
 
 - [ ] **Step 4: Commit**
 
@@ -1369,7 +1369,7 @@ git worktree remove --force $SP/base
 
 Expected: the 8 `*-360.png` shots identical; the 8 `*-1280.png` shots differ only inside the project-card placeholders (check one diff image with Read). Describe the placeholder change in the review guide (don't commit images).
 
-- [ ] **Step 3: Final review** — dispatch the whole-branch review (subagent-driven: per the skill; native: one reviewer on the most capable model) against the spec section. Fix Critical/Important findings; list deferred minors in the review guide.
+- [ ] **Step 3: Final review** - dispatch the whole-branch review (subagent-driven: per the skill; native: one reviewer on the most capable model) against the spec section. Fix Critical/Important findings; list deferred minors in the review guide.
 
 - [ ] **Step 4: Review guide** `docs/reviews/milestone-11-review-guide.md`: what changed and why (one paragraph per task), the "where do I edit X" table (one line per kind of edit → file), the one visual change (placeholder gradient), verification results (tests count, check, audit summary, pixel comparison), what to try by hand (follow one recipe of the content guide; hide a project; reorder `FEATURED`), deferred minors.
 
@@ -1381,7 +1381,7 @@ git commit -m "docs: Milestone 11 review guide
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 git push origin worktree-milestone-11-content-refactor:milestone-11-content-refactor
-gh pr create --base master --head milestone-11-content-refactor --title "Milestone 11 — Content-ready refactor" --body "<summary, link to the review guide and the content guide>
+gh pr create --base master --head milestone-11-content-refactor --title "Milestone 11 - Content-ready refactor" --body "<summary, link to the review guide and the content guide>
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)"
 ```

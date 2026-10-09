@@ -1,12 +1,12 @@
-# Milestone 3 — Hero + About Implementation Plan
+# Milestone 3 - Hero + About Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the Hero and About placeholders with real content: full name, role, pitch, CTAs (See projects / Download CV / GitHub), optional availability pill, and an About section with a round photo, a 3-paragraph bio and fact chips — in EN and FR.
+**Goal:** Replace the Hero and About placeholders with real content: full name, role, pitch, CTAs (See projects / Download CV / GitHub), optional availability pill, and an About section with a round photo, a 3-paragraph bio and fact chips - in EN and FR.
 
 **Architecture:** Personal content goes in a typed data file `src/lib/data/profile.ts` (`{ en, fr }` fields); UI labels go in the i18n dicts. A pure `assetHref(base, path)` builds sub-path-safe URLs to `static/` files. `Hero.svelte` and `About.svelte` only render; their props are narrowed to the dict slice they use.
 
-**Tech Stack:** SvelteKit + Svelte 5 runes, adapter-static, TypeScript, Vitest, Prettier. `sharp` is used once, from a temp dir, to crop the photo — it is **not** a project dependency.
+**Tech Stack:** SvelteKit + Svelte 5 runes, adapter-static, TypeScript, Vitest, Prettier. `sharp` is used once, from a temp dir, to crop the photo - it is **not** a project dependency.
 
 **Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Hero + About".
 
@@ -225,8 +225,8 @@ export const PROFILE: Profile = {
 		fr: 'Ingénieur logiciel · Backend & Systèmes'
 	},
 	pitch: {
-		en: 'I build the invisible part of products: APIs, services, data processing, automation and deployment. My field is backend and low-level — reliability and performance over UI.',
-		fr: "Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c'est le backend et le bas niveau — la fiabilité et la performance plutôt que l'interface."
+		en: 'I build the invisible part of products: APIs, services, data processing, automation and deployment. My field is backend and low-level - reliability and performance over UI.',
+		fr: "Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c'est le backend et le bas niveau - la fiabilité et la performance plutôt que l'interface."
 	},
 	bio: [
 		{
@@ -234,12 +234,12 @@ export const PROFILE: Profile = {
 			fr: "Je me suis mis à la programmation pour l'argent. J'y suis resté parce que j'ai découvert que j'adore comprendre comment les choses fonctionnent en dessous : la mémoire, les processus, le réseau, la machine elle-même."
 		},
 		{
-			en: 'I trained at 42 Lyon (RNCP 7 — Expert in computer architecture), then worked as a full-stack developer at Y247 Group and as a machine-learning developer at Sogeti (Capgemini), and won several hackathons along the way.',
-			fr: "Je me suis formé à 42 Lyon (RNCP 7 — Expert en architecture informatique), puis j'ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage."
+			en: 'I trained at 42 Lyon (RNCP 7 - Expert in computer architecture), then worked as a full-stack developer at Y247 Group and as a machine-learning developer at Sogeti (Capgemini), and won several hackathons along the way.',
+			fr: "Je me suis formé à 42 Lyon (RNCP 7 - Expert en architecture informatique), puis j'ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage."
 		},
 		{
-			en: 'Today I focus on backend and systems work — APIs, services, Rust, infrastructure — while staying at home with Web3 and AI when a project needs them.',
-			fr: "Aujourd'hui je me concentre sur le backend et les systèmes — APIs, services, Rust, infrastructure — tout en restant à l'aise avec le Web3 et l'IA quand un projet en a besoin."
+			en: 'Today I focus on backend and systems work - APIs, services, Rust, infrastructure - while staying at home with Web3 and AI when a project needs them.',
+			fr: "Aujourd'hui je me concentre sur le backend et les systèmes - APIs, services, Rust, infrastructure - tout en restant à l'aise avec le Web3 et l'IA quand un projet en a besoin."
 		}
 	],
 	facts: [
@@ -320,7 +320,7 @@ git commit -m "feat: add profile content, CVs and cropped photo"
 In `src/lib/i18n/en.ts`, replace the `meta` and `hero` blocks with:
 ```ts
 	meta: {
-		title: 'Jocelyn Renault — Software Engineer',
+		title: 'Jocelyn Renault - Software Engineer',
 		description:
 			'Portfolio of Jocelyn Renault, software engineer from 42 School: backend, systems, web, blockchain and AI projects.'
 	},
@@ -341,7 +341,7 @@ In `src/lib/i18n/en.ts`, replace the `meta` and `hero` blocks with:
 In `src/lib/i18n/fr.ts`, replace the `meta` and `hero` blocks with:
 ```ts
 	meta: {
-		title: 'Jocelyn Renault — Ingénieur logiciel',
+		title: 'Jocelyn Renault - Ingénieur logiciel',
 		description:
 			'Portfolio de Jocelyn Renault, ingénieur logiciel issu de 42 : projets backend, systèmes, web, blockchain et IA.'
 	},
@@ -664,7 +664,7 @@ Expected: success, with `build/en/index.html` and `build/fr/index.html` written.
 
 ```bash
 ls build/cv-en.pdf build/cv-fr.pdf build/photo.jpg
-grep -o 'Jocelyn Renault — Software Engineer' build/en/index.html | head -1
+grep -o 'Jocelyn Renault - Software Engineer' build/en/index.html | head -1
 grep -o 'href="[^"]*cv-en\.pdf"' build/en/index.html
 grep -o 'href="[^"]*cv-fr\.pdf"' build/fr/index.html
 grep -c 'cv-fr\.pdf' build/en/index.html

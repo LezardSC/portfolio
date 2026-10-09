@@ -1,8 +1,8 @@
-# Milestone 11 — Content-ready refactor: review guide
+# Milestone 11 - Content-ready refactor: review guide
 
 **Goal:** every content edit touches one place, mistakes are caught by `npm run check` or by a test that names the project and field, and `docs/content-guide.md` explains every edit. The site looks the same as before.
 
-Spec: `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 11 — Content-ready refactor". Plan: `docs/superpowers/plans/2026-10-08-milestone-11-content-refactor.md`.
+Spec: `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 11 - Content-ready refactor". Plan: `docs/superpowers/plans/2026-10-08-milestone-11-content-refactor.md`.
 
 ## Where do I edit…
 
@@ -51,7 +51,7 @@ The projects lead, the sort label (Relevance / Pertinence) and the removed line 
 
 ## Deferred minors
 
-- The Experience heading "Hackathons — {n} podiums" has no singular or zero form (predates M11).
+- The Experience heading "Hackathons - {n} podiums" has no singular or zero form (predates M11).
 - `typeset()` would turn a non-plain object (`Date`, `Map`) into `{}`; there are none in the data.
 - `typeset()` also touches `fr` file paths (`cv.fr`): a French file name containing `'` would break; keep file names plain.
 - `PRIORITY` is a list of strings rather than a type of known ids; the test gives clear messages instead.

@@ -4,7 +4,7 @@ export const fr: Dict = {
 	meta: {
 		locale: 'fr_FR',
 		altLocale: 'en_US',
-		title: 'Jocelyn Renault — Ingénieur logiciel',
+		title: 'Jocelyn Renault - Ingénieur logiciel',
 		description:
 			'Portfolio de Jocelyn Renault, ingénieur logiciel issu de 42\u00a0: projets backend, systèmes, web, blockchain et IA.'
 	},
@@ -72,11 +72,11 @@ export const fr: Dict = {
 	experience: {
 		work: 'Expérience',
 		education: 'Formation',
-		hackathonsTitle: 'Hackathons — {n}\u00a0podiums',
+		hackathonsTitle: 'Hackathons - {n}\u00a0podiums',
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
-		recommendation: 'Recommandation — {name}',
+		recommendation: 'Recommandation - {name}',
 		results: { 1: 'Vainqueur', 2: '2e place', 3: '3e place' },
 		months: { one: '{n}\u00a0mois', other: '{n}\u00a0mois' },
 		certificate: 'Voir le certificat'
