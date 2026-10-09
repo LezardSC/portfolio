@@ -224,7 +224,7 @@ export const MY_TOOL: SkillIcon = { path: 'M…z', hex: '336791' };
 
 then `import { …, MY_TOOL } from './skill-icons';` and `{ name: 'My tool', icon: MY_TOOL }`. A colour too close to the page background is replaced by the text colour automatically.
 
-Each skill belongs to one group only (a test checks it).
+A skill can appear in several groups: add its line to each one. It can only appear once per group (a test checks it).
 
 ### Add, reorder or remove a group
 
