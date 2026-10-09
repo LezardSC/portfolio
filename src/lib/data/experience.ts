@@ -20,8 +20,8 @@ export const JOBS = typeset<Job[]>([
 		internship: true,
 		points: [
 			{
-				en: 'Built an automated experimentation workflow, from training to evaluation, for a computer-vision model detecting marine animals in underwater and satellite images.',
-				fr: 'Mise en place d’un workflow automatisé d’expérimentation, de l’entraînement à l’évaluation, pour un modèle de vision par ordinateur détectant des animaux marins sur des images sous-marines et satellites.'
+				en: 'Built an automated pipeline to test data augmentations on a Faster R-CNN model detecting marine animals in underwater and aerial images: batch runs that resume after an interruption, evaluation and results tracking.',
+				fr: 'Mise en place d’un pipeline automatisé de test d’augmentations de données pour un modèle Faster R-CNN détectant des animaux marins sur des images sous-marines et aériennes : exécution par lots avec reprise après interruption, évaluation et suivi des résultats.'
 			},
 			{
 				en: 'These experiments led to a method that raised the model’s recall on an image domain it was not trained on from 5.4% to 58.3%, without retraining.',
@@ -32,7 +32,7 @@ export const JOBS = typeset<Job[]>([
 				fr: 'Co-auteur d’un article accepté à IEEE ICIP 2026 : « Improving Cross-Domain Marine Animal Detection with Class-Agnostic Object Detectors ».'
 			}
 		],
-		tech: ['PyTorch', 'Python', 'Computer Vision', 'Bash'],
+		tech: ['PyTorch', 'torchvision', 'Faster R-CNN', 'COCO', 'Python', 'Bash'],
 		quote: {
 			text: {
 				en: 'A very good collaborator, serious and committed. He has a solid grasp of Machine Learning and proposes relevant solutions while staying pragmatic.',
