@@ -70,17 +70,10 @@
 	.cert:hover {
 		color: var(--accent);
 	}
-	/* Phone: school and diploma on one line, details joined by dots, certificate link on the right. */
+	/* Phone: school and diploma on one line, then one detail per line and the certificate link. */
 	@media (width < 48rem) {
 		.edu {
-			display: grid;
-			grid-template-columns: minmax(0, 1fr) auto;
-			column-gap: 0.75rem;
-			align-items: center;
 			padding: 0.75rem 0;
-		}
-		.edu > * {
-			grid-column: 1;
 		}
 		.when {
 			font-size: 0.8125rem;
@@ -109,15 +102,10 @@
 			line-height: 1.45;
 			color: var(--muted);
 		}
-		.points li {
-			display: inline;
+		.points li + li {
+			margin-top: 0.125rem;
 		}
-		.points li + li::before {
-			content: ' · ';
-		}
-		.edu > .cert {
-			grid-column: 2;
-			grid-row: 1 / span 2;
+		.cert {
 			min-height: 2.75rem;
 			font-size: 0.875rem;
 		}
