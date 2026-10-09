@@ -20,8 +20,8 @@ export const JOBS = typeset<Job[]>([
 		internship: true,
 		points: [
 			{
-				en: 'Built an automated pipeline to test data augmentations on a Faster R-CNN model detecting marine animals in underwater and aerial images: batch runs that resume after an interruption, evaluation and results tracking.',
-				fr: 'Mise en place d’un pipeline automatisé de test d’augmentations de données pour un modèle Faster R-CNN détectant des animaux marins sur des images sous-marines et aériennes : exécution par lots avec reprise après interruption, évaluation et suivi des résultats.'
+				en: 'Built an automated pipeline to test data augmentations on a Faster R-CNN model detecting marine animals in underwater and aerial images: training, evaluation and results tracking, run in batches on a remote GPU server and resumable after an interruption.',
+				fr: 'Mise en place d’un pipeline automatisé de test d’augmentations de données pour un modèle Faster R-CNN détectant des animaux marins sur des images sous-marines et aériennes : de l’entraînement à l’évaluation et au suivi des résultats, exécuté par lots sur un serveur GPU distant avec reprise après interruption.'
 			},
 			{
 				en: 'These experiments led to a method that raised the model’s recall on an image domain it was not trained on from 5.4% to 58.3%, without retraining.',
@@ -35,8 +35,8 @@ export const JOBS = typeset<Job[]>([
 		tech: ['PyTorch', 'torchvision', 'Faster R-CNN', 'COCO', 'Python', 'Bash'],
 		quote: {
 			text: {
-				en: 'A very good collaborator, serious and committed. He has a solid grasp of Machine Learning and proposes relevant solutions while staying pragmatic.',
-				fr: 'Très bon collaborateur, sérieux et impliqué. Il maîtrise bien les sujets de Machine Learning et sait proposer des solutions pertinentes tout en restant pragmatique.'
+				en: 'A very good collaborator, serious and committed. He has a solid grasp of Machine Learning and proposes relevant solutions while staying pragmatic. He is also reliable, pleasant to work with and always ready to share his knowledge.',
+				fr: 'Très bon collaborateur, sérieux et impliqué. Il maîtrise bien les sujets de Machine Learning et sait proposer des solutions pertinentes tout en restant pragmatique. C’est également quelqu’un de fiable, agréable avec qui travailler et toujours prêt à partager ses connaissances.'
 			},
 			author: 'Herve Nikue',
 			role: {
@@ -69,8 +69,8 @@ export const JOBS = typeset<Job[]>([
 		tech: ['JavaScript', 'SvelteKit', 'Node.js', 'Express', 'SurrealDB'],
 		quote: {
 			text: {
-				en: 'He took a full part in developing our platform, on both front-end and back-end. He proved serious, autonomous and committed, quick to grasp technical problems and propose suitable solutions.',
-				fr: 'Il a pleinement participé au développement de notre plateforme, aussi bien sur les sujets front-end que back-end. Il s’est montré sérieux, autonome et impliqué, avec une bonne capacité à comprendre rapidement les problématiques techniques et à proposer des solutions adaptées.'
+				en: 'He took a full part in developing our platform, on both front-end and back-end. He proved serious, autonomous and committed, quick to grasp technical problems and propose suitable solutions. […] I recommend him without hesitation for Full Stack development work.',
+				fr: 'Il a pleinement participé au développement de notre plateforme, aussi bien sur les sujets front-end que back-end. Il s’est montré sérieux, autonome et impliqué, avec une bonne capacité à comprendre rapidement les problématiques techniques et à proposer des solutions adaptées. […] Je le recommande sans hésitation pour des missions de développement Full Stack.'
 			},
 			author: 'Vincent Tamme',
 			role: { en: 'President, Y247 Group', fr: 'Président, Y247 Group' },
