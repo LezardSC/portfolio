@@ -102,6 +102,16 @@
 		margin: 0 auto;
 		padding: calc(var(--nav-h) + 4rem) 2.5rem 6rem;
 	}
+	/* Desktop: the hero fills the first screen, so About doesn't peek in above the fold. */
+	@media (width >= 48rem) {
+		.hero {
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			min-height: 100svh;
+		}
+	}
 	.available {
 		display: inline-flex;
 		align-items: center;
