@@ -132,7 +132,7 @@
 		display: grid;
 		grid-template-columns: 18.75rem minmax(0, 1fr);
 		gap: 1.75rem;
-		align-items: start;
+		align-items: stretch;
 	}
 	.panels {
 		display: grid;
@@ -197,7 +197,13 @@
 		border: 2px solid var(--border);
 		border-radius: var(--radius);
 	}
+	/* The open panel is at least as tall as the tab list beside it (stretched row), and 30rem. */
+	.enhanced .panels {
+		display: flex;
+		flex-direction: column;
+	}
 	.enhanced .panel {
+		flex: 1;
 		min-height: 30rem;
 	}
 	/* A closed panel is hidden="until-found": its content is skipped but its box stays, so it has no
@@ -206,6 +212,7 @@
 		gap: 0;
 	}
 	.panel[hidden] {
+		flex: none;
 		min-height: 0;
 		padding: 0;
 		border: 0;
