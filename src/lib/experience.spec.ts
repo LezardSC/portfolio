@@ -122,9 +122,9 @@ describe('yearOf', () => {
 });
 
 describe('durationMonths', () => {
-	it('counts both end months', () => {
-		expect(durationMonths('2025-07', '2026-01')).toBe(7);
-		expect(durationMonths('2024-10', '2025-04')).toBe(7);
+	it('counts the months between start and end, like a contract (Oct → Apr is 6)', () => {
+		expect(durationMonths('2025-07', '2026-01')).toBe(6);
+		expect(durationMonths('2024-10', '2025-04')).toBe(6);
 	});
 	it('is 1 for a single month', () => {
 		expect(durationMonths('2024-03', '2024-03')).toBe(1);
