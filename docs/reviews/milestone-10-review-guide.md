@@ -8,7 +8,7 @@ The review has three parts, in this order:
 2. **Compare with the board and try it on a real phone** (15–20 min). I drove the built site with headless Chromium at 360, 390, 900 and 1280px, both themes and both languages, measured the key styles against the board, and checked the folding behaviour with and without JavaScript. What I can't do is put the canvas next to your phone, touch the screen, or judge how it feels.
 3. **Code review** (10 min)
 
-Source of truth: the "Milestone 10 — Phone design" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, the plan `docs/superpowers/plans/2026-10-08-milestone-10-phone-design.md`, and the boards **Mobile — clair** / **Mobile — sombre** on the canvas https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59 (snapshot in `docs/superpowers/designs/2026-10-08-m10-final/`).
+Source of truth: the "Milestone 10 - Phone design" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, the plan `docs/superpowers/plans/2026-10-08-milestone-10-phone-design.md`, and the boards **Mobile - clair** / **Mobile - sombre** on the canvas https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59 (snapshot in `docs/superpowers/designs/2026-10-08-m10-final/`).
 
 "Phone" means narrower than 48rem (768px). From 768px up the site is the M9 desktop design, unchanged.
 
@@ -114,7 +114,7 @@ Taken during the build, each because the board value broke something:
 - [ ] Featured cards: domain colours read well, text is legible, "Code ↗" opens GitHub; GoldenEye says "Code privé".
 - [ ] Tiles: 6 shown, "Voir les 5 autres projets" shows the rest, "Réduire la liste" folds; changing a filter folds the list back.
 - [ ] Skills: one group open at a time, tapping the open group closes it. In the browser's find-in-page, search « Kubernetes »: the DevOps group opens.
-- [ ] Experience: each "Recommandation — …" button opens its quote.
+- [ ] Experience: each "Recommandation - …" button opens its quote.
 - [ ] Contact: "Copier l'adresse" → "Copié !"; tapping anywhere on the Malt card opens Malt; the three buttons are easy to hit.
 - [ ] Rotate to landscape / widen past 768px: the desktop layout comes back with every project and the selected skills tab; nothing is lost.
 - [ ] On an iPhone (Safari): "Réduire", "Réduire la liste" and closing a recommendation don't make the page jump (Safari has no scroll anchoring; I couldn't test WebKit).

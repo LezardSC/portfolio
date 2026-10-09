@@ -1,7 +1,7 @@
-# Portfolio — Design Spec
+# Portfolio - Design Spec
 
 ## Context
-Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, built in **Svelte 5**. Inspiration (idea, not copy): angeluriot.com/portfolio — especially that a recruiter can **filter/sort projects** to quickly find what interests them. Positioning is **general software engineer** (C/ASM, Python/AI, web, blockchain, games). The project directory `/home/lezard/portfolio` is empty (not a git repo). Build happens **incrementally, one milestone at a time**.
+Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, built in **Svelte 5**. Inspiration (idea, not copy): angeluriot.com/portfolio - especially that a recruiter can **filter/sort projects** to quickly find what interests them. Positioning is **general software engineer** (C/ASM, Python/AI, web, blockchain, games). The project directory `/home/lezard/portfolio` is empty (not a git repo). Build happens **incrementally, one milestone at a time**.
 
 **Success criteria:** a recruiter lands on the site in EN or FR, understands who Jocelyn is in seconds, and can narrow projects by context × domain to reach the relevant GitHub repos in a couple of clicks.
 
@@ -11,7 +11,7 @@ Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, buil
 | Framework | SvelteKit (Svelte 5 runes) + `@sveltejs/adapter-static`, fully prerendered, TypeScript |
 | Languages | EN + FR toggle; routes `/en`, `/fr` |
 | Theme | Dark + light toggle, defaults to system preference |
-| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later — its own milestone (M11) once the site is polished |
+| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later - its own milestone (M11) once the site is polished |
 | Project click | Icon links (GitHub / demo) + clickable media, new tab; no detail pages/modals. Private projects have no link |
 | Sections | Hero, About, Projects, Skills, Experience/Education, Contact |
 | Filtering | Two combinable single-select chip groups: Context × Domain + sort |
@@ -63,14 +63,14 @@ type Project = {
   featured?: number;       // lower = shown first in the "Highlights" sort
 };
 ```
-- **Filters:** group *Context* (All, Professional, Personal, School, Hackathon — game jams count as Hackathon) and group *Domain* (All, Web, Blockchain, AI, Low-level, Games). One active chip per group; groups combine with AND. Each chip shows a count computed against the other group's current selection.
+- **Filters:** group *Context* (All, Professional, Personal, School, Hackathon - game jams count as Hackathon) and group *Domain* (All, Web, Blockchain, AI, Low-level, Games). One active chip per group; groups combine with AND. Each chip shows a count computed against the other group's current selection.
 - **Sort:** Highlights / Incontournables (key `featured`; default; projects with `featured` first, ascending, then the rest newest first) | Newest.
 - **Empty state:** "No project matches" + reset button.
 - **Two tiers (by position, after filter + sort):** the first **6** results render as **large cards, 2 per row** (1 on mobile); all remaining results render as **small cards, 3 per row** (1–2 on smaller screens).
   - *Large card:* 16:9 media on top (image, or muted looping video that autoplays only while in view and never under `prefers-reduced-motion`, showing the poster instead); below it date · context, title, award badge, description, tech tags, link icons.
   - *Small card:* domain icon (top-left, inline SVG), link icons (top-right), title, year · context, award line (if any), description clamped to 3 lines, tech tags. No media.
   - *No media yet:* a styled placeholder (domain-coloured gradient + title). Real media can be dropped into `static/projects/` later without code changes.
-- **Links:** GitHub and demo icons (`target=_blank rel=noopener noreferrer`) are the accessible links. The large card's media and the small card's title also link to the primary link (repo, else demo) — the media link is `tabindex=-1 aria-hidden` to avoid duplicate focus stops. No link at all → a "Private" tag, nothing clickable.
+- **Links:** GitHub and demo icons (`target=_blank rel=noopener noreferrer`) are the accessible links. The large card's media and the small card's title also link to the primary link (repo, else demo) - the media link is `tabindex=-1 aria-hidden` to avoid duplicate focus stops. No link at all → a "Private" tag, nothing clickable.
 - **Logic:** pure, unit-tested functions in `src/lib/projects.ts`: `filterProjects`, `sortProjects`, `countFor`, `splitTiers(list, 6)`, `primaryLink`. Components only render; filter/sort state lives in `sections/Projects.svelte`.
 - **Animation:** both tiers use `animate:flip` + fade-in (duration 0 under `prefers-reduced-motion`). Outgoing cards leave immediately (no fade-out: it would hold their grid cell and shove the others); a project moving between tiers fades into its new tier.
 - **Initial content:** at least one project per context. Professional: GoldenEye data augmentation (SogetiLabs/Capgemini, private). Hackathon: KAYP (PBW 2024 winner; links to the backend repo), KAYP-H-WEB3PARIS (winner), Bahapad (PBW 2025 3rd), GameJam Confiture de jeu, Love_Takedown. School: libft, ft_printf, get_next_line, libasm, ft_linear_regression, DSLR (group project; repo is a teammate's), Leaffliction (added in M4), tokenizer, tokenizArt, ft_transcendence. Personal: microcode. Descriptions drafted from READMEs; Jocelyn edits the list freely afterwards.
@@ -80,7 +80,7 @@ _Settled during Milestone 3 brainstorming (2026-09-30)._
 
 **Positioning:** general software engineer with a backend & systems lean. Broader than the Malt profile ("Développeur Backend & Systèmes") so web, blockchain, AI and games projects stay on-message. No location is shown anywhere on the site.
 
-**Content** lives in a new `src/lib/data/profile.ts` (content, `{ en, fr }` fields). UI labels (CTA texts, photo alt, availability text) live in the i18n dicts. `hero.name` / `hero.tagline` leave the dicts; `meta.title` becomes "Jocelyn Renault — Software Engineer" / "Jocelyn Renault — Ingénieur logiciel", and the meta description uses the full name.
+**Content** lives in a new `src/lib/data/profile.ts` (content, `{ en, fr }` fields). UI labels (CTA texts, photo alt, availability text) live in the i18n dicts. `hero.name` / `hero.tagline` leave the dicts; `meta.title` becomes "Jocelyn Renault - Software Engineer" / "Jocelyn Renault - Ingénieur logiciel", and the meta description uses the full name.
 ```ts
 export const profile = {
   name: 'Jocelyn Renault',
@@ -95,21 +95,21 @@ export const profile = {
 };
 ```
 
-**Assets** (`static/`): `cv-en.pdf`, `cv-fr.pdf` (phone number removed; `cv-en.pdf` is temporarily a copy of the French CV until the English one is re-exported — replacing the file needs no code change), `photo.jpg` (cropped once to a 480×480 square centred on Jocelyn, EXIF stripped; the original is not kept).
+**Assets** (`static/`): `cv-en.pdf`, `cv-fr.pdf` (phone number removed; `cv-en.pdf` is temporarily a copy of the French CV until the English one is re-exported - replacing the file needs no code change), `photo.jpg` (cropped once to a 480×480 square centred on Jocelyn, EXIF stripped; the original is not kept).
 
 **Hero** (`sections/Hero.svelte`, props `{ lang, t: Dict['hero'] }`): full height (`100svh`), centred.
 - Optional pill "● Available for work" / "● Disponible" (green dot) when `profile.available`.
 - `h1` name, role line, pitch (muted, max ~60ch).
 - CTAs, wrapping on narrow screens: **See projects** (primary, `#projects`), **Download CV** (opens `cv-{lang}.pdf` in a new tab, no forced download), **GitHub** (icon + label, new tab). External links use `target=_blank rel="noopener noreferrer"`.
-- Pitch EN: *"I build the invisible part of products: APIs, services, data processing, automation and deployment. My field is backend and low-level — reliability and performance over UI."*
-- Pitch FR: *"Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c'est le backend et le bas niveau — la fiabilité et la performance plutôt que l'interface."*
+- Pitch EN: *"I build the invisible part of products: APIs, services, data processing, automation and deployment. My field is backend and low-level - reliability and performance over UI."*
+- Pitch FR: *"Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production. Mon terrain, c'est le backend et le bas niveau - la fiabilité et la performance plutôt que l'interface."*
 
 **About** (`sections/About.svelte` inside `Section`, props `{ lang, title, t: Dict['about'] }`, same pattern as Projects): two-column grid, round 200px photo left and bio right; under 640px it stacks with the photo centred on top. Photo has explicit `width`/`height`, `loading="lazy"`, localized alt ("Photo of Jocelyn Renault"). Below the bio, the facts render as chips in the project tech-tag style (🎓 42 Lyon (RNCP 7) · 🗣 French / English).
 
 Bio draft (Jocelyn edits freely):
-1. EN *"I got into programming for the money. I stayed because I found out I love understanding how things work underneath: memory, processes, the network, the machine itself."* — FR *"Je me suis mis à la programmation pour l'argent. J'y suis resté parce que j'ai découvert que j'adore comprendre comment les choses fonctionnent en dessous : la mémoire, les processus, le réseau, la machine elle-même."*
-2. EN *"I trained at 42 Lyon (RNCP 7 — Expert in computer architecture), then worked as a full-stack developer at Y247 Group and as a machine-learning developer at Sogeti (Capgemini), and won several hackathons along the way."* — FR *"Je me suis formé à 42 Lyon (RNCP 7 — Expert en architecture informatique), puis j'ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage."*
-3. EN *"Today I focus on backend and systems work — APIs, services, Rust, infrastructure — while staying at home with Web3 and AI when a project needs them."* — FR *"Aujourd'hui je me concentre sur le backend et les systèmes — APIs, services, Rust, infrastructure — tout en restant à l'aise avec le Web3 et l'IA quand un projet en a besoin."*
+1. EN *"I got into programming for the money. I stayed because I found out I love understanding how things work underneath: memory, processes, the network, the machine itself."* - FR *"Je me suis mis à la programmation pour l'argent. J'y suis resté parce que j'ai découvert que j'adore comprendre comment les choses fonctionnent en dessous : la mémoire, les processus, le réseau, la machine elle-même."*
+2. EN *"I trained at 42 Lyon (RNCP 7 - Expert in computer architecture), then worked as a full-stack developer at Y247 Group and as a machine-learning developer at Sogeti (Capgemini), and won several hackathons along the way."* - FR *"Je me suis formé à 42 Lyon (RNCP 7 - Expert en architecture informatique), puis j'ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage."*
+3. EN *"Today I focus on backend and systems work - APIs, services, Rust, infrastructure - while staying at home with Web3 and AI when a project needs them."* - FR *"Aujourd'hui je me concentre sur le backend et les systèmes - APIs, services, Rust, infrastructure - tout en restant à l'aise avec le Web3 et l'IA quand un projet en a besoin."*
 
 **Logic:** pure `assetHref(base, path)` in `src/lib/paths.ts` (joins `base` and a `static/` path without double slashes), used for the CV and photo URLs so the site works under a sub-path.
 
@@ -197,7 +197,7 @@ The recommendations were written in French (`original: 'fr'`): the FR page shows
 
 **Component:** `sections/Experience.svelte` inside `Section`, props `{ lang, title, t: Dict['experience'] }`.
 - Grid: two columns ≥ 900px, stacked below. Each column has an `h3` heading and an `<ol>` timeline: a 2px `--border` vertical line with an `--accent` dot per entry; each entry is an `<li>` holding an `<article>`.
-- Entry: period line (muted, small, e.g. "Jul 2025 – Jan 2026 · Internship") → `h4` role (or diploma title; when `link` is set, the title is a link to the certificate, `target=_blank rel="noopener noreferrer"`) → company or school → bullet list → tech tags (project tech-tag style) → optional `<blockquote>` (3px `--accent` left border, italic) with a `<footer>`: "— author, role" and the translated note when relevant.
+- Entry: period line (muted, small, e.g. "Jul 2025 – Jan 2026 · Internship") → `h4` role (or diploma title; when `link` is set, the title is a link to the certificate, `target=_blank rel="noopener noreferrer"`) → company or school → bullet list → tech tags (project tech-tag style) → optional `<blockquote>` (3px `--accent` left border, italic) with a `<footer>`: "- author, role" and the translated note when relevant.
 - Hackathons: under the Education timeline in the right column, `h3` + a compact `<ol>` timeline in the same style _(revised after the PR review; they were bordered pills)_: the medal emoji (`aria-hidden`, on a `--bg` background) replaces the dot on the line; each entry is the event + year in bold (visually hidden place label first; an acronym is an `<abbr>` with `fullName` as its title), then the project in muted smaller text; tighter spacing than the other timelines.
 - `.sr-only` moves from `Hero.svelte` to `src/app.css` (this is its second user).
 
@@ -240,7 +240,7 @@ Order and content:
 **Tests:** `contact.spec.ts` (tile order and ids, `mailto:` href, CV href follows `lang` and `base`, `external` flags); `profile.spec` (email is a valid address, LinkedIn and Malt are `https` URLs); i18n completeness covers the new keys. Visual check with Playwright: both themes, both languages, 1280px and 375px.
 
 
-## Milestone 7 — Fixes & accessibility
+## Milestone 7 - Fixes & accessibility
 _Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" milestone is split in two: M7 (this one: nav, a11y, fixes, audit tooling) and M8 (visual polish & SEO). No domain yet, so nothing here depends on one.
 
 **Mobile nav.** Under ~760px the section links collapse behind a ☰ button (`aria-expanded`, `aria-controls`) that opens a panel below the bar with the links stacked. Brand, language switch and theme toggle stay in the bar at every width. The panel closes on Esc (focus returns to the button), on a link tap, on a tap outside, and resets to closed when the viewport grows past the breakpoint. Before hydration / without JS the links stay reachable: the menu button is hidden and the links stay the current horizontally scrollable row until the menu script takes over. Open/close rules live in a pure, unit-tested function; the component only wires events.
@@ -267,7 +267,7 @@ _Settled during Milestone 7 brainstorming (2026-10-01)._ The original "Polish" m
 - About facts `{#each}` keyed on index, not emoji.
 - Hero availability dot uses a new `--ok` theme token instead of `#2da44e`.
 - `profile.spec` resolves `static/` from the test file's location, not the cwd; the experience timezone test actually runs under a non-UTC `TZ`.
-- ~~Skill icons store only `{ path, hex }`~~ — dropped (checked 2026-10-01): the bundle keeps every referenced `simple-icons` object whole whatever fields are read, so the saving (a few KB of titles/URLs) would need an icon code generator; not worth it.
+- ~~Skill icons store only `{ path, hex }`~~ - dropped (checked 2026-10-01): the bundle keeps every referenced `simple-icons` object whole whatever fields are read, so the saving (a few KB of titles/URLs) would need an icon code generator; not worth it.
 - Pills and chips use a `--pill: 1.25rem` radius token instead of `999px`: a full pill on one line, a rounded rectangle (not a lozenge) if one ever wraps.
 - The Malt symbol's cropped path is inlined in `contact-icons.ts` instead of depending on `simple-icons` subpath order.
 - Copy email: a repeat copy is re-announced; on failure a visible "press Ctrl+C" hint appears next to the selected address; the timer is cleared on destroy; the email tile text comes from the `contactLinks` label.
@@ -282,7 +282,7 @@ It prints a pass/fail table, exits non-zero on any failure, and writes full repo
 
 **Tests.** Unit tests for the menu state function, the active-link logic and the French typography check; existing tests, `npm run check` and `npm run lint` stay clean. The M7 review guide includes the audit table and screenshots at each width.
 
-## Milestone 8 — Layout & media
+## Milestone 8 - Layout & media
 _Settled during Milestone 8 brainstorming (2026-10-01 → 2026-10-02)._ After M7 the user found the site worked but needed visual work, mostly on phones: the phone page was ~13,600px tall against ~7,450px on desktop (Projects alone 7,263px; a large card ~600px, a small one ~300px). The old "Visual polish & SEO" milestone is split again: **M8 Layout & media** (this one), **M9 Finishing touches & SEO** (hero accent, section-heading accent, scroll-reveal, favicon, OG image, per-locale meta), **M10 Deployment**. A smaller About photo next to the title was considered and declined. _Revised after the M8 PR review (2026-10-02): the user's main concern is the readability of the information, so M9 becomes a desktop design pass, M10 the same for phones, M11 deployment (see "Milestones")._
 
 **Approach.** One set of markup per component at every width; CSS media queries restyle it for phones, and scripts only decide whether a video plays. The site is prerendered without knowing the screen size, so choosing a phone or desktop component in JS would flash the wrong layout, and rendering both would duplicate content for screen readers. "Phone" below means under the existing `48rem` breakpoint (the one where both project grids drop to a single column).
@@ -323,12 +323,12 @@ Only under `(hover: hover) and (pointer: fine)`, so touch screens never get a st
 - Visual check with the test media injected (images and MP4s): 360, 390, 768, 1024 and 1440px, both themes, both languages, including a large card without media, the hover state and an expanded quote.
 - The review guide reports page and section heights before and after. Expected: the phone page drops from ~13,600px to under ~9,000px (an estimate, not a gate).
 
-## Milestone 9 — Desktop design
+## Milestone 9 - Desktop design
 _Settled during Milestone 9 brainstorming (2026-10-07 → 2026-10-08), after a design exploration on a Claude Design canvas._
 
 **Goal.** Give the site its new visual identity on desktop, in both themes, with the readability of the information first: the audience is recruiters and clients, often not developers. This section **supersedes the desktop presentation** described in the Hero + About, Projects, Skills, Experience & Education and Contact & Footer sections above; data, logic and accessibility rules from those sections still apply unless changed here.
 
-**Source of truth.** The validated artboards on the canvas https://claude.ai/artifact/5rqhnCoS2tUFHpioTu8jZG (private to Jocelyn's claude.ai account): **A1·M3 révisée — clair** (`A1M3b-Clair`), **A1·M3 révisée — sombre** (`A1M3b-Sombre`) and **Compétences 4A** (`Skills-Idee4A`). Copies of their sources are in `docs/superpowers/designs/2026-10-07-m9-final/` (`.dc.html` design components: they only render inside the canvas, so use them as a value reference, not as code). Every value below comes from them; **the implementation must match them**, each section is screenshot-checked against them, and any deliberate deviation is listed in the review guide. Rejected directions (terminal/developer jokes, SaaS-style bento) stay rejected.
+**Source of truth.** The validated artboards on the canvas https://claude.ai/artifact/5rqhnCoS2tUFHpioTu8jZG (private to Jocelyn's claude.ai account): **A1·M3 révisée - clair** (`A1M3b-Clair`), **A1·M3 révisée - sombre** (`A1M3b-Sombre`) and **Compétences 4A** (`Skills-Idee4A`). Copies of their sources are in `docs/superpowers/designs/2026-10-07-m9-final/` (`.dc.html` design components: they only render inside the canvas, so use them as a value reference, not as code). Every value below comes from them; **the implementation must match them**, each section is screenshot-checked against them, and any deliberate deviation is listed in the review guide. Rejected directions (terminal/developer jokes, SaaS-style bento) stay rejected.
 
 **Scope.** Desktop only (48rem and up). Colours, font and shared styles apply at every width, but phones keep the M8 layouts and only get a "nothing breaks" check (no horizontal scroll at 360px, no overlap); the phone design is M10.
 
@@ -354,7 +354,7 @@ _Settled during Milestone 9 brainstorming (2026-10-07 → 2026-10-08), after a d
 
 The same values go in the no-JS `prefers-color-scheme` block. `THEME_BG` in `src/lib/skills.ts` becomes `{ dark: '#121210', light: '#FAF8F4' }` (its sync test follows). Radii: `--radius: 6px` (cards, buttons), `--radius-sm: 4px` (tags, icon tiles); `--pill` goes. Hover effects stay under `(hover: hover) and (pointer: fine)`, mirrored on `:focus-within`/`:focus-visible`, and drop movement under `prefers-reduced-motion` (as in M8).
 
-**Font.** Schibsted Grotesk (variable, weights 400–900) from `@fontsource-variable/schibsted-grotesk`, latin subset only, self-hosted (no Google request), `font-display: swap`, woff2 preloaded. It replaces the system stack everywhere. Body text 18px, line-height 1.6. The canvas used IBM Plex Mono for the small nav numbers; it is dropped (Schibsted 13px, one font file less) — a deliberate deviation.
+**Font.** Schibsted Grotesk (variable, weights 400–900) from `@fontsource-variable/schibsted-grotesk`, latin subset only, self-hosted (no Google request), `font-display: swap`, woff2 preloaded. It replaces the system stack everywhere. Body text 18px, line-height 1.6. The canvas used IBM Plex Mono for the small nav numbers; it is dropped (Schibsted 13px, one font file less) - a deliberate deviation.
 
 **Page and sections.** Container max 1240px, 40px side padding. `Section.svelte` becomes a 12-column grid (column gap 32px, row gap 28px), 112px top and bottom padding, 2px `--text` top rule:
 - header, 3 columns: the section number ("01"–"05", from the order in `src/lib/sections.ts`, `aria-hidden`) at 112px, weight 900, letter-spacing −0.05em, line-height 0.82, transparent fill with a 2px `--accent` text stroke; then the `h2` at 46px, weight 800, letter-spacing −0.035em, 14px above; then an optional lead line, 17px `--muted`;
@@ -376,8 +376,8 @@ Under 48rem the header stacks above the body and the M8 phone paddings and headi
 
 | EN label | EN value | FR label | FR value |
 |---|---|---|---|
-| Education | 42 Lyon — RNCP 7, expert in computer architecture | Formation | 42 Lyon — RNCP 7, expert en architecture informatique |
-| Latest role | ML & Computer Vision developer — Sogeti (Capgemini) | Dernier poste | Développeur ML & IA Vision — Sogeti (Capgemini) |
+| Education | 42 Lyon - RNCP 7, expert in computer architecture | Formation | 42 Lyon - RNCP 7, expert en architecture informatique |
+| Latest role | ML & Computer Vision developer - Sogeti (Capgemini) | Dernier poste | Développeur ML & IA Vision - Sogeti (Capgemini) |
 | Stack | Python, Rust, C, Node.js, Docker | Stack | Python, Rust, C, Node.js, Docker |
 | Hackathons | 2 wins, 5 podiums | Hackathons | 2 victoires, 5 podiums |
 | Languages | French, English | Langues | Français, anglais |
@@ -417,7 +417,7 @@ Photo left (240px wide, 4:5, 6px radius, `object-fit: cover` centred on the exis
 - **Quotes stay whole on desktop** (deviation from the canvas, which cut one for space); the M8 2-line clamp with Read more stays below 56.25rem.
 - Below the jobs (56px above), two columns `repeat(auto-fit, minmax(min(100%, 320px), 1fr))`, gap 48px:
   - **Education / Formation:** rows with 18px vertical padding and a 1px `--rule`: dates 14px `--muted`, school 20px weight 800, diploma weight 600, details 16px `--body`; the CS50 certificate link.
-  - **Hackathons — {n} podiums** ({n} computed): rows grid `44px 1fr auto`, gap 14px, 12px vertical padding, 1px `--rule`: a 40px tile (4px radius) — trophy icon in `--accent` on `--tint` for a win, medal icon in `--muted` on `--tag` otherwise; event in bold with "project · year" below (15px `--muted`); the result right: **Winner / Vainqueur** (15px weight 800 `--accent`) or **2nd place / 2e place**, **3rd place / 3e place** (15px weight 700 `--body`). The labels come from a new `experience.results` dict entry (`{ 1: 'Winner', 2: '2nd place', 3: '3rd place' }` / `{ 1: 'Vainqueur', 2: '2e place', 3: '3e place' }`, typed `Record<Medal, string>`), replacing the `experience.places` "1st place:" keys; the title count comes from the hackathon data.
+  - **Hackathons - {n} podiums** ({n} computed): rows grid `44px 1fr auto`, gap 14px, 12px vertical padding, 1px `--rule`: a 40px tile (4px radius) - trophy icon in `--accent` on `--tint` for a win, medal icon in `--muted` on `--tag` otherwise; event in bold with "project · year" below (15px `--muted`); the result right: **Winner / Vainqueur** (15px weight 800 `--accent`) or **2nd place / 2e place**, **3rd place / 3e place** (15px weight 700 `--body`). The labels come from a new `experience.results` dict entry (`{ 1: 'Winner', 2: '2nd place', 3: '3rd place' }` / `{ 1: 'Vainqueur', 2: '2e place', 3: '3e place' }`, typed `Record<Medal, string>`), replacing the `experience.places` "1st place:" keys; the title count comes from the hackathon data.
 
 ### Contact & Footer
 - Intro 24px weight 600, max 40ch, 28px below.
@@ -425,7 +425,7 @@ Photo left (240px wide, 4:5, 6px radius, `object-fit: cover` centred on the exis
   - **Email:** label "By email / Par e-mail" (14px weight 600 `--muted`); the address as the `mailto:` link, 30px weight 800, letter-spacing −0.02em, `--text`; a primary **Copy address / Copier l’adresse** button. M7 copy behaviour kept (`aria-live` announcement, repeat re-announce, select-and-hint fallback).
   - **Malt:** Malt symbol (30px, `#FC5757`) in a 48px tile (`#FFEDEC` light, `rgba(252,87,87,.14)` dark), label "Freelance"; title "Working through Malt? / Vous passez par Malt ?" 26px weight 800; text 17px `--body` "My profile, recommendations and mission requests are on Malt too." / « Mon profil, mes recommandations et la prise de contact pour une mission sont aussi sur Malt. »; secondary button **See my Malt profile ↗ / Voir mon profil Malt ↗** (new tab).
 - Below (20px), three tiles `repeat(auto-fit, minmax(min(100%, 200px), 1fr))`, gap 16px: **LinkedIn** (logo `#0A66C2` light, `#4A9FE8` dark), **GitHub** (logo `--text`), **CV (PDF)** (document line icon); 64px tall, padding 0 20px, `--surface`, 2px `--text` border, 6px radius, 18px weight 700, logo + label left, ↗ (↓ for the CV) right. Hover: `--text` fill, `--on-text` text, `6px 6px 0 var(--accent)` shadow, lift 4px. `contactLinks()` changes accordingly (email and Malt become their own blocks; the tiles are linkedin, github, cv) and its tests follow.
-- **Footer:** a full-width band, `#141412` (light) / `#0D0D0B` (dark) with `#FFFFFF` / `#F3F0E8` text, 88px tall: "© {year} Jocelyn Renault" (weight 700) left — the © year is a small deviation kept by choice — and "Back to top ↑ / Retour en haut ↑" (weight 600) right.
+- **Footer:** a full-width band, `#141412` (light) / `#0D0D0B` (dark) with `#FFFFFF` / `#F3F0E8` text, 88px tall: "© {year} Jocelyn Renault" (weight 700) left - the © year is a small deviation kept by choice - and "Back to top ↑ / Retour en haut ↑" (weight 600) right.
 
 ### Favicon, share image, meta
 - **Favicon:** `static/favicon.svg`, white "JR" on `#C2391B`, rounded square (radius 12 on a 64 grid); the letters are outlined paths (an SVG favicon can't load a web font). Also `static/favicon.ico` (32px) and `static/apple-touch-icon.png` (180px). The `$lib/assets/favicon.svg` import in `+layout.svelte` and the downloaded icons8 files in `src/lib/assets/` are removed.
@@ -441,12 +441,12 @@ Each section except the hero fades in once, rising 16px, over ~500ms, when it en
 - **Fidelity:** Playwright screenshots of every section at 1440px and 1280px, both themes, both languages, checked against the artboard values; the canvas can't be rendered outside claude.ai, so the review guide puts the screenshots next to the canvas link for Jocelyn's own side-by-side check and lists every deviation. Quick check at 360px and 390px that nothing breaks.
 - **Review guide:** `docs/reviews/milestone-9-review-guide.md`.
 
-## Milestone 10 — Phone design
+## Milestone 10 - Phone design
 _Settled during Milestone 10 brainstorming (2026-10-08), after a design session on a Claude Design canvas._
 
 **Goal.** Give phones the M9 visual identity with layouts made for a 390px screen: less scrolling, information readable at a glance, nothing that scrolls sideways, touch targets ≥ 44px. This section **supersedes the phone presentation** of Milestone 8 ("Projects on phones", "Other sections on phones") and the phone menu of Milestone 7; data, logic and accessibility rules from earlier sections still apply unless changed here.
 
-**Source of truth.** The validated boards on the canvas "Portfolio — Mobile" https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59 (private to Jocelyn's claude.ai account): **Mobile — clair** (`Mix.dc.html`) and **Mobile — sombre** (`MixSombre.dc.html`, the same board with `theme="Sombre"`). A snapshot is in `docs/superpowers/designs/2026-10-08-m10-final/` (`Mobile-Clair.dc.html`, `Mobile-Sombre.dc.html`, `skill-logos.json`, and a `README.md` with the choice made for each section). Like the M9 boards they only render inside the canvas: use them as a value reference. Values below come from them; the implementation must match them, each section is screenshot-checked against them, and every deliberate deviation is listed in the review guide. Colours, font, borders and radii are the M9 tokens.
+**Source of truth.** The validated boards on the canvas "Portfolio - Mobile" https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59 (private to Jocelyn's claude.ai account): **Mobile - clair** (`Mix.dc.html`) and **Mobile - sombre** (`MixSombre.dc.html`, the same board with `theme="Sombre"`). A snapshot is in `docs/superpowers/designs/2026-10-08-m10-final/` (`Mobile-Clair.dc.html`, `Mobile-Sombre.dc.html`, `skill-logos.json`, and a `README.md` with the choice made for each section). Like the M9 boards they only render inside the canvas: use them as a value reference. Values below come from them; the implementation must match them, each section is screenshot-checked against them, and every deliberate deviation is listed in the review guide. Colours, font, borders and radii are the M9 tokens.
 
 **Scope.** "Phone" = `width < 48rem` (the existing breakpoint, `DESKTOP_QUERY` in `src/lib/projects.ts`). At 48rem and up the M9 desktop layout is unchanged (it was checked down to 768px in M9); tablets get no design of their own. Desktop gets a no-regression check only.
 
@@ -474,7 +474,7 @@ _Settled during Milestone 10 brainstorming (2026-10-08), after a design session 
 | | EN | FR |
 |---|---|---|
 | `pitch` | I build the invisible part of products: APIs, services, data processing, automation and deployment. | Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production. |
-| `pitchMore` | My field is backend and low-level — reliability and performance over UI. | Mon terrain, c’est le backend et le bas niveau — la fiabilité et la performance plutôt que l’interface. |
+| `pitchMore` | My field is backend and low-level - reliability and performance over UI. | Mon terrain, c’est le backend et le bas niveau - la fiabilité et la performance plutôt que l’interface. |
 
 - **At a glance → tiles:** the same `<dl>`, restyled as a 2-column grid, gap 8px, 20px below. Tile: padding 12px 14px, `--surface`, 2px `--border`, 6px radius; `dt` 12px weight 600 uppercase, letter-spacing 0.05em, `--muted`; `dd` 15px weight 700, line-height 1.35, 2px above. Phone order: Education, Latest role, Hackathons, Languages, then **Stack across both columns** (CSS `order`). Data: `GlanceRow` gains `short?: Localized` (shown on phones instead of `value` when present; CSS shows one of the two) and `wide?: true` (full-width tile on phones):
 
@@ -482,7 +482,7 @@ _Settled during Milestone 10 brainstorming (2026-10-08), after a design session 
 |---|---|---|
 | Education | 42 Lyon · RNCP 7 | 42 Lyon · RNCP 7 |
 | Latest role | Sogeti (Capgemini) | Sogeti (Capgemini) |
-| Stack | — (`wide: true`) | — |
+| Stack | - (`wide: true`) | - |
 
 - **Buttons:** 2-column grid, gap 8px: **See projects / Voir les projets** + down-arrow icon (primary, both columns), then **View CV / Voir le CV** and **Malt ↗** (Malt symbol). The phone Malt label comes from a new key `hero.maltShort` ("Malt" in both languages); CSS shows one label per width.
 
@@ -529,11 +529,11 @@ Checked in brainstorming: label contrast ≥ 4.58:1 (light) and ≥ 7.18:1 (dark
 | Project | EN | FR |
 |---|---|---|
 | KAYP | Maritime bills of lading as electronic documents, encrypted and anchored on the XRP Ledger. | Des connaissements maritimes électroniques, chiffrés et ancrés sur le XRP Ledger. |
-| KAYP — H-W3B Paris | The weekend prototype of KAYP: bills of lading secured on the blockchain. | Le prototype de KAYP, en un week-end : des connaissements sécurisés sur la blockchain. |
+| KAYP - H-W3B Paris | The weekend prototype of KAYP: bills of lading secured on the blockchain. | Le prototype de KAYP, en un week-end : des connaissements sécurisés sur la blockchain. |
 | ft_transcendence | Online multiplayer Pong with tournaments, 3D rendering and an AI opponent. | Un Pong multijoueur en ligne avec tournois, rendu 3D et IA adverse. |
 | microcode | An AI agent written from scratch on a local Ollama model. | Un agent IA écrit de zéro, sur un modèle Ollama local. |
 | Bahapad | A launchpad to deploy your own ERC-20 token on Bahamut. | Un launchpad pour déployer son propre token ERC-20 sur Bahamut. |
-| GoldenEye — data augmentation | Data augmentation for a SogetiLabs computer-vision project. | Augmentation de données pour un projet de vision par ordinateur de SogetiLabs. |
+| GoldenEye - data augmentation | Data augmentation for a SogetiLabs computer-vision project. | Augmentation de données pour un projet de vision par ordinateur de SogetiLabs. |
 | Leaffliction | Leaf disease detection with a convolutional neural network. | Détection de maladies des feuilles par un réseau de neurones convolutif. |
 | DSLR | A hand-coded one-vs-all logistic regression, Hogwarts sorting hat style. | Régression logistique one-vs-all recodée à la main, façon Choixpeau de Poudlard. |
 | ft_linear_regression | A from-scratch linear regression that predicts a car’s price. | Régression linéaire écrite de zéro qui prédit le prix d’une voiture. |
@@ -558,9 +558,9 @@ Checked in brainstorming: label contrast ≥ 4.58:1 (light) and ≥ 7.18:1 (dark
 - Buttons: `aria-expanded`, `aria-controls` → the panel. The tab list is `display: none` on phones and the accordion buttons on desktop, so each width has one consistent pattern. Which panels are hidden is a pure, unit-tested `panelHidden({ enhanced, desktop, selected, open }, index): boolean` in `src/lib/skills.ts`; `desktop` comes from `matchMedia(DESKTOP_QUERY)`. Before hydration / without JS all groups show, as today.
 
 ### Experience & Education
-- Sub-headings ("Experience", "Education", "Hackathons — {n} podiums") 14px weight 600 `--accent`; 22px above the first, 32px above the others.
+- Sub-headings ("Experience", "Education", "Hackathons - {n} podiums") 14px weight 600 `--accent`; 22px above the first, 32px above the others.
 - **Job:** padding 20px 0, 1px `--rule` below. Dates on one line: "Jul 2025 → Jan 2026 · Internship · 7 months" 13px weight 500 `--muted` (`<time>` kept); title 20px weight 800, line-height 1.25; company 16px weight 700 `--accent`, 10px below; bullets 15px, line-height 1.55, `--body`, 18px indent; tags 12px (padding 5px 8px).
-- **Recommendation:** a full-width button, min-height 48px, 12px above, padding 0 14px, `--surface`, 1.5px `--border`, 6px radius, 15px weight 600: a 30px weight 800 `--accent` opening quote mark (`aria-hidden`), **Recommendation — {name} / Recommandation — {name}** (new key `experience.recommendation`, filled with `fill()`), chevron right. Open: the quote below (8px above) in a box: padding 16px, `--surface`, 1.5px `--border`, 6px radius; quote 15px, line-height 1.55; caption 13px `--muted`, name bold `--text`; "(translated from French)" kept on the English page. Collapsibles rule applies. The whole quote shows when open (the board cut one quote with a "Read more" inside, for space).
+- **Recommendation:** a full-width button, min-height 48px, 12px above, padding 0 14px, `--surface`, 1.5px `--border`, 6px radius, 15px weight 600: a 30px weight 800 `--accent` opening quote mark (`aria-hidden`), **Recommendation - {name} / Recommandation - {name}** (new key `experience.recommendation`, filled with `fill()`), chevron right. Open: the quote below (8px above) in a box: padding 16px, `--surface`, 1.5px `--border`, 6px radius; quote 15px, line-height 1.55; caption 13px `--muted`, name bold `--text`; "(translated from French)" kept on the English page. Collapsibles rule applies. The whole quote shows when open (the board cut one quote with a "Read more" inside, for space).
 - **This replaces the M8 quote clamp:** the 2-line clamp, its overflow measuring and its Read more button go. At 48rem and up the quote is always whole, with no button (so the 48–56.25rem clamp disappears too).
 - **Education:** rows with 12px vertical padding and a 1px `--rule`: dates 13px `--muted`; school 18px weight 800 with the diploma inline after " · " (15px weight 600 `--body`); details 14px `--muted`, line-height 1.45. CS50 row: "Certificate ↗ / Certificat ↗" right (14px weight 600, min-height 44px).
 - **Hackathons:** rows grid `36px 1fr auto`, gap 12px, 10px vertical padding, 1px `--rule`: 36px tile (trophy `--accent` on `--tint` for a win, medal `--muted` on `--tag` otherwise); event bold 15px with "project · year" below (13px `--muted`); result 13px weight 700 `--body`, `nowrap` (wins weight 800 `--accent`).
@@ -581,7 +581,7 @@ Min-height 76px, padding 0 20px, flex with wrap, gap 12px: "© {year} Jocelyn Re
 - **Manual (review guide):** real-phone feel (touch targets, sticky header, select pickers); featured-card text contrast over real photos once they exist (axe can't measure text over images).
 - **Review guide:** `docs/reviews/milestone-10-review-guide.md`.
 
-## Milestone 11 — Content-ready refactor
+## Milestone 11 - Content-ready refactor
 _Settled during Milestone 11 brainstorming (2026-10-08)._
 
 **Goal.** Before deployment, Jocelyn rewrites the content: picks the projects worth showing (not everything on GitHub), records videos, makes phone images, rewrites descriptions and the About in their own words. This milestone makes every such edit **as convenient as possible, now and later**: each kind of change touches one place, mistakes are caught by the type checker or by a test whose message names the project and field, and a guide explains every edit. **No visible change:** the site renders exactly as before.
@@ -626,8 +626,8 @@ export type Context = keyof typeof CONTEXTS;
 
 ### Experience and hero "At a glance"
 - `PROFILE.glance` rows stay editable in order, but two rows can be **derived** instead of typed: `{ auto: 'latestRole' }` and `{ auto: 'hackathons' }`.
-  - `latestRole`: the newest job (`newestFirst(JOBS)[0]`); value = `"{roleShort ?? role} — {companyShort ?? company}"`, phone `short` = `companyShort ?? company`. New optional `Job` fields `roleShort?: Localized` and `companyShort?: string`; the Sogeti job gets `roleShort` "ML & Computer Vision developer" / "Développeur ML & IA Vision" and `companyShort` "Sogeti (Capgemini)", so the text is identical to today.
-  - `hackathons`: counted from `HACKATHONS` (wins = medal 1, podiums = all), with dictionary templates and one/other forms: EN "{wins} wins, {podiums} podiums", FR "{wins} victoires, {podiums} podiums" → "2 wins, 5 podiums" today. The "Hackathons — {n} podiums" heading already counts.
+  - `latestRole`: the newest job (`newestFirst(JOBS)[0]`); value = `"{roleShort ?? role} - {companyShort ?? company}"`, phone `short` = `companyShort ?? company`. New optional `Job` fields `roleShort?: Localized` and `companyShort?: string`; the Sogeti job gets `roleShort` "ML & Computer Vision developer" / "Développeur ML & IA Vision" and `companyShort` "Sogeti (Capgemini)", so the text is identical to today.
+  - `hackathons`: counted from `HACKATHONS` (wins = medal 1, podiums = all), with dictionary templates and one/other forms: EN "{wins} wins, {podiums} podiums", FR "{wins} victoires, {podiums} podiums" → "2 wins, 5 podiums" today. The "Hackathons - {n} podiums" heading already counts.
   - One pure tested function `glanceRows(profile, jobs, hackathons, lang, t)` returns `{ label, value, short?, wide? }` rows; `Hero.svelte` only renders them.
 - Jobs, education, certificates and hackathons are otherwise unchanged (already one entry each, sorted by the page).
 
@@ -657,18 +657,18 @@ Content can be written with plain spaces and straight apostrophes (a string cont
 - `npm run build` prerenders `/en` and `/fr` without errors; `npm run preview` manual check of theme toggle, language switch, filters.
 
 ## Milestones (each gets its own implementation plan, built one at a time)
-1. **Foundation** — scaffold (sv create, TS, Vitest), adapter-static, lang routing + redirect, i18n dicts, theme toggle, nav, empty section placeholders.
-2. **Projects** — data model, cards, two-group filters, sort, animations, tests.
+1. **Foundation** - scaffold (sv create, TS, Vitest), adapter-static, lang routing + redirect, i18n dicts, theme toggle, nav, empty section placeholders.
+2. **Projects** - data model, cards, two-group filters, sort, animations, tests.
 3. **Hero + About**
 4. **Skills**
 5. **Experience / Education**
 6. **Contact + footer**
-7. **Fixes & accessibility** — mobile nav, active-section highlight, a11y, French typography, `/` redirect, deferred review minors, responsive pass, `npm run audit` (axe + Lighthouse).
-8. **Layout & media** — compact phone layout (overlay project cards, compact rows, scrollable filters, tighter sections and skill chips, clamped quotes), video and poster media, desktop card hover.
-9. **Desktop design** — the new visual identity from the Claude Design canvas on desktop, both themes (see "Milestone 9 — Desktop design"): tokens and font, numbered section grid, hero with the at-a-glance card, restyled projects, skills as tabs, experience, contact with email and Malt blocks, favicon, OG images, per-locale meta, scroll reveal.
-10. **Phone design** — the same pass for phones, once the desktop version is settled (see "Milestone 10 — Phone design"): sticky header with a Contact button (no burger), compact hero tiles, folded About, blurred-photo featured cards, domain-tinted project tiles with one-sentence summaries, skills accordion, collapsed recommendations, compact contact.
-11. **Content-ready refactor** — see "Milestone 11 — Content-ready refactor": each category (domain, context, skill group) defined in one entry, featured list, hidden projects, optional phone images, derived glance rows, automatic French typography, editing guide `docs/content-guide.md`. No visible change.
-12. **Deployment** — OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
+7. **Fixes & accessibility** - mobile nav, active-section highlight, a11y, French typography, `/` redirect, deferred review minors, responsive pass, `npm run audit` (axe + Lighthouse).
+8. **Layout & media** - compact phone layout (overlay project cards, compact rows, scrollable filters, tighter sections and skill chips, clamped quotes), video and poster media, desktop card hover.
+9. **Desktop design** - the new visual identity from the Claude Design canvas on desktop, both themes (see "Milestone 9 - Desktop design"): tokens and font, numbered section grid, hero with the at-a-glance card, restyled projects, skills as tabs, experience, contact with email and Malt blocks, favicon, OG images, per-locale meta, scroll reveal.
+10. **Phone design** - the same pass for phones, once the desktop version is settled (see "Milestone 10 - Phone design"): sticky header with a Contact button (no burger), compact hero tiles, folded About, blurred-photo featured cards, domain-tinted project tiles with one-sentence summaries, skills accordion, collapsed recommendations, compact contact.
+11. **Content-ready refactor** - see "Milestone 11 - Content-ready refactor": each category (domain, context, skill group) defined in one entry, featured list, hidden projects, optional phone images, derived glance rows, automatic French typography, editing guide `docs/content-guide.md`. No visible change.
+12. **Deployment** - OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
 
 ## Next steps after approval
 1. `git init` in `/home/lezard/portfolio`, save this spec to `docs/superpowers/specs/2026-09-23-portfolio-design.md`, commit.

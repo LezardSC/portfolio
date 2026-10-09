@@ -1,8 +1,8 @@
-# Milestone 1 — Foundation Implementation Plan
+# Milestone 1 - Foundation Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** A prerendered bilingual (EN/FR) SvelteKit skeleton with system-aware dark/light theme, a fixed nav with language switch and theme toggle, and empty placeholder sections — ready for Milestone 2 (Projects).
+**Goal:** A prerendered bilingual (EN/FR) SvelteKit skeleton with system-aware dark/light theme, a fixed nav with language switch and theme toggle, and empty placeholder sections - ready for Milestone 2 (Projects).
 
 **Architecture:** SvelteKit + `adapter-static`, everything prerendered. One dynamic route `src/routes/[lang=lang]/` generates `/en/` and `/fr/`; `/` picks a language client-side and redirects. UI strings live in typed TS dictionaries (`fr` must match `en`'s shape). Theme is CSS custom properties switched by `data-theme` on `<html>`, set by an inline script before first paint.
 
@@ -12,13 +12,13 @@
 
 ## Global Constraints
 
-- Svelte 5 runes only (`$props`, `$state`, `$derived`) — no `export let`, no legacy stores.
+- Svelte 5 runes only (`$props`, `$state`, `$derived`) - no `export let`, no legacy stores.
 - Fully static: `export const prerender = true` at root; no server runtime, no backend.
 - Locales exactly `en` and `fr`; URLs `/en/` and `/fr/` (`trailingSlash = 'always'` so output is `en/index.html`, portable to any host).
 - `fr` dictionary is typed as `Dict` (= `typeof en`); a missing key is a type error.
 - Theme values exactly `'dark' | 'light'`; `localStorage` key `'theme'`; fallback `prefers-color-scheme`.
-- The scaffold puts SvelteKit config inside `vite.config.ts` (`sveltekit({ adapter: adapter() })`) — there is **no** `svelte.config.js`. Do not create one.
-- Formatting: run `npm run format` before each commit (tabs, single quotes — scaffold defaults).
+- The scaffold puts SvelteKit config inside `vite.config.ts` (`sveltekit({ adapter: adapter() })`) - there is **no** `svelte.config.js`. Do not create one.
+- Formatting: run `npm run format` before each commit (tabs, single quotes - scaffold defaults).
 - Every commit message ends with a blank line then `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 
 ## Review Focus
@@ -35,7 +35,7 @@
 
 | File | Responsibility |
 |---|---|
-| `src/lib/i18n/lang.ts` | `LANGS`, `Lang`, `isLang`, `pickLang`, `otherLang` — no dictionary imports (keeps `/` and matcher tiny) |
+| `src/lib/i18n/lang.ts` | `LANGS`, `Lang`, `isLang`, `pickLang`, `otherLang` - no dictionary imports (keeps `/` and matcher tiny) |
 | `src/lib/i18n/en.ts`, `fr.ts` | UI strings; `Dict` type exported from `en.ts` |
 | `src/lib/i18n/index.ts` | `dicts: Record<Lang, Dict>`, re-exports |
 | `src/lib/sections.ts` | `SECTIONS` id list (nav + page order) |
@@ -81,7 +81,7 @@ rm -rf src/lib/vitest-examples src/lib/index.ts
 
 Run: `npm run check`
 Expected: `0 ERRORS 0 WARNINGS`.
-(Don't build yet — adapter-static needs `prerender = true`, added in Task 2. `npm test` fails with "No test files found" until Task 2.)
+(Don't build yet - adapter-static needs `prerender = true`, added in Task 2. `npm test` fails with "No test files found" until Task 2.)
 
 - [ ] **Step 4: Replace README**
 
@@ -89,12 +89,12 @@ Expected: `0 ERRORS 0 WARNINGS`.
 ```markdown
 # Portfolio
 
-Personal portfolio — SvelteKit (Svelte 5), fully static, EN/FR.
+Personal portfolio - SvelteKit (Svelte 5), fully static, EN/FR.
 
-- `npm run dev` — dev server
-- `npm test` — unit tests
-- `npm run check` — type check
-- `npm run build` — static site in `build/`
+- `npm run dev` - dev server
+- `npm test` - unit tests
+- `npm run check` - type check
+- `npm run build` - static site in `build/`
 
 Design: `docs/superpowers/specs/2026-09-23-portfolio-design.md`
 ```
@@ -181,7 +181,7 @@ it('matches only en and fr', () => {
 - [ ] **Step 2: Run to verify failure**
 
 Run: `npm test`
-Expected: FAIL — `Failed to resolve import "./lang"` in both files.
+Expected: FAIL - `Failed to resolve import "./lang"` in both files.
 
 - [ ] **Step 3: Implement `lang.ts` and the matcher**
 
@@ -358,7 +358,7 @@ describe('dictionaries', () => {
 - [ ] **Step 2: Run to verify failure**
 
 Run: `npm test`
-Expected: FAIL — cannot resolve `$lib/sections` / `./index`.
+Expected: FAIL - cannot resolve `$lib/sections` / `./index`.
 
 - [ ] **Step 3: Implement**
 
@@ -375,13 +375,13 @@ import type { SectionId } from '$lib/sections';
 
 export const en = {
 	meta: {
-		title: 'Jocelyn — Software Engineer',
+		title: 'Jocelyn - Software Engineer',
 		description:
 			'Portfolio of Jocelyn, software engineer from 42 School: systems, web, blockchain and AI projects.'
 	},
 	hero: {
 		name: 'Jocelyn',
-		tagline: 'Software engineer — systems, web, blockchain & AI.'
+		tagline: 'Software engineer - systems, web, blockchain & AI.'
 	},
 	nav: {
 		about: 'About',
@@ -417,13 +417,13 @@ import type { Dict } from './en';
 
 export const fr: Dict = {
 	meta: {
-		title: 'Jocelyn — Ingénieur logiciel',
+		title: 'Jocelyn - Ingénieur logiciel',
 		description:
 			'Portfolio de Jocelyn, ingénieur logiciel issu de 42 : projets systèmes, web, blockchain et IA.'
 	},
 	hero: {
 		name: 'Jocelyn',
-		tagline: 'Ingénieur logiciel — systèmes, web, blockchain & IA.'
+		tagline: 'Ingénieur logiciel - systèmes, web, blockchain & IA.'
 	},
 	nav: {
 		about: 'À propos',
@@ -498,7 +498,7 @@ Update `src/routes/[lang=lang]/+page.svelte` (still temporary body; head is fina
 - [ ] **Step 4: Run tests + checks**
 
 Run: `npm test && npm run check && npm run build && grep -o '<title>[^<]*' build/fr/index.html`
-Expected: all tests PASS; 0 errors; `<title>Jocelyn — Ingénieur logiciel`.
+Expected: all tests PASS; 0 errors; `<title>Jocelyn - Ingénieur logiciel`.
 
 - [ ] **Step 5: Commit**
 
@@ -553,7 +553,7 @@ describe('nextTheme', () => {
 - [ ] **Step 2: Run to verify failure**
 
 Run: `npm test`
-Expected: FAIL — cannot resolve `./theme`.
+Expected: FAIL - cannot resolve `./theme`.
 
 - [ ] **Step 3: Implement `theme.ts`**
 
@@ -663,7 +663,7 @@ a {
 }
 ```
 
-`src/routes/+layout.svelte` — add the import at the top of the `<script>`:
+`src/routes/+layout.svelte` - add the import at the top of the `<script>`:
 ```svelte
 <script lang="ts">
 	import '../app.css';
@@ -969,7 +969,7 @@ Full page load (not client-side `goto`) so `<html lang>` comes from the prerende
 </style>
 ```
 
-`src/lib/components/sections/About.svelte` — and the same pattern for `Projects.svelte` (`id="projects"`, `t.sections.projects`), `Skills.svelte` (`skills`), `Experience.svelte` (`experience`), `Contact.svelte` (`contact`); only the id and key change:
+`src/lib/components/sections/About.svelte` - and the same pattern for `Projects.svelte` (`id="projects"`, `t.sections.projects`), `Skills.svelte` (`skills`), `Experience.svelte` (`experience`), `Contact.svelte` (`contact`); only the id and key change:
 ```svelte
 <script lang="ts">
 	import type { Dict } from '$lib/i18n';

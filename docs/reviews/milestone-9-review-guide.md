@@ -8,7 +8,7 @@ The review has three parts, in this order:
 2. **Compare with the design and try it in a real browser** (15–20 min). I already drove the built site with headless Chromium at 360, 390, 768, 1024, 1280 and 1440px, both themes and both languages, and measured the key styles against the design values. What I can't do is look at the canvas next to the site with your eyes, use your real mouse and keyboard, or judge how it feels.
 3. **Code review** (10 min)
 
-Source of truth: the "Milestone 9 — Desktop design" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, the plan `docs/superpowers/plans/2026-10-08-milestone-9-desktop-design.md`, and the validated artboards on the canvas https://claude.ai/artifact/5rqhnCoS2tUFHpioTu8jZG (**A1·M3 révisée — clair**, **A1·M3 révisée — sombre**, **Compétences 4A**; copies of their sources in `docs/superpowers/designs/2026-10-07-m9-final/`).
+Source of truth: the "Milestone 9 - Desktop design" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, the plan `docs/superpowers/plans/2026-10-08-milestone-9-desktop-design.md`, and the validated artboards on the canvas https://claude.ai/artifact/5rqhnCoS2tUFHpioTu8jZG (**A1·M3 révisée - clair**, **A1·M3 révisée - sombre**, **Compétences 4A**; copies of their sources in `docs/superpowers/designs/2026-10-07-m9-final/`).
 
 Phones are **not** designed in this milestone (that's M10): they get the new colours and font with the M8 layouts, and I only checked that nothing breaks.
 
@@ -55,10 +55,10 @@ Expected (what I got):
 |---|---|
 | `npm test` | 243 passed |
 | `npm run check` | 0 errors, 0 warnings |
-| axe — EN/FR × dark/light × 360/1280px, menu open, before hydration | 0 violations (17 runs) |
+| axe - EN/FR × dark/light × 360/1280px, menu open, before hydration | 0 violations (17 runs) |
 | No horizontal scroll at 360px | fits (EN/FR × dark/light) |
-| Lighthouse mobile — Performance / A11y / Best practices / SEO | 98 / 100 / 100 / 92 (pending domain: hreflang) |
-| Lighthouse desktop — Performance / A11y / Best practices / SEO | 100 / 100 / 100 / 92 (pending domain: hreflang) |
+| Lighthouse mobile - Performance / A11y / Best practices / SEO | 98 / 100 / 100 / 92 (pending domain: hreflang) |
+| Lighthouse desktop - Performance / A11y / Best practices / SEO | 100 / 100 / 100 / 92 (pending domain: hreflang) |
 | Design values measured in the browser (19 selectors × 2 themes × 2 languages) | all match |
 
 The design-value check compared the computed styles with the artboards: ground and footer colours per theme, Schibsted Grotesk, hero name 122px/900, role accent, at-a-glance card border and background, section number 112px, titles 46px/800, nav 72px, featured titles 32px, more-project titles 19px, selected tab shadow, panel min-height 480px, job titles 24px, email 30px/800.

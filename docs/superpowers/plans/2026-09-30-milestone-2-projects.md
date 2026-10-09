@@ -1,4 +1,4 @@
-# Milestone 2 — Projects Implementation Plan
+# Milestone 2 - Projects Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -428,14 +428,14 @@ export const PROJECTS: Project[] = [
 		tech: ['Java', 'Spring Boot', 'Python', 'XRPL'],
 		links: { repo: gh('KAYP-backend-PBW2024') },
 		award: {
-			en: 'Winner — Paris Blockchain Week 2024 (XRPL track)',
-			fr: 'Vainqueur — Paris Blockchain Week 2024 (track XRPL)'
+			en: 'Winner - Paris Blockchain Week 2024 (XRPL track)',
+			fr: 'Vainqueur - Paris Blockchain Week 2024 (track XRPL)'
 		},
 		featured: 1
 	},
 	{
 		id: 'kayp-h-web3-paris',
-		title: 'KAYP — H-W3B Paris',
+		title: 'KAYP - H-W3B Paris',
 		description: {
 			en: 'First version of KAYP, built in a weekend: a web app to generate, exchange and store maritime bills of lading, secured and audited on the blockchain.',
 			fr: 'Première version de KAYP, construite en un week-end : une application web pour générer, échanger et stocker des connaissements maritimes, sécurisés et audités sur la blockchain.'
@@ -445,7 +445,7 @@ export const PROJECTS: Project[] = [
 		domains: ['blockchain', 'web'],
 		tech: ['TypeScript', 'React', 'Tailwind CSS', 'Python'],
 		links: { repo: gh('KAYP-H-WEB3PARIS') },
-		award: { en: 'Winner — H-W3B Paris 2024', fr: 'Vainqueur — H-W3B Paris 2024' },
+		award: { en: 'Winner - H-W3B Paris 2024', fr: 'Vainqueur - H-W3B Paris 2024' },
 		featured: 2
 	},
 	{
@@ -489,14 +489,14 @@ export const PROJECTS: Project[] = [
 		tech: ['Solidity', 'TypeScript', 'Hardhat'],
 		links: { repo: gh('Bahapad-Smart-Contract-PBW2025') },
 		award: {
-			en: '3rd place — Paris Blockchain Week 2025',
-			fr: '3e place — Paris Blockchain Week 2025'
+			en: '3rd place - Paris Blockchain Week 2025',
+			fr: '3e place - Paris Blockchain Week 2025'
 		},
 		featured: 5
 	},
 	{
 		id: 'goldeneye-data-augmentation',
-		title: 'GoldenEye — data augmentation',
+		title: 'GoldenEye - data augmentation',
 		description: {
 			en: 'Data augmentation experiments for GoldenEye, a SogetiLabs (Capgemini) computer-vision project, to enlarge and diversify its training datasets.',
 			fr: 'Expérimentations d’augmentation de données pour GoldenEye, un projet de vision par ordinateur de SogetiLabs (Capgemini), afin d’enrichir et de diversifier ses jeux d’entraînement.'
@@ -1565,7 +1565,7 @@ Expected: every command succeeds, and the build prerenders `/en/` and `/fr/`.
 
 ```bash
 grep -c 'class="card' build/en/index.html
-grep -o 'Vainqueur — H-W3B Paris 2024' build/fr/index.html | head -1
+grep -o 'Vainqueur - H-W3B Paris 2024' build/fr/index.html | head -1
 grep -c 'GoldenEye' build/en/index.html
 ```
 Expected: the first count is at least 15 (it counts 15 cards and possibly other `card` classes), the French award string is found, and GoldenEye appears (count ≥ 1).

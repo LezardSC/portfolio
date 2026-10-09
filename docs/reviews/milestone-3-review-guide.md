@@ -1,4 +1,4 @@
-# How to review PR #3 — Milestone 3 (Hero + About)
+# How to review PR #3 - Milestone 3 (Hero + About)
 
 Branch `milestone-3-hero-about` → `master`. The PR number may differ; see the PR link on GitHub.
 
@@ -55,7 +55,7 @@ Hero (`/en/` then `/fr/`):
 - [ ] **See projects** scrolls to Projects.
 - [ ] **Download CV** opens the PDF in a new tab. `/fr/` → `cv-fr.pdf`, `/en/` → `cv-en.pdf`. The EN one is still the French CV (see §3).
 - [ ] **GitHub** opens github.com/LezardSC in a new tab.
-- [ ] Browser tab title: "Jocelyn Renault — Software Engineer" / "— Ingénieur logiciel".
+- [ ] Browser tab title: "Jocelyn Renault - Software Engineer" / "- Ingénieur logiciel".
 - [ ] No "Available for work" pill. To see it, set `available: true` in `src/lib/data/profile.ts`, check it in `npm run dev`, then set it back.
 
 About:

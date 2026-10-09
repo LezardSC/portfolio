@@ -6,7 +6,7 @@ export const en = {
 	meta: {
 		locale: 'en_US',
 		altLocale: 'fr_FR',
-		title: 'Jocelyn Renault — Software Engineer',
+		title: 'Jocelyn Renault - Software Engineer',
 		description:
 			'Portfolio of Jocelyn Renault, software engineer from 42 School: backend, systems, web, blockchain and AI projects.'
 	},
@@ -77,11 +77,11 @@ export const en = {
 	experience: {
 		work: 'Experience',
 		education: 'Education',
-		hackathonsTitle: 'Hackathons — {n} podiums',
+		hackathonsTitle: 'Hackathons - {n} podiums',
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
-		recommendation: 'Recommendation — {name}',
+		recommendation: 'Recommendation - {name}',
 		results: { 1: 'Winner', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>,
 		months: { one: '{n} month', other: '{n} months' },
 		certificate: 'View certificate'

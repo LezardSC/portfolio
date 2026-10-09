@@ -1,4 +1,4 @@
-# Portfolio — project guide for Claude
+# Portfolio - project guide for Claude
 
 Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully static (`adapter-static`), bilingual EN/FR, dark/light theme.
 

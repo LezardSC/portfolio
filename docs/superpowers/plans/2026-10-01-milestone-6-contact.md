@@ -1,4 +1,4 @@
-# Milestone 6 — Contact & Footer Implementation Plan
+# Milestone 6 - Contact & Footer Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -175,7 +175,7 @@ describe('contact brand icons', () => {
 - [ ] **Step 5: Run the tests to see them fail**
 
 Run: `npm test`
-Expected: FAIL — `contact.spec.ts` and `contact-icons.spec.ts` cannot resolve `./contact` / `./contact-icons`; profile tests fail on `undefined` email / linkedin / malt.
+Expected: FAIL - `contact.spec.ts` and `contact-icons.spec.ts` cannot resolve `./contact` / `./contact-icons`; profile tests fail on `undefined` email / linkedin / malt.
 
 - [ ] **Step 6: Add the profile fields**
 
@@ -299,7 +299,7 @@ In `src/lib/i18n/dicts.spec.ts`, add at the end of the `describe` block:
 - [ ] **Step 2: Run it to see it fail**
 
 Run: `npm test -- dicts`
-Expected: FAIL — found `['experience.newTab', 'hero.newTab']`.
+Expected: FAIL - found `['experience.newTab', 'hero.newTab']`.
 
 - [ ] **Step 3: Move the key in both dictionaries**
 

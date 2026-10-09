@@ -1,4 +1,4 @@
-# Milestone 7 — Fixes & Accessibility Implementation Plan
+# Milestone 7 - Fixes & Accessibility Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** SvelteKit + Svelte 5 runes, TypeScript, Vitest, `adapter-static`; new dev deps `playwright@1.63.0`, `@axe-core/playwright`, `lighthouse`, `chrome-launcher`.
 
-**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 7 — Fixes & accessibility". Read it before starting any task.
+**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 7 - Fixes & accessibility". Read it before starting any task.
 
 ## Global Constraints
 
@@ -60,7 +60,7 @@
 Run: `npm ci`
 Expected: completes. Then `npm test` passes (baseline).
 
-- [ ] **Step 2: Write the failing test** — `src/lib/nav-menu.spec.ts`
+- [ ] **Step 2: Write the failing test** - `src/lib/nav-menu.spec.ts`
 
 ```ts
 import { describe, expect, it } from 'vitest';
@@ -92,7 +92,7 @@ describe('nextMenu', () => {
 Run: `npx vitest run src/lib/nav-menu.spec.ts`
 Expected: FAIL, cannot resolve `./nav-menu`.
 
-- [ ] **Step 4: Implement** — `src/lib/nav-menu.ts`
+- [ ] **Step 4: Implement** - `src/lib/nav-menu.ts`
 
 ```ts
 /** What can happen to the mobile nav menu. */
@@ -357,7 +357,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 No new unit test: `currentSection()` only reads the DOM and delegates to the already-tested `sectionInView` / `isAtBottom`. It is checked in the browser in Step 4.
 
-- [ ] **Step 1: Extract the shared helper** — `src/lib/sections-dom.ts`
+- [ ] **Step 1: Extract the shared helper** - `src/lib/sections-dom.ts`
 
 ```ts
 import { isAtBottom, sectionInView, SECTIONS, type SectionId } from './sections';
@@ -500,7 +500,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes: `resolveTheme`, `nextTheme`, `THEME_KEY`, `Theme` (`src/lib/theme.ts`); `--tap` token (Task 1).
 - Produces: `themeOnSystemChange(stored: string | null, prefersDark: boolean): Theme | null`.
 
-- [ ] **Step 1: Write the failing test** — append to `src/lib/theme.spec.ts` (and add `themeOnSystemChange` to its import from `./theme`)
+- [ ] **Step 1: Write the failing test** - append to `src/lib/theme.spec.ts` (and add `themeOnSystemChange` to its import from `./theme`)
 
 ```ts
 describe('themeOnSystemChange', () => {
@@ -523,7 +523,7 @@ describe('themeOnSystemChange', () => {
 Run: `npx vitest run src/lib/theme.spec.ts`
 Expected: FAIL, `themeOnSystemChange` is not exported.
 
-- [ ] **Step 3: Implement** — append to `src/lib/theme.ts`
+- [ ] **Step 3: Implement** - append to `src/lib/theme.ts`
 
 ```ts
 /** Theme to apply when the OS preference changes, or null when the visitor picked one (their choice wins). */
@@ -535,7 +535,7 @@ export function themeOnSystemChange(stored: string | null, prefersDark: boolean)
 Run: `npx vitest run src/lib/theme.spec.ts`
 Expected: PASS.
 
-- [ ] **Step 4: Rewrite the toggle** — `src/lib/components/ThemeToggle.svelte`
+- [ ] **Step 4: Rewrite the toggle** - `src/lib/components/ThemeToggle.svelte`
 
 The accessible name now comes from two visually hidden spans, one of them `display: none` per theme (so it is out of the accessibility tree), chosen by the same CSS selectors as the icons. That is correct from the first paint; the old `aria-label` was wrong until hydration on a light OS. The `title` tooltip is only set after hydration.
 
@@ -701,7 +701,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   - `Period.svelte` props `{ points: PeriodPoint[] }`.
   - dict key `skipToContent: string` (top level); `<main id="main" tabindex="-1">`.
 
-- [ ] **Step 1: Write the failing test** — in `src/lib/experience.spec.ts`, add `periodPoints` to the import and add:
+- [ ] **Step 1: Write the failing test** - in `src/lib/experience.spec.ts`, add `periodPoints` to the import and add:
 
 ```ts
 describe('periodPoints', () => {
@@ -733,7 +733,7 @@ describe('periodPoints', () => {
 Run: `npx vitest run src/lib/experience.spec.ts`
 Expected: FAIL, `periodPoints` is not exported.
 
-- [ ] **Step 3: Implement** — in `src/lib/experience.ts`, replace the whole `formatPeriod` function (with its comment) with:
+- [ ] **Step 3: Implement** - in `src/lib/experience.ts`, replace the whole `formatPeriod` function (with its comment) with:
 
 ```ts
 /** One end of a period: display text, plus a `<time datetime>` value unless it is "present". */
@@ -882,9 +882,9 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Interfaces:**
 - Consumes: `LANGS`, `pickLang`, `localeHref` (`src/lib/i18n/lang.ts`); `en.meta.title`.
-- Produces: `redirectScript(base: string): string` — the body of an inline `<script>` (no tags).
+- Produces: `redirectScript(base: string): string` - the body of an inline `<script>` (no tags).
 
-- [ ] **Step 1: Write the failing test** — `src/lib/i18n/redirect.spec.ts`
+- [ ] **Step 1: Write the failing test** - `src/lib/i18n/redirect.spec.ts`
 
 The script is plain ES5 run before any bundle; the test runs it against fake `navigator`/`location` and requires the same result as the tested `pickLang`, so the two cannot drift.
 
@@ -937,7 +937,7 @@ describe('redirectScript', () => {
 Run: `npx vitest run src/lib/i18n/redirect.spec.ts`
 Expected: FAIL, cannot resolve `./redirect`.
 
-- [ ] **Step 3: Implement** — `src/lib/i18n/redirect.ts`
+- [ ] **Step 3: Implement** - `src/lib/i18n/redirect.ts`
 
 ```ts
 import { LANGS } from './lang';
@@ -975,7 +975,7 @@ In `src/lib/i18n/lang.ts`, replace the comment above `pickLang` with:
  */
 ```
 
-- [ ] **Step 5: Use it on `/`** — replace `src/routes/+page.svelte` with:
+- [ ] **Step 5: Use it on `/`** - replace `src/routes/+page.svelte` with:
 
 ```svelte
 <script lang="ts">
@@ -1002,7 +1002,7 @@ In `src/lib/i18n/lang.ts`, replace the comment above `pickLang` with:
 (If the Svelte compiler rejects the `<script>` string inside `{@html}` in the markup, move the tag text into the `<script lang="ts">` block as `const redirect = '<scr' + 'ipt>' + redirectScript(base) + '</scr' + 'ipt>';` and render `{@html redirect}`.)
 
 Run: `npm test && npm run check && npm run build`
-Expected: pass. `grep -o '<title>[^<]*</title>' build/index.html` shows `<title>Jocelyn Renault — Software Engineer</title>`, and `grep -c 'location.replace' build/index.html` is `1`.
+Expected: pass. `grep -o '<title>[^<]*</title>' build/index.html` shows `<title>Jocelyn Renault - Software Engineer</title>`, and `grep -c 'location.replace' build/index.html` is `1`.
 
 - [ ] **Step 6: Check in the browser**
 
@@ -1032,7 +1032,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes: `dicts` (`src/lib/i18n/index.ts`), `PROFILE`, `PROJECTS`, `JOBS`, `EDUCATION`, `HACKATHONS`, `SKILL_GROUPS`.
 - Produces: `frenchSpacingIssues(text: string): string[]`; dict `experience.places` values now end with their own colon (`'1st place:'`, `'1re place :'`).
 
-- [ ] **Step 1: Write the failing test** — `src/lib/i18n/typography.spec.ts`
+- [ ] **Step 1: Write the failing test** - `src/lib/i18n/typography.spec.ts`
 
 ```ts
 import { describe, expect, it } from 'vitest';
@@ -1098,7 +1098,7 @@ describe('French content', () => {
 Run: `npx vitest run src/lib/i18n/typography.spec.ts`
 Expected: FAIL, cannot resolve `./typography`.
 
-- [ ] **Step 3: Implement** — `src/lib/i18n/typography.ts`
+- [ ] **Step 3: Implement** - `src/lib/i18n/typography.ts`
 
 ```ts
 /** A plain (breakable) space where French typography wants a no-break one: before : ; ! ? % », after «. */
@@ -1410,7 +1410,7 @@ In `vite.config.ts`, in the `server` project, change `include` to:
 
 Append `/reports` to both `.gitignore` (under a `# Audit output` comment) and `.prettierignore`.
 
-- [ ] **Step 3: Write the failing test** — `scripts/audit-report.spec.ts`
+- [ ] **Step 3: Write the failing test** - `scripts/audit-report.spec.ts`
 
 ```ts
 import { describe, expect, it } from 'vitest';
@@ -1516,7 +1516,7 @@ describe('formatTable / allPassed', () => {
 Run: `npx vitest run scripts/audit-report.spec.ts`
 Expected: FAIL, cannot resolve `./audit-report`.
 
-- [ ] **Step 5: Implement** — `scripts/audit-report.ts`
+- [ ] **Step 5: Implement** - `scripts/audit-report.ts`
 
 Plain, erasable TypeScript only (no enums, no parameter properties): Node runs this file directly.
 
@@ -1598,7 +1598,7 @@ export function allPassed(checks: readonly Check[]): boolean {
 Run: `npx vitest run scripts/audit-report.spec.ts`
 Expected: PASS.
 
-- [ ] **Step 6: Write the runner** — `scripts/audit.ts`
+- [ ] **Step 6: Write the runner** - `scripts/audit.ts`
 
 ```ts
 /**

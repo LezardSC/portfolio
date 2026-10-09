@@ -8,7 +8,7 @@ The review has three parts, in this order:
 2. **Manual testing on a real phone and a real browser** (15 min). I already drove the built site with headless Chromium: menu, Escape, Tab-out, rotation, skip link, live OS theme switch, `/` redirect by browser language, copy fallback, touch target sizes, and 20 full-page screenshots (EN/FR × dark/light × 360/390/768/1024/1440px). What I can't do is use a real phone, a real screen reader or your OS theme switch, so those are the checks below.
 3. **Code review** (10 min)
 
-Source of truth: the "Milestone 7 — Fixes & accessibility" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, together with `docs/superpowers/plans/2026-10-01-milestone-7-fixes-a11y.md`.
+Source of truth: the "Milestone 7 - Fixes & accessibility" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, together with `docs/superpowers/plans/2026-10-01-milestone-7-fixes-a11y.md`.
 
 This milestone is the first half of the old "Polish" milestone. Visual polish & SEO is **M8**, deployment (OVH domain, home server) is **M9**.
 
@@ -153,7 +153,7 @@ The empty boxes in place of 🎓 🥇 in my screenshots are only missing emoji f
 ### `/` redirect
 
 - [ ] Open `http://localhost:4173/` with a French browser language: you land on `/fr/` with no visible flash. With English or any other language: `/en/`.
-- [ ] The tab title on `/` (visible for a split second, or with JavaScript disabled) is "Jocelyn Renault — Software Engineer".
+- [ ] The tab title on `/` (visible for a split second, or with JavaScript disabled) is "Jocelyn Renault - Software Engineer".
 
 ### French typography (`/fr/`)
 
