@@ -48,14 +48,14 @@
 	}
 	.num {
 		margin: 0;
-		font-size: 7rem;
+		font-size: 4.5rem;
 		line-height: 0.82;
 		font-weight: 900;
 		letter-spacing: -0.05em;
-		/* Outline only: a 4px stroke painted under a background-coloured fill leaves a 2px outer
+		/* Outline only: a 3px stroke painted under a background-coloured fill leaves a 1.5px outer
 		   line and hides the variable font's overlapping contours (visible in a bare stroke). */
 		color: var(--bg);
-		-webkit-text-stroke: 4px var(--accent);
+		-webkit-text-stroke: 3px var(--accent);
 		paint-order: stroke fill;
 	}
 	h2 {
