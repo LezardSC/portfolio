@@ -56,7 +56,6 @@ export const fr: Dict = {
 		private: 'Privé',
 		repo: 'Code source sur GitHub',
 		demo: 'Démo en ligne',
-		lead: '{total}\u00a0projets, les plus importants d’abord.',
 		showMore: 'Voir les {n} autres projets',
 		showMoreOne: 'Voir 1 autre projet',
 		showFewer: 'Réduire la liste',
