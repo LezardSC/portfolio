@@ -17,6 +17,24 @@ export const CPU: SkillIcon = {
 	hex: '0071C5'
 };
 
+/** Hexagon with C# cut out (C#): hexagon clockwise; the C ring and the 8 non-overlapping bars of
+ *  the # counter-clockwise (overlapping holes would fill back in). */
+export const CSHARP: SkillIcon = {
+	path:
+		'M12 1.5l9.1 5.25v10.5L12 22.5l-9.1-5.25V6.75z' +
+		'M11.68 8.82A4.5 4.5 0 1 0 11.68 15.18L10.27 13.77A2.5 2.5 0 1 1 10.27 10.23z' +
+		'M15.25 9.5v5h1v-5zM17.75 9.5v5h1v-5z' +
+		'M14 10.75v1h1.25v-1zM16.25 10.75v1h1.5v-1zM18.75 10.75v1h1.25v-1z' +
+		'M14 12.25v1h1.25v-1zM16.25 12.25v1h1.5v-1zM18.75 12.25v1h1.25v-1z',
+	hex: '9B4F96'
+};
+
+/** Contract page with </> cut out (SmartPy). Page clockwise, brackets counter-clockwise. */
+export const SMART_CONTRACT: SkillIcon = {
+	path: 'M5 2h10l4 4v16H5z' + 'M10.5 10l-3 3 3 3 1-1-2-2 2-2z' + 'M12.5 11l2 2-2 2 1 1 3-3-3-3z',
+	hex: '2C7DF7'
+};
+
 /** Database cylinder: a top cap and two bands (SQL). */
 export const DATABASE: SkillIcon = {
 	path:

@@ -16,7 +16,7 @@ export const ICONS = {
 	chip:
 		'M7.5 6h9a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 16.5v-9A1.5 1.5 0 0 1 7.5 6z' +
 		'M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4',
-	/** Game controller (Games). */
+	/** Game controller (Games, the Games skill group). */
 	gamepad:
 		'M6 7h12a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4v-3a4 4 0 0 1 4-4z' +
 		'M7 10.5v4M5 12.5h4' +
@@ -27,6 +27,8 @@ export const ICONS = {
 		'M4.5 4h15A1.5 1.5 0 0 1 21 5.5v4a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 9.5v-4A1.5 1.5 0 0 1 4.5 4z' +
 		'M4.5 13h15a1.5 1.5 0 0 1 1.5 1.5v4a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5v-4A1.5 1.5 0 0 1 4.5 13z' +
 		'M7 7.5h.01M7 16.5h.01',
+	/** A stack of disks: a cylinder with a middle ring (Databases). */
+	database: 'M3 5a9 3 0 1 0 18 0a9 3 0 1 0-18 0zM3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0',
 	/** Two arrows in a circle (DevOps). */
 	cycle: 'M20 12a8 8 0 0 1-13.66 5.66M4 12a8 8 0 0 1 13.66-5.66M18 3v4h-4M6 21v-4h4'
 } as const;
