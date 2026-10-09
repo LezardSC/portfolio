@@ -10,20 +10,27 @@ export const JOBS = typeset<Job[]>([
 	{
 		company: 'Sogeti, part of Capgemini',
 		role: {
-			en: 'Machine Learning & Computer Vision developer',
-			fr: 'Développeur Machine Learning & IA Vision'
+			en: 'Machine Learning R&D Engineer',
+			fr: 'Ingénieur R&D Machine Learning'
 		},
-		roleShort: { en: 'ML & Computer Vision developer', fr: 'Développeur ML & IA Vision' },
+		roleShort: { en: 'ML R&D Engineer', fr: 'Ingénieur R&D ML' },
 		companyShort: 'Sogeti (Capgemini)',
 		start: '2025-07',
 		end: '2026-01',
 		internship: true,
 		points: [
 			{
-				en: 'Built an automated experimentation workflow that improved a computer-vision model detecting and classifying underwater and satellite images, from training to evaluation.',
-				fr: 'Mise en place d’un workflow d’automatisation d’expérimentations qui a amélioré un modèle d’IA de vision détectant et classifiant des images sous-marines et satellites, de l’entraînement à l’évaluation.'
+				en: 'Built an automated experimentation workflow, from training to evaluation, for a computer-vision model detecting marine animals in underwater and satellite images.',
+				fr: 'Mise en place d’un workflow automatisé d’expérimentation, de l’entraînement à l’évaluation, pour un modèle de vision par ordinateur détectant des animaux marins sur des images sous-marines et satellites.'
 			},
-			{ en: 'Wrote a scientific paper.', fr: 'Rédaction d’un article scientifique.' }
+			{
+				en: 'These experiments led to a method that raised the model’s recall on an image domain it was not trained on from 5.4% to 58.3%, without retraining.',
+				fr: 'Ces expériences ont abouti à une méthode qui fait passer le rappel du modèle de 5,4 % à 58,3 % sur un domaine d’images absent de l’entraînement, sans réentraînement.'
+			},
+			{
+				en: 'Co-authored a paper accepted at IEEE ICIP 2026: “Improving Cross-Domain Marine Animal Detection with Class-Agnostic Object Detectors”.',
+				fr: 'Co-auteur d’un article accepté à IEEE ICIP 2026 : « Improving Cross-Domain Marine Animal Detection with Class-Agnostic Object Detectors ».'
+			}
 		],
 		tech: ['PyTorch', 'Python', 'Computer Vision', 'Bash'],
 		quote: {
@@ -47,19 +54,19 @@ export const JOBS = typeset<Job[]>([
 		internship: true,
 		points: [
 			{
-				en: 'Designed and built a web application for a private-sector client, from scratch.',
-				fr: 'Conception et développement d’une application web pour un client du secteur privé, en partant de zéro.'
+				en: 'Designed and built a web application from scratch for a client (under NDA).',
+				fr: 'Conception et développement d’une application web, à partir de zéro, pour un client (projet sous NDA).'
 			},
 			{
-				en: 'Set up the dev environment, designed the database, and built the backend, API routes and authentication.',
-				fr: 'Mise en place de l’environnement de développement, architecture de la base de données, développement du backend, des routes API et de l’authentification.'
+				en: 'Set up the dev environment, designed the database (SurrealDB), and built the backend, API routes and authentication.',
+				fr: 'Mise en place de l’environnement de développement, architecture de la base de données (SurrealDB), développement du backend, des routes API et de l’authentification.'
 			},
 			{
 				en: 'Built the frontend, integrating mock-ups from a designer.',
 				fr: 'Développement du frontend avec intégration de maquettes fournies par un designer.'
 			}
 		],
-		tech: ['SvelteKit', 'Node.js', 'Express'],
+		tech: ['JavaScript', 'SvelteKit', 'Node.js', 'Express', 'SurrealDB'],
 		quote: {
 			text: {
 				en: 'He took a full part in developing our platform, on both front-end and back-end. He proved serious, autonomous and committed, quick to grasp technical problems and propose suitable solutions.',
@@ -81,12 +88,12 @@ export const EDUCATION = typeset<Education[]>([
 		end: '2026',
 		points: [
 			{
-				en: 'RNCP 7: information systems & networks',
-				fr: 'RNCP 7\u00a0: systèmes d’information et réseaux'
+				en: 'RNCP level 7 (Master’s level): information systems & networks',
+				fr: 'Titre RNCP niveau 7 (Bac+5) : systèmes d’information et réseaux'
 			},
 			{
-				en: 'RNCP 6: software solutions designer-developer, web & mobile',
-				fr: 'RNCP 6\u00a0: concepteur développeur de solutions informatiques, web et mobile'
+				en: 'RNCP level 6 (Bachelor’s level): software solutions designer-developer, web & mobile',
+				fr: 'Titre RNCP niveau 6 (Bac+3) : concepteur développeur de solutions informatiques, web et mobile'
 			}
 		]
 	},
