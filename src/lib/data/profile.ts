@@ -59,21 +59,21 @@ export const PROFILE = typeset<Profile>({
 		{
 			label: { en: 'Education', fr: 'Formation' },
 			value: {
-				en: '42 Lyon - RNCP 7, expert in computer architecture',
-				fr: '42 Lyon - RNCP 7, expert en architecture informatique'
+				en: '42 Lyon | RNCP 7, expert in computer architecture',
+				fr: '42 Lyon | RNCP 7, expert en architecture informatique'
 			},
 			short: { en: '42 Lyon · RNCP 7', fr: '42 Lyon · RNCP 7' }
 		},
 		{ label: { en: 'Latest role', fr: 'Dernier poste' }, auto: 'latestRole' },
 		{
-			label: { en: 'Stack', fr: 'Stack' },
-			value: { en: 'Python, Rust, C, Node.js, Docker', fr: 'Python, Rust, C, Node.js, Docker' },
+			label: { en: 'Main Stack', fr: 'Stack principale' },
+			value: { en: 'Rust, Python, Node.js, C, Docker', fr: 'Rust, Python, Node.js, C, Docker' },
 			wide: true
 		},
 		{ label: { en: 'Hackathons', fr: 'Hackathons' }, auto: 'hackathons' },
 		{
 			label: { en: 'Languages', fr: 'Langues' },
-			value: { en: 'French, English', fr: 'Français, anglais' }
+			value: { en: 'French, English', fr: 'Français, Anglais' }
 		}
 	],
 	email: 'jocelynrenaultpro@gmail.com',
@@ -82,5 +82,5 @@ export const PROFILE = typeset<Profile>({
 	malt: 'https://www.malt.fr/profile/jocelynrenault',
 	cv: { en: 'cv-en.pdf', fr: 'cv-fr.pdf' },
 	photo: 'photo.jpg',
-	available: false
+	available: true
 });

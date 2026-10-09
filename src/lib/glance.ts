@@ -47,7 +47,7 @@ export function glanceRows(
 			if (!job) return [];
 			const company = job.companyShort ?? job.company;
 			const role = (job.roleShort ?? job.role)[lang];
-			return [{ label, value: `${role} - ${company}`, short: company, wide }];
+			return [{ label, value: `${role} | ${company}`, short: company, wide }];
 		}
 		const podiums = data.hackathons.length;
 		if (podiums === 0) return [];
