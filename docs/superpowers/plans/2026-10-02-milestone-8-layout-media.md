@@ -1,4 +1,4 @@
-# Milestone 8 — Layout & Media Implementation Plan
+# Milestone 8 - Layout & Media Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** SvelteKit + Svelte 5 runes (`MediaQuery` from `svelte/reactivity`, `prefersReducedMotion` from `svelte/motion`, `$props.id()`), TypeScript, Vitest, `adapter-static`; Playwright (already a dev dependency) for visual checks; system `ffmpeg` only to make temporary test videos (never committed).
 
-**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 8 — Layout & media". Read it before starting any task.
+**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 8 - Layout & media". Read it before starting any task.
 
 ## Global Constraints
 
@@ -32,7 +32,7 @@
 ## Review Focus
 
 1. **A project with a video, opened on a phone, with reduced motion, or before hydration**: no `.mp4` request at all. Pinned in Task 1 (`shouldPlayVideo` tests) and Task 8 Step 4 (request counter at 360/390px, at 1440px with `reducedMotion: 'reduce'`, and `grep` of the prerendered HTML for `<video`).
-2. **Longest award and title on a 360px overlay card** (KAYP: "Winner — Paris Blockchain Week 2024 (XRPL track)"): the card must grow, never clip or spill text. Pinned in Task 8 Step 4 (`overflowing` must be empty at every width).
+2. **Longest award and title on a 360px overlay card** (KAYP: "Winner - Paris Blockchain Week 2024 (XRPL track)"): the card must grow, never clip or spill text. Pinned in Task 8 Step 4 (`overflowing` must be empty at every width).
 3. **Media data mistakes** (missing poster file, a `.gif`, a leading `/`, a typo in a path): the data test fails naming the file. Pinned in Task 1 (`mediaIssues` tests).
 4. **Quote shorter than 3 lines, or window widened past 56.25rem while expanded**: no button that expands nothing, no clamp on the wide layout, and no-JS visitors read the whole quote. Pinned in Task 6 (`quoteView` tests) and Task 6 Step 7 (built HTML has no `clamp` class and no button).
 5. **Keyboard user tabbing through the one-row filter chips on a phone**: the focused chip scrolls into view with its outline visible. Pinned in Task 4 Step 4 (Playwright: focus the last chip, check it is inside the row's box).
@@ -72,7 +72,7 @@ git push origin --delete wip-m8-handoff
 
 Expected: 177 tests pass; the branch is gone locally and on GitHub. `tmp/` in the main checkout is git-ignored and survives the checkout.
 
-- [ ] **Step 2: Write the failing tests** — append to `src/lib/projects.spec.ts` (and add `mediaIssues`, `shouldPlayVideo` to its import list)
+- [ ] **Step 2: Write the failing tests** - append to `src/lib/projects.spec.ts` (and add `mediaIssues`, `shouldPlayVideo` to its import list)
 
 ```ts
 describe('shouldPlayVideo', () => {
@@ -134,7 +134,7 @@ describe('mediaIssues', () => {
 Run: `npx vitest run src/lib/projects.spec.ts`
 Expected: FAIL, `shouldPlayVideo` / `mediaIssues` are not exported.
 
-- [ ] **Step 4: Implement** — in `src/lib/projects.ts`, replace the `media` field of `Project` and add the helpers
+- [ ] **Step 4: Implement** - in `src/lib/projects.ts`, replace the `media` field of `Project` and add the helpers
 
 Replace:
 
@@ -198,7 +198,7 @@ export function mediaIssues(media: Media, exists: (src: string) => boolean): str
 }
 ```
 
-- [ ] **Step 5: Use it in the data test** — in `src/lib/data/projects.spec.ts`, import `mediaIssues` from `$lib/projects` and replace the test `'points media at relative paths that exist in static/'` with:
+- [ ] **Step 5: Use it in the data test** - in `src/lib/data/projects.spec.ts`, import `mediaIssues` from `$lib/projects` and replace the test `'points media at relative paths that exist in static/'` with:
 
 ```ts
 	it('has valid media files that exist in static/', () => {
@@ -226,7 +226,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 2: `ProjectMedia` — poster first, video only when it should play
+### Task 2: `ProjectMedia` - poster first, video only when it should play
 
 **Files:**
 - Modify: `src/lib/components/projects/ProjectMedia.svelte` (full rewrite below)
@@ -419,7 +419,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 3: Large cards — phone overlay, desktop hover
+### Task 3: Large cards - phone overlay, desktop hover
 
 **Files:**
 - Modify: `src/lib/components/projects/ProjectCardLarge.svelte` (`<style>` block only)
@@ -429,7 +429,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes: `ProjectMedia` root `.media` and its `.frame`, `.placeholder span` (Task 2).
 - Produces: nothing new for other tasks.
 
-- [ ] **Step 1: Align the grid breakpoint** — in `src/lib/components/sections/Projects.svelte` replace `@media (max-width: 48rem) {` with `@media (width < 48rem) {`.
+- [ ] **Step 1: Align the grid breakpoint** - in `src/lib/components/sections/Projects.svelte` replace `@media (max-width: 48rem) {` with `@media (width < 48rem) {`.
 
 - [ ] **Step 2: Replace the `<style>` block of `ProjectCardLarge.svelte`**
 
@@ -574,7 +574,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 Run: `npm run check && npm test && npm run lint && npm run build`
 Expected: all pass.
 
-- [ ] **Step 4: Look at it** — start `npx vite preview --port 4181 --strictPort` (background), then with a throwaway Playwright script in the session scratchpad (resolve `playwright` with `createRequire(process.cwd() + '/')` and run it from the worktree root) screenshot `#projects` at 360px and 390px, dark and light, and at 1280px with the mouse over the first card. Expected: phone cards about 260–300px tall with the placeholder gradient behind white text, nothing cut off; desktop card lifted with an accent border. Stop the preview server afterwards (kill it by PID, not `pkill -f`).
+- [ ] **Step 4: Look at it** - start `npx vite preview --port 4181 --strictPort` (background), then with a throwaway Playwright script in the session scratchpad (resolve `playwright` with `createRequire(process.cwd() + '/')` and run it from the worktree root) screenshot `#projects` at 360px and 390px, dark and light, and at 1280px with the mouse over the first card. Expected: phone cards about 260–300px tall with the placeholder gradient behind white text, nothing cut off; desktop card lifted with an accent border. Stop the preview server afterwards (kill it by PID, not `pkill -f`).
 
 - [ ] **Step 5: Commit**
 
@@ -597,7 +597,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes: `ProjectLinks` root `.links`, `TechTags` root `ul`, global `.sr-only` (`src/app.css`).
 - Produces: nothing new.
 
-- [ ] **Step 1: Small card markup** — in `ProjectCardSmall.svelte` replace
+- [ ] **Step 1: Small card markup** - in `ProjectCardSmall.svelte` replace
 
 ```svelte
 	<p class="meta">{project.date.slice(0, 4)} · {t.contexts[project.context]}</p>
@@ -671,7 +671,7 @@ with
 		overflow: hidden;
 	}
 
-	/* Phone: one compact row — icon | title over year · context | links, then two lines of text. */
+	/* Phone: one compact row - icon | title over year · context | links, then two lines of text. */
 	@media (width < 48rem) {
 		.card {
 			display: grid;
@@ -738,7 +738,7 @@ with
 </style>
 ```
 
-- [ ] **Step 3: One-row filters** — append inside the `<style>` of `ProjectFilters.svelte`:
+- [ ] **Step 3: One-row filters** - append inside the `<style>` of `ProjectFilters.svelte`:
 
 ```css
 	/* Phone: each group is one row of chips that scrolls sideways; the label stays put. */
@@ -800,7 +800,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 **Interfaces:** none.
 
-- [ ] **Step 1: Section** — replace the `<style>` block of `Section.svelte` with:
+- [ ] **Step 1: Section** - replace the `<style>` block of `Section.svelte` with:
 
 ```svelte
 <style>
@@ -825,7 +825,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 </style>
 ```
 
-- [ ] **Step 2: Skills** — append inside the `<style>` of `Skills.svelte` (after the existing media queries):
+- [ ] **Step 2: Skills** - append inside the `<style>` of `Skills.svelte` (after the existing media queries):
 
 ```css
 	@media (width < 48rem) {
@@ -881,7 +881,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
   - `ONE_COLUMN_QUERY = '(width < 56.25rem)'` in `src/lib/experience.ts`
   - dict keys `experience.readMore`, `experience.showLess`
 
-- [ ] **Step 1: Write the failing test** — append to `src/lib/experience.spec.ts` (add `quoteView` to its import from `./experience`):
+- [ ] **Step 1: Write the failing test** - append to `src/lib/experience.spec.ts` (add `quoteView` to its import from `./experience`):
 
 ```ts
 describe('quoteView', () => {
@@ -915,7 +915,7 @@ describe('quoteView', () => {
 Run: `npx vitest run src/lib/experience.spec.ts`
 Expected: FAIL, `quoteView` is not exported.
 
-- [ ] **Step 3: Implement** — append to `src/lib/experience.ts`:
+- [ ] **Step 3: Implement** - append to `src/lib/experience.ts`:
 
 ```ts
 /** Below this width Experience is one column, and long quotes get clamped. */
@@ -938,7 +938,7 @@ export function quoteView(s: { narrow: boolean; overflows: boolean; expanded: bo
 
 Run: `npx vitest run src/lib/experience.spec.ts` → PASS.
 
-- [ ] **Step 4: Dict keys** — in `src/lib/i18n/en.ts`, inside `experience`, after `translated`:
+- [ ] **Step 4: Dict keys** - in `src/lib/i18n/en.ts`, inside `experience`, after `translated`:
 
 ```ts
 		readMore: 'Read more',
@@ -952,7 +952,7 @@ and in `src/lib/i18n/fr.ts`, inside `experience`, after `translated`:
 		showLess: 'Réduire',
 ```
 
-- [ ] **Step 5: Wire it in `JobItem.svelte`** — replace the `<script>` block with:
+- [ ] **Step 5: Wire it in `JobItem.svelte`** - replace the `<script>` block with:
 
 ```svelte
 <script lang="ts">
@@ -998,7 +998,7 @@ and replace the `{#if job.quote}` … `{/if}` block with:
 		<blockquote>
 			<p id={quoteId} class:clamp bind:this={quoteEl}>{quoted(job.quote.text[lang], lang)}</p>
 			<footer>
-				— {job.quote.author}, {job.quote.role[lang]}
+				- {job.quote.author}, {job.quote.role[lang]}
 				{#if job.quote.original !== lang}<span class="note">{t.translated}</span>{/if}
 			</footer>
 		</blockquote>
@@ -1082,7 +1082,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 **Interfaces:**
 - Produces: `straightApostrophes(text: string): string[]` in `src/lib/i18n/typography.ts`.
 
-- [ ] **Step 1: Write the failing tests** — in `typography.spec.ts`, import `straightApostrophes` too, add:
+- [ ] **Step 1: Write the failing tests** - in `typography.spec.ts`, import `straightApostrophes` too, add:
 
 ```ts
 describe('straightApostrophes', () => {
@@ -1108,7 +1108,7 @@ and inside `describe('French content', …)`, after the existing `it.each`, add:
 Run: `npx vitest run src/lib/i18n/typography.spec.ts`
 Expected: FAIL: `straightApostrophes` not exported.
 
-- [ ] **Step 3: Implement** — append to `src/lib/i18n/typography.ts`:
+- [ ] **Step 3: Implement** - append to `src/lib/i18n/typography.ts`:
 
 ```ts
 /** Each straight apostrophe (U+0027) in a French text, with a little context; French uses ’ (U+2019). */
@@ -1122,7 +1122,7 @@ export function straightApostrophes(text: string): string[] {
 Run: `npx vitest run src/lib/i18n/typography.spec.ts`
 Expected: the unit tests pass; the "profile uses ’" test FAILS and lists the spots (`c'est`, `l'interface`, `l'argent`, `J'y`, `j'ai`, `Aujourd'hui`, `l'aise`, `l'IA`, …). Other sources may also be listed.
 
-- [ ] **Step 4: Fix the content** — in every `fr` string the test lists, replace each `'` with `’`. In `src/lib/data/profile.ts` these strings are double-quoted only because of the apostrophes; after the replacement run `npx prettier --write` on each edited file so they become single-quoted like the rest.
+- [ ] **Step 4: Fix the content** - in every `fr` string the test lists, replace each `'` with `’`. In `src/lib/data/profile.ts` these strings are double-quoted only because of the apostrophes; after the replacement run `npx prettier --write` on each edited file so they become single-quoted like the rest.
 
 Run: `npm test && npm run lint && npm run check`
 Expected: all pass.
@@ -1164,7 +1164,7 @@ ls -la static/projects
 
 Expected: `test-a.jpg`, `test-b.mp4`, `test-b.jpg`, `test-c.mp4`, `test-c.jpg`, `test-d.jpg`; each MP4 a few hundred KB.
 
-- [ ] **Step 2: Point four projects at it (temporary edit of `src/lib/data/projects.ts`)** — add a `media` line to these entries (after `links`):
+- [ ] **Step 2: Point four projects at it (temporary edit of `src/lib/data/projects.ts`)** - add a `media` line to these entries (after `links`):
   - `kayp-pbw-2024`: `media: { kind: 'image', src: 'projects/test-a.jpg' },`
   - `kayp-h-web3-paris`: `media: { kind: 'video', src: 'projects/test-b.mp4', poster: 'projects/test-b.jpg' },`
   - `ft-transcendence`: `media: { kind: 'video', src: 'projects/test-c.mp4', poster: 'projects/test-c.jpg' },`
@@ -1172,7 +1172,7 @@ Expected: `test-a.jpg`, `test-b.mp4`, `test-b.jpg`, `test-c.mp4`, `test-c.jpg`, 
 
 `bahapad` and `goldeneye-data-augmentation` (private, no link) keep the placeholder, so both cases are checked. Run `npm test` (the media data test must pass) and `npm run build`.
 
-- [ ] **Step 3: Write the check script** — `<scratchpad>/m8-check.cjs`:
+- [ ] **Step 3: Write the check script** - `<scratchpad>/m8-check.cjs`:
 
 ```js
 // node <scratchpad>/m8-check.cjs <origin> <out-dir>   (run from the worktree root)
@@ -1257,7 +1257,7 @@ Expected, for every result:
 - `overflowing` = `[]` (no clipped or spilling card text, including KAYP's long award at 360px);
 - `pageOverflow` = `false`.
 
-Open the screenshots (Read tool) for EN dark 390, EN light 390, FR dark 360 and EN dark 1440 and check: overlay text readable in both themes, image visible at the top of each phone card, compact rows, one-row filters, smaller chips, clamped quotes. Note `heights.page` and per-section heights at 390 and 1440 for the review guide (before: phone 13,600px — Projects 7,263, Experience 2,248, Skills 1,609, About 899; desktop 7,450px — Projects 3,479, Experience 1,097, Skills 817, About 540). Fix anything wrong in the owning task's file and commit it as `fix: …` before going on.
+Open the screenshots (Read tool) for EN dark 390, EN light 390, FR dark 360 and EN dark 1440 and check: overlay text readable in both themes, image visible at the top of each phone card, compact rows, one-row filters, smaller chips, clamped quotes. Note `heights.page` and per-section heights at 390 and 1440 for the review guide (before: phone 13,600px - Projects 7,263, Experience 2,248, Skills 1,609, About 899; desktop 7,450px - Projects 3,479, Experience 1,097, Skills 817, About 540). Fix anything wrong in the owning task's file and commit it as `fix: …` before going on.
 
 Stop the preview server by PID.
 
@@ -1288,7 +1288,7 @@ Expected: all pass, audit 25/25.
 - Add: `docs/reviews/milestone-8/*.png` (from Task 8)
 
 - [ ] **Step 1: Write the review guide**, same structure as `docs/reviews/milestone-7-review-guide.md`:
-  - Header: branch `milestone-8-layout-media` → `master`; source of truth = spec section "Milestone 8 — Layout & media" + this plan; M9 is Finishing touches & SEO, M10 Deployment.
+  - Header: branch `milestone-8-layout-media` → `master`; source of truth = spec section "Milestone 8 - Layout & media" + this plan; M9 is Finishing touches & SEO, M10 Deployment.
   - **0. Get the code:** `cd /Users/lezard/Documents/portfolio/.claude/worktrees/milestone-8-layout-media && source ~/.nvm/nvm.sh && nvm use 24 && npm ci` (or `gh pr checkout <n>`); commit → task table from `git log --oneline master..`.
   - **1. Automated checks:** `npm run check && npm test && npm run lint && npm run build`, `npm run audit`; expected test count (read it from the last run) and the audit table.
   - **Heights before/after** table (page + Projects, Experience, Skills, About at 390 and 1440px) from Task 8.

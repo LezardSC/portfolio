@@ -8,7 +8,7 @@ The review has three parts, in this order:
 2. **Manual testing on a real phone and a real browser** (15 min). I already drove the built site with headless Chromium at 360, 390, 768, 1024 and 1440px, both themes and both languages, with temporary test media in place. What I can't do is hold a real phone, judge the overlay over your own screenshots, or use Safari.
 3. **Code review** (10 min)
 
-Source of truth: the "Milestone 8 — Layout & media" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, together with `docs/superpowers/plans/2026-10-02-milestone-8-layout-media.md`.
+Source of truth: the "Milestone 8 - Layout & media" section of `docs/superpowers/specs/2026-09-23-portfolio-design.md`, together with `docs/superpowers/plans/2026-10-02-milestone-8-layout-media.md`.
 
 The old "Visual polish & SEO" milestone is now split: **M8 Layout & media** (this one), then, after your first look at this PR: **M9 Desktop design** (readability first; the hero/heading accents, scroll-reveal, favicon and link previews are inputs to it), **M10 Phone design**, **M11 Deployment**.
 

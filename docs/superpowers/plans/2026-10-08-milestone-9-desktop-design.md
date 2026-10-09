@@ -1,4 +1,4 @@
-# Milestone 9 — Desktop design Implementation Plan
+# Milestone 9 - Desktop design Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** SvelteKit 2 + Svelte 5 runes, adapter-static (prerendered), TypeScript, Vitest, Playwright (screenshots, OG generation, audit), `@fontsource-variable/schibsted-grotesk`.
 
-**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 9 — Desktop design" (and the older sections it supersedes on desktop). Design sources: `docs/superpowers/designs/2026-10-07-m9-final/` (`A1M3b-Clair.dc.html`, `A1M3b-Sombre.dc.html`, `Skills-Idee4A.dc.html`; value reference only, they render only inside the canvas https://claude.ai/artifact/5rqhnCoS2tUFHpioTu8jZG).
+**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Milestone 9 - Desktop design" (and the older sections it supersedes on desktop). Design sources: `docs/superpowers/designs/2026-10-07-m9-final/` (`A1M3b-Clair.dc.html`, `A1M3b-Sombre.dc.html`, `Skills-Idee4A.dc.html`; value reference only, they render only inside the canvas https://claude.ai/artifact/5rqhnCoS2tUFHpioTu8jZG).
 
 ## Global Constraints
 
@@ -30,7 +30,7 @@
 
 - **Hero name at 768–1240px:** "Jocelyn Renault." is `nowrap`; on a 1024px or 800px window it must not overflow the page (expected: font scales down with `min(7.625rem, 9.6vw)`, no horizontal scroll). Pinned in Task 3 Step 6.
 - **French filters with counts at 1024px:** the three segmented bars (longer French labels + counts) must wrap inside the section body, never overflow it. Pinned in Task 4 Step 8.
-- **Content hidden by scroll reveal:** a section must never stay invisible — deep link `/fr/#contact`, reduced motion, no JS, or printing. Pinned by `shouldReveal` tests and Task 9 Step 5 (deep link + print checks).
+- **Content hidden by scroll reveal:** a section must never stay invisible - deep link `/fr/#contact`, reduced motion, no JS, or printing. Pinned by `shouldReveal` tests and Task 9 Step 5 (deep link + print checks).
 - **Theme tokens in every theme block:** a token defined for dark but missing in the light or the no-JS light block would render with the dark value on a light page. Pinned in Task 1 Step 1 (`theme-tokens.spec.ts`).
 - **Skills tabs with keyboard and without JS:** arrow keys must move focus and selection together with exactly one tab in the tab order; without JS all six groups must be readable. Pinned by `nextTab` tests and Task 5 Step 7.
 
@@ -721,15 +721,15 @@ replace `facts: Fact[];` with `glance: GlanceRow[];`, and replace the `facts: [.
 		{
 			label: { en: 'Education', fr: 'Formation' },
 			value: {
-				en: '42 Lyon — RNCP 7, expert in computer architecture',
-				fr: '42 Lyon — RNCP 7, expert en architecture informatique'
+				en: '42 Lyon - RNCP 7, expert in computer architecture',
+				fr: '42 Lyon - RNCP 7, expert en architecture informatique'
 			}
 		},
 		{
 			label: { en: 'Latest role', fr: 'Dernier poste' },
 			value: {
-				en: 'ML & Computer Vision developer — Sogeti (Capgemini)',
-				fr: 'Développeur ML & IA Vision — Sogeti (Capgemini)'
+				en: 'ML & Computer Vision developer - Sogeti (Capgemini)',
+				fr: 'Développeur ML & IA Vision - Sogeti (Capgemini)'
 			}
 		},
 		{
@@ -1061,7 +1061,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 4: Projects — segmented filters, featured cards, more projects
+### Task 4: Projects - segmented filters, featured cards, more projects
 
 **Files:**
 - Create: `src/lib/components/icons/TrophyIcon.svelte`
@@ -1226,7 +1226,7 @@ Replace `src/lib/components/projects/ProjectLinks.svelte`:
 </style>
 ```
 
-(`aria-label` contains the visible text — "Source code on GitHub" ⊃ "Source code", "Code source sur GitHub" ⊃ "Code source"/"Code", "Démo en ligne" ⊃ "Démo" — so label-in-name holds.)
+(`aria-label` contains the visible text - "Source code on GitHub" ⊃ "Source code", "Code source sur GitHub" ⊃ "Code source"/"Code", "Démo en ligne" ⊃ "Démo" - so label-in-name holds.)
 
 - [ ] **Step 4: Segmented filters**
 
@@ -1451,7 +1451,7 @@ Replace `src/lib/components/projects/ProjectCardLarge.svelte` markup and the non
 </article>
 ```
 
-Style block — desktop base, then the M8 phone block kept with the additions marked `/* M9 */`:
+Style block - desktop base, then the M8 phone block kept with the additions marked `/* M9 */`:
 
 ```css
 	.card {
@@ -1525,7 +1525,7 @@ Style block — desktop base, then the M8 phone block kept with the additions ma
 	}
 ```
 
-Keep the existing `@media (width < 48rem) { … }` block unchanged and add inside it (M9 — restore the M8 phone card look the desktop base no longer gives):
+Keep the existing `@media (width < 48rem) { … }` block unchanged and add inside it (M9 - restore the M8 phone card look the desktop base no longer gives):
 
 ```css
 		.card {
@@ -2214,7 +2214,7 @@ export function durationLabel(months: number, forms: { one: string; other: strin
 	experience: {
 		work: 'Experience',
 		education: 'Education',
-		hackathonsTitle: 'Hackathons — {n} podiums',
+		hackathonsTitle: 'Hackathons - {n} podiums',
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
@@ -2232,7 +2232,7 @@ export function durationLabel(months: number, forms: { one: string; other: strin
 	experience: {
 		work: 'Expérience',
 		education: 'Formation',
-		hackathonsTitle: 'Hackathons — {n} podiums',
+		hackathonsTitle: 'Hackathons - {n} podiums',
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
@@ -2302,7 +2302,7 @@ Replace the markup of `src/lib/components/experience/JobItem.svelte` (script: re
 						<p id={quoteId} class:clamp bind:this={quoteEl}>{job.quote.text[lang]}</p>
 					</blockquote>
 					<figcaption>
-						<strong>{job.quote.author}</strong> — {job.quote.role[lang]}
+						<strong>{job.quote.author}</strong> - {job.quote.role[lang]}
 						{#if job.quote.original !== lang}<span class="note">{t.translated}</span>{/if}
 					</figcaption>
 				</div>
@@ -3013,7 +3013,7 @@ Replace the markup and styles:
 </style>
 ```
 
-In the script, the copy failure branch selects `address` — it is now the `<a>`; `range.selectNodeContents(address)` still works. The old `emailLabel` key is gone; `grep -rn emailLabel src` must print nothing.
+In the script, the copy failure branch selects `address` - it is now the `<a>`; `range.selectNodeContents(address)` still works. The old `emailLabel` key is gone; `grep -rn emailLabel src` must print nothing.
 
 - [ ] **Step 5: Footer band**
 

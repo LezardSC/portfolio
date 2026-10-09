@@ -48,7 +48,7 @@ All in `src/lib/data/projects.ts`, inside `ALL_PROJECTS`. The order of entries d
 		domains: ['ai', 'web'], // keys of DOMAINS; the FIRST one is the main one (card icon, colour, label)
 		tech: ['Python', 'Ollama'], // tags at the bottom of the card, at least one
 		links: { repo: gh('my-project'), demo: 'https://demo.example.com' }, // both optional
-		award: { en: 'Winner — Some Hackathon 2026', fr: 'Vainqueur — Some Hackathon 2026' }, // optional
+		award: { en: 'Winner - Some Hackathon 2026', fr: 'Vainqueur - Some Hackathon 2026' }, // optional
 		media: { kind: 'image', src: 'projects/my-project/cover.webp' }, // optional, see Media
 		hidden: true // optional: keeps the entry but takes it off the site
 	},
@@ -90,7 +90,7 @@ Add `demo: 'https://…'` to `links`: `links: { repo: gh('my-project'), demo: 'h
 
 ### Mark an award
 
-`award: { en: 'Winner — Event 2026', fr: 'Vainqueur — Event 2026' }`. It shows with a trophy on the card. To also list it under Experience → Hackathons, add a hackathon result (see [Experience](#experience)).
+`award: { en: 'Winner - Event 2026', fr: 'Vainqueur - Event 2026' }`. It shows with a trophy on the card. To also list it under Experience → Hackathons, add a hackathon result (see [Experience](#experience)).
 
 ---
 
@@ -269,7 +269,7 @@ In `src/lib/data/experience.ts`. Entries are sorted by the page (newest first).
 	},
 ```
 
-The hero's "Latest role" shows the newest job as "roleShort — companyShort" (or the full `role` and `company` when the short ones are missing).
+The hero's "Latest role" shows the newest job as "roleShort - companyShort" (or the full `role` and `company` when the short ones are missing).
 
 ### Add a school or a certificate
 
@@ -294,7 +294,7 @@ The hero's "Latest role" shows the newest job as "roleShort — companyShort" (o
 - `fullName`: optional, shown as a tooltip when `event` is an acronym.
 - `project`: a name, or `{ en, fr }` when it's a description.
 
-The "Hackathons — N podiums" heading and the hero's "2 wins, 5 podiums" count themselves.
+The "Hackathons - N podiums" heading and the hero's "2 wins, 5 podiums" count themselves.
 
 ---
 

@@ -1,4 +1,4 @@
-# How to review PR #2 — Milestone 2 (Projects)
+# How to review PR #2 - Milestone 2 (Projects)
 
 PR: https://github.com/LezardSC/portfolio/pull/2 · branch `milestone-2-projects` → `master`
 
@@ -62,7 +62,7 @@ npm run build && npm run preview     # http://localhost:4173/en/
 Scroll to **Projects**.
 
 ### 2.1 Default layout
-- [ ] 6 **large** cards, 2 per row, in this order: KAYP, KAYP — H-W3B Paris, ft_transcendence, microcode, Bahapad, GoldenEye.
+- [ ] 6 **large** cards, 2 per row, in this order: KAYP, KAYP - H-W3B Paris, ft_transcendence, microcode, Bahapad, GoldenEye.
 - [ ] Then a **"More projects"** divider, and 9 **small** cards, 3 per row.
 - [ ] Large cards: a coloured placeholder with the title (no images yet), then year · context, title, 🏆 award (for the 3 winners), description, tech tags, and a GitHub icon.
 - [ ] Small cards: domain icon on the top left, GitHub icon on the top right, the title (a link), year · context, the description clamped to **3 lines** with no overflow, and tech tags.

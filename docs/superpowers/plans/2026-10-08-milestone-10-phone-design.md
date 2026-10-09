@@ -1,14 +1,14 @@
-# Milestone 10 — Phone design Implementation Plan
+# Milestone 10 - Phone design Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Give phones (`width < 48rem`) the layouts validated on the Claude Design board "Mobile — clair / sombre": header with a Contact button, compact hero tiles, folded About, blurred-photo featured cards, domain-tinted project tiles with one-sentence summaries, skills accordion, collapsed recommendations, compact contact. Desktop stays exactly as M9.
+**Goal:** Give phones (`width < 48rem`) the layouts validated on the Claude Design board "Mobile - clair / sombre": header with a Contact button, compact hero tiles, folded About, blurred-photo featured cards, domain-tinted project tiles with one-sentence summaries, skills accordion, collapsed recommendations, compact contact. Desktop stays exactly as M9.
 
 **Architecture:** One set of markup per component, restyled by `@media (width < 48rem)` blocks that replace the M8 phone styles. Where phone and desktop need different controls, both exist and CSS shows one set per width. Everything the phone folds away is only folded after hydration. Decisions live in small pure, tested functions (`mainDomain`, `hiddenCount`, `panelHidden`, `mixHex`); components only render and wire.
 
 **Tech Stack:** SvelteKit 2 + Svelte 5 runes, adapter-static (prerendered), TypeScript, Vitest, Playwright (screenshots, audit).
 
-**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section **"Milestone 10 — Phone design"** (it supersedes the M8 phone presentation and the M7 phone menu). Design sources: `docs/superpowers/designs/2026-10-08-m10-final/` (`Mobile-Clair.dc.html` holds every value; `README.md` lists the choice per section). They only render inside the canvas https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59, so use them as a value reference.
+**Spec:** `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section **"Milestone 10 - Phone design"** (it supersedes the M8 phone presentation and the M7 phone menu). Design sources: `docs/superpowers/designs/2026-10-08-m10-final/` (`Mobile-Clair.dc.html` holds every value; `README.md` lists the choice per section). They only render inside the canvas https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59, so use them as a value reference.
 
 ## Global Constraints
 
@@ -58,7 +58,7 @@ Expected: all pass (the M9 baseline). `tmp/` is not in the worktree: stock photo
 
 ---
 
-### Task 1: Data — main domain, domain colours, summaries, pitch and glance
+### Task 1: Data - main domain, domain colours, summaries, pitch and glance
 
 **Files:**
 - Create: `src/lib/color.ts`, `src/lib/color.spec.ts`
@@ -289,8 +289,8 @@ and add:
 		fr: 'Je conçois la partie invisible des produits : APIs, services, traitement de données, automatisation et mise en production.'
 	},
 	pitchMore: {
-		en: 'My field is backend and low-level — reliability and performance over UI.',
-		fr: 'Mon terrain, c’est le backend et le bas niveau — la fiabilité et la performance plutôt que l’interface.'
+		en: 'My field is backend and low-level - reliability and performance over UI.',
+		fr: 'Mon terrain, c’est le backend et le bas niveau - la fiabilité et la performance plutôt que l’interface.'
 	},
 ```
 
@@ -1232,7 +1232,7 @@ and add to its style:
 
 - [ ] **Step 6: Filters as on the board**
 
-In `ProjectFilters.svelte`: the context and domain `<option>`s lose their count — `{value === 'all' ? t.all : t.contexts[value]}` (and `t.domains[value]`), keeping `disabled={count === 0 && filters.context !== value}` (the `{@const count}` stays). Give the sort label a class: `<label class="pick phone sort">`. Replace the `/* Phone: one full-width row per filter … */ @media (width < 48rem) { … }` block with:
+In `ProjectFilters.svelte`: the context and domain `<option>`s lose their count - `{value === 'all' ? t.all : t.contexts[value]}` (and `t.domains[value]`), keeping `disabled={count === 0 && filters.context !== value}` (the `{@const count}` stays). Give the sort label a class: `<label class="pick phone sort">`. Replace the `/* Phone: one full-width row per filter … */ @media (width < 48rem) { … }` block with:
 
 ```css
 	/* Phone: Context and Domain side by side, Sort by below; labels above the selects. */
@@ -1286,7 +1286,7 @@ In `ProjectFilters.svelte`: the context and domain `<option>`s lose their count 
 
 - [ ] **Step 7: Measure the selects at 360px**
 
-Run the checks (`npm run format && npm run lint && npm run check && npm test` → pass), build, preview, then with a scratchpad Playwright script at 360×800 on `/fr/`, for each value of the Context and Domain selects: `select.selectOption(value)` then `select.evaluate(el => el.scrollWidth > el.clientWidth)` — that doesn't catch clipped text in a select, so instead measure the text: create a hidden span with the select's computed font, put the selected option's text in it, compare its width with `select.clientWidth - 14 - 40` (padding). Expected: every label fits ("Professionnel" is the longest). **If one is clipped**, add inside the phone block:
+Run the checks (`npm run format && npm run lint && npm run check && npm test` → pass), build, preview, then with a scratchpad Playwright script at 360×800 on `/fr/`, for each value of the Context and Domain selects: `select.selectOption(value)` then `select.evaluate(el => el.scrollWidth > el.clientWidth)` - that doesn't catch clipped text in a select, so instead measure the text: create a hidden span with the select's computed font, put the selected option's text in it, compare its width with `select.clientWidth - 14 - 40` (padding). Expected: every label fits ("Professionnel" is the longest). **If one is clipped**, add inside the phone block:
 
 ```css
 		@media (width < 24.375rem) {
@@ -1764,7 +1764,7 @@ Replace the `<div class="panels"> … </div>` block with:
 		</div>
 ```
 
-(Keep the panel's existing children — `<h3>`, `<p class="desc">`, `<ul role="list" class="tiles">…</ul>` — unchanged inside the new `<div class="panel">`.)
+(Keep the panel's existing children - `<h3>`, `<p class="desc">`, `<ul role="list" class="tiles">…</ul>` - unchanged inside the new `<div class="panel">`.)
 
 - [ ] **Step 4: Accordion styles**
 
@@ -1878,7 +1878,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 7: Experience — collapsed recommendations, compact rows
+### Task 7: Experience - collapsed recommendations, compact rows
 
 **Files:**
 - Modify: `src/lib/experience.ts`, `src/lib/experience.spec.ts` (remove `quoteView`, `ONE_COLUMN_QUERY`)
@@ -1892,8 +1892,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 - [ ] **Step 1: Strings**
 
-`en.ts` `experience`: delete `readMore` and `showLess`; add `recommendation: 'Recommendation — {name}',`.
-`fr.ts` `experience`: delete `readMore` and `showLess`; add `recommendation: 'Recommandation — {name}',`.
+`en.ts` `experience`: delete `readMore` and `showLess`; add `recommendation: 'Recommendation - {name}',`.
+`fr.ts` `experience`: delete `readMore` and `showLess`; add `recommendation: 'Recommandation - {name}',`.
 
 - [ ] **Step 2: Remove the M8 quote clamp logic**
 
@@ -1976,7 +1976,7 @@ Replace the `<script>` and markup of `JobItem.svelte` with:
 					<p>{job.quote.text[lang]}</p>
 				</blockquote>
 				<figcaption>
-					<strong>{job.quote.author}</strong> — {job.quote.role[lang]}
+					<strong>{job.quote.author}</strong> - {job.quote.role[lang]}
 					{#if job.quote.original !== lang}<span class="note">{t.translated}</span>{/if}
 				</figcaption>
 			</figure>
@@ -2182,7 +2182,7 @@ Expected: all pass; `grep -rn "quoteView\|ONE_COLUMN_QUERY\|experience\.readMore
 
 - [ ] **Step 7: Visual check**
 
-At 390px FR both themes: each job = "juil. 2025 → janv. 2026 · Stage · 7 mois" on one line (13px), title 20px, company accent, bullets, 12px tags, then "“ Recommandation — Herve Nikue ⌄" full width; tap → the whole quote in a box below, chevron up. Education: "42 Lyon · Expert en architecture informatique" then the RNCP details joined by " · "; CS50 row with the certificate link on the right. Hackathons: 36px tiles, results right. `javaScriptEnabled: false` → both quotes visible, no buttons. At 900px and 1280px: quotes whole with the big quote mark, no button (the old 48–56rem clamp is gone), layout as M9.
+At 390px FR both themes: each job = "juil. 2025 → janv. 2026 · Stage · 7 mois" on one line (13px), title 20px, company accent, bullets, 12px tags, then "“ Recommandation - Herve Nikue ⌄" full width; tap → the whole quote in a box below, chevron up. Education: "42 Lyon · Expert en architecture informatique" then the RNCP details joined by " · "; CS50 row with the certificate link on the right. Hackathons: 36px tiles, results right. `javaScriptEnabled: false` → both quotes visible, no buttons. At 900px and 1280px: quotes whole with the big quote mark, no button (the old 48–56rem clamp is gone), layout as M9.
 
 - [ ] **Step 8: Commit**
 
@@ -2484,7 +2484,7 @@ Screenshot the featured cards with and without photos, both themes, at 390 and 3
 
 - [ ] **Step 4: Review guide**
 
-Copy a selection of screenshots into `docs/reviews/milestone-10/` (hero, projects without and with stock photos, skills with a group open, experience with a quote open, contact — 390px FR light and dark; one 360px FR full page; one 1280px no-regression) and write `docs/reviews/milestone-10-review-guide.md` in the style of `docs/reviews/milestone-9-review-guide.md`: what changed per section; how to run (`npm run dev`, then a 390px window / device mode; `npm run audit -- --screens`); the audit table; the screenshots next to the canvas link https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59 for a side-by-side check; page height before/after; **Deviations** (footer keeps "© {year}"; certificate link keeps "View certificate / Voir le certificat"; Vincent's quote shown whole when opened; e-mail size if Step 4 of Task 8 needed it; select padding if Task 4 Step 7 needed it; anything else taken); **For Jocelyn to review** (the 17 summaries in `src/lib/data/projects.ts`; real photos still to supply: one image per featured project in `static/projects/`, a still `poster` for videos); manual checks (real phone: touch targets, sticky header, native select pickers, find-in-page, featured-card text over real photos once added — axe can't measure text over images); removed code (M7 phone menu, M8 quote clamp).
+Copy a selection of screenshots into `docs/reviews/milestone-10/` (hero, projects without and with stock photos, skills with a group open, experience with a quote open, contact - 390px FR light and dark; one 360px FR full page; one 1280px no-regression) and write `docs/reviews/milestone-10-review-guide.md` in the style of `docs/reviews/milestone-9-review-guide.md`: what changed per section; how to run (`npm run dev`, then a 390px window / device mode; `npm run audit -- --screens`); the audit table; the screenshots next to the canvas link https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59 for a side-by-side check; page height before/after; **Deviations** (footer keeps "© {year}"; certificate link keeps "View certificate / Voir le certificat"; Vincent's quote shown whole when opened; e-mail size if Step 4 of Task 8 needed it; select padding if Task 4 Step 7 needed it; anything else taken); **For Jocelyn to review** (the 17 summaries in `src/lib/data/projects.ts`; real photos still to supply: one image per featured project in `static/projects/`, a still `poster` for videos); manual checks (real phone: touch targets, sticky header, native select pickers, find-in-page, featured-card text over real photos once added - axe can't measure text over images); removed code (M7 phone menu, M8 quote clamp).
 
 - [ ] **Step 5: Commit, push, open the PR**
 
@@ -2497,7 +2497,7 @@ git push origin worktree-milestone-10-phone-design:milestone-10-phone-design
 gh pr create --base master --head milestone-10-phone-design \
   --title "Milestone 10: phone design" \
   --body "$(cat <<'EOF'
-Phone layouts from the validated Claude Design board (Mobile — clair / sombre), both themes: header with a Contact button (no menu), compact hero with glance tiles, About behind Read more, select filters, featured cards on a veiled photo or domain colour, other projects as domain-tinted tiles with one-sentence summaries (6, then See N more), skills accordion, recommendations behind a button, compact contact. Desktop unchanged.
+Phone layouts from the validated Claude Design board (Mobile - clair / sombre), both themes: header with a Contact button (no menu), compact hero with glance tiles, About behind Read more, select filters, featured cards on a veiled photo or domain colour, other projects as domain-tinted tiles with one-sentence summaries (6, then See N more), skills accordion, recommendations behind a button, compact contact. Desktop unchanged.
 
 Review guide: docs/reviews/milestone-10-review-guide.md
 

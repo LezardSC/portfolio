@@ -70,7 +70,7 @@
 					<p>{job.quote.text[lang]}</p>
 				</blockquote>
 				<figcaption>
-					<strong>{job.quote.author}</strong> — {job.quote.role[lang]}
+					<strong>{job.quote.author}</strong> - {job.quote.role[lang]}
 					{#if job.quote.original !== lang}<span class="note">{t.translated}</span>{/if}
 				</figcaption>
 			</figure>

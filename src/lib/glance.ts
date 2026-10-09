@@ -13,7 +13,7 @@ export type GlanceRow = {
 };
 
 /**
- * A row computed from the data: `latestRole` = the newest job ("role — company", short =
+ * A row computed from the data: `latestRole` = the newest job ("role - company", short =
  * company; `roleShort` / `companyShort` win when set), `hackathons` = "2 wins, 5 podiums".
  * Left out when there is no job / no hackathon.
  */
@@ -47,7 +47,7 @@ export function glanceRows(
 			if (!job) return [];
 			const company = job.companyShort ?? job.company;
 			const role = (job.roleShort ?? job.role)[lang];
-			return [{ label, value: `${role} — ${company}`, short: company, wide }];
+			return [{ label, value: `${role} - ${company}`, short: company, wide }];
 		}
 		const podiums = data.hackathons.length;
 		if (podiums === 0) return [];

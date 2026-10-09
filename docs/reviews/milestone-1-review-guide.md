@@ -1,4 +1,4 @@
-# How to review PR #1 — Milestone 1 (Foundation)
+# How to review PR #1 - Milestone 1 (Foundation)
 
 PR: https://github.com/LezardSC/portfolio/pull/1 · branch `milestone-1-foundation` → `master`
 
@@ -62,7 +62,7 @@ grep -o '<html lang="[a-z]*"' build/en/index.html build/fr/index.html
 # Expect: lang="en" for the en page, lang="fr" for the fr page
 
 grep -o '<title>[^<]*' build/en/index.html build/fr/index.html
-# Expect: "Jocelyn — Software Engineer" / "Jocelyn — Ingénieur logiciel"
+# Expect: "Jocelyn - Software Engineer" / "Jocelyn - Ingénieur logiciel"
 ```
 
 **If any of these fails**, stop there. Paste the output into a PR comment, or give it to me next session.

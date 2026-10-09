@@ -1,6 +1,6 @@
-# Milestone 10 — final phone design (2026-10-08)
+# Milestone 10 - final phone design (2026-10-08)
 
-Copies of the validated boards from the Claude Design canvas "Portfolio — Mobile"
+Copies of the validated boards from the Claude Design canvas "Portfolio - Mobile"
 (https://claude.ai/artifact/9N2zK35VungBsy2GnLcE59). The canvas is the source of truth; these files are a snapshot.
 
 - `Mobile-Clair.dc.html`: full phone page, 390px wide, light theme (canvas board `Mix.dc.html`).
@@ -19,11 +19,11 @@ Desktop reference stays `../2026-10-07-m9-final/`. Colours, fonts, borders and r
 | Header | Name, theme toggle, EN, and a filled **Contact** button. No burger menu. |
 | Hero | Compact: name on two lines (58px), role, one-sentence pitch, "En bref" as 2×2 tiles + full-width Stack tile; "Voir les projets" full width, then "Voir le CV" / "Malt ↗" side by side. |
 | About | Photo (88px) + first paragraph; the rest behind "Lire la suite". |
-| Projects — filters | Three native selects: Contexte, Domaine (side by side), Trier par (full width). |
-| Projects — featured | Compact cards: the project's **mobile photo** as full-card background, blurred (6px) and darkened (62% black veil), info on top in white (domain, year · context, title, award, 3-line description, tags, code link). Blur/darkening to be tuned with the real photos. |
-| Projects — others | 2-column tiles tinted by domain, large domain icon as a watermark, domain · year, title, **one-sentence summary**, context, Code ↗ / Privé. 6 shown, then "Voir les 5 autres projets". |
+| Projects - filters | Three native selects: Contexte, Domaine (side by side), Trier par (full width). |
+| Projects - featured | Compact cards: the project's **mobile photo** as full-card background, blurred (6px) and darkened (62% black veil), info on top in white (domain, year · context, title, award, 3-line description, tags, code link). Blur/darkening to be tuned with the real photos. |
+| Projects - others | 2-column tiles tinted by domain, large domain icon as a watermark, domain · year, title, **one-sentence summary**, context, Code ↗ / Privé. 6 shown, then "Voir les 5 autres projets". |
 | Skills | Accordion version of the desktop tabs: one row per domain (icon, name, count, chevron); the open one gets the 2px ink border + 5px accent offset shadow and shows its logos in 2 columns. |
-| Experience | Jobs stacked; each recommendation collapsed behind a "Recommandation — Name" button. Compact education and hackathon list. |
+| Experience | Jobs stacked; each recommendation collapsed behind a "Recommandation - Name" button. Compact education and hackathon list. |
 | Contact | E-mail card (address on one line, 19px), Malt card as one tappable row, then LinkedIn / GitHub / CV as three equal buttons. |
 | Titles | Section headers: outlined number 46px inline with a 29px title. |
 
