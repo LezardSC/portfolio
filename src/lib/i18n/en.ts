@@ -61,7 +61,6 @@ export const en = {
 		private: 'Private',
 		repo: 'Source code on GitHub',
 		demo: 'Live demo',
-		lead: '{total} projects, most important first.',
 		showMore: 'See the {n} other projects',
 		showMoreOne: 'See 1 other project',
 		showFewer: 'Show fewer',
