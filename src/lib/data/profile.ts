@@ -43,16 +43,20 @@ export const PROFILE = typeset<Profile>({
 	},
 	bio: [
 		{
-			en: 'I got into programming for the money. I stayed because I found out I love understanding how things work underneath: memory, processes, the network, the machine itself.',
-			fr: 'Je me suis mis à la programmation pour l’argent. J’y suis resté parce que j’ai découvert que j’adore comprendre comment les choses fonctionnent en dessous\u00a0: la mémoire, les processus, le réseau, la machine elle-même.'
+			en: 'I got into programming for the money. Unfortunately, I ended up enjoying it.',
+			fr: "Je me suis mis au code pour l'argent. Problème : j'ai fini par aimer ça."
 		},
 		{
-			en: 'I trained at 42 Lyon (RNCP 7 - Expert in computer architecture), then worked as a full-stack developer at Y247 Group and as a machine-learning developer at Sogeti (Capgemini), and won several hackathons along the way.',
-			fr: 'Je me suis formé à 42 Lyon (RNCP 7 - Expert en architecture informatique), puis j’ai travaillé comme développeur full stack chez Y247 Group et comme développeur machine learning chez Sogeti (Capgemini), en remportant plusieurs hackathons au passage.'
+			en: 'And it shows in my work. When a bug won’t go away, I track down its cause instead of working around it. When I’m handed a project, I own it end to end, from the database to the interface. And when the field is new to me, I get up to speed fast: that’s the part I enjoy most.',
+			fr: "Et ça se voit dans mon travail. Quand un bug résiste, je cherche sa cause au lieu de le contourner. Quand on me confie un sujet, je le prends en main de bout en bout, de la base de données jusqu'à l'interface. Et quand le domaine m'est inconnu, je me mets vite à niveau : c'est la partie que je préfère."
 		},
 		{
-			en: 'Today I focus on backend and systems work - APIs, services, Rust, infrastructure - while staying at home with Web3 and AI when a project needs them.',
-			fr: 'Aujourd’hui je me concentre sur le backend et les systèmes - APIs, services, Rust, infrastructure - tout en restant à l’aise avec le Web3 et l’IA quand un projet en a besoin.'
+			en: 'Over the last few years, that has meant a web application built from scratch for a client, a computer-vision model improved at Sogeti, an award-winning blockchain platform at Paris Blockchain Week and a Game Boy emulator in Rust.',
+			fr: 'Ces dernières années, ça a donné une application web construite de zéro pour un client, un modèle de vision par ordinateur amélioré chez Sogeti, une plateforme blockchain primée à la Paris Blockchain Week et un émulateur Game Boy en Rust.'
+		},
+		{
+			en: 'Next project on the list: maybe yours.',
+			fr: 'Le prochain projet sur la liste : peut-être le vôtre.'
 		}
 	],
 	glance: [
