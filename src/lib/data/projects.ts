@@ -13,6 +13,7 @@ const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
  * get the big cards. Move a line to reorder. Every id must exist and not be hidden (a test checks it).
  */
 export const PRIORITY: string[] = [
+	'cross-emu',
 	'kayp-pbw-2024',
 	'kayp-h-web3-paris',
 	'ft-transcendence',
@@ -23,6 +24,24 @@ export const PRIORITY: string[] = [
 
 /** Every project, hidden ones included. Order here doesn't matter: the page sorts them. */
 export const ALL_PROJECTS = typeset<Project[]>([
+	{
+		id: 'cross-emu',
+		title: 'Cross-Emu',
+		description: {
+			en: 'A Game Boy and Game Boy Color emulator in Rust, built as a team: M-cycle-accurate CPU, T-cycle-accurate graphics, all four sound channels, MBC1/2/3/5 cartridges, save states and a built-in debugger (step-by-step, watchpoints, disassembly). It started as a 42 project; we kept going to make it truly faithful.',
+			fr: "Un émulateur Game Boy et Game Boy Color en Rust, développé en équipe : CPU précis au M-cycle, affichage précis au T-cycle, les quatre canaux audio, cartouches MBC1/2/3/5, sauvegardes d'état et débogueur intégré (pas à pas, watchpoints, désassemblage). Parti d'un projet de 42, on l'a poursuivi pour le rendre vraiment fidèle."
+		},
+		summary: {
+			en: 'A cycle-accurate Game Boy and Game Boy Color emulator in Rust, with a debugger.',
+			fr: 'Un émulateur Game Boy et Game Boy Color en Rust, précis au cycle, avec débogueur.'
+		},
+		date: '2026-05',
+		context: 'school',
+		domains: ['low-level', 'games'],
+		tech: ['Rust', 'egui', 'cpal'],
+		links: { repo: 'https://github.com/cross-emu/cross-emu' },
+		media: { kind: 'image', src: 'projects/cross-emu/cover.webp' }
+	},
 	{
 		id: 'kayp-pbw-2024',
 		title: 'KAYP',
