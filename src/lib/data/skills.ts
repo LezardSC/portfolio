@@ -5,6 +5,7 @@ import {
 	siDjango,
 	siDocker,
 	siExpress,
+	siFlask,
 	siGit,
 	siGithubactions,
 	siIpfs,
@@ -29,12 +30,15 @@ import {
 	siSurrealdb,
 	siSvelte,
 	siTailwindcss,
+	siThreedotjs,
+	siTokio,
 	siTypescript,
+	siUnity,
 	siXrp
 } from 'simple-icons';
 import type { SkillGroup } from '$lib/skills';
 import { ICONS } from './icons';
-import { CHAT, CPU, DATABASE, HARDHAT, NEURAL_NET } from './skill-icons';
+import { CHAT, CPU, CSHARP, DATABASE, HARDHAT, NEURAL_NET, SMART_CONTRACT } from './skill-icons';
 import { typeset } from '$lib/i18n/typography';
 
 // French text may use plain spaces and straight apostrophes: typeset() adds the no-break spaces and ’
@@ -48,8 +52,8 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 		icon: ICONS.server,
 		title: { en: 'Backend', fr: 'Backend' },
 		description: {
-			en: 'APIs, databases, authentication and services.',
-			fr: 'APIs, bases de données, authentification et services.'
+			en: 'APIs, authentication and services.',
+			fr: 'APIs, authentification et services.'
 		},
 		skills: [
 			{ name: 'Python', icon: siPython },
@@ -59,7 +63,19 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 			{ name: 'JavaScript', icon: siJavascript },
 			{ name: 'Express', icon: siExpress },
 			{ name: 'Django', icon: siDjango },
-			{ name: 'Java', icon: siOpenjdk },
+			{ name: 'Flask', icon: siFlask },
+			{ name: 'Java', icon: siOpenjdk }
+		]
+	},
+	{
+		id: 'databases',
+		icon: ICONS.database,
+		title: { en: 'Databases', fr: 'Bases de données' },
+		description: {
+			en: 'Data modelling and queries, relational or not.',
+			fr: 'Modélisation des données et requêtes, relationnelles ou non.'
+		},
+		skills: [
 			{ name: 'SQL', icon: DATABASE },
 			{ name: 'PostgreSQL', icon: siPostgresql },
 			{ name: 'SQLite', icon: siSqlite },
@@ -76,6 +92,7 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 		},
 		skills: [
 			{ name: 'Rust', icon: siRust },
+			{ name: 'Tokio', icon: siTokio },
 			{ name: 'C', icon: siC },
 			{ name: 'C++', icon: siCplusplus },
 			{ name: 'x86-64 Assembly', icon: CPU },
@@ -130,6 +147,7 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 		skills: [
 			{ name: 'Solidity', icon: siSolidity },
 			{ name: 'Hardhat', icon: HARDHAT },
+			{ name: 'SmartPy', icon: SMART_CONTRACT },
 			{ name: 'Solana', icon: siSolana },
 			{ name: 'Rust', icon: siRust },
 			{ name: 'XRPL', icon: siXrp },
@@ -149,7 +167,22 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 			{ name: 'JavaScript', icon: siJavascript },
 			{ name: 'SvelteKit', icon: siSvelte },
 			{ name: 'React', icon: siReact },
-			{ name: 'Tailwind CSS', icon: siTailwindcss }
+			{ name: 'Tailwind CSS', icon: siTailwindcss },
+			{ name: 'Three.js', icon: siThreedotjs }
+		]
+	},
+	{
+		id: 'games',
+		icon: ICONS.gamepad,
+		title: { en: 'Games', fr: 'Jeux vidéo' },
+		description: {
+			en: 'Game engines and 3D, native or in the browser.',
+			fr: 'Moteurs de jeu et 3D, en natif ou dans le navigateur.'
+		},
+		skills: [
+			{ name: 'C#', icon: CSHARP },
+			{ name: 'Unity', icon: siUnity },
+			{ name: 'Three.js', icon: siThreedotjs }
 		]
 	}
 ]);
