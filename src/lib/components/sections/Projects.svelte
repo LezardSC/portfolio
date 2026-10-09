@@ -29,7 +29,6 @@
 	const tiers = $derived(
 		splitTiers(sortProjects(filterProjects(PROJECTS, filters), sort, PRIORITY))
 	);
-	const lead = $derived(fill(t.lead, { total: PROJECTS.length }));
 	const ms = $derived(prefersReducedMotion.current ? 0 : 300);
 
 	/** False in the prerendered HTML: without JS every tile shows and there is no button. */
@@ -50,7 +49,7 @@
 	});
 </script>
 
-<Section id="projects" {title} {lead}>
+<Section id="projects" {title}>
 	<ProjectFilters projects={PROJECTS} bind:filters bind:sort {lang} {t} />
 
 	{#if tiers.large.length === 0}
