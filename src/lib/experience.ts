@@ -111,11 +111,14 @@ export function yearOf(date: string): string {
 	return date.slice(0, 4);
 }
 
-/** Months covered by a period, both ends included: 2025-07 → 2026-01 is 7. */
+/**
+ * Months from start to end, counted like a contract: 2024-10 → 2025-04 is 6 (mid-October to
+ * mid-April). A period within a single month still counts as 1.
+ */
 export function durationMonths(start: Month, end: Month): number {
 	const [y1, m1] = start.split('-').map(Number);
 	const [y2, m2] = end.split('-').map(Number);
-	return (y2 - y1) * 12 + (m2 - m1) + 1;
+	return Math.max(1, (y2 - y1) * 12 + (m2 - m1));
 }
 
 /** "1 month" / "7 months" from the dictionary's `{n}` templates. */
