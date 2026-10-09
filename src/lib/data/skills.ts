@@ -1,5 +1,7 @@
 import {
+	siBruno,
 	siC,
+	siCplusplus,
 	siDjango,
 	siDocker,
 	siExpress,
@@ -15,6 +17,7 @@ import {
 	siOpencv,
 	siOpenjdk,
 	siPostgresql,
+	siPostman,
 	siPython,
 	siPytorch,
 	siReact,
@@ -22,6 +25,8 @@ import {
 	siScikitlearn,
 	siSolana,
 	siSolidity,
+	siSqlite,
+	siSurrealdb,
 	siSvelte,
 	siTailwindcss,
 	siTypescript,
@@ -36,7 +41,7 @@ import { typeset } from '$lib/i18n/typography';
 // (docs/content-guide.md). Always give typeset its type, typeset<X[]>(…): it keeps TypeScript's check
 // of misspelled field names.
 
-/** Group and chip order is display order. Each skill belongs to exactly one group. */
+/** Group and chip order is display order. A skill may appear in several groups, once per group. */
 export const SKILL_GROUPS = typeset<SkillGroup[]>([
 	{
 		id: 'backend',
@@ -48,12 +53,17 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 		},
 		skills: [
 			{ name: 'Python', icon: siPython },
+			{ name: 'Rust', icon: siRust },
 			{ name: 'Node.js', icon: siNodedotjs },
+			{ name: 'TypeScript', icon: siTypescript },
+			{ name: 'JavaScript', icon: siJavascript },
 			{ name: 'Express', icon: siExpress },
 			{ name: 'Django', icon: siDjango },
 			{ name: 'Java', icon: siOpenjdk },
 			{ name: 'SQL', icon: DATABASE },
-			{ name: 'PostgreSQL', icon: siPostgresql }
+			{ name: 'PostgreSQL', icon: siPostgresql },
+			{ name: 'SQLite', icon: siSqlite },
+			{ name: 'SurrealDB', icon: siSurrealdb }
 		]
 	},
 	{
@@ -67,6 +77,7 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 		skills: [
 			{ name: 'Rust', icon: siRust },
 			{ name: 'C', icon: siC },
+			{ name: 'C++', icon: siCplusplus },
 			{ name: 'x86-64 Assembly', icon: CPU },
 			{ name: 'Linux', icon: siLinux }
 		]
@@ -76,15 +87,18 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 		icon: ICONS.cycle,
 		title: { en: 'DevOps & Tools', fr: 'DevOps & outils' },
 		description: {
-			en: 'Containers, deployment and continuous integration.',
-			fr: 'Conteneurs, déploiement et intégration continue.'
+			en: 'Containers, deployment, continuous integration and API testing.',
+			fr: "Conteneurs, déploiement, intégration continue et tests d'API."
 		},
 		skills: [
 			{ name: 'Docker', icon: siDocker },
 			{ name: 'Kubernetes', icon: siKubernetes },
 			{ name: 'Nginx', icon: siNginx },
 			{ name: 'GitHub Actions (CI/CD)', icon: siGithubactions },
-			{ name: 'Git', icon: siGit }
+			{ name: 'Git', icon: siGit },
+			{ name: 'Linux', icon: siLinux },
+			{ name: 'Postman', icon: siPostman },
+			{ name: 'Bruno', icon: siBruno }
 		]
 	},
 	{
@@ -96,6 +110,7 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 			fr: 'Modèles de vision, entraînement et agents LLM.'
 		},
 		skills: [
+			{ name: 'Python', icon: siPython },
 			{ name: 'PyTorch', icon: siPytorch },
 			{ name: 'scikit-learn', icon: siScikitlearn },
 			{ name: 'Deep Learning', icon: NEURAL_NET },
@@ -116,6 +131,7 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 			{ name: 'Solidity', icon: siSolidity },
 			{ name: 'Hardhat', icon: HARDHAT },
 			{ name: 'Solana', icon: siSolana },
+			{ name: 'Rust', icon: siRust },
 			{ name: 'XRPL', icon: siXrp },
 			{ name: 'IPFS', icon: siIpfs }
 		]

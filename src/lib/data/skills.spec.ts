@@ -23,10 +23,12 @@ describe('skill data', () => {
 		expect(empty).toEqual([]);
 	});
 
-	it('puts each skill in exactly one group', () => {
-		const names = allSkills.map((s) => skillName(s, 'en').toLowerCase());
-		const dupes = names.filter((n, i) => names.indexOf(n) !== i);
-		expect(dupes).toEqual([]);
+	it('lists each skill at most once per group', () => {
+		for (const group of SKILL_GROUPS) {
+			const names = group.skills.map((s) => skillName(s, 'en').toLowerCase());
+			const dupes = names.filter((n, i) => names.indexOf(n) !== i);
+			expect(dupes, group.id).toEqual([]);
+		}
 	});
 
 	it('has non-empty text in both languages', () => {
