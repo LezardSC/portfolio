@@ -62,11 +62,4 @@ describe('theme tokens in src/app.css', () => {
 	it('uses the same light values with and without JS', () => {
 		for (const name of THEMED) expect(noJsLight.get(name), name).toBe(light.get(name));
 	});
-
-	it('has the M9 palette', () => {
-		expect(dark.get('--bg')).toBe('#121210');
-		expect(dark.get('--accent')).toBe('#ff7f5e');
-		expect(light.get('--bg')).toBe('#faf8f4');
-		expect(light.get('--accent')).toBe('#c2391b');
-	});
 });

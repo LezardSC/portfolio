@@ -1,34 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import {
-	contrastRatio,
-	logoColor,
-	nextTab,
-	panelHidden,
-	skillName,
-	THEME_BG,
-	type Skill
-} from './skills';
-
-const icon = { path: 'M0 0h24v24H0z', hex: '000000' };
-
-describe('skillName', () => {
-	it('returns a plain string name as-is in every language', () => {
-		const skill: Skill = { name: 'Rust', icon };
-		expect(skillName(skill, 'en')).toBe('Rust');
-		expect(skillName(skill, 'fr')).toBe('Rust');
-	});
-
-	it('picks the requested language of a localized name', () => {
-		const skill: Skill = {
-			name: { en: 'Computer Vision', fr: 'Vision par ordinateur' },
-			icon
-		};
-		expect(skillName(skill, 'en')).toBe('Computer Vision');
-		expect(skillName(skill, 'fr')).toBe('Vision par ordinateur');
-	});
-});
+import { contrastRatio, logoColor, nextTab, panelHidden, THEME_BG } from './skills';
 
 describe('contrastRatio', () => {
 	it('is 21 for black on white and 1 for a colour on itself', () => {

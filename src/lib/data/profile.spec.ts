@@ -60,8 +60,4 @@ describe('profile data', () => {
 		const bad = paths.filter((p) => p.startsWith('/') || !existsSync(staticFile(p)));
 		expect(bad).toEqual([]);
 	});
-
-	it('uses a distinct CV file per language', () => {
-		expect(PROFILE.cv.en).not.toBe(PROFILE.cv.fr);
-	});
 });

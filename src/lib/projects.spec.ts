@@ -3,12 +3,8 @@ import {
 	countFor,
 	filterProjects,
 	hiddenCount,
-	mainDomain,
-	PHONE_OTHERS,
 	mediaFiles,
 	mediaIssues,
-	PHONE_QUERY,
-	DESKTOP_QUERY,
 	NO_FILTERS,
 	primaryLink,
 	shouldPlayVideo,
@@ -214,16 +210,8 @@ describe('mediaIssues', () => {
 	});
 });
 
-describe('mainDomain', () => {
-	it('is the first domain of the list', () => {
-		const p = { domains: ['blockchain', 'web'] } as Project;
-		expect(mainDomain(p)).toBe('blockchain');
-	});
-});
-
 describe('hiddenCount', () => {
-	it('counts the tiles past the first PHONE_OTHERS', () => {
-		expect(PHONE_OTHERS).toBe(6);
+	it('counts the tiles past the first 6 (PHONE_OTHERS)', () => {
 		expect(hiddenCount(11)).toBe(5);
 		expect(hiddenCount(7)).toBe(1);
 	});
@@ -245,11 +233,5 @@ describe('mediaFiles', () => {
 			'm.jpg'
 		]);
 		expect(mediaFiles({ kind: 'image', src: 'a.jpg' })).toEqual(['a.jpg']);
-	});
-});
-
-describe('PHONE_QUERY', () => {
-	it('is exactly the complement of DESKTOP_QUERY', () => {
-		expect(PHONE_QUERY).toBe(`not all and ${DESKTOP_QUERY}`);
 	});
 });

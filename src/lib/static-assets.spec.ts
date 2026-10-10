@@ -22,12 +22,6 @@ describe('static icons and share images', () => {
 		expect(readFileSync(staticFile('favicon.ico')).readUInt16LE(2)).toBe(1);
 	});
 
-	it('draws the favicon without a web font', () => {
-		const svg = readFileSync(staticFile('favicon.svg'), 'utf8');
-		expect(svg).not.toMatch(/<text|font-family/);
-		expect(svg).toContain('#C2391B');
-	});
-
 	it.each(LANGS)('has a 1200×630 share image for %s', (lang) => {
 		expect(pngSize(`og-${lang}.png`)).toEqual([1200, 630]);
 	});

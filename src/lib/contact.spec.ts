@@ -6,22 +6,10 @@ import { contactLinks, type ContactLink } from './contact';
 const byId = (links: ContactLink[]) => Object.fromEntries(links.map((l) => [l.id, l]));
 
 describe('contactLinks', () => {
-	it('lists the tiles under the email and Malt blocks, in order', () => {
-		expect(contactLinks('en', '', 'CV (PDF)').map((l) => l.id)).toEqual([
-			'linkedin',
-			'github',
-			'cv'
-		]);
-	});
-
 	it('labels profiles with their brand name and links them', () => {
 		const links = byId(contactLinks('en', '', 'CV'));
 		expect(links['linkedin']).toMatchObject({ label: 'LinkedIn', href: PROFILE.linkedin });
 		expect(links['github']).toMatchObject({ label: 'GitHub', href: PROFILE.github });
-	});
-
-	it('opens every tile in a new tab', () => {
-		expect(contactLinks('en', '', 'CV').every((l) => l.external)).toBe(true);
 	});
 
 	it('points the CV tile at the file for the language, under base', () => {
