@@ -28,6 +28,7 @@
 			<p class="award"><TrophyIcon /> {project.award[lang]}</p>
 		{/if}
 		<p class="desc">{project.description[lang]}</p>
+		<p class="summary">{project.summary[lang]}</p>
 		<div class="footer">
 			<TechTags tech={project.tech} />
 			<ProjectLinks {project} {t} />
@@ -45,7 +46,8 @@
 	.card > :global(.media) {
 		border-radius: var(--radius);
 	}
-	.wm {
+	.wm,
+	.summary {
 		display: none;
 	}
 	.body {
@@ -206,11 +208,11 @@
 			flex: none;
 		}
 		.desc {
-			display: -webkit-box;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 3;
-			line-clamp: 3;
-			overflow: hidden;
+			display: none;
+		}
+		.summary {
+			display: block;
+			margin: 0;
 			font-size: 0.9375rem;
 			line-height: 1.5;
 			color: #ece8df;

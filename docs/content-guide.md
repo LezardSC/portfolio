@@ -40,7 +40,7 @@ All in `src/lib/data/projects.ts`, inside `ALL_PROJECTS`. The order of entries d
 			fr: 'Texte long pour les grandes cartes. Deux ou trois phrases.'
 		},
 		summary: {
-			en: 'One sentence for the phone tiles, ending with a full stop.', // ≤ 100 characters
+			en: 'One sentence for phones (tiles and big cards), ending with a full stop.', // ≤ 100 characters
 			fr: 'Une phrase pour les tuiles du téléphone.'
 		},
 		date: '2026-05', // 'YYYY-MM' (sorts "Newest"; the card shows the year)
