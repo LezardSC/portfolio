@@ -10,7 +10,8 @@ const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
 /**
  * Priority order: these projects come first, in this order; every other project follows, newest
  * first. Not a separate category: the first 6 of whatever list is displayed (filters included)
- * get the big cards. Move a line to reorder. Every id must exist and not be hidden (a test checks it).
+ * get the big cards (the first 5 on phones). Move a line to reorder. Every id must exist and not
+ * be hidden (a test checks it).
  */
 export const PRIORITY: string[] = [
 	'cross-emu',
@@ -33,12 +34,12 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		},
 		summary: {
 			en: 'A cycle-accurate Game Boy and Game Boy Color emulator in Rust, with a debugger.',
-			fr: 'Un émulateur Game Boy et Game Boy Color en Rust, précis au cycle, avec débogueur.'
+			fr: 'Un émulateur Game Boy et Game Boy Color en Rust, précis et fidèle à l’originale, avec débogueur.'
 		},
 		date: '2026-05',
 		context: 'school',
 		domains: ['low-level', 'games'],
-		tech: ['Rust', 'egui', 'cpal'],
+		tech: ['Rust', 'assembly', 'egui', 'cpal', 'tokio'],
 		links: { repo: 'https://github.com/cross-emu/cross-emu' },
 		media: { kind: 'image', src: 'projects/cross-emu/cover.webp' }
 	},

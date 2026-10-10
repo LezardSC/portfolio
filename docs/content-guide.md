@@ -82,7 +82,7 @@ export const PRIORITY: string[] = [
 ];
 ```
 
-In the default "Relevance" sort, these come first in this order, then every other project newest first. It's an order, not a category: the list can be as long as you like. The **first 6 of whatever is displayed** get the big cards (with image or video) and the rest small cards, so with 9 priority projects the last 3 lead the small cards, and filtering on School gives big cards to the 6 best-ranked school projects. To reorder, move a line. A typo in an id makes `npm test` fail with `"the-id": no project has this id`.
+In the default "Relevance" sort, these come first in this order, then every other project newest first. It's an order, not a category: the list can be as long as you like. The **first 6 of whatever is displayed** get the big cards (with image or video) and the rest small cards, so with 9 priority projects the last 3 lead the small cards, and filtering on School gives big cards to the 6 best-ranked school projects. Phones show only the **first 5** as big cards; the 6th leads the small tiles there (`LARGE_COUNT` and `PHONE_LARGE_COUNT` in `src/lib/projects.ts`). To reorder, move a line. A typo in an id makes `npm test` fail with `"the-id": no project has this id`.
 
 ### Add a live demo link
 
