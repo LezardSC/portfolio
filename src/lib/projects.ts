@@ -8,6 +8,8 @@ export type SortKey = (typeof SORTS)[number];
 
 /** How many results get the large card layout: the first ones of the displayed list, whatever they are. */
 export const LARGE_COUNT = 6;
+/** Same on phones, which have room for fewer: the next ones lead the small tiles. */
+export const PHONE_LARGE_COUNT = 5;
 
 /**
  * Card media. Paths are relative to `static/`, without a leading slash. A video always has a
