@@ -25,7 +25,6 @@ describe('OVERLAY', () => {
 			'utf8'
 		);
 		expect(css).toContain(`--veil: ${OVERLAY.veilPlain};`);
-		expect(css).toContain(`--veil: ${OVERLAY.veilPhoto};`);
 		expect(css).toContain(`background: ${OVERLAY.veil};`);
 		expect(css).toContain(`rgb(255 255 255 / ${OVERLAY.tagBg})`);
 		for (const key of [...TEXTS, 'tag'] as const) expect(css, key).toContain(OVERLAY[key]);

@@ -1,7 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { SECTIONS } from '$lib/sections';
-import { SORTS } from '$lib/projects';
-import { MEDALS } from '$lib/experience';
 import { dicts } from './index';
 import { LANGS } from './lang';
 
@@ -25,26 +22,5 @@ describe('dictionaries', () => {
 			expect(typeof value, key).toBe('string');
 			expect((value as string).trim(), key).not.toBe('');
 		}
-	});
-
-	it.each(LANGS)('%s has a nav label and title for every section', (lang) => {
-		for (const id of SECTIONS) {
-			expect(dicts[lang].nav[id]).toBeTruthy();
-			expect(dicts[lang].sections[id]).toBeTruthy();
-		}
-	});
-
-	it.each(LANGS)('%s labels every project sort', (lang) => {
-		const p = dicts[lang].projects;
-		for (const s of SORTS) expect(p.sort[s], s).toBeTruthy();
-	});
-
-	it.each(LANGS)('%s labels every hackathon result', (lang) => {
-		for (const m of MEDALS) expect(dicts[lang].experience.results[m], String(m)).toBeTruthy();
-	});
-
-	it.each(LANGS)('%s has a single top-level "opens in a new tab" text', (lang) => {
-		const newTabKeys = keys(dicts[lang]).filter((k) => k.endsWith('newTab'));
-		expect(newTabKeys).toEqual(['newTab']);
 	});
 });

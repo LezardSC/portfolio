@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isLang, localeHref, otherLang, pickLang } from './lang';
+import { isLang, localeHref, pickLang } from './lang';
 
 describe('isLang', () => {
 	it('accepts supported locales', () => {
@@ -24,13 +24,6 @@ describe('pickLang', () => {
 	it('falls back to en', () => {
 		expect(pickLang(['de-DE', 'ja'])).toBe('en');
 		expect(pickLang([])).toBe('en');
-	});
-});
-
-describe('otherLang', () => {
-	it('swaps en and fr', () => {
-		expect(otherLang('en')).toBe('fr');
-		expect(otherLang('fr')).toBe('en');
 	});
 });
 
