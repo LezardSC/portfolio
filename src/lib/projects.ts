@@ -29,7 +29,7 @@ export type Project = {
 	id: string;
 	title: string;
 	description: Localized;
-	/** One sentence for the phone tiles (any project can land in the small tier after filtering). */
+	/** One sentence shown on phones instead of the description, on both tiles and big cards. */
 	summary: Localized;
 	/** 'YYYY-MM' */
 	date: string;
