@@ -10,6 +10,7 @@
 		filterProjects,
 		hiddenCount,
 		NO_FILTERS,
+		PHONE_LARGE_COUNT,
 		PHONE_OTHERS,
 		sortProjects,
 		splitTiers,
@@ -26,15 +27,19 @@
 	let filters = $state<Filters>({ ...NO_FILTERS });
 	let sort = $state<SortKey>('priority');
 
-	const tiers = $derived(
-		splitTiers(sortProjects(filterProjects(PROJECTS, filters), sort, PRIORITY))
-	);
+	const sorted = $derived(sortProjects(filterProjects(PROJECTS, filters), sort, PRIORITY));
+	const tiers = $derived(splitTiers(sorted));
+	/** Phones give fewer big cards. Both layouts are in the HTML and CSS picks one, so the
+	    prerendered page is right before JS runs: the big cards past PHONE_LARGE_COUNT are
+	    desktop-only, and the same projects lead the small tiles as phone-only. */
+	const phone = $derived(splitTiers(sorted, PHONE_LARGE_COUNT));
+	const phoneOnly = $derived(phone.small.length - tiers.small.length);
 	const ms = $derived(prefersReducedMotion.current ? 0 : 300);
 
 	/** False in the prerendered HTML: without JS every tile shows and there is no button. */
 	let ready = $state(false);
 	let showAll = $state(false);
-	const hidden = $derived(hiddenCount(tiers.small.length));
+	const hidden = $derived(hiddenCount(phone.small.length));
 
 	onMount(() => {
 		ready = true;
@@ -61,18 +66,23 @@
 		</div>
 	{:else}
 		<ul class="grid large" role="list">
-			{#each tiers.large as project (project.id)}
-				<li animate:flip={{ duration: ms }} in:fade={{ duration: ms }}>
+			{#each tiers.large as project, i (project.id)}
+				<li
+					class:desktop-only={i >= PHONE_LARGE_COUNT}
+					animate:flip={{ duration: ms }}
+					in:fade={{ duration: ms }}
+				>
 					<ProjectCardLarge {project} {lang} {t} />
 				</li>
 			{/each}
 		</ul>
 
-		{#if tiers.small.length > 0}
-			<h3 class="more">{t.more}</h3>
+		{#if phone.small.length > 0}
+			<h3 class="more" class:phone-only={tiers.small.length === 0}>{t.more}</h3>
 			<ul id="more-projects" class="grid small" role="list">
-				{#each tiers.small as project, i (project.id)}
+				{#each phone.small as project, i (project.id)}
 					<li
+						class:phone-only={i < phoneOnly}
 						class:folded={ready && !showAll && i >= PHONE_OTHERS}
 						animate:flip={{ duration: ms }}
 						in:fade={{ duration: ms }}
@@ -120,10 +130,17 @@
 		font-size: 1.625rem;
 		font-weight: 800;
 	}
-	.show-more {
+	.show-more,
+	.phone-only {
 		display: none;
 	}
 	@media (width < 48rem) {
+		.phone-only {
+			display: revert;
+		}
+		.desktop-only {
+			display: none;
+		}
 		.large {
 			grid-template-columns: minmax(0, 1fr);
 			grid-auto-rows: auto;
