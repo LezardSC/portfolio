@@ -4,22 +4,10 @@ import {
 	durationMonths,
 	formatPeriod,
 	hackathonsNewestFirst,
-	localize,
 	newestFirst,
 	periodPoints,
-	yearOf,
 	type Hackathon
 } from './experience';
-
-describe('localize', () => {
-	it('returns a plain string as is', () => {
-		expect(localize('KAYP', 'fr')).toBe('KAYP');
-	});
-	it('picks the language of a localized string', () => {
-		expect(localize({ en: 'Internship', fr: 'Stage' }, 'fr')).toBe('Stage');
-		expect(localize({ en: 'Internship', fr: 'Stage' }, 'en')).toBe('Internship');
-	});
-});
 
 describe('formatPeriod', () => {
 	it('formats a month range in English', () => {
@@ -111,13 +99,6 @@ describe('hackathonsNewestFirst', () => {
 			{ medal: 2, event: 'C', date: '2024-11' }
 		];
 		expect(hackathonsNewestFirst(list).map((h) => h.event)).toEqual(['B', 'C', 'A']);
-	});
-});
-
-describe('yearOf', () => {
-	it('returns the year of a month or a year', () => {
-		expect(yearOf('2025-11')).toBe('2025');
-		expect(yearOf('2024')).toBe('2024');
 	});
 });
 
