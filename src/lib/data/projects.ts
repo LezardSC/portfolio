@@ -14,13 +14,6 @@ const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
  * be hidden (a test checks it).
  */
 export const PRIORITY: string[] = [
-	'cross-emu',
-	'kayp-pbw-2024',
-	'kayp-h-web3-paris',
-	'ft-transcendence',
-	'microcode',
-	'bahapad',
-	'goldeneye-data-augmentation'
 ];
 
 /** Every project, hidden ones included. Order here doesn't matter: the page sorts them. */
@@ -37,11 +30,12 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			fr: 'Un émulateur Game Boy et Game Boy Color en Rust, précis et fidèle à l’originale, avec débogueur.'
 		},
 		date: '2026-05',
-		context: 'school',
+		context: 'personal',
 		domains: ['low-level', 'games'],
 		tech: ['Rust', 'assembly', 'egui', 'cpal', 'tokio'],
 		links: { repo: 'https://github.com/cross-emu/cross-emu' },
-		media: { kind: 'image', src: 'projects/cross-emu/cover.webp' }
+		media: { kind: 'image', src: 'projects/cross-emu/cover.webp' },
+		hidden: true,
 	},
 	{
 		id: 'kayp-pbw-2024',
@@ -62,7 +56,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		award: {
 			en: 'Winner - Paris Blockchain Week 2024 (XRPL track)',
 			fr: 'Vainqueur - Paris Blockchain Week 2024 (track XRPL)'
-		}
+		},
+		hidden: true,
 	},
 	{
 		id: 'kayp-h-web3-paris',
@@ -80,7 +75,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['blockchain', 'web'],
 		tech: ['TypeScript', 'React', 'Tailwind CSS', 'Python'],
 		links: { repo: gh('KAYP-H-WEB3PARIS') },
-		award: { en: 'Winner - H-W3B Paris 2024', fr: 'Vainqueur - H-W3B Paris 2024' }
+		award: { en: 'Winner - H-W3B Paris 2024', fr: 'Vainqueur - H-W3B Paris 2024' },
+		hidden: true,
 	},
 	{
 		id: 'ft-transcendence',
@@ -97,7 +93,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['web', 'games'],
 		tech: ['Python', 'JavaScript', 'Bootstrap', 'Docker'],
-		links: { repo: gh('42-ft_transcendence') }
+		links: { repo: gh('42-ft_transcendence') },
+		hidden: true,
 	},
 	{
 		id: 'microcode',
@@ -114,7 +111,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'personal',
 		domains: ['ai'],
 		tech: ['Python', 'Ollama', 'LLM agents'],
-		links: { repo: gh('microcode') }
+		links: { repo: gh('microcode') },
+		hidden: true,
 	},
 	{
 		id: 'bahapad',
@@ -135,7 +133,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		award: {
 			en: '3rd place - Paris Blockchain Week 2025',
 			fr: '3e place - Paris Blockchain Week 2025'
-		}
+		},
+		hidden: true,
 	},
 	{
 		id: 'goldeneye-data-augmentation',
@@ -152,7 +151,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'professional',
 		domains: ['ai'],
 		tech: ['Python'],
-		links: {}
+		links: {},
+		hidden: true,
 	},
 	{
 		id: 'tokenizart',
@@ -169,7 +169,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['blockchain', 'web'],
 		tech: ['Solidity', 'Hardhat', 'IPFS', 'JavaScript'],
-		links: { repo: gh('42-tokenizArt') }
+		links: { repo: gh('42-tokenizArt') },
+		hidden: true,
 	},
 	{
 		id: 'tokenizer',
@@ -186,7 +187,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['blockchain'],
 		tech: ['Solidity', 'JavaScript'],
-		links: { repo: gh('42-tokenizer') }
+		links: { repo: gh('42-tokenizer') },
+		hidden: true,
 	},
 	{
 		id: 'ft-linear-regression',
@@ -203,7 +205,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['ai'],
 		tech: ['Python'],
-		links: { repo: gh('42-ft_linear_regression') }
+		links: { repo: gh('42-ft_linear_regression') },
+		hidden: true,
 	},
 	{
 		id: 'dslr',
@@ -220,7 +223,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['ai'],
 		tech: ['Python', 'Matplotlib'],
-		links: {}
+		links: {},
+		hidden: true,
 	},
 	{
 		id: 'leaffliction',
@@ -237,7 +241,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['ai'],
 		tech: ['Python', 'PyTorch', 'PlantCV'],
-		links: { repo: gh('42-Leaffliction') }
+		links: { repo: gh('42-Leaffliction') },
+		hidden: true,
 	},
 	{
 		id: 'libasm',
@@ -254,7 +259,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['low-level'],
 		tech: ['x86-64 Assembly', 'NASM', 'C'],
-		links: { repo: gh('42-libasm') }
+		links: { repo: gh('42-libasm') },
+		hidden: true,
 	},
 	{
 		id: 'libft',
@@ -271,7 +277,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['low-level'],
 		tech: ['C', 'Makefile'],
-		links: { repo: gh('42-libft') }
+		links: { repo: gh('42-libft') },
+		hidden: true,
 	},
 	{
 		id: 'ft-printf',
@@ -288,7 +295,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['low-level'],
 		tech: ['C'],
-		links: { repo: gh('42-ft_printf') }
+		links: { repo: gh('42-ft_printf') },
+		hidden: true,
 	},
 	{
 		id: 'get-next-line',
@@ -305,7 +313,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['low-level'],
 		tech: ['C'],
-		links: { repo: gh('42-get_next_line') }
+		links: { repo: gh('42-get_next_line') },
+		hidden: true,
 	},
 	{
 		id: 'confiture-de-jeu',
@@ -322,7 +331,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'hackathon',
 		domains: ['games'],
 		tech: ['C#', 'Unity'],
-		links: { repo: gh('GameJam-Confiture-de-jeu-1') }
+		links: { repo: gh('GameJam-Confiture-de-jeu-1') },
+		hidden: true,
 	},
 	{
 		id: 'love-takedown',
@@ -339,7 +349,26 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'hackathon',
 		domains: ['games'],
 		tech: ['C#', 'Unity'],
-		links: { repo: gh('Love_Takedown') }
+		links: { repo: gh('Love_Takedown') },
+		hidden: true,
+	},
+	{
+		id: 'so-long',
+		title: 'So Long',
+		description: {
+			en: "A 2D game built in C on top of the MiniLibX, a bare-bones graphics library: real-time game loop, sprite animations, enemies, and walls that tile themselves based on their neighbours. Before each game, the map is validated, down to checking that it can be completed.",
+			fr: "Un jeu 2D développé en C sur la MiniLibX, une bibliothèque graphique minimaliste : boucle de jeu en temps réel, sprites animés, ennemis et murs qui s'ajustent automatiquement à leurs voisins. Avant chaque partie, la carte est validée, jusqu'à vérifier qu'elle est bien faisable."
+		},
+		summary: {
+			en: 'A top-down 2D game in C with the MiniLibX, styled like Pokémon Mystery Dungeon.',
+			fr: 'Un jeu 2D en vue de dessus en C avec la MiniLibX, façon Pokémon Donjon Mystère.'
+		},
+		date: '2023-05',
+		context: 'school',
+		domains: ['games', 'low-level'],
+		tech: ['C', 'MiniLibX'],
+		links: { repo: gh('so_long')},
+		media: { kind: 'video', src: 'projects/so_long/demo.mp4', poster: 'projects/so_long/poster.webp', phone: 'projects/so_long/phone.webp' },
 	}
 ]);
 
