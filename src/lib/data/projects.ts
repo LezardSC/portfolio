@@ -13,8 +13,7 @@ const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
  * get the big cards (the first 5 on phones). Move a line to reorder. Every id must exist and not
  * be hidden (a test checks it).
  */
-export const PRIORITY: string[] = [
-];
+export const PRIORITY: string[] = [];
 
 /** Every project, hidden ones included. Order here doesn't matter: the page sorts them. */
 export const ALL_PROJECTS = typeset<Project[]>([
@@ -22,8 +21,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		id: 'cross-emu',
 		title: 'Cross-Emu',
 		description: {
-			en: 'A Game Boy and Game Boy Color emulator in Rust, built as a team: M-cycle-accurate CPU, T-cycle-accurate graphics, all four sound channels, MBC1/2/3/5 cartridges, save states and a built-in debugger (step-by-step, watchpoints, disassembly). It started as a 42 project; we kept going to make it truly faithful.',
-			fr: "Un émulateur Game Boy et Game Boy Color en Rust, développé en équipe : CPU précis au M-cycle, affichage précis au T-cycle, les quatre canaux audio, cartouches MBC1/2/3/5, sauvegardes d'état et débogueur intégré (pas à pas, watchpoints, désassemblage). Parti d'un projet de 42, on l'a poursuivi pour le rendre vraiment fidèle."
+			en: 'A Game Boy and Game Boy Color emulator in Rust, built as a team: cycle-accurate CPU and graphics, sound, cartridge support, save states and a built-in debugger. Started as a school project, we kept going to make it truly faithful and enjoyable to use.',
+			fr: "Un émulateur Game Boy et Game Boy Color en Rust, développé en équipe : CPU et affichage précis au cycle près, gestion du son et des cartouches, sauvegardes d'état et débogueur intégré. Parti d'un projet d'école, on l'a poursuivi pour le rendre vraiment fidèle et agréable à utiliser."
 		},
 		summary: {
 			en: 'A cycle-accurate Game Boy and Game Boy Color emulator in Rust, with a debugger.',
@@ -34,8 +33,12 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['low-level', 'games'],
 		tech: ['Rust', 'assembly', 'egui', 'cpal', 'tokio'],
 		links: { repo: 'https://github.com/cross-emu/cross-emu' },
-		media: { kind: 'image', src: 'projects/cross-emu/cover.webp' },
-		hidden: true,
+		media: {
+			kind: 'video',
+			src: 'projects/cross-emu/demo.mp4',
+			poster: 'projects/cross-emu/poster.webp',
+			phone: 'projects/cross-emu/phone.webp'
+		}
 	},
 	{
 		id: 'kayp-pbw-2024',
@@ -57,7 +60,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			en: 'Winner - Paris Blockchain Week 2024 (XRPL track)',
 			fr: 'Vainqueur - Paris Blockchain Week 2024 (track XRPL)'
 		},
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'kayp-h-web3-paris',
@@ -76,7 +79,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		tech: ['TypeScript', 'React', 'Tailwind CSS', 'Python'],
 		links: { repo: gh('KAYP-H-WEB3PARIS') },
 		award: { en: 'Winner - H-W3B Paris 2024', fr: 'Vainqueur - H-W3B Paris 2024' },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'ft-transcendence',
@@ -94,7 +97,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['web', 'games'],
 		tech: ['Python', 'JavaScript', 'Bootstrap', 'Docker'],
 		links: { repo: gh('42-ft_transcendence') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'microcode',
@@ -112,7 +115,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python', 'Ollama', 'LLM agents'],
 		links: { repo: gh('microcode') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'bahapad',
@@ -134,7 +137,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			en: '3rd place - Paris Blockchain Week 2025',
 			fr: '3e place - Paris Blockchain Week 2025'
 		},
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'goldeneye-data-augmentation',
@@ -152,7 +155,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python'],
 		links: {},
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'tokenizart',
@@ -170,7 +173,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['blockchain', 'web'],
 		tech: ['Solidity', 'Hardhat', 'IPFS', 'JavaScript'],
 		links: { repo: gh('42-tokenizArt') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'tokenizer',
@@ -188,7 +191,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['blockchain'],
 		tech: ['Solidity', 'JavaScript'],
 		links: { repo: gh('42-tokenizer') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'ft-linear-regression',
@@ -206,7 +209,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python'],
 		links: { repo: gh('42-ft_linear_regression') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'dslr',
@@ -224,7 +227,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python', 'Matplotlib'],
 		links: {},
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'leaffliction',
@@ -242,7 +245,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python', 'PyTorch', 'PlantCV'],
 		links: { repo: gh('42-Leaffliction') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'libasm',
@@ -260,7 +263,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['low-level'],
 		tech: ['x86-64 Assembly', 'NASM', 'C'],
 		links: { repo: gh('42-libasm') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'libft',
@@ -278,7 +281,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['low-level'],
 		tech: ['C', 'Makefile'],
 		links: { repo: gh('42-libft') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'ft-printf',
@@ -296,7 +299,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['low-level'],
 		tech: ['C'],
 		links: { repo: gh('42-ft_printf') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'get-next-line',
@@ -314,7 +317,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['low-level'],
 		tech: ['C'],
 		links: { repo: gh('42-get_next_line') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'confiture-de-jeu',
@@ -332,7 +335,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['games'],
 		tech: ['C#', 'Unity'],
 		links: { repo: gh('GameJam-Confiture-de-jeu-1') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'love-takedown',
@@ -350,13 +353,13 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['games'],
 		tech: ['C#', 'Unity'],
 		links: { repo: gh('Love_Takedown') },
-		hidden: true,
+		hidden: true
 	},
 	{
 		id: 'so-long',
 		title: 'So Long',
 		description: {
-			en: "A 2D game built in C on top of the MiniLibX, a bare-bones graphics library: real-time game loop, sprite animations, enemies, and walls that tile themselves based on their neighbours. Before each game, the map is validated, down to checking that it can be completed.",
+			en: 'A 2D game built in C on top of the MiniLibX, a bare-bones graphics library: real-time game loop, sprite animations, enemies, and walls that tile themselves based on their neighbours. Before each game, the map is validated, down to checking that it can be completed.',
 			fr: "Un jeu 2D développé en C sur la MiniLibX, une bibliothèque graphique minimaliste : boucle de jeu en temps réel, sprites animés, ennemis et murs qui s'ajustent automatiquement à leurs voisins. Avant chaque partie, la carte est validée, jusqu'à vérifier qu'elle est bien faisable."
 		},
 		summary: {
@@ -367,8 +370,13 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['games', 'low-level'],
 		tech: ['C', 'MiniLibX'],
-		links: { repo: gh('so_long')},
-		media: { kind: 'video', src: 'projects/so_long/demo.mp4', poster: 'projects/so_long/poster.webp', phone: 'projects/so_long/phone.webp' },
+		links: { repo: gh('so_long') },
+		media: {
+			kind: 'video',
+			src: 'projects/so_long/demo.mp4',
+			poster: 'projects/so_long/poster.webp',
+			phone: 'projects/so_long/phone.webp'
+		}
 	}
 ]);
 
