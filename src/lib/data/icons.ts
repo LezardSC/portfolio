@@ -29,6 +29,8 @@ export const ICONS = {
 		'M7 7.5h.01M7 16.5h.01',
 	/** A stack of disks: a cylinder with a middle ring (Databases). */
 	database: 'M3 5a9 3 0 1 0 18 0a9 3 0 1 0-18 0zM3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0',
+	/** Smartphone with a home dot (Mobile). */
+	phone: 'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01',
 	/** Two arrows in a circle (DevOps). */
 	cycle: 'M20 12a8 8 0 0 1-13.66 5.66M4 12a8 8 0 0 1 13.66-5.66M18 3v4h-4M6 21v-4h4'
 } as const;

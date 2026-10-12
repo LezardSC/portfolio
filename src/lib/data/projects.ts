@@ -105,6 +105,52 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		}
 	},
 	{
+		id: 'ft_hangouts',
+		title: 'Hangouts',
+		description: {
+			en: '',
+			fr: ''
+		},
+		summary: {
+			en: '',
+			fr: ''
+		},
+		date: '2024-08',
+		context: 'school',
+		domains: ['mobile'],
+		tech: ['kotlin'],
+		links: { repo: '' },
+		media: {
+			kind: 'video',
+			src: '',
+			poster: '',
+			phone: ''
+		}
+	},
+	{
+		id: 'swifty_companion',
+		title: 'Swifty Companion',
+		description: {
+			en: '',
+			fr: ''
+		},
+		summary: {
+			en: '',
+			fr: ''
+		},
+		date: '2024-08',
+		context: 'school',
+		domains: ['mobile'],
+		tech: ['kotlin'],
+		links: { repo: '' },
+		media: {
+			kind: 'video',
+			src: '',
+			poster: '',
+			phone: ''
+		}
+	},
+	{
 		id: 'microcode',
 		title: 'microcode',
 		description: {

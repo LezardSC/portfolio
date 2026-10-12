@@ -1,4 +1,5 @@
 import {
+	siAndroidstudio,
 	siBruno,
 	siC,
 	siCplusplus,
@@ -10,6 +11,7 @@ import {
 	siGithubactions,
 	siIpfs,
 	siJavascript,
+	siKotlin,
 	siKubernetes,
 	siLinux,
 	siNginx,
@@ -169,6 +171,19 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 			{ name: 'React', icon: siReact },
 			{ name: 'Tailwind CSS', icon: siTailwindcss },
 			{ name: 'Three.js', icon: siThreedotjs }
+		]
+	},
+	{
+		id: 'mobile',
+		icon: ICONS.phone,
+		title: { en: 'Mobile', fr: 'Mobile' },
+		description: {
+			en: 'Native Android apps.',
+			fr: 'Applications Android natives.'
+		},
+		skills: [
+			{ name: 'Kotlin', icon: siKotlin },
+			{ name: 'Android Studio', icon: siAndroidstudio }
 		]
 	},
 	{
