@@ -18,7 +18,7 @@
 		<span class="icon"><Icon path={domain.icon} size={22} /></span>
 		<ProjectLinks {project} {t} compact />
 	</div>
-	<!-- Phone only: label, summary and context (CSS shows one set of texts per width). -->
+	<!-- Phone only: label and context (CSS shows one set of texts per width). -->
 	<p class="label">{domain.label[lang]} · {year}</p>
 	<h4>
 		{#if href}
@@ -31,7 +31,6 @@
 	{#if project.award}
 		<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
 	{/if}
-	<p class="desc">{project.description[lang]}</p>
 	<p class="summary">{project.summary[lang]}</p>
 	<TechTags tech={project.tech} small />
 	<p class="ctx">{CONTEXTS[project.context].label[lang]}</p>
@@ -84,19 +83,13 @@
 		font-weight: 500;
 		color: var(--muted);
 	}
-	.desc {
+	.summary {
 		margin: 0;
 		font-size: 0.9375rem;
 		line-height: 1.5;
 		color: var(--body);
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 3;
-		line-clamp: 3;
-		overflow: hidden;
 	}
 	.label,
-	.summary,
 	.ctx {
 		display: none;
 	}
@@ -173,15 +166,11 @@
 		}
 		.summary {
 			grid-area: summary;
-			display: block;
-			margin: 0;
 			font-size: 0.8125rem;
 			line-height: 1.4;
-			color: var(--body);
 		}
 		.meta,
 		.award,
-		.desc,
 		.card > :global(ul) {
 			display: none;
 		}
