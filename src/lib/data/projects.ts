@@ -83,7 +83,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 	},
 	{
 		id: 'ft-transcendence',
-		title: 'ft_transcendence',
+		title: 'Transcendence',
 		description: {
 			en: 'Final project of the 42 Common Core: a website for online multiplayer Pong with tournaments, e-mail-verified accounts, 3D rendering, an AI opponent and a blockchain module, in English, French and Spanish.',
 			fr: 'Projet final du tronc commun de 42\u00a0: un site de Pong multijoueur en ligne avec tournois, comptes vérifiés par e-mail, rendu 3D, IA adverse et module blockchain, en anglais, français et espagnol.'
@@ -442,6 +442,29 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			src: 'projects/minishell/demo.mp4',
 			poster: 'projects/minishell/poster.webp',
 			phone: 'projects/minishell/phone.webp'
+		}
+	},
+	{
+		id: 'philosophers',
+		title: 'Philosophers',
+		description: {
+			en: 'The dining philosophers problem in C: philosophers sit around a table, each needing two shared forks to eat, and must not starve. Each one is a thread and each fork a mutex, with no deadlocks or data races, and any death reported within 10 ms.',
+			fr: 'Le problème du dîner des philosophes en C\u00a0: des philosophes autour d’une table doivent prendre deux fourchettes partagées pour manger, sans mourir de faim. Chacun est un thread et chaque fourchette un mutex, sans interblocage ni accès concurrent, et toute mort est signalée en moins de 10 ms.'
+		},
+		summary: {
+			en: 'The dining philosophers problem in C, with threads and mutexes.',
+			fr: 'Le problème du dîner des philosophes en C, avec threads et mutex.'
+		},
+		date: '2023-12',
+		context: 'school',
+		domains: ['low-level'],
+		tech: ['C', 'threads'],
+		links: { repo: gh('42-Philosophers') },
+		media: {
+			kind: 'video',
+			src: 'projects/philosophers/demo.mp4',
+			poster: 'projects/philosophers/poster.webp',
+			phone: 'projects/philosophers/phone.webp'
 		}
 	},
 	{
