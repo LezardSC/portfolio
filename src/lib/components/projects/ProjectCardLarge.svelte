@@ -138,7 +138,7 @@
 			color: #f3f0e8;
 		}
 		.card.has-media {
-			--veil: 0.62;
+			--veil: 0.58;
 		}
 		.card::before {
 			content: '';
@@ -155,7 +155,7 @@
 			z-index: -2;
 			aspect-ratio: auto;
 			border-radius: 0;
-			filter: blur(var(--blur, 6px));
+			filter: blur(var(--blur, 4px));
 		}
 		/* No photo: the domain colour is the ground (the empty media box would cover it). */
 		.card:not(.has-media) > :global(.media) {
