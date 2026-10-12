@@ -377,6 +377,29 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			poster: 'projects/so_long/poster.webp',
 			phone: 'projects/so_long/phone.webp'
 		}
+	},
+	{
+		id: 'minishell',
+		title: 'Minishell',
+		description: {
+			en: "Our own shell in C, a lightweight version of Bash, the command interpreter of Linux and macOS. It handles quotes, variables, reading from and writing to files, and chains commands so that one's output feeds the next, all while matching Bash's behaviour down to the edge cases.",
+			fr: "Notre propre shell en C, une version allégée de Bash, l'interpréteur de commandes de Linux et macOS. Il gère les guillemets, les variables, la lecture et l'écriture dans des fichiers, et enchaîne les commandes pour que le résultat de l'une alimente la suivante, en reproduisant le comportement de Bash jusque dans les cas limites."
+		},
+		summary: {
+			en: 'Our own version of Bash in C, the program that runs the commands typed in a terminal.',
+			fr: 'Notre propre version de Bash en C, le programme qui exécute les commandes tapées dans un terminal.'
+		},
+		date: '2023-10',
+		context: 'school',
+		domains: ['low-level'],
+		tech: ['C', 'bash'],
+		links: { repo: 'https://github.com/Edwardhug/minishell' },
+		media: {
+			kind: 'video',
+			src: 'projects/minishell/demo.mp4',
+			poster: 'projects/minishell/poster.webp',
+			phone: 'projects/minishell/phone.webp'
+		}
 	}
 ]);
 
