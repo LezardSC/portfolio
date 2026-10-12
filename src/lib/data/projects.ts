@@ -231,7 +231,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['ai'],
 		tech: ['Python', 'Matplotlib'],
-		links: {},
+		links: {}
 	},
 	{
 		id: 'leaffliction',
@@ -380,6 +380,29 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			src: 'projects/so_long/demo.mp4',
 			poster: 'projects/so_long/poster.webp',
 			phone: 'projects/so_long/phone.webp'
+		}
+	},
+	{
+		id: 'cub3d',
+		title: 'Cub3d',
+		description: {
+			en: 'A first-person 3D maze in the spirit of Wolfenstein 3D or Doom, built as a team in C on top of the MiniLibX, a bare-bones graphics library. The 3D view is drawn with raycasting: one ray per column of the screen, with a different texture for each side. Movement is smooth, and the map is parsed and validated before each game.',
+			fr: "Un labyrinthe 3D à la première personne dans l'esprit de Wolfenstein 3D ou Doom, développé en équipe en C sur la MiniLibX, une bibliothèque graphique minimaliste. La vue 3D est dessinée par raycasting : un rayon par colonne de l'écran, avec une texture différente pour chaque face. Les déplacements sont fluides, et la carte est parsée et validée avant chaque partie."
+		},
+		summary: {
+			en: 'A first-person 3D maze in C, drawn with raycasting like Wolfenstein 3D or Doom.',
+			fr: 'Un labyrinthe 3D à la première personne en C, dessiné en raycasting comme Wolfenstein 3D ou Doom.'
+		},
+		date: '2024-04',
+		context: 'school',
+		domains: ['games', 'low-level'],
+		tech: ['C', 'MiniLibX'],
+		links: { repo: gh('42-cub3d') },
+		media: {
+			kind: 'video',
+			src: 'projects/cub3d/demo.mp4',
+			poster: 'projects/cub3d/poster.webp',
+			phone: 'projects/cub3d/phone.webp'
 		}
 	},
 	{
