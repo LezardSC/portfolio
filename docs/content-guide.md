@@ -164,8 +164,8 @@ To keep another part than the centre, crop it in any image editor first.
 
 Both live in the phone block (`@media (width < 48rem)`) of `src/lib/components/projects/ProjectCardLarge.svelte`:
 
-- **Blur:** `filter: blur(var(--blur, 6px));` on `.card > :global(.media)`. Change `6px` (more = blurrier). For a much stronger blur, also make its `inset: -1rem` more negative (e.g. `-2rem`): the image overflows the card so the blur's soft edge stays hidden.
-- **Darkening:** a `#10100e` layer whose opacity is `--veil` (0 = none, 1 = black). `.card.has-media { --veil: 0.62; }` is for cards with an image; `--veil: 0.35;` in `.card` is for cards without one (domain colour as background).
+- **Blur:** `filter: blur(var(--blur, 4px));` on `.card > :global(.media)`. Change `4px` (more = blurrier). For a much stronger blur, also make its `inset: -1rem` more negative (e.g. `-2rem`): the image overflows the card so the blur's soft edge stays hidden.
+- **Darkening:** a `#10100e` layer whose opacity is `--veil` (0 = none, 1 = black). `.card.has-media { --veil: 0.58; }` is for cards with an image; `--veil: 0.35;` in `.card` is for cards without one (domain colour as background).
 
 Change the no-image veil in `src/lib/overlay.ts` as well (`veilPlain`): `npm test` fails if it differs from the CSS. It also checks the text contrast on every domain colour with `veilPlain`, so lowering it may fail for a light domain colour. Over an image the contrast isn't tested: check the cards by eye at 360px in both themes.
 
