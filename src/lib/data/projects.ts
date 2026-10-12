@@ -231,7 +231,13 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['ai'],
 		tech: ['Python', 'Matplotlib'],
-		links: {}
+		links: { repo: gh('https://github.com/Hgeffroy/42_Dslr') },
+		media: {
+			kind: 'video',
+			src: 'projects/dslr/demo.mp4',
+			poster: 'projects/dslr/poster.webp',
+			phone: 'projects/dslr/phone.webp'
+		}
 	},
 	{
 		id: 'leaffliction',
