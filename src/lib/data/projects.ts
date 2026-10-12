@@ -260,12 +260,17 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			en: 'Leaf disease detection with a convolutional neural network.',
 			fr: 'Détection de maladies des feuilles par un réseau de neurones convolutif.'
 		},
-		date: '2025-12',
+		date: '2025-11',
 		context: 'school',
 		domains: ['ai'],
 		tech: ['Python', 'PyTorch', 'PlantCV'],
 		links: { repo: gh('42-Leaffliction') },
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/leaffliction/demo.mp4',
+			poster: 'projects/leaffliction/poster.webp',
+			phone: 'projects/leaffliction/phone.webp'
+		}
 	},
 	{
 		id: 'libasm',
@@ -283,60 +288,6 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['low-level'],
 		tech: ['x86-64 Assembly', 'NASM', 'C'],
 		links: { repo: gh('42-libasm') },
-		hidden: true
-	},
-	{
-		id: 'libft',
-		title: 'libft',
-		description: {
-			en: 'My own C standard library, the first 42 project, validated at 125%, and extended throughout the curriculum with extra functions.',
-			fr: 'Ma propre bibliothèque standard C\u00a0: premier projet de 42, validé à 125\u00a0%, puis enrichie de nouvelles fonctions tout au long du cursus.'
-		},
-		summary: {
-			en: 'My own C standard library, validated at 125%.',
-			fr: 'Ma propre bibliothèque standard C, validée à 125\u00a0%.'
-		},
-		date: '2022-11',
-		context: 'school',
-		domains: ['low-level'],
-		tech: ['C', 'Makefile'],
-		links: { repo: gh('42-libft') },
-		hidden: true
-	},
-	{
-		id: 'ft-printf',
-		title: 'ft_printf',
-		description: {
-			en: 'A re-implementation of printf with variadic arguments, supporting the c, s, p, d, i, u, x and X conversions, packaged as a static library.',
-			fr: 'Une réimplémentation de printf avec arguments variadiques, gérant les conversions c, s, p, d, i, u, x et X, livrée sous forme de bibliothèque statique.'
-		},
-		summary: {
-			en: 'A re-implementation of printf, as a static library.',
-			fr: 'Une réimplémentation de printf, en bibliothèque statique.'
-		},
-		date: '2022-11',
-		context: 'school',
-		domains: ['low-level'],
-		tech: ['C'],
-		links: { repo: gh('42-ft_printf') },
-		hidden: true
-	},
-	{
-		id: 'get-next-line',
-		title: 'get_next_line',
-		description: {
-			en: 'A function that reads a file descriptor one line at a time, whatever the buffer size: careful buffer handling and memory management in C.',
-			fr: 'Une fonction qui lit un descripteur de fichier ligne par ligne, quelle que soit la taille du buffer\u00a0: gestion rigoureuse des buffers et de la mémoire en C.'
-		},
-		summary: {
-			en: 'Reading a file line by line, whatever the buffer size.',
-			fr: 'Lire un fichier ligne par ligne, quelle que soit la taille du buffer.'
-		},
-		date: '2022-11',
-		context: 'school',
-		domains: ['low-level'],
-		tech: ['C'],
-		links: { repo: gh('42-get_next_line') },
 		hidden: true
 	},
 	{
@@ -442,6 +393,29 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			src: 'projects/minishell/demo.mp4',
 			poster: 'projects/minishell/poster.webp',
 			phone: 'projects/minishell/phone.webp'
+		}
+	},
+	{
+		id: 'ft-irc',
+		title: 'ft_irc',
+		description: {
+			en: 'An IRC server in C++98, built as a team. IRC is one of the oldest chat protocols, where users meet in channels. Ours handles many clients at once and works with real ones like irssi or HexChat: private messages, channel operators, topics, invite-only or password-protected channels.',
+			fr: 'Un serveur IRC en C++98, développé en binôme. IRC est l’un des plus anciens protocoles de messagerie, où l’on discute dans des salons. Le nôtre gère plusieurs clients à la fois et fonctionne avec de vrais clients comme irssi ou HexChat : messages privés, opérateurs, sujets, salons sur invitation ou protégés par mot de passe.'
+		},
+		summary: {
+			en: 'An IRC server in C++98 that real clients like irssi or HexChat can connect to.',
+			fr: 'Un serveur IRC en C++98 compatible avec de vrais clients comme irssi ou HexChat.'
+		},
+		date: '2024-05',
+		context: 'school',
+		domains: ['low-level'],
+		tech: ['C++', 'sockets', 'poll()'],
+		links: { repo: 'https://github.com/MarcelCerdan/ft_irc' },
+		media: {
+			kind: 'video',
+			src: 'projects/irc/demo.mp4',
+			poster: 'projects/irc/poster.webp',
+			phone: 'projects/irc/phone.webp'
 		}
 	},
 	{
