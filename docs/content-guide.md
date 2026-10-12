@@ -36,11 +36,11 @@ All in `src/lib/data/projects.ts`, inside `ALL_PROJECTS`. The order of entries d
 		id: 'my-project', // unique, lowercase-with-dashes; never change it once published
 		title: 'My Project',
 		description: {
-			en: 'Long text for the big cards and the desktop small cards. Two or three sentences.',
+			en: 'Long text for the big cards (desktop). Two or three sentences.',
 			fr: 'Texte long pour les grandes cartes. Deux ou trois phrases.'
 		},
 		summary: {
-			en: 'One sentence for phones (tiles and big cards), ending with a full stop.', // ≤ 100 characters
+			en: 'One sentence for the small cards, and the big cards on phones, ending with a full stop.', // ≤ 100 characters
 			fr: 'Une phrase pour les tuiles du téléphone.'
 		},
 		date: '2026-05', // 'YYYY-MM' (sorts "Newest"; the card shows the year)
