@@ -8,6 +8,7 @@ import { ICONS } from './icons';
  */
 export const DOMAINS = typeset({
 	web: { label: { en: 'Web', fr: 'Web' }, color: '#5b3fa0', icon: ICONS.code },
+	mobile: { label: { en: 'Mobile', fr: 'Mobile' }, color: '#2e6b34', icon: ICONS.phone },
 	blockchain: { label: { en: 'Blockchain', fr: 'Blockchain' }, color: '#24408e', icon: ICONS.cube },
 	ai: { label: { en: 'AI', fr: 'IA' }, color: '#0b6e6e', icon: ICONS.sparkles },
 	'low-level': { label: { en: 'Low-level', fr: 'Bas niveau' }, color: '#c2391b', icon: ICONS.chip },
