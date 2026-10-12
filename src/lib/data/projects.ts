@@ -209,7 +209,12 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python'],
 		links: { repo: gh('42-ft_linear_regression') },
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/linear-regression/demo.mp4',
+			poster: 'projects/linear-regression/poster.webp',
+			phone: 'projects/linear-regression/phone.webp'
+		}
 	},
 	{
 		id: 'dslr',
@@ -227,7 +232,6 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python', 'Matplotlib'],
 		links: {},
-		hidden: true
 	},
 	{
 		id: 'leaffliction',
