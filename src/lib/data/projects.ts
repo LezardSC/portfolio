@@ -115,7 +115,12 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['ai'],
 		tech: ['Python', 'Ollama', 'LLM agents'],
 		links: { repo: gh('microcode') },
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/microcode/demo.mp4',
+			poster: 'projects/microcode/poster.webp',
+			phone: 'projects/microcode/phone.webp'
+		}
 	},
 	{
 		id: 'bahapad',
