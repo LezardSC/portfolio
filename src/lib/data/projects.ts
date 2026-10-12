@@ -400,6 +400,29 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			poster: 'projects/minishell/poster.webp',
 			phone: 'projects/minishell/phone.webp'
 		}
+	},
+	{
+		id: 'red-tetris',
+		title: 'Red Tetris',
+		description: {
+			en: 'An online multiplayer Tetris that runs in the browser, built as a team. The game runs on the server, which keeps every screen in sync in real time. Clearing lines send a penalty to your opponents, you can see their boards filling up, and the last player standing wins. Both the client and the server are covered by tests.',
+			fr: 'Un Tetris multijoueur en ligne qui se joue dans le navigateur, développé en équipe. La partie tourne sur le serveur, qui synchronise tous les écrans en temps réel. Chaque ligne complétée envoie des pénalités aux adversaires, on voit leur plateau se remplir, et le dernier joueur en lice gagne. Le client comme le serveur sont couverts par des tests.'
+		},
+		summary: {
+			en: 'An online multiplayer Tetris in the browser, synced in real time.',
+			fr: 'Un Tetris multijoueur en ligne dans le navigateur, synchronisé en temps réel.'
+		},
+		date: '2026-09',
+		context: 'school',
+		domains: ['web', 'games'],
+		tech: ['TypeScript', 'Svelte', 'Fastify', 'socket.io', 'Tailwind CSS', 'Vitest'],
+		links: { repo: gh('42-red-tetris') },
+		media: {
+			kind: 'video',
+			src: 'projects/red-tetris/demo.mp4',
+			poster: 'projects/red-tetris/poster.webp',
+			phone: 'projects/red-tetris/phone.webp'
+		}
 	}
 ]);
 
