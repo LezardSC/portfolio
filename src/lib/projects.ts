@@ -31,7 +31,7 @@ export type Project = {
 	id: string;
 	title: string;
 	description: Localized;
-	/** One sentence shown on phones instead of the description, on both tiles and big cards. */
+	/** One sentence for the small cards on desktop, and every cards on phones (instead of the description). */
 	summary: Localized;
 	/** 'YYYY-MM' */
 	date: string;
