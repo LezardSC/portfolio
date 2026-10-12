@@ -95,9 +95,14 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		date: '2024-08',
 		context: 'school',
 		domains: ['web', 'games'],
-		tech: ['Python', 'JavaScript', 'Bootstrap', 'Docker'],
-		links: { repo: gh('42-ft_transcendence') },
-		hidden: true
+		tech: ['Python', 'JavaScript', 'Django', 'Solidity', 'Docker'],
+		links: { repo: 'https://github.com/maujogue/transcendence' },
+		media: {
+			kind: 'video',
+			src: 'projects/transcendence/demo.mp4',
+			poster: 'projects/transcendence/poster.webp',
+			phone: 'projects/transcendence/phone.webp'
+		}
 	},
 	{
 		id: 'microcode',
