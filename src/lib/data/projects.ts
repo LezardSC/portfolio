@@ -105,21 +105,27 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		}
 	},
 	{
-		id: 'ft_hangouts',
+		id: 'ft-hangouts',
 		title: 'Hangouts',
 		description: {
-			en: 'x',
-			fr: 'x'
+			en: 'A native Android contacts and SMS app in Kotlin, on the plain Android framework with no third-party libraries. Contacts with photos are stored in SQLite; conversations send real SMS and show incoming ones live, and a message from an unknown number creates the contact. Calls, header colour, light or dark theme and English or French are a tap away.',
+			fr: "Une application Android native de contacts et de SMS en Kotlin, sur le framework Android seul, sans bibliothèque tierce. Les contacts et leurs photos sont stockés en SQLite ; les conversations envoient de vrais SMS et affichent ceux reçus en direct, et un message d'un numéro inconnu crée le contact. Appels, couleur d'en-tête, thème clair ou sombre et anglais ou français sont à portée de doigt."
 		},
 		summary: {
-			en: 'x',
-			fr: 'x'
+			en: 'A native Android contacts and SMS app in Kotlin, with no third-party libraries.',
+			fr: 'Une app Android native de contacts et de SMS en Kotlin, sans bibliothèque tierce.'
 		},
-		date: '2024-08',
+		date: '2026-08',
 		context: 'school',
 		domains: ['mobile'],
-		tech: ['kotlin'],
-		links: { repo: '' }
+		tech: ['Kotlin', 'Android SDK', 'SQLite'],
+		links: { repo: gh('42-ft_hangouts') },
+		media: {
+			kind: 'video',
+			src: 'projects/ft-hangouts/demo.mp4',
+			poster: 'projects/ft-hangouts/poster.webp',
+			phone: 'projects/ft-hangouts/phone.webp'
+		}
 	},
 	{
 		id: 'swifty-companion',
@@ -203,7 +209,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		date: '2025-07',
 		context: 'professional',
 		domains: ['ai'],
-		tech: ['PyTorch', 'Faster R-CNN', 'OpenCV', 'Bash'],
+		tech: ['Python', 'PyTorch', 'Faster R-CNN', 'Bash', 'Research'],
 		company: 'Sogeti (Capgemini)',
 		links: {},
 		media: {
