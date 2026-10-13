@@ -3,6 +3,7 @@
 	import type { Dict, Lang } from '$lib/i18n';
 	import { mainDomain, type Project } from '$lib/projects';
 	import Icon from '../Icon.svelte';
+	import BriefcaseIcon from '../icons/BriefcaseIcon.svelte';
 	import TrophyIcon from '../icons/TrophyIcon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
 	import ProjectMedia from './ProjectMedia.svelte';
@@ -24,6 +25,9 @@
 			<span>{project.date.slice(0, 4)} · {CONTEXTS[project.context].label[lang]}</span>
 		</p>
 		<h3><span class="title">{project.title}</span></h3>
+		{#if project.company}
+			<p class="award"><BriefcaseIcon /> {project.company}</p>
+		{/if}
 		{#if project.award}
 			<p class="award"><TrophyIcon /> {project.award[lang]}</p>
 		{/if}

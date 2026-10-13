@@ -48,6 +48,7 @@ All in `src/lib/data/projects.ts`, inside `ALL_PROJECTS`. The order of entries d
 		domains: ['ai', 'web'], // keys of DOMAINS; the FIRST one is the main one (card icon, colour, label)
 		tech: ['Python', 'Ollama'], // tags at the bottom of the card, at least one
 		links: { repo: gh('my-project'), demo: 'https://demo.example.com' }, // both optional
+		company: 'Some Company', // optional, professional projects only
 		award: { en: 'Winner - Some Hackathon 2026', fr: 'Vainqueur - Some Hackathon 2026' }, // optional
 		media: { kind: 'image', src: 'projects/my-project/cover.webp' }, // optional, see Media
 		hidden: true // optional: keeps the entry but takes it off the site
@@ -87,6 +88,10 @@ In the default "Relevance" sort, these come first in this order, then every othe
 ### Add a live demo link
 
 Add `demo: 'https://…'` to `links`: `links: { repo: gh('my-project'), demo: 'https://my-project.example.com' }`. Use `https://`.
+
+### Show the company
+
+`company: 'Sogeti (Capgemini)'` on a `professional` project shows the company under the title, with a briefcase. It's a plain string: company names don't translate. A test refuses it on other contexts.
 
 ### Mark an award
 

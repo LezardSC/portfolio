@@ -74,6 +74,14 @@ describe('project data', () => {
 		}
 	});
 
+	it('names a company only on professional projects', () => {
+		for (const p of ALL_PROJECTS) {
+			if (p.company === undefined) continue;
+			expect(p.context, `${p.id}: a company needs the professional context`).toBe('professional');
+			expect(p.company.trim(), p.id).not.toBe('');
+		}
+	});
+
 	it('has at least one valid, unique domain and one tech tag per project', () => {
 		for (const p of ALL_PROJECTS) {
 			expect(p.domains.length, p.id).toBeGreaterThan(0);
