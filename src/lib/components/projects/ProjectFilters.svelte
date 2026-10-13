@@ -197,8 +197,17 @@
 		cursor: default;
 	}
 	.count {
+		display: inline-block;
 		font-size: 0.75rem;
+		font-variant-numeric: tabular-nums;
 		color: var(--muted);
+	}
+	.count::after {
+		content: '00';
+		display: block;
+		height: 0;
+		overflow: hidden;
+		visibility: hidden;
 	}
 	.opt[aria-pressed='true'] .count {
 		color: var(--on-text);
