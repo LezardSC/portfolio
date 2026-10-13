@@ -119,24 +119,30 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['mobile'],
 		tech: ['kotlin'],
-		links: { repo: '' },
+		links: { repo: '' }
 	},
 	{
-		id: 'swifty_companion',
+		id: 'swifty-companion',
 		title: 'Swifty Companion',
 		description: {
-			en: 'x',
-			fr: 'x'
+			en: 'A native Android app to look up any 42 student by login: photo, coalition, level, skills and projects, pulled live from the school API. The OAuth2 token is cached and renewed only when it expires, and the app handles the API rate limit and every error case: unknown login, no network, bad credentials.',
+			fr: "Une application Android native pour rechercher n'importe quel étudiant de 42 par son login : photo, coalition, niveau, compétences et projets, récupérés en direct depuis l'API de l'école. Le jeton OAuth2 est mis en cache et renouvelé seulement à son expiration, et l'app gère la limite de requêtes de l'API et chaque cas d'erreur : login inconnu, pas de réseau, identifiants invalides."
 		},
 		summary: {
-			en: 'x',
-			fr: 'x'
+			en: 'An Android app in Kotlin to browse any 42 student profile through the school API.',
+			fr: "Une app Android en Kotlin pour consulter le profil de tout étudiant 42 via l'API."
 		},
 		date: '2026-08',
 		context: 'school',
 		domains: ['mobile'],
-		tech: ['kotlin'],
+		tech: ['Kotlin', 'Jetpack Compose', 'Retrofit', 'OAuth2'],
 		links: { repo: gh('42-swifty-companion') },
+		media: {
+			kind: 'video',
+			src: 'projects/swifty-companion/demo.mp4',
+			poster: 'projects/swifty-companion/poster.webp',
+			phone: 'projects/swifty-companion/phone.webp'
+		}
 	},
 	{
 		id: 'microcode',
@@ -184,22 +190,28 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		hidden: true
 	},
 	{
-		id: 'goldeneye-data-augmentation',
+		id: 'goldeneye',
 		title: 'GoldenEye - data augmentation',
 		description: {
-			en: 'Data augmentation experiments for GoldenEye, a SogetiLabs (Capgemini) computer-vision project, to enlarge and diversify its training datasets.',
-			fr: 'Expérimentations d’augmentation de données pour GoldenEye, un projet de vision par ordinateur de SogetiLabs (Capgemini), afin d’enrichir et de diversifier ses jeux d’entraînement.'
+			en: 'I studied research papers on data augmentation and implemented the most promising techniques (cross-domain color transfer, sun glitter, box-aware CutMix) so a detector trained underwater could find marine animals in aerial photos. A Bash pipeline tests them one by one on a GPU server: train a Faster R-CNN, score recall, log to a spreadsheet, resume after any crash.',
+			fr: "J'ai étudié des articles de recherche sur l'augmentation de données et implémenté les techniques les plus prometteuses (transfert de couleurs entre domaines, reflets du soleil, CutMix adapté aux boîtes) pour qu'un détecteur entraîné sous l'eau repère les animaux marins en photo aérienne. Un pipeline Bash les teste une à une sur serveur GPU : entraînement d'un Faster R-CNN, mesure du rappel, suivi dans un tableur, reprise après tout arrêt."
 		},
 		summary: {
-			en: 'Data augmentation for a SogetiLabs computer-vision project.',
-			fr: 'Augmentation de données pour un projet de vision par ordinateur de SogetiLabs.'
+			en: 'Data augmentations to help an underwater detector find marine animals in aerial images.',
+			fr: "Des augmentations de données pour qu'un détecteur sous-marin repère les animaux vus du ciel."
 		},
 		date: '2025-07',
 		context: 'professional',
 		domains: ['ai'],
-		tech: ['Python'],
+		tech: ['PyTorch', 'Faster R-CNN', 'OpenCV', 'Bash'],
+		company: 'Sogeti (Capgemini)',
 		links: {},
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/goldeneye/demo.mp4',
+			poster: 'projects/goldeneye/poster.webp',
+			phone: 'projects/goldeneye/phone.webp'
+		}
 	},
 	{
 		id: 'tokenizart',

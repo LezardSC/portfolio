@@ -11,6 +11,7 @@ import {
 	siGithubactions,
 	siIpfs,
 	siJavascript,
+	siJetpackcompose,
 	siKotlin,
 	siKubernetes,
 	siLinux,
@@ -183,6 +184,7 @@ export const SKILL_GROUPS = typeset<SkillGroup[]>([
 		},
 		skills: [
 			{ name: 'Kotlin', icon: siKotlin },
+			{ name: 'Jetpack Compose', icon: siJetpackcompose },
 			{ name: 'Android Studio', icon: siAndroidstudio }
 		]
 	},

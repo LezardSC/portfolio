@@ -28,6 +28,9 @@
 		{/if}
 	</h4>
 	<p class="meta">{year} · {CONTEXTS[project.context].label[lang]} · {domain.label[lang]}</p>
+	{#if project.company}
+		<p class="award"><span aria-hidden="true">💼</span> {project.company}</p>
+	{/if}
 	{#if project.award}
 		<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
 	{/if}
