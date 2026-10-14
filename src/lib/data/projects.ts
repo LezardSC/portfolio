@@ -108,8 +108,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		id: 'ft-hangouts',
 		title: 'Hangouts',
 		description: {
-			en: 'A native Android contacts and SMS app in Kotlin, on the plain Android framework with no third-party libraries. Contacts with photos are stored in SQLite; conversations send real SMS and show incoming ones live, and a message from an unknown number creates the contact. Calls, header colour, light or dark theme and English or French are a tap away.',
-			fr: "Une application Android native de contacts et de SMS en Kotlin, sur le framework Android seul, sans bibliothèque tierce. Les contacts et leurs photos sont stockés en SQLite ; les conversations envoient de vrais SMS et affichent ceux reçus en direct, et un message d'un numéro inconnu crée le contact. Appels, couleur d'en-tête, thème clair ou sombre et anglais ou français sont à portée de doigt."
+			en: 'A contacts and SMS app for Android, written in Kotlin without any external library. You can save contacts, text them or call them, and a message from an unknown number adds a new contact. The theme, language and header colour can be changed in the settings.',
+			fr: "Une application de contacts et de SMS pour Android, écrite en Kotlin sans bibliothèque externe. On peut enregistrer des contacts, leur écrire ou les appeler, et un message d'un numéro inconnu ajoute un nouveau contact. Le thème, la langue et la couleur de l'en-tête se changent dans les paramètres."
 		},
 		summary: {
 			en: 'A native Android contacts and SMS app in Kotlin, with no third-party libraries.',
@@ -131,8 +131,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		id: 'swifty-companion',
 		title: 'Swifty Companion',
 		description: {
-			en: 'A native Android app to look up any 42 student by login: photo, coalition, level, skills and projects, pulled live from the school API. The OAuth2 token is cached and renewed only when it expires, and the app handles the API rate limit and every error case: unknown login, no network, bad credentials.',
-			fr: "Une application Android native pour rechercher n'importe quel étudiant de 42 par son login : photo, coalition, niveau, compétences et projets, récupérés en direct depuis l'API de l'école. Le jeton OAuth2 est mis en cache et renouvelé seulement à son expiration, et l'app gère la limite de requêtes de l'API et chaque cas d'erreur : login inconnu, pas de réseau, identifiants invalides."
+			en: "An Android app in Kotlin to look up a 42 student by their login and see their level, skills and projects, fetched from the school's API. The access token is kept until it expires, and the app shows a clear message when the login doesn't exist or there is no network.",
+			fr: "Une application Android en Kotlin pour rechercher un étudiant de 42 par son login et voir son niveau, ses compétences et ses projets, récupérés depuis l'API de l'école. Le jeton d'accès est gardé jusqu'à son expiration, et l'app affiche un message clair si le login n'existe pas ou s'il n'y a pas de réseau."
 		},
 		summary: {
 			en: 'An Android app in Kotlin to browse any 42 student profile through the school API.',
@@ -203,8 +203,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			fr: "J'ai étudié des articles de recherche sur l'augmentation de données et implémenté les techniques les plus prometteuses (transfert de couleurs entre domaines, reflets du soleil, CutMix adapté aux boîtes) pour qu'un détecteur entraîné sous l'eau repère les animaux marins en photo aérienne. Un pipeline Bash les teste une à une sur serveur GPU : entraînement d'un Faster R-CNN, mesure du rappel, suivi dans un tableur, reprise après tout arrêt."
 		},
 		summary: {
-			en: 'Data augmentations to help an underwater detector find marine animals in aerial images.',
-			fr: "Des augmentations de données pour qu'un détecteur sous-marin repère les animaux vus du ciel."
+			en: 'Teaching an AI trained on underwater photos to spot marine animals from the sky.',
+			fr: "Apprendre à une IA entraînée sous l'eau à repérer les animaux marins vus du ciel."
 		},
 		date: '2025-07',
 		context: 'professional',
@@ -239,21 +239,26 @@ export const ALL_PROJECTS = typeset<Project[]>([
 	},
 	{
 		id: 'tokenizer',
-		title: 'tokenizer',
+		title: 'Altarian42',
 		description: {
-			en: 'Altarian42, an ERC-20 token meant to modernize 42’s wallet system: capped and burnable supply, with multisignature approval of every reward.',
-			fr: 'Altarian42, un token ERC-20 pensé pour moderniser le porte-monnaie de 42\u00a0: offre plafonnée et brûlable, avec validation multisignature de chaque récompense.'
+			en: "An ERC-20 token on Ethereum, designed to replace 42's wallet system: students earn it for projects and achievements, then spend it in the school shop, where it is burned. No staff member can create tokens alone: a reward is only paid once several of them approve it, and the total supply has a fixed limit.",
+			fr: "Un token ERC-20 sur Ethereum, pensé pour remplacer le porte-monnaie de 42 : les étudiants le gagnent avec leurs projets et leurs succès, puis le dépensent à la boutique de l'école, où il est brûlé. Aucun membre du staff ne peut créer de tokens seul : une récompense n'est versée qu'une fois approuvée par plusieurs d'entre eux, et l'offre totale est plafonnée."
 		},
 		summary: {
-			en: 'A multisig-approved ERC-20 token for 42’s wallet.',
-			fr: 'Un token ERC-20 à validation multisignature pour le porte-monnaie de 42.'
+			en: "An Ethereum token for School 42's wallet, where every reward needs several staff approvals.",
+			fr: 'Un token Ethereum pour le porte-monnaie de l\'école 42, chaque récompense validée par plusieurs encadrants.'
 		},
-		date: '2024-06',
+		date: '2024-11',
 		context: 'school',
 		domains: ['blockchain'],
-		tech: ['Solidity', 'JavaScript'],
+		tech: ['Solidity', 'OpenZeppelin', 'Hardhat', 'JavaScript'],
 		links: { repo: gh('42-tokenizer') },
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/tokenizer/demo.mp4',
+			poster: 'projects/tokenizer/poster.webp',
+			phone: 'projects/tokenizer/phone.webp'
+		}
 	},
 	{
 		id: 'ft-linear-regression',
