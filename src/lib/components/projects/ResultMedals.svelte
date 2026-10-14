@@ -51,6 +51,12 @@
 		stroke-linecap: round;
 		stroke-linejoin: round;
 	}
+	@media (width < 48rem) {
+		svg {
+			width: 1.5rem;
+			height: 1.5rem;
+		}
+	}
 	.m1 {
 		--fill: #f5c542;
 		--line: #8a6100;
