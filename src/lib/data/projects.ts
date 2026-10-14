@@ -40,47 +40,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			phone: 'projects/cross-emu/phone.webp'
 		}
 	},
-	{
-		id: 'kayp-pbw-2024',
-		title: 'KAYP',
-		description: {
-			en: 'Digitalizes maritime trade documents, starting with the bill of lading. The backend exposes DCSA-standard APIs that serialize, encrypt and hash each eBL, then anchor it on the XRP Ledger through smart contracts.',
-			fr: 'Numérise les documents du commerce maritime, à commencer par le connaissement. Le backend expose des API au standard DCSA qui sérialisent, chiffrent et hachent chaque eBL, puis l’ancrent sur le XRP Ledger via des smart contracts.'
-		},
-		summary: {
-			en: 'Maritime bills of lading as electronic documents, encrypted and anchored on the XRP Ledger.',
-			fr: 'Des connaissements maritimes électroniques, chiffrés et ancrés sur le XRP Ledger.'
-		},
-		date: '2024-04',
-		context: 'hackathon',
-		domains: ['blockchain', 'web'],
-		tech: ['Java', 'Spring Boot', 'Python', 'XRPL'],
-		links: { repo: gh('KAYP-backend-PBW2024') },
-		award: {
-			en: 'Winner - Paris Blockchain Week 2024 (XRPL track)',
-			fr: 'Vainqueur - Paris Blockchain Week 2024 (track XRPL)'
-		},
-		hidden: true
-	},
-	{
-		id: 'kayp-h-web3-paris',
-		title: 'KAYP - H-W3B Paris',
-		description: {
-			en: 'First version of KAYP, built in a weekend: a web app to generate, exchange and store maritime bills of lading, secured and audited on the blockchain.',
-			fr: 'Première version de KAYP, construite en un week-end\u00a0: une application web pour générer, échanger et stocker des connaissements maritimes, sécurisés et audités sur la blockchain.'
-		},
-		summary: {
-			en: 'The weekend prototype of KAYP: bills of lading secured on the blockchain.',
-			fr: 'Le prototype de KAYP, en un week-end\u00a0: des connaissements sécurisés sur la blockchain.'
-		},
-		date: '2024-03',
-		context: 'hackathon',
-		domains: ['blockchain', 'web'],
-		tech: ['TypeScript', 'React', 'Tailwind CSS', 'Python'],
-		links: { repo: gh('KAYP-H-WEB3PARIS') },
-		award: { en: 'Winner - H-W3B Paris 2024', fr: 'Vainqueur - H-W3B Paris 2024' },
-		hidden: true
-	},
+
 	{
 		id: 'ft-transcendence',
 		title: 'Transcendence',
@@ -174,6 +134,33 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		}
 	},
 	{
+		id: 'kayp',
+		title: 'KAYP',
+		description: {
+			en: 'Digitalizes and authenticates maritime bills of lading, built as a team over three hackathons. A React app creates the eBL, then a Java API hashes it and mints an NFT carrying that hash on the XRP Ledger, so anyone can check it was never altered. The first version used Tezos smart contracts.',
+			fr: "Numérise et authentifie les connaissements maritimes, développé en équipe sur trois hackathons. Une application React crée l'eBL, puis une API Java le hache et mint sur le XRP Ledger un NFT qui porte ce hash, pour que chacun puisse vérifier qu'il n'a jamais été modifié. La première version utilisait des smart contracts Tezos."
+		},
+		summary: {
+			en: 'Maritime bills of lading as electronic documents, proven on the XRP Ledger or Tezos.',
+			fr: 'Des connaissements maritimes électroniques, avec leur preuve ancrée sur le XRP Ledger ou Tezos.'
+		},
+		date: '2024-04',
+		context: 'hackathon',
+		domains: ['blockchain', 'web'],
+		tech: ['TypeScript', 'React', 'Java', 'Python', 'XRPL', 'SmartPy'],
+		links: { repo: 'https://github.com/theocerdan/frontend_kayp' },
+		award: {
+			en: '1st - H-W3B Paris & Paris Blockchain Week 2024',
+			fr: '1ère place - H-W3B Paris & Paris Blockchain Week 2024'
+		},
+		media: {
+			kind: 'video',
+			src: 'projects/kayp/demo.mp4',
+			poster: 'projects/kayp/poster.webp',
+			phone: 'projects/kayp/phone.webp'
+		}
+	},
+	{
 		id: 'bahapad',
 		title: 'Bahapad',
 		description: {
@@ -256,7 +243,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		},
 		summary: {
 			en: "An Ethereum token for School 42's wallet, where every reward needs several staff approvals.",
-			fr: "Un token Ethereum pour le porte-monnaie de l'école 42, chaque récompense validée par plusieurs encadrants."
+			fr: "Un token Ethereum pour le porte-monnaie de 42, chaque récompense validée par plusieurs encadrants."
 		},
 		date: '2024-11',
 		context: 'school',
