@@ -183,7 +183,7 @@
 			height: 1rem;
 		}
 		h4 {
-			font-size: 1.0625rem;
+			font-size: 0.94rem;
 			line-height: 1.15;
 			letter-spacing: -0.01em;
 			overflow-wrap: anywhere;
