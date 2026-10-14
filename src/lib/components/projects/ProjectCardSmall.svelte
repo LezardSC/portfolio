@@ -122,11 +122,12 @@
 			overflow: hidden;
 			display: grid;
 			grid-template-columns: minmax(0, 1fr) auto;
-			grid-template-rows: auto auto auto 1fr;
+			grid-template-rows: auto auto auto 1fr auto;
 			grid-template-areas:
 				'label label'
 				'title title'
 				'summary summary'
+				'. .'
 				'ctx links';
 			gap: 0.375rem 0;
 			min-height: 12.5rem;
@@ -153,12 +154,14 @@
 			height: 6.875rem;
 			stroke-width: 1.2;
 		}
-		/* Positioned so they paint above the (positioned) watermark. */
+		/* Positioned so they paint above the (positioned) watermark. The links box itself stays
+		   static so the demo link can be placed against the card. */
 		.label,
 		.head,
 		.summary,
 		.ctx,
-		.card :global(.links) {
+		.card :global(.links a),
+		.card :global(.private) {
 			position: relative;
 		}
 		.label {
@@ -197,14 +200,15 @@
 		}
 		.ctx,
 		.card :global(.links) {
-			align-self: end;
+			/* Same height, so the separator is one level line. */
+			align-self: stretch;
 			border-top: 1.5px solid color-mix(in srgb, var(--dfg) 35%, transparent);
 		}
 		.ctx {
 			grid-area: ctx;
 			display: flex;
 			align-items: center;
-			min-height: 2.75rem;
+			min-height: 2.25rem;
 			margin: 0;
 			font-size: 0.75rem;
 			font-weight: 600;
@@ -213,6 +217,20 @@
 		.card :global(.links) {
 			grid-area: links;
 			padding-left: 0.375rem;
+		}
+		.card :global(.links a),
+		.card :global(.private) {
+			min-height: 2.25rem;
+		}
+		/* No room for two links at the bottom: with code too, the demo goes top right, level with
+		   the label (which leaves it room). */
+		.card :global(.links:has(.repo) .demo) {
+			position: absolute;
+			top: 0.375rem;
+			right: 0.75rem;
+		}
+		.card:has(:global(.repo)):has(:global(.demo)) .label {
+			padding-right: 3.75rem;
 		}
 		.card :global(.links a) {
 			font-size: 0.8125rem;
