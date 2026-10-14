@@ -43,7 +43,6 @@ export type Project = {
 	media?: Media;
 	/** Company the project was built at, shown under the title: only for professional projects. */
 	company?: string;
-	award?: Localized;
 	/** Takes the project off the site while keeping its text here. */
 	hidden?: true;
 };

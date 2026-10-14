@@ -52,6 +52,8 @@ export type Hackathon = {
 	date: Month;
 	/** Project name, or a description when it has no name. */
 	project?: string | Localized;
+	/** `id` of the project in src/lib/data/projects.ts: its card then shows this result. */
+	projectId?: string;
 };
 
 export function localize(value: string | Localized, lang: Lang): string {
@@ -105,6 +107,23 @@ export function newestFirst<T extends { start?: string; end?: string }>(items: r
 
 export function hackathonsNewestFirst(list: readonly Hackathon[]): Hackathon[] {
 	return [...list].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/** A project's hackathon results, best first: by medal, then newest. */
+export function projectResults(id: string, list: readonly Hackathon[]): Hackathon[] {
+	return list
+		.filter((h) => h.projectId === id)
+		.sort((a, b) => a.medal - b.medal || b.date.localeCompare(a.date));
+}
+
+/** One chip per placement, best first: its medal and the results that got it (newest first). */
+export function placements(
+	results: readonly Hackathon[]
+): { medal: Medal; results: Hackathon[] }[] {
+	return MEDALS.map((medal) => ({
+		medal,
+		results: results.filter((h) => h.medal === medal)
+	})).filter((p) => p.results.length > 0);
 }
 
 export function yearOf(date: string): string {

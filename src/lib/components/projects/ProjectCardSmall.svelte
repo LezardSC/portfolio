@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { CONTEXTS, DOMAINS } from '$lib/data/categories';
+	import { HACKATHONS } from '$lib/data/experience';
+	import { projectResults } from '$lib/experience';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { mainDomain, primaryLink, type Project } from '$lib/projects';
 	import Icon from '../Icon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
+	import ResultMedals from './ResultMedals.svelte';
 	import TechTags from './TechTags.svelte';
 
 	let { project, lang, t }: { project: Project; lang: Lang; t: Dict['projects'] } = $props();
@@ -11,6 +14,7 @@
 	const href = $derived(primaryLink(project));
 	const domain = $derived(DOMAINS[mainDomain(project)]);
 	const year = $derived(project.date.slice(0, 4));
+	const results = $derived(projectResults(project.id, HACKATHONS));
 </script>
 
 <article class="card" style:--dc={domain.color}>
@@ -20,19 +24,19 @@
 	</div>
 	<!-- Phone only: label and context (CSS shows one set of texts per width). -->
 	<p class="label">{domain.label[lang]} · {year}</p>
-	<h4>
-		{#if href}
-			<a {href} target="_blank" rel="noopener noreferrer">{project.title}</a>
-		{:else}
-			{project.title}
-		{/if}
-	</h4>
+	<div class="head">
+		<h4>
+			{#if href}
+				<a {href} target="_blank" rel="noopener noreferrer">{project.title}</a>
+			{:else}
+				{project.title}
+			{/if}
+		</h4>
+		<ResultMedals {results} {t} />
+	</div>
 	<p class="meta">{year} · {CONTEXTS[project.context].label[lang]} · {domain.label[lang]}</p>
 	{#if project.company}
 		<p class="award"><span aria-hidden="true">💼</span> {project.company}</p>
-	{/if}
-	{#if project.award}
-		<p class="award"><span aria-hidden="true">🏆</span> {project.award[lang]}</p>
 	{/if}
 	<p class="summary">{project.summary[lang]}</p>
 	<TechTags tech={project.tech} small />
@@ -66,8 +70,16 @@
 		background: var(--tint);
 		color: var(--accent);
 	}
+	/* Title, then the hackathon medals on the same line. */
+	.head {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.25rem;
+	}
 	h4 {
-		margin: 0.25rem 0 0;
+		min-width: 0;
+		margin: 0;
 		font-size: 1.1875rem;
 		font-weight: 800;
 		line-height: 1.25;
@@ -143,7 +155,7 @@
 		}
 		/* Positioned so they paint above the (positioned) watermark. */
 		.label,
-		h4,
+		.head,
 		.summary,
 		.ctx,
 		.card :global(.links) {
@@ -159,9 +171,15 @@
 			letter-spacing: 0.07em;
 			color: var(--dfg);
 		}
-		h4 {
+		.head {
 			grid-area: title;
-			margin: 0.25rem 0 0;
+			gap: 0.375rem;
+		}
+		.head :global(svg) {
+			width: 1rem;
+			height: 1rem;
+		}
+		h4 {
 			font-size: 1.0625rem;
 			line-height: 1.15;
 			letter-spacing: -0.01em;

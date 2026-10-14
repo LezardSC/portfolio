@@ -1,17 +1,21 @@
 <script lang="ts">
 	import { CONTEXTS, DOMAINS } from '$lib/data/categories';
+	import { HACKATHONS } from '$lib/data/experience';
+	import { projectResults } from '$lib/experience';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { mainDomain, type Project } from '$lib/projects';
 	import Icon from '../Icon.svelte';
 	import BriefcaseIcon from '../icons/BriefcaseIcon.svelte';
-	import TrophyIcon from '../icons/TrophyIcon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
 	import ProjectMedia from './ProjectMedia.svelte';
+	import ResultChips from './ResultChips.svelte';
+	import ResultMedals from './ResultMedals.svelte';
 	import TechTags from './TechTags.svelte';
 
 	let { project, lang, t }: { project: Project; lang: Lang; t: Dict['projects'] } = $props();
 
 	const domain = $derived(DOMAINS[mainDomain(project)]);
+	const results = $derived(projectResults(project.id, HACKATHONS));
 </script>
 
 <article class="card" class:has-media={!!project.media} style:--dc={domain.color}>
@@ -24,13 +28,15 @@
 			<span class="dom"><Icon path={domain.icon} size={18} />{domain.label[lang]}</span>
 			<span>{project.date.slice(0, 4)} · {CONTEXTS[project.context].label[lang]}</span>
 		</p>
-		<h3><span class="title">{project.title}</span></h3>
+		<!-- Hackathon results: chips on desktop, medals next to the title on phones. -->
+		<div class="head">
+			<h3><span class="title">{project.title}</span></h3>
+			<ResultMedals {results} {t} />
+		</div>
 		{#if project.company}
 			<p class="award"><BriefcaseIcon /> {project.company}</p>
 		{/if}
-		{#if project.award}
-			<p class="award"><TrophyIcon /> {project.award[lang]}</p>
-		{/if}
+		<ResultChips {results} {t} />
 		<p class="desc">{project.description[lang]}</p>
 		<p class="summary">{project.summary[lang]}</p>
 		<div class="footer">
@@ -76,7 +82,17 @@
 		gap: 0.375rem;
 		color: var(--accent);
 	}
+	.head {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	/* Desktop shows the chips instead. */
+	.head > :global(.medals) {
+		display: none;
+	}
 	h3 {
+		min-width: 0;
 		margin: 0;
 		font-size: 2rem;
 		line-height: 1.15;
@@ -210,6 +226,12 @@
 		}
 		.award :global(svg) {
 			flex: none;
+		}
+		.body > :global(.results) {
+			display: none;
+		}
+		.head > :global(.medals) {
+			display: flex;
 		}
 		.desc {
 			display: none;
