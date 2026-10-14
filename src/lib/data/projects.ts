@@ -209,8 +209,8 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		id: 'goldeneye',
 		title: 'GoldenEye - data augmentation',
 		description: {
-			en: 'I studied research papers on data augmentation and implemented the most promising techniques (cross-domain color transfer, sun glitter, box-aware CutMix) so a detector trained underwater could find marine animals in aerial photos. A Bash pipeline tests them one by one on a GPU server: train a Faster R-CNN, score recall, log to a spreadsheet, resume after any crash.',
-			fr: "J'ai étudié des articles de recherche sur l'augmentation de données et implémenté les techniques les plus prometteuses (transfert de couleurs entre domaines, reflets du soleil, CutMix adapté aux boîtes) pour qu'un détecteur entraîné sous l'eau repère les animaux marins en photo aérienne. Un pipeline Bash les teste une à une sur serveur GPU : entraînement d'un Faster R-CNN, mesure du rappel, suivi dans un tableur, reprise après tout arrêt."
+			en: 'From research papers, I implemented the most promising data augmentation techniques (cross-domain color transfer, sun glitter, box-aware CutMix) so a detector trained underwater could spot marine animals in aerial photos. A Bash pipeline tests each one on a GPU server: train a Faster R-CNN, score recall, resume after any crash.',
+			fr: "D'après des articles de recherche, j'ai implémenté les meilleures techniques d'augmentation de données (transfert de couleurs, reflets du soleil, CutMix adapté aux boîtes) pour qu'un détecteur entraîné sous l'eau repère les animaux marins en photo aérienne. Un pipeline Bash les teste sur serveur GPU : entraînement d'un Faster R-CNN, mesure du rappel, reprise après arrêt."
 		},
 		summary: {
 			en: 'Teaching an AI trained on underwater photos to spot marine animals from the sky.',
