@@ -63,6 +63,7 @@ export const fr: Dict = {
 		code: 'Code',
 		privateCode: 'Code privé',
 		demoLink: 'Démo',
+		demoShort: 'Démo',
 		/** Hackathon chips on the cards, one per placement ("×n" when it happened more than once). */
 		placement: 'Hackathon\u00a0: {place}',
 		places: { 1: '1re place', 2: '2e place', 3: '3e place' },

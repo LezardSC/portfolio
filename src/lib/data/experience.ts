@@ -126,6 +126,7 @@ export const HACKATHONS = typeset<Hackathon[]>([
 		event: 'CND',
 		fullName: 'Commissariat au Numérique de Défense',
 		date: '2025-11',
-		project: { en: 'Firewall log triage', fr: 'Tri de logs pare-feu' }
+		project: 'Vigie',
+		projectId: 'vigie'
 	}
 ]);
