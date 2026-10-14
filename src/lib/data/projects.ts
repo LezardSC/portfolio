@@ -180,6 +180,32 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		}
 	},
 	{
+		id: 'vigie',
+		title: 'Vigie - Firewall Logs Analyzer',
+		description: {
+			en: 'Sorts live firewall logs into attacks and bugs, built as a team during a cyberdefence hackathon. A FastAPI backend runs a LangGraph workflow where rules and a LightGBM model classify each log and an LLM explains unknown events. A React dashboard shows stats, fix suggestions and an AI assistant, and critical alerts trigger a phone call.',
+			fr: "Trie en direct les logs de pare-feu en attaques et bugs, développé en équipe lors d'un hackathon de cyberdéfense. Un backend FastAPI pilote un workflow LangGraph : règles et modèle LightGBM classent chaque log, un LLM explique les inconnus. Un dashboard React affiche stats, correctifs et assistant IA ; les alertes critiques déclenchent un appel."
+		},
+		summary: {
+			en: 'Live firewall log triage, with ML classification and LLM explanations.',
+			fr: 'Le tri des logs de pare-feu en direct, avec classification ML et explications par LLM.'
+		},
+		date: '2025-11',
+		context: 'hackathon',
+		domains: ['ai', 'web'],
+		tech: ['React', 'Python', 'FastAPI', 'LangGraph'],
+		links: {
+			repo: 'https://github.com/axelvag/Hackathon_CND',
+			demo: 'https://42-lyon-hackathon-2025.netlify.app'
+		},
+		media: {
+			kind: 'video',
+			src: 'projects/vigie/demo.mp4',
+			poster: 'projects/vigie/poster.webp',
+			phone: 'projects/vigie/phone.webp'
+		}
+	},
+	{
 		id: 'goldeneye',
 		title: 'GoldenEye - data augmentation',
 		description: {
