@@ -114,7 +114,7 @@
 	}
 
 	/* Phone: tile tinted by the main domain, big domain icon as a watermark, one-sentence summary,
-	   context and link at the bottom. Colours from the --tile-* tokens (DOMAIN_TILE, tested). */
+	   context and link at the bottom. Colours from the --tile-* tokens. */
 	@media (width < 48rem) {
 		.card {
 			--dfg: color-mix(in srgb, var(--dc) var(--tile-fg), #ffffff);

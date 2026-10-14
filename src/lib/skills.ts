@@ -24,7 +24,7 @@ export function skillName(skill: Skill, lang: Lang): string {
 	return typeof skill.name === 'string' ? skill.name : skill.name[lang];
 }
 
-/** Page background per theme. Keep in sync with `--bg` in src/app.css (a test checks it). */
+/** Page background per theme. Keep in sync with `--bg` in src/app.css. */
 export const THEME_BG = { dark: '#121210', light: '#faf8f4' } as const;
 
 /** Below this contrast with the page background, a brand colour is replaced by the text colour. */
