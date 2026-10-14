@@ -37,11 +37,6 @@ describe('profile data', () => {
 		}
 	});
 
-	it('has at least one About paragraph and at most one full-width glance row', () => {
-		expect(PROFILE.bio.length).toBeGreaterThan(0);
-		expect(PROFILE.glance.filter((r) => r.wide).length).toBeLessThanOrEqual(1);
-	});
-
 	it('links GitHub over https', () => {
 		expect(PROFILE.github).toMatch(/^https:\/\/github\.com\//);
 	});

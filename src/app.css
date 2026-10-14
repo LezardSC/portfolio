@@ -23,7 +23,7 @@
 	--footer-bg: #0d0d0b;
 	--footer-text: #f3f0e8;
 	--malt-tile: rgb(252 87 87 / 0.14);
-	/* Phone project tiles (DOMAIN_TILE in src/lib/projects.ts). */
+	/* Phone project tiles: domain colour at --tile-pct over --tile-base; labels mixed --tile-fg with white. */
 	--tile-base: #121210;
 	--tile-pct: 24%;
 	--tile-fg: 45%;

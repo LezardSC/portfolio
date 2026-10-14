@@ -140,7 +140,7 @@
 	}
 
 	/* Phone: the photo (or the domain colour) fills the card under a dark veil; text at the bottom.
-	   Light text in both themes; colours mirror OVERLAY in src/lib/overlay.ts (tested). */
+	   Light text in both themes. */
 	@media (width < 48rem) {
 		.card {
 			--veil: 0.35;
