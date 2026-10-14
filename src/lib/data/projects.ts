@@ -177,23 +177,28 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		id: 'bahapad',
 		title: 'Bahapad',
 		description: {
-			en: 'A token launchpad for the Bahamut blockchain: a factory contract lets anyone deploy a custom ERC-20 token with its metadata (name, symbol, supply, image, description).',
-			fr: 'Un launchpad de tokens pour la blockchain Bahamut\u00a0: un contrat factory permet à chacun de déployer son propre token ERC-20 avec ses métadonnées (nom, symbole, offre, image, description).'
+			en: 'A token launchpad for the Bahamut blockchain, built in a team. A factory contract lets anyone deploy their own ERC-20 token with a name, symbol, supply, etc. The React app connects a wallet, creates tokens from a form, lists every token as it is launched and opens a Uniswap V2 liquidity pool so it can be traded.',
+			fr: "Un launchpad de tokens pour la blockchain Bahamut, développé en équipe. Un contrat factory permet à chacun de déployer son propre token ERC-20 avec nom, symbole, offre, etc. L'application React connecte un wallet, crée les tokens depuis un formulaire, liste chaque token dès son lancement et ouvre un pool de liquidité Uniswap V2 pour qu'il s'échange."
 		},
 		summary: {
-			en: 'A launchpad to deploy your own ERC-20 token on Bahamut.',
-			fr: 'Un launchpad pour déployer son propre token ERC-20 sur Bahamut.'
+			en: 'Launch your own ERC-20 token on Bahamut and open its liquidity pool in a few clicks.',
+			fr: 'Lancer son propre token ERC-20 sur Bahamut et ouvrir son pool de liquidité en quelques clics.'
 		},
 		date: '2025-04',
 		context: 'hackathon',
-		domains: ['blockchain'],
-		tech: ['Solidity', 'TypeScript', 'Hardhat'],
-		links: { repo: gh('Bahapad-Smart-Contract-PBW2025') },
+		domains: ['blockchain', 'web'],
+		tech: ['Solidity', 'Hardhat', 'TypeScript', 'React', 'wagmi', 'Uniswap V2'],
+		links: { repo: 'https://github.com/theocerdan/bahapad' },
 		award: {
-			en: '3rd place - Paris Blockchain Week 2025',
-			fr: '3e place - Paris Blockchain Week 2025'
+			en: '3rd place - Paris Blockchain Week 2025 (Bahamut track)',
+			fr: '3e place - Paris Blockchain Week 2025 (track Bahamut)'
 		},
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/bahapad/demo.mp4',
+			poster: 'projects/bahapad/poster.webp',
+			phone: 'projects/bahapad/phone.webp'
+		}
 	},
 	{
 		id: 'goldeneye',
@@ -221,21 +226,26 @@ export const ALL_PROJECTS = typeset<Project[]>([
 	},
 	{
 		id: 'tokenizart',
-		title: 'tokenizArt',
+		title: 'Girl42',
 		description: {
-			en: 'Girl42, a one-of-a-kind ERC-721 NFT deployed on Ethereum’s Sepolia testnet, with its image and metadata stored on IPFS and a small website to interact with it.',
-			fr: 'Girl42, un NFT ERC-721 unique déployé sur le testnet Sepolia d’Ethereum, avec image et métadonnées stockées sur IPFS et un petit site pour interagir avec lui.'
+			en: 'A one-of-a-kind NFT on Ethereum, made for a 42 project with art drawn by a friend. The ERC-721 contract allows exactly one token, minted once by its owner, and its image and metadata are stored on IPFS. A small web page connects MetaMask, mints the token and displays it as read from the blockchain.',
+			fr: "Un NFT unique sur Ethereum, créé pour un projet de 42 avec un dessin d'un ami. Le contrat ERC-721 n'autorise qu'un seul token, frappé une seule fois par son propriétaire, et son image et ses métadonnées sont stockées sur IPFS. Une petite page web connecte MetaMask, frappe le token et l'affiche tel que lu sur la blockchain."
 		},
 		summary: {
-			en: 'A one-of-a-kind ERC-721 NFT on Sepolia, with its metadata on IPFS.',
-			fr: 'Un NFT ERC-721 unique sur Sepolia, avec ses métadonnées sur IPFS.'
+			en: 'A one-of-a-kind NFT on Ethereum, minted from a small web page with MetaMask.',
+			fr: 'Un NFT unique sur Ethereum, frappé depuis une petite page web avec MetaMask.'
 		},
 		date: '2024-12',
 		context: 'school',
-		domains: ['blockchain', 'web'],
-		tech: ['Solidity', 'Hardhat', 'IPFS', 'JavaScript'],
+		domains: ['blockchain'],
+		tech: ['Solidity', 'JavaScript', 'Hardhat', 'IPFS', 'ethers.js', 'MetaMask'],
 		links: { repo: gh('42-tokenizArt') },
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/tokenizart/demo.mp4',
+			poster: 'projects/tokenizart/poster.webp',
+			phone: 'projects/tokenizart/phone.webp'
+		}
 	},
 	{
 		id: 'tokenizer',
@@ -246,7 +256,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		},
 		summary: {
 			en: "An Ethereum token for School 42's wallet, where every reward needs several staff approvals.",
-			fr: 'Un token Ethereum pour le porte-monnaie de l\'école 42, chaque récompense validée par plusieurs encadrants.'
+			fr: "Un token Ethereum pour le porte-monnaie de l'école 42, chaque récompense validée par plusieurs encadrants."
 		},
 		date: '2024-11',
 		context: 'school',
