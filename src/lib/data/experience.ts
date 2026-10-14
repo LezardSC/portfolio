@@ -111,10 +111,16 @@ export const EDUCATION = typeset<Education[]>([
 
 /** Hackathon results. Order here doesn't matter: the page sorts newest first. */
 export const HACKATHONS = typeset<Hackathon[]>([
-	{ medal: 1, event: 'Paris Blockchain Week', date: '2024-04', project: 'KAYP' },
-	{ medal: 1, event: 'H-W3B Paris', date: '2024-03', project: 'KAYP' },
-	{ medal: 2, event: 'H-W3B Super Finale', date: '2024-11', project: 'KAYP' },
-	{ medal: 3, event: 'Paris Blockchain Week', date: '2025-04', project: 'Bahapad' },
+	{ medal: 1, event: 'Paris Blockchain Week', date: '2024-04', project: 'KAYP', projectId: 'kayp' },
+	{ medal: 1, event: 'H-W3B Paris', date: '2024-03', project: 'KAYP', projectId: 'kayp' },
+	{ medal: 2, event: 'H-W3B Super Finale', date: '2024-11', project: 'KAYP', projectId: 'kayp' },
+	{
+		medal: 3,
+		event: 'Paris Blockchain Week',
+		date: '2025-04',
+		project: 'Bahapad',
+		projectId: 'bahapad'
+	},
 	{
 		medal: 3,
 		event: 'CND',

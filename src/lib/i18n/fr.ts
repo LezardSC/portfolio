@@ -62,7 +62,12 @@ export const fr: Dict = {
 		sourceCode: 'Code source',
 		code: 'Code',
 		privateCode: 'Code privé',
-		demoLink: 'Démo'
+		demoLink: 'Démo',
+		/** Hackathon chips on the cards, one per placement ("×n" when it happened more than once). */
+		placement: 'Hackathon\u00a0: {place}',
+		places: { 1: '1re place', 2: '2e place', 3: '3e place' },
+		/** Tooltip: the events behind a chip. */
+		resultItem: '{event} {year}'
 	},
 	skills: {
 		lead: 'Mon cœur de métier\u00a0: backend, systèmes et outillage.',

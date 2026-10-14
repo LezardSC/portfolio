@@ -49,7 +49,6 @@ All in `src/lib/data/projects.ts`, inside `ALL_PROJECTS`. The order of entries d
 		tech: ['Python', 'Ollama'], // tags at the bottom of the card, at least one
 		links: { repo: gh('my-project'), demo: 'https://demo.example.com' }, // both optional
 		company: 'Some Company', // optional, professional projects only
-		award: { en: 'Winner - Some Hackathon 2026', fr: 'Vainqueur - Some Hackathon 2026' }, // optional
 		media: { kind: 'image', src: 'projects/my-project/cover.webp' }, // optional, see Media
 		hidden: true // optional: keeps the entry but takes it off the site
 	},
@@ -93,9 +92,9 @@ Add `demo: 'https://…'` to `links`: `links: { repo: gh('my-project'), demo: 'h
 
 `company: 'Sogeti (Capgemini)'` on a `professional` project shows the company under the title, with a briefcase. It's a plain string: company names don't translate. A test refuses it on other contexts.
 
-### Mark an award
+### Mark a hackathon result
 
-`award: { en: 'Winner - Event 2026', fr: 'Vainqueur - Event 2026' }`. It shows with a trophy on the card. To also list it under Experience → Hackathons, add a hackathon result (see [Experience](#experience)).
+Add the result under Experience → Hackathons (see [Add a hackathon result](#add-a-hackathon-result)) with `projectId` set to the project's `id`. Big cards on desktop then show one chip per placement under the title ("Hackathon: 1st place ×2", "Hackathon: 2nd place"); every other card (small cards, and all cards on phones) shows one icon per result next to the title: gold trophy, silver or bronze medal. Hovering a chip or icon lists its events.
 
 ---
 
@@ -301,12 +300,13 @@ The hero's "Latest role" shows the newest job as "roleShort - companyShort" (or 
 ### Add a hackathon result
 
 ```ts
-	{ medal: 1, event: 'Paris Blockchain Week', date: '2026-04', project: 'KAYP' },
+	{ medal: 1, event: 'Paris Blockchain Week', date: '2026-04', project: 'KAYP', projectId: 'kayp' },
 ```
 
 - `medal`: 1 (winner), 2 or 3.
 - `fullName`: optional, shown as a tooltip when `event` is an acronym.
 - `project`: a name, or `{ en, fr }` when it's a description.
+- `projectId`: optional, the `id` of a shown project in `projects.ts`: its card then shows the result (a test checks the id exists).
 
 The "Hackathons - N podiums" heading and the hero's "2 wins, 5 podiums" count themselves.
 

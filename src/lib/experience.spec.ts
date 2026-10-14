@@ -6,6 +6,8 @@ import {
 	hackathonsNewestFirst,
 	newestFirst,
 	periodPoints,
+	placements,
+	projectResults,
 	type Hackathon
 } from './experience';
 
@@ -99,6 +101,37 @@ describe('hackathonsNewestFirst', () => {
 			{ medal: 2, event: 'C', date: '2024-11' }
 		];
 		expect(hackathonsNewestFirst(list).map((h) => h.event)).toEqual(['B', 'C', 'A']);
+	});
+});
+
+describe('projectResults', () => {
+	const list: Hackathon[] = [
+		{ medal: 2, event: 'A', date: '2024-11', projectId: 'x' },
+		{ medal: 1, event: 'B', date: '2024-03', projectId: 'x' },
+		{ medal: 1, event: 'C', date: '2024-04', projectId: 'x' },
+		{ medal: 1, event: 'D', date: '2025-01', projectId: 'y' },
+		{ medal: 3, event: 'E', date: '2025-02' }
+	];
+	it("keeps only the project's results, best medal first, then newest", () => {
+		expect(projectResults('x', list).map((h) => h.event)).toEqual(['C', 'B', 'A']);
+	});
+	it('is empty for a project without results', () => {
+		expect(projectResults('z', list)).toEqual([]);
+	});
+});
+
+describe('placements', () => {
+	const h = (medal: 1 | 2 | 3, event: string): Hackathon => ({ medal, event, date: '2024-01' });
+	it('groups the results by medal, best first, keeping their order', () => {
+		const got = placements([h(1, 'A'), h(1, 'B'), h(2, 'C')]);
+		expect(got.map((p) => [p.medal, p.results.map((r) => r.event)])).toEqual([
+			[1, ['A', 'B']],
+			[2, ['C']]
+		]);
+	});
+	it('leaves out medals the project never got', () => {
+		expect(placements([h(3, 'A')]).map((p) => p.medal)).toEqual([3]);
+		expect(placements([])).toEqual([]);
 	});
 });
 

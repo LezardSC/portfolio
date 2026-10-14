@@ -67,7 +67,12 @@ export const en = {
 		sourceCode: 'Source code',
 		code: 'Code',
 		privateCode: 'Private code',
-		demoLink: 'Live demo'
+		demoLink: 'Live demo',
+		/** Hackathon chips on the cards, one per placement ("×n" when it happened more than once). */
+		placement: 'Hackathon: {place}',
+		places: { 1: '1st place', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>,
+		/** Tooltip: the events behind a chip. */
+		resultItem: '{event} {year}'
 	},
 	skills: {
 		lead: 'My core: backend, systems and tooling.',
