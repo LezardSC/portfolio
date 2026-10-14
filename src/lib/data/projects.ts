@@ -149,10 +149,6 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['blockchain', 'web'],
 		tech: ['TypeScript', 'React', 'Java', 'Python', 'XRPL', 'SmartPy'],
 		links: { repo: 'https://github.com/theocerdan/frontend_kayp' },
-		award: {
-			en: '1st - H-W3B Paris & Paris Blockchain Week 2024',
-			fr: '1ère place - H-W3B Paris & Paris Blockchain Week 2024'
-		},
 		media: {
 			kind: 'video',
 			src: 'projects/kayp/demo.mp4',
@@ -176,10 +172,6 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		domains: ['blockchain', 'web'],
 		tech: ['Solidity', 'Hardhat', 'TypeScript', 'React', 'wagmi', 'Uniswap V2'],
 		links: { repo: 'https://github.com/theocerdan/bahapad' },
-		award: {
-			en: '3rd place - Paris Blockchain Week 2025 (Bahamut track)',
-			fr: '3e place - Paris Blockchain Week 2025 (track Bahamut)'
-		},
 		media: {
 			kind: 'video',
 			src: 'projects/bahapad/demo.mp4',
@@ -243,7 +235,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		},
 		summary: {
 			en: "An Ethereum token for School 42's wallet, where every reward needs several staff approvals.",
-			fr: "Un token Ethereum pour le porte-monnaie de 42, chaque récompense validée par plusieurs encadrants."
+			fr: 'Un token Ethereum pour le porte-monnaie de 42, chaque récompense validée par plusieurs encadrants.'
 		},
 		date: '2024-11',
 		context: 'school',
@@ -295,7 +287,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'school',
 		domains: ['ai'],
 		tech: ['Python', 'Matplotlib'],
-		links: { repo: gh('https://github.com/Hgeffroy/42_Dslr') },
+		links: { repo: 'https://github.com/Hgeffroy/42_Dslr' },
 		media: {
 			kind: 'video',
 			src: 'projects/dslr/demo.mp4',

@@ -67,7 +67,7 @@ describe('project data', () => {
 	it('has non-empty text in both languages', () => {
 		for (const p of ALL_PROJECTS) {
 			expect(p.title.trim(), p.id).not.toBe('');
-			for (const text of [p.description, ...(p.award ? [p.award] : [])]) {
+			for (const text of [p.description, p.summary]) {
 				expect(text.en.trim(), p.id).not.toBe('');
 				expect(text.fr.trim(), p.id).not.toBe('');
 			}

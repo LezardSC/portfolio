@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { LANGS } from '$lib/i18n/lang';
 import { localize, MEDALS } from '$lib/experience';
 import { EDUCATION, HACKATHONS, JOBS } from './experience';
+import { ALL_PROJECTS } from './projects';
 
 const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
 const YEAR = /^\d{4}$/;
@@ -45,6 +46,12 @@ describe('experience data', () => {
 	it('spells out every abbreviated event name', () => {
 		for (const h of HACKATHONS)
 			if (h.fullName !== undefined) expect(h.fullName.trim(), h.event).not.toBe('');
+	});
+
+	it('links results only to projects that exist and are shown', () => {
+		const shown = new Set(ALL_PROJECTS.filter((p) => !p.hidden).map((p) => p.id));
+		for (const h of HACKATHONS)
+			if (h.projectId !== undefined) expect(shown.has(h.projectId), h.event).toBe(true);
 	});
 
 	it('uses https for every link', () => {
