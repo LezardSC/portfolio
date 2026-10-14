@@ -384,19 +384,27 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		id: 'love-takedown',
 		title: 'Love Takedown',
 		description: {
-			en: 'A game made as a team during a game jam.',
-			fr: 'Un jeu réalisé en équipe lors d’une game jam.'
+			en: 'A 72-hour game jam in Lyon on the random theme “Wrath of the love takedown”, in a team of six. Leaving a nightclub, you book a taxi on your phone and outrun a faceless crowd until it arrives: keep the phone in signal to follow its route, and unleash a Takedown when your adrenaline peaks.',
+			fr: 'Une game jam de 72\u00a0h à Lyon sur le thème tiré au sort «\u00a0Wrath of the love takedown\u00a0», en équipe de six. En sortant de boîte de nuit, on commande un taxi sur son téléphone et on fuit une foule sans visage jusqu’à son arrivée\u00a0: il faut garder du réseau pour suivre son trajet, et déclencher un Takedown quand l’adrénaline est au maximum.'
 		},
 		summary: {
-			en: 'A game made as a team during a game jam.',
-			fr: 'Un jeu réalisé en équipe lors d’une game jam.'
+			en: 'A 72-hour jam game: outrun a crowd until your taxi arrives.',
+			fr: 'Un jeu de game jam en 72\u00a0h\u00a0: semer une foule jusqu’à l’arrivée du taxi.'
 		},
 		date: '2024-07',
 		context: 'hackathon',
 		domains: ['games'],
 		tech: ['C#', 'Unity'],
-		links: { repo: gh('Love_Takedown') },
-		hidden: true
+		links: {
+			repo: 'https://github.com/Mastrum1/Love_Takedown',
+			demo: 'https://antoinearzac.itch.io/love-takedown'
+		},
+		media: {
+			kind: 'video',
+			src: 'projects/love-takedown/demo.mp4',
+			poster: 'projects/love-takedown/poster.webp',
+			phone: 'projects/love-takedown/phone.webp'
+		}
 	},
 	{
 		id: 'so-long',
