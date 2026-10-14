@@ -68,6 +68,7 @@ export const en = {
 		code: 'Code',
 		privateCode: 'Private code',
 		demoLink: 'Live demo',
+		demoShort: 'Demo',
 		/** Hackathon chips on the cards, one per placement ("×n" when it happened more than once). */
 		placement: 'Hackathon: {place}',
 		places: { 1: '1st place', 2: '2nd place', 3: '3rd place' } satisfies Record<Medal, string>,

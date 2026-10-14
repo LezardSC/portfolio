@@ -12,6 +12,7 @@
 <div class="links">
 	{#if project.links.repo}
 		<a
+			class="repo"
 			href={project.links.repo}
 			target="_blank"
 			rel="noopener noreferrer"
@@ -23,10 +24,12 @@
 	{/if}
 	{#if project.links.demo}
 		<a
+			class="demo"
 			href={project.links.demo}
 			target="_blank"
 			rel="noopener noreferrer"
-			aria-label="{t.demo}: {project.title}">{t.demoLink} <span aria-hidden="true">↗</span></a
+			aria-label="{t.demo}: {project.title}"
+			>{compact ? t.demoShort : t.demoLink} <span aria-hidden="true">↗</span></a
 		>
 	{/if}
 	{#if !project.links.repo && !project.links.demo}
@@ -63,7 +66,13 @@
 	.short {
 		display: none;
 	}
+	/* Phone: code above demo, right-aligned. */
 	@media (width < 48rem) {
+		.links {
+			flex-direction: column;
+			align-items: flex-end;
+			gap: 0;
+		}
 		.long {
 			display: none;
 		}
