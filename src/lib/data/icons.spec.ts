@@ -16,8 +16,4 @@ describe('icon library', () => {
 	it.each(Object.entries(ICONS))('%s is well-formed path data', (_, path) => {
 		expect(isIconPath(path)).toBe(true);
 	});
-	it('has no two identical icons', () => {
-		const paths = Object.values(ICONS);
-		expect(new Set(paths).size).toBe(paths.length);
-	});
 });

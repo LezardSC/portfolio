@@ -52,16 +52,6 @@ export function mainDomain(p: Project): Domain {
 	return p.domains[0];
 }
 
-/**
- * Phone tile colours per theme (the domain colour is `DOMAINS[d].color` in $lib/data/categories): background = domain colour at `pct` over `base`; label, rule and
- * watermark = domain colour mixed `fg` with white. Keep in sync with `--tile-*` in src/app.css
- * (theme-tokens.spec.ts checks it).
- */
-export const DOMAIN_TILE = {
-	light: { base: '#ffffff', pct: 0.11, fg: 1 },
-	dark: { base: '#121210', pct: 0.24, fg: 0.45 }
-} as const;
-
 /** Small project tiles shown on phones before the "See N other projects" button. */
 export const PHONE_OTHERS = 6;
 

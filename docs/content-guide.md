@@ -171,7 +171,7 @@ Both live in the phone block (`@media (width < 48rem)`) of `src/lib/components/p
 - **Blur:** `filter: blur(var(--blur, 4px));` on `.card > :global(.media)`. Change `4px` (more = blurrier). For a much stronger blur, also make its `inset: -1rem` more negative (e.g. `-2rem`): the image overflows the card so the blur's soft edge stays hidden.
 - **Darkening:** a `#10100e` layer whose opacity is `--veil` (0 = none, 1 = black). `.card.has-media { --veil: 0.58; }` is for cards with an image; `--veil: 0.35;` in `.card` is for cards without one (domain colour as background).
 
-Change the no-image veil in `src/lib/overlay.ts` as well (`veilPlain`): `npm test` fails if it differs from the CSS. It also checks the text contrast on every domain colour with `veilPlain`, so lowering it may fail for a light domain colour. Over an image the contrast isn't tested: check the cards by eye at 360px in both themes.
+Contrast isn't tested: check the cards by eye at 360px in both themes (lowering the veil can make text unreadable on a light domain colour), and run `npm run audit`.
 
 ---
 
@@ -186,7 +186,7 @@ In `src/lib/data/categories.ts`. The key order is the filter order.
 ```
 
 - **key** (`devops`): lowercase-with-dashes, used in projects' `domains`.
-- **color**: `#rrggbb`. It tints the phone tiles and the phone cards without media, so it must be fairly dark: `npm test` checks contrast in both themes and fails if it's too light (in `categories.spec.ts`, with "label", "body" or "muted"; in `overlay.spec.ts`, with "text", "meta", "domain", "award", "desc" or "tag"). Darken it until it passes. Each domain needs its own colour.
+- **color**: `#rrggbb`. It tints the phone tiles and the phone cards without media, so it must be fairly dark: check the phone tiles and cards by eye in both themes, and `npm run audit` flags text that's too faint. Give each domain its own colour.
 - **icon**: one of `ICONS` in `icons.ts`, or a new one (below).
 
 The domain shows up in the filters as soon as a visible project uses it.
@@ -352,10 +352,7 @@ From the repo root:
 1. `npm run format`: tidies the files (and turns `'l\'IA'` into `"l'IA"`).
 2. `npm test`: checks the data. A failure names the project or field. Common messages:
    - `"projects/x/cover.webp": missing from static/`: wrong path or file name (case included).
-   - `my-project en: short enough for a tile`: the summary is over 100 characters.
-   - `my-project fr: one sentence ending with a full stop`: the summary needs exactly one sentence, ending with `.`.
    - `"the-id": no project has this id` / `is hidden`: fix `PRIORITY`.
-   - `light label` / `dark body` / `desc` … `expected … to be greater than or equal to 4.5`: a domain colour is too light; darken it.
    - `export const X: … = typeset(`: write `typeset<Type>(…)` instead (it keeps the check of misspelled field names).
 3. `npm run check`: catches typos in field names (`hiden: true` → "Did you mean to write 'hidden'?") and in category keys.
 4. `npm run dev`: look at the site (http://localhost:5173), on a narrow window too.

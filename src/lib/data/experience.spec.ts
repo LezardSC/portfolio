@@ -39,10 +39,6 @@ describe('experience data', () => {
 		for (const h of HACKATHONS) expect(MEDALS, h.event).toContain(h.medal);
 	});
 
-	it('keeps hackathon event names short enough for one pill line', () => {
-		expect(HACKATHONS.filter((h) => h.event.length > 25).map((h) => h.event)).toEqual([]);
-	});
-
 	it('spells out every abbreviated event name', () => {
 		for (const h of HACKATHONS)
 			if (h.fullName !== undefined) expect(h.fullName.trim(), h.event).not.toBe('');

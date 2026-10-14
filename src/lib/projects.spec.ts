@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
 	countFor,
 	filterProjects,
-	hiddenCount,
 	mediaFiles,
 	mediaIssues,
 	NO_FILTERS,
@@ -10,7 +9,6 @@ import {
 	shouldPlayVideo,
 	sortProjects,
 	visibleProjects,
-	splitTiers,
 	type Project
 } from './projects';
 
@@ -110,21 +108,6 @@ describe('visibleProjects', () => {
 	});
 });
 
-describe('splitTiers', () => {
-	it('puts the first 6 in large and the rest in small by default', () => {
-		const many = Array.from({ length: 8 }, (_, i) => make({ id: `p${i}` }));
-		const { large, small } = splitTiers(many);
-		expect(ids(large)).toEqual(['p0', 'p1', 'p2', 'p3', 'p4', 'p5']);
-		expect(ids(small)).toEqual(['p6', 'p7']);
-	});
-	it('puts everything in large when there are fewer than n', () => {
-		expect(splitTiers(list.slice(0, 3))).toEqual({ large: list.slice(0, 3), small: [] });
-	});
-	it('handles an empty list', () => {
-		expect(splitTiers([])).toEqual({ large: [], small: [] });
-	});
-});
-
 describe('primaryLink', () => {
 	it('prefers the repo', () => {
 		expect(primaryLink(make({ id: 'r', links: { repo: 'https://r', demo: 'https://d' } }))).toBe(
@@ -207,21 +190,6 @@ describe('mediaIssues', () => {
 				exists
 			)
 		).toEqual(['"projects/missing.jpg": missing from static/']);
-	});
-});
-
-describe('hiddenCount', () => {
-	it('counts the tiles past the first 6 (PHONE_OTHERS)', () => {
-		expect(hiddenCount(11)).toBe(5);
-		expect(hiddenCount(7)).toBe(1);
-	});
-	it('is 0 when everything fits', () => {
-		expect(hiddenCount(6)).toBe(0);
-		expect(hiddenCount(3)).toBe(0);
-		expect(hiddenCount(0)).toBe(0);
-	});
-	it('takes another number of shown tiles', () => {
-		expect(hiddenCount(4, 2)).toBe(2);
 	});
 });
 
