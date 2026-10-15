@@ -20,6 +20,53 @@ export type SkillGroup = {
 	skills: Skill[];
 };
 
+/** What the page gets for a logo: its id in the sprite and its brand colour, not the drawing. */
+export type ShownLogo = { id: string; hex: string };
+export type ShownSkill = { name: string | Localized; logo: ShownLogo };
+export type ShownSkillGroup = Omit<SkillGroup, 'skills'> & { skills: ShownSkill[] };
+
+/** FNV-1a, 32 bits, base 36: short, stable across builds, enough for a few dozen drawings. */
+function hash(text: string): string {
+	let h = 0x811c9dc5;
+	for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193);
+	return (h >>> 0).toString(36);
+}
+
+/** Id of a logo in the sprite, from its drawing: the same logo in several groups is drawn once. */
+export function logoId(icon: SkillIcon): string {
+	return `l${hash(icon.path)}`;
+}
+
+/**
+ * The skill logos as one SVG sprite (one <symbol> per drawing), served as skill-logos.svg: the
+ * paths (most of the page's JS otherwise) download once, apart from the page and its scripts.
+ */
+export function logoSprite(groups: readonly SkillGroup[]): string {
+	const symbols = new Map<string, string>();
+	for (const skill of groups.flatMap((g) => g.skills))
+		symbols.set(
+			logoId(skill.icon),
+			`<symbol id="${logoId(skill.icon)}" viewBox="0 0 24 24"><path d="${skill.icon.path}"/></symbol>`
+		);
+	return `<svg xmlns="http://www.w3.org/2000/svg">${[...symbols.values()].join('')}</svg>\n`;
+}
+
+/** Changes whenever a drawing does: added to the sprite URL, so browsers never use a stale copy. */
+export function spriteVersion(groups: readonly SkillGroup[]): string {
+	return hash(logoSprite(groups));
+}
+
+/** The skill groups as the page needs them: each logo by id and colour. */
+export function shownGroups(groups: readonly SkillGroup[]): ShownSkillGroup[] {
+	return groups.map((group) => ({
+		...group,
+		skills: group.skills.map(({ name, icon }) => ({
+			name,
+			logo: { id: logoId(icon), hex: icon.hex }
+		}))
+	}));
+}
+
 /**
  * Keyboard rule of the vertical skills tab list: the tab to select and focus after `key`, or
  * null when the key isn't handled. Arrows wrap around; Home/End go to the ends.
