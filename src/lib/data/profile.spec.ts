@@ -24,12 +24,12 @@ describe('profile data', () => {
 	});
 
 	it.each(LANGS)('renders every glance row with text (%s)', (lang) => {
-		const h = dicts[lang].hero;
-		const rows = glanceRows(PROFILE.glance, { jobs: JOBS, hackathons: HACKATHONS }, lang, {
-			tally: h.glanceTally,
-			wins: h.glanceWins,
-			podiums: h.glancePodiums
-		});
+		const rows = glanceRows(
+			PROFILE.glance,
+			{ jobs: JOBS, hackathons: HACKATHONS },
+			lang,
+			dicts[lang].hero.glanceText
+		);
 		for (const r of rows) {
 			expect(r.label.trim(), JSON.stringify(r)).not.toBe('');
 			expect(r.value.trim(), JSON.stringify(r)).not.toBe('');

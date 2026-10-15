@@ -12,11 +12,7 @@
 	let { lang, t, newTab }: { lang: Lang; t: Dict['hero']; newTab: string } = $props();
 
 	const glance = $derived(
-		glanceRows(PROFILE.glance, { jobs: JOBS, hackathons: HACKATHONS }, lang, {
-			tally: t.glanceTally,
-			wins: t.glanceWins,
-			podiums: t.glancePodiums
-		})
+		glanceRows(PROFILE.glance, { jobs: JOBS, hackathons: HACKATHONS }, lang, t.glanceText)
 	);
 	/** First name and the rest: two lines on phones, one on desktop. */
 	const [first, ...others] = PROFILE.name.split(' ');

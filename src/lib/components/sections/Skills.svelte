@@ -6,7 +6,8 @@
 	import { ICONS } from '$lib/data/icons';
 	import { DESKTOP_QUERY } from '$lib/projects';
 	import { logoColor } from '$lib/color';
-	import { nextTab, panelHidden, skillName } from '$lib/skills';
+	import { localize } from '$lib/i18n/lang';
+	import { nextTab, panelHidden } from '$lib/skills';
 	import { THEME_BG } from '$lib/theme';
 	import Section from '../Section.svelte';
 	import Icon from '../Icon.svelte';
@@ -97,7 +98,7 @@
 					<h3 id="skills-{group.id}">{group.title[lang]}</h3>
 					<p class="desc">{group.description[lang]}</p>
 					<ul role="list" class="tiles">
-						{#each group.skills as skill (skillName(skill, 'en'))}
+						{#each group.skills as skill (localize(skill.name, 'en'))}
 							<li
 								style:--logo-dark={logoColor(skill.icon.hex, THEME_BG.dark)}
 								style:--logo-light={logoColor(skill.icon.hex, THEME_BG.light)}
@@ -112,7 +113,7 @@
 								>
 									<path d={skill.icon.path} />
 								</svg>
-								{skillName(skill, lang)}
+								{localize(skill.name, lang)}
 							</li>
 						{/each}
 					</ul>

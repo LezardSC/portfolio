@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Hackathon, Job } from './experience';
-import { glanceRows, plural, type GlanceEntry, type GlanceItem, type GlanceText } from './glance';
+import { glanceRows, type GlanceEntry, type GlanceItem, type GlanceText } from './glance';
 
 const T: GlanceText = {
 	tally: '{wins}, {podiums}',
@@ -32,16 +32,6 @@ const entries: GlanceEntry[] = [
 	{ label: L('Latest role'), auto: 'latestRole' },
 	{ label: L('Hackathons'), auto: 'hackathons' }
 ];
-
-describe('plural', () => {
-	it('uses the language plural rules', () => {
-		const f = { one: '{n} x', other: '{n} xs' };
-		expect(plural(1, f, 'en')).toBe('1 x');
-		expect(plural(0, f, 'en')).toBe('0 xs');
-		expect(plural(0, f, 'fr')).toBe('0 x');
-		expect(plural(2, f, 'fr')).toBe('2 xs');
-	});
-});
 
 describe('glanceRows', () => {
 	it('passes hand-written rows through in the page language', () => {

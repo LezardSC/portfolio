@@ -1,4 +1,4 @@
-import type { Lang, Localized } from '$lib/i18n/lang';
+import type { Localized } from '$lib/i18n/lang';
 
 /** One 24×24 SVG path, plus its brand colour as 6 hex digits without `#`. */
 export type SkillIcon = { path: string; hex: string };
@@ -19,10 +19,6 @@ export type SkillGroup = {
 	description: Localized;
 	skills: Skill[];
 };
-
-export function skillName(skill: Skill, lang: Lang): string {
-	return typeof skill.name === 'string' ? skill.name : skill.name[lang];
-}
 
 /**
  * Keyboard rule of the vertical skills tab list: the tab to select and focus after `key`, or

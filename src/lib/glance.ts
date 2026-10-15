@@ -1,5 +1,5 @@
 import { newestFirst, type Hackathon, type Job } from '$lib/experience';
-import { fill } from '$lib/i18n/format';
+import { fill, plural, type Plural } from '$lib/i18n/format';
 import type { Lang, Localized } from '$lib/i18n/lang';
 
 /** A hand-written row of the hero's "At a glance" card. */
@@ -24,13 +24,7 @@ export type GlanceEntry = GlanceRow | GlanceAuto;
 /** A row ready to render. */
 export type GlanceItem = { label: string; value: string; short?: string; wide: boolean };
 
-export type Plural = { one: string; other: string };
 export type GlanceText = { tally: string; wins: Plural; podiums: Plural };
-
-/** `{n}` filled into the form the language's plural rules pick (French: 0 and 1 are singular). */
-export function plural(n: number, forms: Plural, lang: Lang): string {
-	return fill(new Intl.PluralRules(lang).select(n) === 'one' ? forms.one : forms.other, { n });
-}
 
 export function glanceRows(
 	entries: readonly GlanceEntry[],

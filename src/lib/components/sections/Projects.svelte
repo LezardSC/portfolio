@@ -5,7 +5,7 @@
 	import { fade } from 'svelte/transition';
 	import { PRIORITY, PROJECTS } from '$lib/data/projects';
 	import type { Dict, Lang } from '$lib/i18n';
-	import { fill } from '$lib/i18n/format';
+	import { plural } from '$lib/i18n/format';
 	import {
 		filterProjects,
 		hiddenCount,
@@ -99,7 +99,7 @@
 					aria-controls="more-projects"
 					onclick={() => (showAll = !showAll)}
 				>
-					{showAll ? t.showFewer : hidden === 1 ? t.showMoreOne : fill(t.showMore, { n: hidden })}
+					{showAll ? t.showFewer : plural(hidden, t.showMore, lang)}
 				</button>
 			{/if}
 		{/if}

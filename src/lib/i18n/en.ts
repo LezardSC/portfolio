@@ -17,10 +17,12 @@ export const en = {
 		malt: 'Malt profile',
 		maltShort: 'Malt',
 		glance: 'At a glance',
-		/** "At a glance" hackathon tally, from the data. */
-		glanceTally: '{wins}, {podiums}',
-		glanceWins: { one: '{n} win', other: '{n} wins' },
-		glancePodiums: { one: '{n} podium', other: '{n} podiums' }
+		/** "At a glance" hackathon tally, counted from the data. */
+		glanceText: {
+			tally: '{wins}, {podiums}',
+			wins: { one: '{n} win', other: '{n} wins' },
+			podiums: { one: '{n} podium', other: '{n} podiums' }
+		}
 	},
 	about: {
 		photoAlt: 'Photo of Jocelyn Renault'
@@ -61,8 +63,7 @@ export const en = {
 		private: 'Private',
 		repo: 'Source code on GitHub',
 		demo: 'Live demo',
-		showMore: 'See the {n} other projects',
-		showMoreOne: 'See 1 other project',
+		showMore: { one: 'See {n} other project', other: 'See the {n} other projects' },
 		showFewer: 'Show fewer',
 		sourceCode: 'Source code',
 		code: 'Code',
