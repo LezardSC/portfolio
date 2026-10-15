@@ -18,6 +18,8 @@ Spec: `docs/superpowers/specs/2026-09-23-portfolio-design.md`, section "Mileston
 | `/en/` HTML (gzipped) | 56 KB | 25 KB |
 | axe, 360px overflow | 0 violations, fits | 0 violations (now also the 404 page), fits |
 
+**Live site, PageSpeed Insights (2026-10-15, https://jocelynrenault.com, redirected to `/en/`):** mobile **100 / 100 / 100 / 100** and desktop **100 / 100 / 100 / 100** (performance, accessibility, best practices, SEO). Higher than the local 96: the live server compresses and caches files, which `vite preview` does not.
+
 ### How performance got there
 
 | Try | Mobile | Outcome |
