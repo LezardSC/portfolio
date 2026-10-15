@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { CONTEXTS, DOMAINS } from '$lib/data/categories';
 	import { HACKATHONS } from '$lib/data/experience';
+	import { ICONS } from '$lib/data/icons';
 	import { projectResults } from '$lib/experience';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { mainDomain, type Project } from '$lib/projects';
 	import Icon from '../Icon.svelte';
-	import BriefcaseIcon from '../icons/BriefcaseIcon.svelte';
 	import ProjectLinks from './ProjectLinks.svelte';
 	import ProjectMedia from './ProjectMedia.svelte';
 	import ResultChips from './ResultChips.svelte';
@@ -34,7 +34,7 @@
 			<ResultMedals {results} {t} />
 		</div>
 		{#if project.company}
-			<p class="award"><BriefcaseIcon /> {project.company}</p>
+			<p class="award"><Icon path={ICONS.briefcase} size={18} stroke={2} /> {project.company}</p>
 		{/if}
 		<ResultChips {results} {t} />
 		<p class="desc">{project.description[lang]}</p>
