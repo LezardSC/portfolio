@@ -83,4 +83,4 @@ JSON
 
 ## Server config
 
-`static/.htaccess` (copied into `build/`) sets: `http` and `www` → `https://jocelynrenault.com` (301); `/` → `/fr/` or `/en/` from the browser language (302); the 404 page; caching (one year for `_app/immutable/`, revalidate HTML, one week for the rest); compression; security headers. HSTS is not set yet (see [backlog.md](backlog.md)).
+`static/.htaccess` (copied into `build/`) sets: `http` and `www` → `https://jocelynrenault.com` (301); `/` → `/fr/` or `/en/` from the browser language (302); the 404 page; caching (one year for `_app/immutable/`, revalidate HTML, one week for the rest); compression; security headers. HSTS is not set yet ([#34](https://github.com/LezardSC/portfolio/issues/34)).
