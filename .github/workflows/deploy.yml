@@ -41,5 +41,4 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_SECURE: ${{ vars.FTP_SECURE }}
       - run: npm run smoke

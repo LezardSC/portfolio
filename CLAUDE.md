@@ -17,7 +17,7 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - `npm run screens`: builds, then captures the site (EN/FR × dark/light × 360–1440px, phone collapsibles open, before hydration; 25 full pages) into `reports/screens-baseline/`. `npm run screens -- --compare` captures again and compares pixel by pixel, writing diff images to `reports/screens-diff/` (exit 1 on any difference). Take the baseline before a refactor, compare after each step.
 - `npm run og`: regenerates the share images and icons in `static/` (loads the data through Vite).
 - `npm run budget`: fails when `build/` is over 80 MB (the OVH hosting has 100) and lists the largest files.
-- `npm run deploy [-- --dry-run]`: FTP(S) upload of `build/` (only changed files; reads `.env.deploy`). Normally CI does it on merge: see `docs/deploy.md`.
+- `npm run deploy [-- --dry-run]`: SFTP upload of `build/` (only changed files; reads `.env.deploy`). Normally CI does it on merge: see `docs/deploy.md`.
 - `npm run smoke`: checks the live site (redirects, canonical, caching, 404).
 - `npm run audit -- --ci`: as in CI, Lighthouse performance is reported, not required.
 
