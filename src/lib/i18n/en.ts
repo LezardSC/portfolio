@@ -10,6 +10,11 @@ export const en = {
 		description:
 			'Portfolio of Jocelyn Renault, software engineer from 42 School: backend, systems, web, blockchain and AI projects.'
 	},
+	notFound: {
+		title: 'Page not found',
+		text: 'This page does not exist, or it has moved.',
+		home: 'Go to the site in English'
+	},
 	hero: {
 		available: 'Available for work',
 		projects: 'See projects',
