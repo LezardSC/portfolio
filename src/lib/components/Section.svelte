@@ -26,9 +26,9 @@
 
 <style>
 	section {
-		max-width: 77.5rem;
+		max-width: var(--page-max);
 		margin: 0 auto;
-		padding: 0 2.5rem;
+		padding: 0 var(--gutter);
 	}
 	.inner {
 		display: grid;
@@ -74,9 +74,6 @@
 	}
 	/* Phone: outlined number and title on one line, lead below. */
 	@media (width < 48rem) {
-		section {
-			padding: 0 1.25rem;
-		}
 		.inner {
 			display: block;
 			padding: 3rem 0;

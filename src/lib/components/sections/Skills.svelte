@@ -4,7 +4,9 @@
 	import { SKILL_GROUPS } from '$lib/data/skills';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { DESKTOP_QUERY } from '$lib/projects';
-	import { logoColor, nextTab, panelHidden, skillName, THEME_BG } from '$lib/skills';
+	import { logoColor } from '$lib/color';
+	import { nextTab, panelHidden, skillName } from '$lib/skills';
+	import { THEME_BG } from '$lib/theme';
 	import Section from '../Section.svelte';
 	import Icon from '../Icon.svelte';
 
@@ -109,6 +111,7 @@
 								style:--logo-light={logoColor(skill.icon.hex, THEME_BG.light)}
 							>
 								<svg
+									class="logo"
 									viewBox="0 0 24 24"
 									width="30"
 									height="30"
@@ -247,18 +250,8 @@
 		font-size: 1.125rem;
 		font-weight: 600;
 	}
-	/* Brand colour per theme (computed by logoColor); same theme selectors as src/app.css. */
 	.tiles svg {
 		flex-shrink: 0;
-		color: var(--logo-dark);
-	}
-	:global(:root[data-theme='light']) .tiles svg {
-		color: var(--logo-light);
-	}
-	@media (prefers-color-scheme: light) {
-		:global(:root:not([data-theme])) .tiles svg {
-			color: var(--logo-light);
-		}
 	}
 	/* Too narrow for tabs beside the panel (300px + a 200px tile + padding): tabs above it. */
 	@media (width < 60rem) {

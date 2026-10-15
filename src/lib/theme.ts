@@ -1,6 +1,9 @@
 export type Theme = 'dark' | 'light';
 export const THEME_KEY = 'theme';
 
+/** Page background per theme (the browser bar colour). Equal to `--bg` in src/app.css (theme-tokens.spec.ts). */
+export const THEME_BG = { dark: '#121210', light: '#faf8f4' } as const;
+
 /** Keep in sync with the inline script in src/app.html. */
 export function resolveTheme(stored: string | null, prefersDark: boolean): Theme {
 	if (stored === 'dark' || stored === 'light') return stored;

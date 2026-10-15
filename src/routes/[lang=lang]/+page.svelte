@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 	import { localeHref } from '$lib/i18n/lang';
 	import { assetHref } from '$lib/paths';
-	import { THEME_BG } from '$lib/skills';
+	import { THEME_BG } from '$lib/theme';
 	import Footer from '$lib/components/Footer.svelte';
 	import Nav from '$lib/components/Nav.svelte';
 	import About from '$lib/components/sections/About.svelte';
