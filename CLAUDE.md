@@ -39,7 +39,7 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - `static/.htaccess` is the Apache config (redirects, language on `/`, caching, headers). It hardcodes the locale paths; `htaccess.spec.ts` fails when `lang.ts` changes.
 - Skill logos are not in the page JS: `+page.server.ts` sends each logo's id and colour, and `skill-logos.svg` (prerendered from `SKILL_GROUPS`) holds the drawings. Editing skills is unchanged.
 - Both light palettes in `src/app.css` (with JS: `[data-theme='light']`; without: `prefers-color-scheme`) must stay identical; `theme-tokens.spec.ts` checks it.
-- Watch list: `docs/backlog.md` holds known issues not fixed yet. Add to it rather than leaving a note in a session; remove an entry when it is done.
+- Known problems and ideas not done yet are **GitHub issues** (`gh issue list`), not notes in a file or a session. Open one (labels: `bug`, `content`, `refactor`, `hosting`, `tooling`, `accessibility`, `documentation`, `enhancement`; `later` when it waits on something) rather than leaving a note in a session.
 
 ## Workflow (superpowers plugin)
 
@@ -50,6 +50,14 @@ The user builds this **one milestone at a time** and reviews each one before the
 3. Execute. The user chose **subagent-driven** for Milestone 1; ask again for each new plan.
 4. Push a branch, open a PR with `gh` (installed and authenticated as LezardSC), and add a review guide in `docs/reviews/`.
 5. Stop. The user reviews the PR before anything is merged.
+
+Smaller work goes **issue by issue**, without a plan file:
+
+1. Read the issue and check it still holds (the code may have moved on). Unclear or several possible fixes: ask first.
+2. One worktree and branch per issue (`issue-<n>-<slug>`). Small related issues may share a PR.
+3. Fix it, tests first when there is logic. Run `npm run check`, `npm test`, `npm run lint`; for anything visual, `npm run screens -- --compare` against a baseline taken before.
+4. Open the PR with `Closes #<n>` in its description (merging closes the issue). A review guide in `docs/reviews/` only when the change is big enough to need one.
+5. Stop. The user reviews and merges.
 
 ## Git notes
 

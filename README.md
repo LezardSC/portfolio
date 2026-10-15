@@ -46,5 +46,5 @@ Other scripts:
 
 - [Editing content](docs/content-guide.md)
 - [Deployment](docs/deploy.md)
-- [Known issues](docs/backlog.md)
+- [Known issues](https://github.com/LezardSC/portfolio/issues)
 - [Design spec](docs/superpowers/specs/2026-09-23-portfolio-design.md)
