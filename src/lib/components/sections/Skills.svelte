@@ -4,7 +4,7 @@
 	import { SKILL_GROUPS } from '$lib/data/skills';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { ICONS } from '$lib/data/icons';
-	import { DESKTOP_QUERY } from '$lib/projects';
+	import { DESKTOP_QUERY } from '$lib/breakpoints';
 	import { logoColor } from '$lib/color';
 	import { localize } from '$lib/i18n/lang';
 	import { nextTab, panelHidden } from '$lib/skills';
