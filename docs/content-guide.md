@@ -361,4 +361,4 @@ From the repo root:
 5. Before publishing: `npm run audit` (accessibility and Lighthouse; reports in `reports/`).
 6. Publishing: open a PR. When it is merged into `master`, the site updates within minutes ([deploy.md](deploy.md)). `npm run budget` must pass: the whole build, media included, stays under 80 MB.
 
-Known issues not fixed yet are listed in [`docs/backlog.md`](backlog.md).
+Known issues not fixed yet are [GitHub issues](https://github.com/LezardSC/portfolio/issues).

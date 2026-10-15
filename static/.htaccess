@@ -38,7 +38,7 @@ ErrorDocument 404 /404.html
 	Header always set Cache-Control "no-cache" env=LANGREDIRECT
 	Header always merge Vary "Accept-Language" env=LANGREDIRECT
 
-	# Security headers. HSTS comes later, once HTTPS has run cleanly (docs/backlog.md).
+	# Security headers. HSTS comes later, once HTTPS has run cleanly (GitHub issue #34).
 	Header always set X-Content-Type-Options "nosniff"
 	Header always set Referrer-Policy "strict-origin-when-cross-origin"
 	Header always set X-Frame-Options "DENY"
