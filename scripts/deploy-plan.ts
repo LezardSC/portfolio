@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 /** Path → SHA-256 of the file's content. */
 export type Manifest = Record<string, string>;
 
@@ -6,6 +8,25 @@ export const MANIFEST = '.deploy-manifest.json';
 
 /** Remote files the deploy never deletes: OVH's hosting config and the manifest. */
 export const KEEP: readonly string[] = ['.ovhconfig', MANIFEST];
+
+/**
+ * The SFTP server's host keys (ED25519 and RSA), as `ssh-keygen -l` prints them. The deploy only
+ * sends the password to a server holding one of them. If OVH changes its keys, the deploy stops:
+ * check the new ones (docs/deploy.md) and update this list.
+ */
+export const OVH_HOST_KEYS: readonly string[] = [
+	'SHA256:xhieLplnoEvvl7+a8sq8wLCh/bvOQvQFIVewi+fK2og',
+	'SHA256:itDZ6cuojUbG3+jrh5F/igkXa2xjzejbYJkNAlw8/VM'
+];
+
+/** A raw public key's fingerprint, in OpenSSH's format. */
+export function fingerprint(key: Buffer): string {
+	return `SHA256:${createHash('sha256').update(key).digest('base64').replace(/=+$/, '')}`;
+}
+
+export function hostKeyTrusted(key: Buffer, trusted: readonly string[]): boolean {
+	return trusted.includes(fingerprint(key));
+}
 
 /** Assets first, then .htaccess, then HTML: a page never points at a file not uploaded yet. */
 const rank = (path: string) => (path.endsWith('.html') ? 2 : path.endsWith('.htaccess') ? 1 : 0);

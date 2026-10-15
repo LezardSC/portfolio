@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MANIFEST, planDeploy } from './deploy-plan';
+import { fingerprint, hostKeyTrusted, MANIFEST, OVH_HOST_KEYS, planDeploy } from './deploy-plan';
 
 describe('planDeploy', () => {
 	it('uploads new and changed files, skips unchanged ones', () => {
@@ -54,5 +54,25 @@ describe('planDeploy', () => {
 			}
 		);
 		expect(plan.uploads).toEqual(['en/index.html']);
+	});
+});
+
+describe('host key check', () => {
+	// The ED25519 key ftp.cluster129.hosting.ovh.net sent, as ssh-keyscan prints it.
+	const ovhKey = Buffer.from(
+		'AAAAC3NzaC1lZDI1NTE5AAAAIPHzGPnvg+XUpaMELjQ4AIj/6pkjvvHYCUxDVpcdaC8T',
+		'base64'
+	);
+
+	it('computes the fingerprint ssh shows (SHA256, base64, no padding)', () => {
+		expect(fingerprint(ovhKey)).toBe('SHA256:xhieLplnoEvvl7+a8sq8wLCh/bvOQvQFIVewi+fK2og');
+	});
+
+	it('trusts the pinned OVH keys', () => {
+		expect(hostKeyTrusted(ovhKey, OVH_HOST_KEYS)).toBe(true);
+	});
+
+	it('refuses any other key (someone in between, or the server changed)', () => {
+		expect(hostKeyTrusted(Buffer.from('another key'), OVH_HOST_KEYS)).toBe(false);
 	});
 });
