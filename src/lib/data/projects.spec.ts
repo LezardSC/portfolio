@@ -64,6 +64,15 @@ describe('project data', () => {
 		}
 	});
 
+	it('keeps descriptions within 350 characters', () => {
+		const tooLong = ALL_PROJECTS.flatMap((p) =>
+			(['en', 'fr'] as const)
+				.filter((lang) => p.description[lang].length > 350)
+				.map((lang) => `${p.id} (${lang}): ${p.description[lang].length} characters`)
+		);
+		expect(tooLong).toEqual([]);
+	});
+
 	it('names a company only on professional projects', () => {
 		for (const p of ALL_PROJECTS) {
 			if (p.company === undefined) continue;
