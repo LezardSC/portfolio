@@ -30,6 +30,12 @@ describe('lighthouseChecks', () => {
 		expect(c.accessibility).toMatchObject({ ok: false, detail: '98 < 100' });
 	});
 
+	it('passes a report-only category under its target, showing the score', () => {
+		const checks = lighthouseChecks('mobile', summary({ performance: 0.9 }), ['performance']);
+		expect(checks[0]).toMatchObject({ ok: true, detail: '90 (report only, target 95)' });
+		expect(lighthouseChecks('mobile', summary({ seo: 0.9 }), ['performance'])[3].ok).toBe(false);
+	});
+
 	it('fails a missing score', () => {
 		expect(byCategory('desktop', summary({ seo: null })).seo.ok).toBe(false);
 	});
