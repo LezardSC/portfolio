@@ -155,7 +155,7 @@
 			border: 2px solid var(--text);
 			border-radius: var(--radius);
 			background: var(--dc);
-			color: #f3f0e8;
+			color: var(--on-photo-soft);
 		}
 		.card.has-media {
 			--veil: 0.58;
@@ -165,7 +165,7 @@
 			position: absolute;
 			inset: 0;
 			z-index: -1;
-			background: #10100e;
+			background: var(--photo-veil);
 			opacity: var(--veil);
 		}
 		/* Bigger than the card so the blur has no soft edge. */
@@ -187,24 +187,24 @@
 			top: -1.75rem;
 			right: -1.75rem;
 			z-index: -1;
-			color: #ffffff;
+			color: var(--on-photo);
 			opacity: 0.15;
 			pointer-events: none;
 		}
 		.body {
-			--text: #ffffff;
-			--muted: #d6d1c6;
+			--text: var(--on-photo);
+			--muted: var(--on-photo-muted);
 			flex: none;
 			gap: 0.5rem;
 		}
 		.meta {
 			gap: 0.25rem 0.625rem;
 			font-size: 0.8125rem;
-			color: #d6d1c6;
+			color: var(--on-photo-muted);
 		}
 		.dom {
 			font-weight: 600;
-			color: #ffa58c;
+			color: var(--on-photo-domain);
 		}
 		.dom :global(svg) {
 			width: 1rem;
@@ -213,7 +213,7 @@
 		h3 {
 			font-size: 1.4375rem;
 			letter-spacing: -0.02em;
-			color: #ffffff;
+			color: var(--on-photo);
 		}
 		.title {
 			background: none;
@@ -222,7 +222,7 @@
 			align-items: flex-start;
 			font-size: 0.875rem;
 			line-height: 1.35;
-			color: #ffb59f;
+			color: var(--on-photo-award);
 		}
 		.award :global(svg) {
 			flex: none;
@@ -241,7 +241,7 @@
 			margin: 0;
 			font-size: 0.9375rem;
 			line-height: 1.5;
-			color: #ece8df;
+			color: var(--on-photo-body);
 		}
 		.footer {
 			flex-wrap: wrap;
@@ -250,22 +250,22 @@
 			min-height: 0;
 			margin-top: 0.125rem;
 			padding-top: 0.375rem;
-			border-top: 1px solid rgb(255 255 255 / 0.2);
+			border-top: 1px solid var(--photo-rule);
 		}
 		.footer > :global(ul) {
 			padding-top: 0;
 		}
 		.footer :global(li) {
-			background: rgb(255 255 255 / 0.16);
-			color: #f3f0e8;
+			background: var(--photo-tag);
+			color: var(--on-photo-soft);
 		}
 		.footer :global(a) {
 			font-weight: 700;
-			color: #ffffff;
+			color: var(--on-photo);
 		}
 		.footer :global(.private) {
 			font-size: 0.8125rem;
-			color: #d6d1c6;
+			color: var(--on-photo-muted);
 		}
 	}
 

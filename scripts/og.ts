@@ -15,11 +15,12 @@ const vite = await createServer({
 	appType: 'custom',
 	logLevel: 'error'
 });
-const [{ PROFILE }, { LANGS }] = await Promise.all([
+const [{ PROFILE }, { LANGS }, { THEME_BG }] = await Promise.all([
 	vite.ssrLoadModule('/src/lib/data/profile.ts') as Promise<
 		typeof import('../src/lib/data/profile.ts')
 	>,
-	vite.ssrLoadModule('/src/lib/i18n/lang.ts') as Promise<typeof import('../src/lib/i18n/lang.ts')>
+	vite.ssrLoadModule('/src/lib/i18n/lang.ts') as Promise<typeof import('../src/lib/i18n/lang.ts')>,
+	vite.ssrLoadModule('/src/lib/theme.ts') as Promise<typeof import('../src/lib/theme.ts')>
 ]);
 await vite.close();
 
@@ -34,9 +35,10 @@ const FONT_CSS = `@font-face{font-family:S;src:url(data:font/woff2;base64,${font
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
+/** Text and accent colours: the light --text and --accent of src/app.css. */
 function ogHtml(lang: Lang): string {
 	return `<!doctype html><html><head><style>${FONT_CSS}</style></head><body>
-<div style="width:1200px;height:630px;background:#FAF8F4;color:#141412;padding:72px 80px;display:flex;flex-direction:column;justify-content:space-between">
+<div style="width:1200px;height:630px;background:${THEME_BG.light};color:#141412;padding:72px 80px;display:flex;flex-direction:column;justify-content:space-between">
   <img src="${svgData(favicon)}" width="72" height="72" alt="">
   <div>
     <div style="font-size:118px;font-weight:900;line-height:.9;letter-spacing:-.055em;white-space:nowrap">${esc(PROFILE.name)}<span style="color:#C2391B">.</span></div>

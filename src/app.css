@@ -4,6 +4,19 @@
 	--radius-sm: 4px;
 	--tap: 2.25rem;
 	--font: 'Schibsted Grotesk Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	/* Page column: content width and side padding (1.25rem on phones). */
+	--page-max: 77.5rem;
+	--gutter: 2.5rem;
+	/* Phone photo cards (ProjectCardLarge): light text over a dark veil, in both themes. */
+	--photo-veil: #10100e;
+	--photo-tag: rgb(255 255 255 / 0.16);
+	--photo-rule: rgb(255 255 255 / 0.2);
+	--on-photo: #ffffff;
+	--on-photo-soft: #f3f0e8;
+	--on-photo-body: #ece8df;
+	--on-photo-muted: #d6d1c6;
+	--on-photo-domain: #ffa58c;
+	--on-photo-award: #ffb59f;
 	color-scheme: dark;
 	--bg: #121210;
 	--surface: #1a1916;
@@ -197,10 +210,25 @@ main:focus {
 	color: var(--on-accent);
 }
 
+/* Brand logos (skills, contact): colour per theme, computed by logoColor into the inline
+   --logo-dark / --logo-light. Same theme selectors as the palette above. */
+.logo {
+	color: var(--logo-dark);
+}
+:root[data-theme='light'] .logo {
+	color: var(--logo-light);
+}
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme]) .logo {
+		color: var(--logo-light);
+	}
+}
+
 /* Phone (M10): shorter header bar, 17px text, narrower button padding. */
 @media (width < 48rem) {
 	:root {
 		--nav-h: 3.75rem;
+		--gutter: 1.25rem;
 	}
 	body {
 		font-size: 1.0625rem;

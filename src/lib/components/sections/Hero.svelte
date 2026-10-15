@@ -98,9 +98,9 @@
 
 <style>
 	.hero {
-		max-width: 77.5rem;
+		max-width: var(--page-max);
 		margin: 0 auto;
-		padding: calc(var(--nav-h) + 4rem) 2.5rem 6rem;
+		padding: calc(var(--nav-h) + 4rem) var(--gutter) 6rem;
 	}
 	/* Desktop: the hero fills the first screen, so About doesn't peek in above the fold. */
 	@media (width >= 48rem) {
@@ -214,7 +214,7 @@
 	/* Phone: name on two lines, then role, first pitch sentence, glance tiles, buttons. */
 	@media (width < 48rem) {
 		.hero {
-			padding: calc(var(--nav-h) + 1.75rem) 1.25rem 2.5rem;
+			padding: calc(var(--nav-h) + 1.75rem) var(--gutter) 2.5rem;
 		}
 		.available {
 			margin-bottom: 0.875rem;
