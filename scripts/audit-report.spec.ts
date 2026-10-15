@@ -34,16 +34,10 @@ describe('lighthouseChecks', () => {
 		expect(byCategory('desktop', summary({ seo: null })).seo.ok).toBe(false);
 	});
 
-	it('lets SEO pass as "pending domain" when only domain-bound audits fail', () => {
+	it('fails SEO when an audit fails, and names it', () => {
 		const c = byCategory('mobile', summary({ seo: 0.92 }, ['hreflang']));
-		expect(c.seo.ok).toBe(true);
-		expect(c.seo.detail).toBe('92 (pending domain: hreflang)');
-	});
-
-	it('fails SEO when any other audit fails too, and names them', () => {
-		const c = byCategory('mobile', summary({ seo: 0.83 }, ['hreflang', 'meta-description']));
 		expect(c.seo.ok).toBe(false);
-		expect(c.seo.detail).toBe('83 < 100 (failed: hreflang, meta-description)');
+		expect(c.seo.detail).toBe('92 < 100 (failed: hreflang)');
 	});
 });
 

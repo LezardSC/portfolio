@@ -10,7 +10,10 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: adapter()
+			adapter: adapter(),
+			// Absolute paths: `base` is then '' or '/sub', never '..', so absoluteUrl() gets a real path,
+			// and 404.html (served at any depth) still finds /_app/…
+			paths: { relative: false }
 		})
 	],
 	test: {
