@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-	durationLabel,
 	durationMonths,
 	hackathonsNewestFirst,
 	newestFirst,
@@ -128,13 +127,5 @@ describe('durationMonths', () => {
 	});
 	it('is 1 for a single month', () => {
 		expect(durationMonths('2024-03', '2024-03')).toBe(1);
-	});
-});
-
-describe('durationLabel', () => {
-	const forms = { one: '{n} month', other: '{n} months' };
-	it('uses the singular for 1 and the plural otherwise', () => {
-		expect(durationLabel(1, forms)).toBe('1 month');
-		expect(durationLabel(7, forms)).toBe('7 months');
 	});
 });

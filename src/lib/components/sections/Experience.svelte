@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { EDUCATION, HACKATHONS, JOBS } from '$lib/data/experience';
 	import { ICONS } from '$lib/data/icons';
-	import { hackathonsNewestFirst, localize, newestFirst, yearOf } from '$lib/experience';
+	import { hackathonsNewestFirst, newestFirst, yearOf } from '$lib/experience';
+	import { localize } from '$lib/i18n/lang';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { fill } from '$lib/i18n/format';
 	import EducationItem from '../experience/EducationItem.svelte';

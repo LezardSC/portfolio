@@ -15,9 +15,11 @@ export const fr: Dict = {
 		malt: 'Profil Malt',
 		maltShort: 'Malt',
 		glance: 'En bref',
-		glanceTally: '{wins}, {podiums}',
-		glanceWins: { one: '{n} victoire', other: '{n} victoires' },
-		glancePodiums: { one: '{n} podium', other: '{n} podiums' }
+		glanceText: {
+			tally: '{wins}, {podiums}',
+			wins: { one: '{n} victoire', other: '{n} victoires' },
+			podiums: { one: '{n} podium', other: '{n} podiums' }
+		}
 	},
 	about: {
 		photoAlt: 'Photo de Jocelyn Renault'
@@ -56,8 +58,7 @@ export const fr: Dict = {
 		private: 'Privé',
 		repo: 'Code source sur GitHub',
 		demo: 'Démo en ligne',
-		showMore: 'Voir les {n} autres projets',
-		showMoreOne: 'Voir 1 autre projet',
+		showMore: { one: 'Voir {n} autre projet', other: 'Voir les {n} autres projets' },
 		showFewer: 'Réduire la liste',
 		sourceCode: 'Code source',
 		code: 'Code',

@@ -1,4 +1,3 @@
-import { fill } from '$lib/i18n/format';
 import type { Lang, Localized } from '$lib/i18n/lang';
 
 /** 'YYYY-MM' */
@@ -55,10 +54,6 @@ export type Hackathon = {
 	/** `id` of the project in src/lib/data/projects.ts: its card then shows this result. */
 	projectId?: string;
 };
-
-export function localize(value: string | Localized, lang: Lang): string {
-	return typeof value === 'string' ? value : value[lang];
-}
 
 /** 'YYYY' stays as is; 'YYYY-MM' becomes "Jul 2025" / "juil. 2025". UTC, so the month never shifts. */
 function formatPoint(point: string, lang: Lang): string {
@@ -126,9 +121,4 @@ export function durationMonths(start: Month, end: Month): number {
 	const [y1, m1] = start.split('-').map(Number);
 	const [y2, m2] = end.split('-').map(Number);
 	return Math.max(1, (y2 - y1) * 12 + (m2 - m1));
-}
-
-/** "1 month" / "7 months" from the dictionary's `{n}` templates. */
-export function durationLabel(months: number, forms: { one: string; other: string }): string {
-	return fill(months === 1 ? forms.one : forms.other, { n: months });
 }
