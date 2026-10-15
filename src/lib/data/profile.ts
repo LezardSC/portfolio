@@ -44,7 +44,7 @@ export const PROFILE = typeset<Profile>({
 	bio: [
 		{
 			en: 'I got into programming for the money. Unfortunately, I ended up enjoying it.',
-			fr: "Je me suis mis au code pour l'argent. Problème : j'ai fini par aimer ça."
+			fr: "Au départ, j'ai appris à coder pour le salaire. Je ne pensais pas y prendre goût."
 		},
 		{
 			en: 'And it shows in my work. When a bug won’t go away, I track down its cause instead of working around it. When I’m handed a project, I own it end to end, from the database to the interface. And when the field is new to me, I get up to speed fast: that’s the part I enjoy most.',
