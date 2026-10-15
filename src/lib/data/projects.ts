@@ -13,7 +13,17 @@ const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
  * get the big cards (the first 5 on phones). Move a line to reorder. Every id must exist and not
  * be hidden (a test checks it).
  */
-export const PRIORITY: string[] = [];
+export const PRIORITY: string[] = [
+	'cross-emu',
+	'goldeneye',
+	'batontv',
+	'kayp',
+	'microcode',
+	'vigie',
+	'red-tetris',
+	'ft-transcendence',
+	'ft-irc'
+];
 
 /** Every project, hidden ones included. Order here doesn't matter: the page sorts them. */
 export const ALL_PROJECTS = typeset<Project[]>([
