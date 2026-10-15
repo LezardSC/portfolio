@@ -20,3 +20,6 @@ Things worth worrying about that are not fixed yet. Each entry: what, why it mat
 - **`light-dark()`** once iOS < 17.5 is negligible: the light palette in `src/app.css` could then be written once (today twice, kept equal by `theme-tokens.spec.ts`).
 - **The copy announcement uses one `requestAnimationFrame`** (`Contact.svelte`): a ~100 ms timeout is more reliable for some screen readers to repeat an identical message.
 - **Narrowing the window with focus on a desktop nav link** drops focus to `<body>` when the links hide below 48rem.
+- **`npm run screens` without `--compare` silently replaces an existing baseline.** A slip mid-refactor throws the reference away: warn when one exists, or require `--force`.
+- **`src/lib/data/icons.ts` header comment** still describes only category icons at a 1.5 stroke; `ICONS` now also holds interface icons drawn at the caller's stroke (2, 2.2).
+- **`projectLayout` tests** cover 0, 3, 6 and 13 projects: the exact-5 case (where the phone-only tiles start) would pin the boundary.
