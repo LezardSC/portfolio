@@ -4,8 +4,10 @@
  * themes, phone and desktop, no-JS), horizontal overflow at 360px, and Lighthouse
  * on /en/ (mobile and desktop). Prints a PASS/FAIL table, writes full reports to reports/,
  * and exits non-zero if anything failed. --screens also saves full-page screenshots.
+ * --ci: Lighthouse performance is reported, not required (CI machines are too noisy); the table
+ * also goes to the GitHub job summary.
  */
-import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import lighthouse from 'lighthouse';
 import desktopConfig from 'lighthouse/core/config/desktop-config.js';
@@ -30,6 +32,7 @@ const LANGS = ['en', 'fr'] as const;
 const THEMES = ['dark', 'light'] as const;
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 const SCREEN_WIDTHS = [360, 390, 768, 1024, 1440];
+const CI = process.argv.includes('--ci');
 
 async function axe(page: Page, label: string, file: string): Promise<Check> {
 	const { violations } = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
@@ -140,14 +143,18 @@ async function lighthouseChecksFor(): Promise<Check[]> {
 			writeFileSync(`${OUT}/lighthouse-${label}.json`, json);
 			const { categories, audits } = result.lhr;
 			checks.push(
-				...lighthouseChecks(label, {
-					scores: Object.fromEntries(
-						CATEGORIES.map((c) => [c, categories[c]?.score ?? null])
-					) as Record<Category, number | null>,
-					failedSeoAudits: (categories.seo?.auditRefs ?? [])
-						.filter((ref) => ref.weight > 0 && (audits[ref.id]?.score ?? 1) < 1)
-						.map((ref) => ref.id)
-				})
+				...lighthouseChecks(
+					label,
+					{
+						scores: Object.fromEntries(
+							CATEGORIES.map((c) => [c, categories[c]?.score ?? null])
+						) as Record<Category, number | null>,
+						failedSeoAudits: (categories.seo?.auditRefs ?? [])
+							.filter((ref) => ref.weight > 0 && (audits[ref.id]?.score ?? 1) < 1)
+							.map((ref) => ref.id)
+					},
+					CI ? ['performance'] : []
+				)
 			);
 		}
 		return checks;
@@ -176,6 +183,11 @@ async function main(): Promise<void> {
 		stop();
 	}
 	console.log(`\n${formatTable(checks)}\n\nFull reports in ${OUT}/`);
+	if (process.env.GITHUB_STEP_SUMMARY)
+		appendFileSync(
+			process.env.GITHUB_STEP_SUMMARY,
+			`### Audit\n\n\`\`\`\n${formatTable(checks)}\n\`\`\`\n`
+		);
 	process.exitCode = allPassed(checks) ? 0 : 1;
 }
 

@@ -19,13 +19,20 @@ export type LighthouseSummary = {
 
 const pct = (score: number) => String(Math.round(score * 100));
 
-export function lighthouseChecks(label: string, summary: LighthouseSummary): Check[] {
+/** `reportOnly` categories show their score but always pass (CI machines are too noisy for them). */
+export function lighthouseChecks(
+	label: string,
+	summary: LighthouseSummary,
+	reportOnly: readonly Category[] = []
+): Check[] {
 	return CATEGORIES.map((category) => {
 		const name = `Lighthouse ${label} ${category}`;
 		const score = summary.scores[category];
 		const target = CATEGORY_TARGETS[category];
 		if (score === null) return { name, ok: false, detail: 'no score' };
 		if (score >= target) return { name, ok: true, detail: pct(score) };
+		if (reportOnly.includes(category))
+			return { name, ok: true, detail: `${pct(score)} (report only, target ${pct(target)})` };
 		const failed = category === 'seo' ? summary.failedSeoAudits : [];
 		const suffix = failed.length > 0 ? ` (failed: ${failed.join(', ')})` : '';
 		return { name, ok: false, detail: `${pct(score)} < ${pct(target)}${suffix}` };
