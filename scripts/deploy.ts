@@ -22,6 +22,8 @@ import {
 
 const BUILD = 'build';
 const dryRun = process.argv.includes('--dry-run');
+/** Readable by the web server, writable only by this account (the server's default is 666). */
+const MODE = 0o644;
 
 function env(name: string): string {
 	const value = process.env[name];
@@ -49,9 +51,10 @@ async function remoteManifest(client: SftpClient, root: string): Promise<Manifes
 	}
 }
 
-/** Every file on the server under root, with its size. */
+/** Every file on the server under root, with its size; symbolic links are also added to `links`. */
 async function remoteFiles(
 	client: SftpClient,
+	links: Set<string>,
 	root: string,
 	sub = ''
 ): Promise<Record<string, number>> {
@@ -59,8 +62,11 @@ async function remoteFiles(
 	for (const entry of await client.list(sub ? `${root}/${sub}` : root)) {
 		if (entry.name === '.' || entry.name === '..') continue;
 		const path = sub ? `${sub}/${entry.name}` : entry.name;
-		if (entry.type === 'd') Object.assign(files, await remoteFiles(client, root, path));
-		else files[path] = entry.size;
+		if (entry.type === 'd') Object.assign(files, await remoteFiles(client, links, root, path));
+		else {
+			files[path] = entry.size;
+			if (entry.type === 'l') links.add(path);
+		}
 	}
 	return files;
 }
@@ -84,7 +90,8 @@ async function main(): Promise<void> {
 			hostVerifier: (key: Buffer) => hostKeyTrusted(key, trusted)
 		});
 		const root = await client.realPath(process.env.FTP_DIR || 'www');
-		const onServer = await remoteFiles(client, root);
+		const links = new Set<string>();
+		const onServer = await remoteFiles(client, links, root);
 		const localSizes = Object.fromEntries(listFiles(BUILD).map((f) => [f.path, f.size]));
 		const plan = planDeploy(local, await remoteManifest(client, root), Object.keys(onServer), {
 			local: localSizes,
@@ -107,10 +114,15 @@ async function main(): Promise<void> {
 				await client.mkdir(`${root}/${dir}`, true);
 				made.add(dir);
 			}
+			// OVH's placeholder index.html is a link to a file outside this account: writing
+			// through it fails ("No such file"), so the link goes and a real file takes its place.
+			if (links.has(path)) await client.delete(`${root}/${path}`);
 			await client.put(`${BUILD}/${path}`, `${root}/${path}`);
+			await client.chmod(`${root}/${path}`, MODE);
 			console.log(`  sent ${path}`);
 		}
 		await client.put(Buffer.from(JSON.stringify(local)), `${root}/${MANIFEST}`);
+		await client.chmod(`${root}/${MANIFEST}`, MODE);
 		for (const path of plan.deletes) await client.delete(`${root}/${path}`);
 		console.log('Deploy done.');
 	} finally {

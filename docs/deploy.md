@@ -23,7 +23,7 @@ In the OVH control panel, *Web Cloud*:
 4. **Hébergements → FTP - SSH:** note the FTP server (`ftp.clusterNNN.hosting.ovh.net`) and the login; set a password.
 5. Note here anything the free hosting turns out not to offer (an Apache module), found while setting it up.
 
-Found during setup (2026-10-15): the Multisite tab has no SSL column any more; both names already had a Let's Encrypt certificate. The hosting is on `cluster129`: FTP server `ftp.cluster129.hosting.ovh.net`. **FTPS is refused** ("500 This security scheme is not implemented") but **SFTP works** with the same login, so the deploy uses SFTP (port 22).
+Found during setup (2026-10-15): the Multisite tab has no SSL column any more; both names already had a Let's Encrypt certificate. The hosting is on `cluster129`: FTP server `ftp.cluster129.hosting.ovh.net`. **FTPS is refused** ("500 This security scheme is not implemented") but **SFTP works** with the same login, so the deploy uses SFTP (port 22). OVH's placeholder `index.html` is a symbolic link to a file outside the account: the deploy removes such a link before uploading a real file in its place. Uploaded files are set to `644` (the server's default is `666`).
 
 ## GitHub secrets
 
