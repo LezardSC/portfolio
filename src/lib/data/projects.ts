@@ -22,7 +22,16 @@ export const PRIORITY: string[] = [
 	'vigie',
 	'red-tetris',
 	'ft-transcendence',
-	'ft-irc'
+	'ft-irc',
+	'minishell',
+	'bahapad',
+	'cub3d',
+	'leaffliction',
+	'ft-hangouts',
+	'tokenizer',
+	'dslr',
+	'love-takedown',
+	'philosophers'
 ];
 
 /** Every project, hidden ones included. Order here doesn't matter: the page sorts them. */
