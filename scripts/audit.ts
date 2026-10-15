@@ -5,8 +5,7 @@
  * on /en/ (mobile and desktop). Prints a PASS/FAIL table, writes full reports to reports/,
  * and exits non-zero if anything failed. --screens also saves full-page screenshots.
  */
-import { execSync, spawn, type ChildProcess } from 'node:child_process';
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import lighthouse from 'lighthouse';
 import desktopConfig from 'lighthouse/core/config/desktop-config.js';
@@ -21,6 +20,7 @@ import {
 	type Category,
 	type Check
 } from './audit-report.ts';
+import { openCollapsibles, startPreview } from './preview.ts';
 
 const PORT = 4180;
 const DEBUG_PORT = 9223;
@@ -30,35 +30,6 @@ const LANGS = ['en', 'fr'] as const;
 const THEMES = ['dark', 'light'] as const;
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 const SCREEN_WIDTHS = [360, 390, 768, 1024, 1440];
-
-/**
- * Resolves once `vite preview` itself prints its URL. Polling the port instead could get an
- * answer from another server already on it (vite then exits on --strictPort), and audit that.
- */
-function waitForPreview(server: ChildProcess, timeoutMs = 30_000): Promise<void> {
-	return new Promise((resolve, reject) => {
-		let output = '';
-		const timer = setTimeout(
-			() => reject(new Error('vite preview did not start in time')),
-			timeoutMs
-		);
-		const onData = (chunk: Buffer) => {
-			output += chunk.toString();
-			if (output.includes(`:${PORT}`)) {
-				clearTimeout(timer);
-				resolve();
-			}
-		};
-		server.stdout?.on('data', onData);
-		server.stderr?.on('data', onData);
-		server.on('exit', (code) => {
-			clearTimeout(timer);
-			reject(
-				new Error(`vite preview exited (code ${code}); is port ${PORT} already in use?\n${output}`)
-			);
-		});
-	});
-}
 
 async function axe(page: Page, label: string, file: string): Promise<Check> {
 	const { violations } = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
@@ -90,10 +61,7 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 					);
 					checks.push(overflowCheck(label, overflow));
 					// Phone collapsibles: open each kind once, then check what they reveal.
-					await page.click('#about .read-more');
-					await page.click('#projects .show-more');
-					await page.locator('#skills .acc').nth(1).click();
-					await page.locator('#experience .rec').first().click();
+					await openCollapsibles(page);
 					checks.push(await axe(page, `${label} collapsibles open`, `${file}-open`));
 				}
 				await context.close();
@@ -171,17 +139,13 @@ async function lighthouseChecksFor(): Promise<Check[]> {
 }
 
 async function main(): Promise<void> {
-	rmSync(OUT, { recursive: true, force: true });
+	// Clear the previous audit, but keep the screenshot baseline of `npm run screens`.
 	mkdirSync(OUT, { recursive: true });
-	execSync('npm run build', { stdio: 'inherit' });
-	const server = spawn(
-		'./node_modules/.bin/vite',
-		['preview', '--port', String(PORT), '--strictPort'],
-		{ stdio: ['ignore', 'pipe', 'pipe'] }
-	);
+	for (const entry of readdirSync(OUT))
+		if (!entry.startsWith('screens-')) rmSync(`${OUT}/${entry}`, { recursive: true, force: true });
+	const stop = await startPreview(PORT);
 	let checks: Check[] = [];
 	try {
-		await waitForPreview(server);
 		const browser = await chromium.launch();
 		try {
 			checks = await browserChecks(browser);
@@ -191,7 +155,7 @@ async function main(): Promise<void> {
 		}
 		checks.push(...(await lighthouseChecksFor()));
 	} finally {
-		server.kill();
+		stop();
 	}
 	console.log(`\n${formatTable(checks)}\n\nFull reports in ${OUT}/`);
 	process.exitCode = allPassed(checks) ? 0 : 1;
