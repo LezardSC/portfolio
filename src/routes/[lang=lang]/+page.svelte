@@ -3,6 +3,7 @@
 	import { localeHref } from '$lib/i18n/lang';
 	import { alternates } from '$lib/seo';
 	import { absoluteUrl } from '$lib/site';
+	import { assetHref } from '$lib/paths';
 	import { THEME_BG } from '$lib/theme';
 	import Footer from '$lib/components/Footer.svelte';
 	import Nav from '$lib/components/Nav.svelte';
@@ -47,7 +48,13 @@
 	<Hero lang={data.lang} t={t.hero} newTab={t.newTab} />
 	<About lang={data.lang} title={t.sections.about} t={t.about} common={t.common} />
 	<Projects lang={data.lang} title={t.sections.projects} t={t.projects} />
-	<Skills lang={data.lang} title={t.sections.skills} t={t.skills} />
+	<Skills
+		lang={data.lang}
+		title={t.sections.skills}
+		t={t.skills}
+		groups={data.skills}
+		sprite={assetHref(base, data.logoSprite)}
+	/>
 	<Experience lang={data.lang} title={t.sections.experience} t={t.experience} newTab={t.newTab} />
 	<Contact lang={data.lang} title={t.sections.contact} t={t.contact} newTab={t.newTab} />
 </main>
