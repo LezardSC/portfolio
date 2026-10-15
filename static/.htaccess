@@ -26,10 +26,10 @@ ErrorDocument 404 /404.html
 </IfModule>
 
 <IfModule mod_headers.c>
-	# Caching: one week by default; HTML, sitemap and robots revalidate on every visit, so a
-	# deploy shows at once; hashed files under _app/immutable never change, so one year.
+	# Caching: one week by default; HTML, sitemap, robots and the CVs revalidate on every visit, so
+	# a deploy (or a new CV) shows at once; hashed files under _app/immutable never change: one year.
 	Header set Cache-Control "public, max-age=604800"
-	<FilesMatch "\.(html|xml|txt)$">
+	<FilesMatch "\.(html|xml|txt|pdf)$">
 		Header set Cache-Control "no-cache"
 	</FilesMatch>
 	<If "%{REQUEST_URI} =~ m#/_app/immutable/#">
