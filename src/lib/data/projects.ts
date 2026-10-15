@@ -134,6 +134,23 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		}
 	},
 	{
+		id: 'portfolio',
+		title: 'Portfolio',
+		description: {
+			en: 'This website, which I built to put an AI-assisted, spec-driven workflow into practice. I chose the design in Claude Design, wrote the spec and a plan per milestone, then had Claude Code implement each one, reviewing every pull request before merging.',
+			fr: "Ce site, que j'ai construit pour mettre en pratique un développement assisté par IA et piloté par les specs. J'ai choisi le design dans Claude Design, rédigé le cahier des charges et un plan par étape, puis fait implémenter chacune par Claude Code en relisant chaque pull request avant de la fusionner."
+		},
+		summary: {
+			en: 'This site: AI-assisted, spec-driven, every milestone reviewed through pull requests.',
+			fr: 'Ce site : assisté par IA, piloté par les specs, chaque étape relue via pull request.'
+		},
+		date: '2026-10',
+		context: 'personal',
+		domains: ['web'],
+		tech: ['Svelte 5', 'TypeScript', 'Claude Code', 'Claude Design'],
+		links: {}
+	},
+	{
 		id: 'kayp',
 		title: 'KAYP',
 		description: {
@@ -348,37 +365,24 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		id: 'libasm',
 		title: 'libasm',
 		description: {
-			en: 'Standard C functions (strlen, strcpy, strcmp, write, read, strdup) and linked-list helpers rewritten in x86-64 assembly with NASM, calling syscalls directly.',
-			fr: 'Des fonctions C standard (strlen, strcpy, strcmp, write, read, strdup) et des utilitaires de listes chaînées réécrits en assembleur x86-64 avec NASM, en appelant directement les syscalls.'
+			en: 'Part of the C standard library rewritten in x86-64 assembly with NASM, callable from C under the System V calling convention. Beyond string functions and syscall wrappers that set errno, it parses numbers in any base, and sorts and filters linked lists through comparison functions written in C.',
+			fr: "Une partie de la bibliothèque standard C réécrite en assembleur x86-64 avec NASM, appelable depuis le C selon la convention d'appel System V. Au-delà des fonctions de chaînes et des appels système qui renseignent errno, elle convertit des nombres dans n'importe quelle base, puis trie et filtre des listes chaînées via des fonctions de comparaison écrites en C."
 		},
 		summary: {
-			en: 'Standard C functions rewritten in x86-64 assembly.',
-			fr: 'Des fonctions C standard réécrites en assembleur x86-64.'
+			en: 'C library functions in x86-64 assembly, up to base conversion and list sorting.',
+			fr: "Des fonctions C en assembleur x86-64, jusqu'à la conversion de base et le tri de listes."
 		},
 		date: '2024-06',
 		context: 'school',
 		domains: ['low-level'],
 		tech: ['x86-64 Assembly', 'NASM', 'C'],
 		links: { repo: gh('42-libasm') },
-		hidden: true
-	},
-	{
-		id: 'confiture-de-jeu',
-		title: 'Confiture de Jeu #1',
-		description: {
-			en: 'A 48-hour game jam in Lyon on the theme “beware of appearances”: a platformer where the hero puts on a mask to reveal hidden platforms.',
-			fr: 'Une game jam de 48 h à Lyon sur le thème «\u00a0méfiez-vous des apparences\u00a0»\u00a0: un jeu de plateforme où le héros enfile un masque pour révéler des plateformes cachées.'
-		},
-		summary: {
-			en: 'A 48-hour platformer where a mask reveals hidden platforms.',
-			fr: 'Un jeu de plateforme en 48\u00a0h où un masque révèle des plateformes cachées.'
-		},
-		date: '2024-03',
-		context: 'hackathon',
-		domains: ['games'],
-		tech: ['C#', 'Unity'],
-		links: { repo: gh('GameJam-Confiture-de-jeu-1') },
-		hidden: true
+		media: {
+			kind: 'video',
+			src: 'projects/libasm/demo.mp4',
+			poster: 'projects/libasm/poster.webp',
+			phone: 'projects/libasm/phone.webp'
+		}
 	},
 	{
 		id: 'love-takedown',
