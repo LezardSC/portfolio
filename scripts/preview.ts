@@ -1,6 +1,11 @@
 import { execSync, spawn, type ChildProcess } from 'node:child_process';
 import type { Page } from 'playwright';
 
+/** True once vite's output shows its URL on `port`. Colour codes (on when CI is set) are ignored. */
+export function previewReady(output: string, port: number): boolean {
+	return new RegExp(`:${port}/`).test(output.replace(/\x1b\[[0-9;]*m/g, ''));
+}
+
 /**
  * Resolves once `vite preview` itself prints its URL. Polling the port instead could get an
  * answer from another server already on it (vite then exits on --strictPort), and test that.
@@ -14,7 +19,7 @@ function waitForPreview(server: ChildProcess, port: number, timeoutMs = 30_000):
 		);
 		const onData = (chunk: Buffer) => {
 			output += chunk.toString();
-			if (output.includes(`:${port}`)) {
+			if (previewReady(output, port)) {
 				clearTimeout(timer);
 				resolve();
 			}
