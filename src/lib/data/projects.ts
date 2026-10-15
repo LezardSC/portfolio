@@ -178,7 +178,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		title: 'Bahapad',
 		description: {
 			en: 'A token launchpad for the Bahamut blockchain, built in a team. A factory contract lets anyone deploy their own ERC-20 token with a name, symbol, supply, etc. The React app connects a wallet, creates tokens from a form, lists every token as it is launched and opens a Uniswap V2 liquidity pool so it can be traded.',
-			fr: "Un launchpad de tokens pour la blockchain Bahamut, développé en équipe. Un contrat factory permet à chacun de déployer son propre token ERC-20 avec nom, symbole, offre, etc. L'application React connecte un wallet, crée les tokens depuis un formulaire, liste chaque token dès son lancement et ouvre un pool de liquidité Uniswap V2 pour qu'il s'échange."
+			fr: "Un launchpad de tokens pour la blockchain Bahamut, développé en équipe. Un contrat factory permet à chacun de déployer son token ERC-20 avec nom, symbole, offre, etc. L'application React connecte un wallet, crée les tokens depuis un formulaire, liste chaque token à son lancement et ouvre un pool de liquidité Uniswap V2 pour qu'il s'échange."
 		},
 		summary: {
 			en: 'Launch your own ERC-20 token on Bahamut and open its liquidity pool in a few clicks.',
@@ -227,7 +227,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		title: 'GoldenEye - data augmentation',
 		description: {
 			en: 'From research papers, I implemented the most promising data augmentation techniques (cross-domain color transfer, sun glitter, box-aware CutMix) so a detector trained underwater could spot marine animals in aerial photos. A Bash pipeline tests each one on a GPU server: train a Faster R-CNN, score recall, resume after any crash.',
-			fr: "D'après des articles de recherche, j'ai implémenté les meilleures techniques d'augmentation de données (transfert de couleurs, reflets du soleil, CutMix adapté aux boîtes) pour qu'un détecteur entraîné sous l'eau repère les animaux marins en photo aérienne. Un pipeline Bash les teste sur serveur GPU : entraînement d'un Faster R-CNN, mesure du rappel, reprise après arrêt."
+			fr: "J'ai implémenté des techniques d'augmentation de données issues de la recherche (transfert de couleurs, reflets du soleil, CutMix adapté aux boîtes) pour qu'un détecteur entraîné sous l'eau repère les animaux marins vus du ciel. Un pipeline Bash les évalue sur GPU : entraînement d'un Faster R-CNN, mesure du rappel, reprise après arrêt."
 		},
 		summary: {
 			en: 'Teaching an AI trained on underwater photos to spot marine animals from the sky.',
@@ -274,7 +274,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		title: 'Altarian42',
 		description: {
 			en: "An ERC-20 token on Ethereum, designed to replace 42's wallet system: students earn it for projects and achievements, then spend it in the school shop, where it is burned. No staff member can create tokens alone: a reward is only paid once several of them approve it, and the total supply has a fixed limit.",
-			fr: "Un token ERC-20 sur Ethereum, pensé pour remplacer le porte-monnaie de 42 : les étudiants le gagnent avec leurs projets et leurs succès, puis le dépensent à la boutique de l'école, où il est brûlé. Aucun membre du staff ne peut créer de tokens seul : une récompense n'est versée qu'une fois approuvée par plusieurs d'entre eux, et l'offre totale est plafonnée."
+			fr: "Un token ERC-20 sur Ethereum, pensé pour remplacer le porte-monnaie de 42 : les étudiants le gagnent avec leurs projets et succès, puis le dépensent à la boutique de l'école, où il est brûlé. Aucun membre du staff ne peut créer de tokens seul : une récompense n'est versée qu'avec l'accord de plusieurs d'entre eux, et l'offre totale est plafonnée."
 		},
 		summary: {
 			en: "An Ethereum token for School 42's wallet, where every reward needs several staff approvals.",
@@ -366,7 +366,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		title: 'libasm',
 		description: {
 			en: 'Part of the C standard library rewritten in x86-64 assembly with NASM, callable from C under the System V calling convention. Beyond string functions and syscall wrappers that set errno, it parses numbers in any base, and sorts and filters linked lists through comparison functions written in C.',
-			fr: "Une partie de la bibliothèque standard C réécrite en assembleur x86-64 avec NASM, appelable depuis le C selon la convention d'appel System V. Au-delà des fonctions de chaînes et des appels système qui renseignent errno, elle convertit des nombres dans n'importe quelle base, puis trie et filtre des listes chaînées via des fonctions de comparaison écrites en C."
+			fr: "Une partie de la bibliothèque standard C réécrite en assembleur x86-64 avec NASM, appelable depuis le C selon la convention System V. Au-delà des fonctions de chaînes et des appels système qui renseignent errno, elle convertit des nombres en toute base, puis trie et filtre des listes chaînées via des fonctions de comparaison écrites en C."
 		},
 		summary: {
 			en: 'C library functions in x86-64 assembly, up to base conversion and list sorting.',
@@ -389,7 +389,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		title: 'Love Takedown',
 		description: {
 			en: 'A 72-hour game jam in Lyon on the random theme “Wrath of the love takedown”, in a team of six. Leaving a nightclub, you book a taxi on your phone and outrun a faceless crowd until it arrives: keep the phone in signal to follow its route, and unleash a Takedown when your adrenaline peaks.',
-			fr: 'Une game jam de 72\u00a0h à Lyon sur le thème tiré au sort «\u00a0Wrath of the love takedown\u00a0», en équipe de six. En sortant de boîte de nuit, on commande un taxi sur son téléphone et on fuit une foule sans visage jusqu’à son arrivée\u00a0: il faut garder du réseau pour suivre son trajet, et déclencher un Takedown quand l’adrénaline est au maximum.'
+			fr: 'Une game jam de 72\u00a0h à Lyon sur le thème tiré au sort «\u00a0Wrath of the love takedown\u00a0», en équipe de six. En sortant de boîte de nuit, on commande un taxi sur son téléphone et on fuit une foule sans visage jusqu’à son arrivée\u00a0: il faut garder du réseau pour suivre son trajet, et déclencher un Takedown au pic d’adrénaline.'
 		},
 		summary: {
 			en: 'A 72-hour jam game: outrun a crowd until your taxi arrives.',
@@ -438,7 +438,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		title: 'Cub3d',
 		description: {
 			en: 'A first-person 3D maze in the spirit of Wolfenstein 3D or Doom, built as a team in C on top of the MiniLibX, a bare-bones graphics library. The 3D view is drawn with raycasting: one ray per column of the screen, with a different texture for each side. Movement is smooth, and the map is parsed and validated before each game.',
-			fr: "Un labyrinthe 3D à la première personne dans l'esprit de Wolfenstein 3D ou Doom, développé en équipe en C sur la MiniLibX, une bibliothèque graphique minimaliste. La vue 3D est dessinée par raycasting : un rayon par colonne de l'écran, avec une texture différente pour chaque face. Les déplacements sont fluides, et la carte est parsée et validée avant chaque partie."
+			fr: "Un labyrinthe 3D à la première personne dans l'esprit de Wolfenstein 3D ou Doom, développé en équipe en C sur la MiniLibX, une bibliothèque graphique minimaliste. La vue 3D est dessinée par raycasting : un rayon par colonne d'écran, une texture par face de mur. Les déplacements sont fluides, et la carte est validée avant chaque partie."
 		},
 		summary: {
 			en: 'A first-person 3D maze in C, drawn with raycasting like Wolfenstein 3D or Doom.',
