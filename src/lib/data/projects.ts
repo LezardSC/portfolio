@@ -167,7 +167,12 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		context: 'personal',
 		domains: ['web'],
 		tech: ['Svelte 5', 'TypeScript', 'Claude Code', 'Claude Design'],
-		links: {}
+		links: { repo: gh('portfolio') },
+		media: {
+			kind: 'image',
+			src: 'projects/portfolio/cover.webp',
+			phone: 'projects/portfolio/phone.webp'
+		}
 	},
 	{
 		id: 'kayp',
