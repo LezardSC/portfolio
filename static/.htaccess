@@ -1,0 +1,65 @@
+# Apache config for the OVH hosting (copied into build/ by the build).
+# Every directive that needs a module is inside <IfModule>: a missing module drops that feature
+# instead of failing every request with a 500. No "Options" line: OVH may not allow it.
+# Locale paths (/en/, /fr/) are written here because this file has no access to base or LANGS;
+# src/lib/htaccess.spec.ts fails when lang.ts changes.
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	# 1. One canonical address: https, no www (a single 301). The host is taken from the request.
+	#    SERVER_PORT, not HTTPS: OVH's front proxy can hide HTTPS from Apache (OVH's own advice).
+	RewriteCond %{SERVER_PORT} ^80$ [OR]
+	RewriteCond %{HTTP_HOST} ^www\. [NC]
+	RewriteCond %{HTTP_HOST} ^(?:www\.)?([^:]+) [NC]
+	RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+	# 2. / → the visitor's language, like pickLang(): the first of en/fr in Accept-Language wins.
+	#    302 and not cached, so a visitor changing language preferences is not stuck. Absolute
+	#    https target: Apache behind the proxy may think the request is http (one hop saved).
+	#    The JS redirect page at / stays as the fallback when this does not run.
+	RewriteCond %{HTTP:Accept-Language} ^(?:\s*(?!(?:en|fr)(?![a-z]))[a-z*]{1,8}(?:-[a-z0-9]{1,8})*(?:\s*;\s*q=[0-9.]+)?\s*,)*\s*fr(?![a-z]) [NC]
+	RewriteRule ^$ https://%{HTTP_HOST}/fr/ [R=302,L,E=LANGREDIRECT:1]
+	RewriteRule ^$ https://%{HTTP_HOST}/en/ [R=302,L,E=LANGREDIRECT:1]
+</IfModule>
+
+<IfModule mod_headers.c>
+	# Caching: one week by default; HTML, sitemap and robots revalidate on every visit, so a
+	# deploy shows at once; hashed files under _app/immutable never change, so one year.
+	Header set Cache-Control "public, max-age=604800"
+	<FilesMatch "\.(html|xml|txt)$">
+		Header set Cache-Control "no-cache"
+	</FilesMatch>
+	<If "%{REQUEST_URI} =~ m#/_app/immutable/#">
+		Header set Cache-Control "public, max-age=31536000, immutable"
+	</If>
+	Header always set Cache-Control "no-cache" env=LANGREDIRECT
+	Header always merge Vary "Accept-Language" env=LANGREDIRECT
+
+	# Security headers. HSTS comes later, once HTTPS has run cleanly (docs/backlog.md).
+	Header always set X-Content-Type-Options "nosniff"
+	Header always set Referrer-Policy "strict-origin-when-cross-origin"
+	Header always set X-Frame-Options "DENY"
+	Header always set Content-Security-Policy "frame-ancestors 'none'"
+</IfModule>
+
+<IfModule mod_deflate.c>
+	<IfModule mod_filter.c>
+		AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml application/javascript text/javascript application/json image/svg+xml
+	</IfModule>
+</IfModule>
+
+<IfModule mod_mime.c>
+	AddType font/woff2 .woff2
+	AddType image/webp .webp
+	AddType video/webm .webm
+</IfModule>
+
+# The deploy manifest (file hashes) is for the deploy script, not for visitors.
+<IfModule mod_authz_core.c>
+	<Files ".deploy-manifest.json">
+		Require all denied
+	</Files>
+</IfModule>

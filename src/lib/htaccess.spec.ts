@@ -1,0 +1,48 @@
+import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
+import { LANGS, pickLang } from './i18n/lang';
+
+const htaccess = readFileSync(new URL('../../static/.htaccess', import.meta.url), 'utf8');
+
+/** The Accept-Language pattern of the `/` → /fr/ rule, as Apache (PCRE, [NC]) would apply it. */
+function frenchRule(): RegExp {
+	const line = htaccess.split('\n').find((l) => l.includes('RewriteCond %{HTTP:Accept-Language}'));
+	if (!line) throw new Error('no Accept-Language rule in static/.htaccess');
+	return new RegExp(line.trim().split(/\s+/)[2], 'i');
+}
+
+const headerPrefs = (h: string) =>
+	h
+		.split(',')
+		.map((part) => part.split(';')[0].trim())
+		.filter(Boolean);
+
+describe('static/.htaccess', () => {
+	it('redirects exactly the locales of lang.ts (update the rules when one is added)', () => {
+		expect(LANGS).toEqual(['en', 'fr']);
+		expect(htaccess).toContain('RewriteRule ^$ https://%{HTTP_HOST}/fr/ [R=302');
+		expect(htaccess).toContain('RewriteRule ^$ https://%{HTTP_HOST}/en/ [R=302');
+	});
+
+	it.each([
+		'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+		'en-US,en;q=0.9,fr;q=0.8',
+		'de-DE,de;q=0.9,fr;q=0.8',
+		'de-DE,es;q=0.9',
+		'FR',
+		'fr-CA',
+		'fry,fr;q=0.5',
+		'fry',
+		'*',
+		'',
+		'en-GB, fr'
+	])('chooses what pickLang chooses for "%s"', (header) => {
+		const htaccessLang = frenchRule().test(header) ? 'fr' : 'en';
+		expect(htaccessLang).toBe(pickLang(headerPrefs(header)));
+	});
+
+	it('serves the 404 page and hides the deploy manifest', () => {
+		expect(htaccess).toContain('ErrorDocument 404 /404.html');
+		expect(htaccess).toContain('.deploy-manifest.json');
+	});
+});
