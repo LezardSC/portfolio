@@ -366,7 +366,7 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		title: 'libasm',
 		description: {
 			en: 'Part of the C standard library rewritten in x86-64 assembly with NASM, callable from C under the System V calling convention. Beyond string functions and syscall wrappers that set errno, it parses numbers in any base, and sorts and filters linked lists through comparison functions written in C.',
-			fr: "Une partie de la bibliothèque standard C réécrite en assembleur x86-64 avec NASM, appelable depuis le C selon la convention System V. Au-delà des fonctions de chaînes et des appels système qui renseignent errno, elle convertit des nombres en toute base, puis trie et filtre des listes chaînées via des fonctions de comparaison écrites en C."
+			fr: 'Une partie de la bibliothèque standard C réécrite en assembleur x86-64 avec NASM, appelable depuis le C selon la convention System V. Au-delà des fonctions de chaînes et des appels système qui renseignent errno, elle convertit des nombres en toute base, puis trie et filtre des listes chaînées via des fonctions de comparaison écrites en C.'
 		},
 		summary: {
 			en: 'C library functions in x86-64 assembly, up to base conversion and list sorting.',
@@ -546,6 +546,29 @@ export const ALL_PROJECTS = typeset<Project[]>([
 			src: 'projects/red-tetris/demo.mp4',
 			poster: 'projects/red-tetris/poster.webp',
 			phone: 'projects/red-tetris/phone.webp'
+		}
+	},
+	{
+		id: 'batontv',
+		title: 'BatonTV',
+		description: {
+			en: 'A self-hosted media server at home: 16 Docker Compose services for streaming, library automation and HTTPS through a reverse proxy. The download client can only reach the internet through a WireGuard VPN, which acts as a kill switch, and a small script keeps its port in sync with the VPN. Video transcoding runs on the GPU.',
+			fr: "Un serveur multimédia auto-hébergé chez moi : 16 services Docker Compose pour le streaming, l'automatisation de la bibliothèque et le HTTPS via un reverse proxy. Le client de téléchargement ne sort que par un VPN WireGuard, qui sert de kill switch, et un petit script synchronise son port avec le VPN. Le transcodage vidéo passe par le GPU."
+		},
+		summary: {
+			en: 'A self-hosted media server: 16 Docker services, VPN-only downloads and GPU transcoding.',
+			fr: 'Un serveur multimédia auto-hébergé : 16 services Docker, VPN obligatoire et transcodage GPU.'
+		},
+		date: '2025-01',
+		context: 'personal',
+		domains: ['devops'],
+		tech: ['Docker Compose', 'WireGuard', 'Nginx', 'Linux', 'Shell', 'PostgreSQL'],
+		links: { repo: gh('batontv') },
+		media: {
+			kind: 'video',
+			src: 'projects/batontv/demo.mp4',
+			poster: 'projects/batontv/poster.webp',
+			phone: 'projects/batontv/phone.webp'
 		}
 	}
 ]);

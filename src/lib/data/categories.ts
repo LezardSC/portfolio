@@ -12,7 +12,8 @@ export const DOMAINS = typeset({
 	blockchain: { label: { en: 'Blockchain', fr: 'Blockchain' }, color: '#24408e', icon: ICONS.cube },
 	ai: { label: { en: 'AI', fr: 'IA' }, color: '#0b6e6e', icon: ICONS.sparkles },
 	'low-level': { label: { en: 'Low-level', fr: 'Bas niveau' }, color: '#c2391b', icon: ICONS.chip },
-	games: { label: { en: 'Games', fr: 'Jeux' }, color: '#7a2e5e', icon: ICONS.gamepad }
+	games: { label: { en: 'Games', fr: 'Jeux' }, color: '#7a2e5e', icon: ICONS.gamepad },
+	devops: { label: { en: 'DevOps', fr: 'DevOps' }, color: '#7a4f10', icon: ICONS.cycle }
 } satisfies Record<string, DomainDef>);
 export type Domain = keyof typeof DOMAINS;
 export const DOMAIN_IDS = Object.keys(DOMAINS) as Domain[];
