@@ -51,6 +51,7 @@ async function main(): Promise<void> {
 		await check('http → https', `http://${host}/en/`, 301, location(en)),
 		await check('www → bare domain', `https://www.${host}/en/`, 301, location(en)),
 		await check('sitemap', `${SITE_ORIGIN}/sitemap.xml`, 200),
+		await check('skill logos sprite', `${SITE_ORIGIN}/skill-logos.svg`, 200),
 		await check('404 page at depth', `${SITE_ORIGIN}/no/such/page/`, 404, (_r, body) =>
 			body.includes('noindex') && body.includes('/_app/immutable/') ? null : 'not the custom 404'
 		)

@@ -359,5 +359,6 @@ From the repo root:
 3. `npm run check`: catches typos in field names (`hiden: true` → "Did you mean to write 'hidden'?") and in category keys.
 4. `npm run dev`: look at the site (http://localhost:5173), on a narrow window too.
 5. Before publishing: `npm run audit` (accessibility and Lighthouse; reports in `reports/`).
+6. Publishing: open a PR. When it is merged into `master`, the site updates within minutes ([deploy.md](deploy.md)). `npm run budget` must pass: the whole build, media included, stays under 80 MB.
 
 Known issues not fixed yet are listed in [`docs/backlog.md`](backlog.md).

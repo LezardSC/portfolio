@@ -2,17 +2,18 @@
 
 Things worth worrying about that are not fixed yet. Each entry: what, why it matters, where it should be handled. Remove an entry when it is done.
 
-## Before or at deployment (M13)
+## Content
 
-- **The English CV is the French one.** `static/cv-en.pdf` and `static/cv-fr.pdf` are byte-identical, so English visitors download a French CV. Export an English CV (without the phone number) before going public.
-- **Absolute canonical / hreflang / `og:image` URLs.** Link previews and Lighthouse SEO (92 today, `hreflang`) need absolute URLs, which need the domain. One site-origin setting; `DOMAIN_PENDING_AUDITS` in `scripts/audit-report.ts` then goes.
-- **32 MB of project videos in git.** Every re-encode adds its full size to the history forever. Decide before deployment: keep in git, Git LFS, or host media outside the repo.
+- **Media in git and on OVH.** About 32 MB of the 100 MB hosting, almost all project videos; every re-encode adds its full size to the git history. `npm run budget` fails over 80 MB (CI and every deploy). Near the limit: re-encode, then consider hosting media outside the repo.
 
-## Performance (next milestone)
+## Hosting
 
-- **Lighthouse mobile performance 93–94 < 95** (desktop 100). FCP 2.1 s, LCP 2.9 s on simulated slow 4G + 4× CPU; TBT 10 ms, CLS 0. Look at render-blocking CSS and font (the font preload is in place; inline critical CSS?) and the LCP element. Report: `reports/lighthouse-mobile.html` after `npm run audit`.
-- **Each page ships both languages' content in its JS** (page node about 66 KB gzipped, `{ en, fr }` everywhere). Fine at this size; revisit if content grows a lot.
-- **simple-icons objects ship whole** (title, slug, an `svg` getter) where only `{ path, hex }` is used: a few KB of the page JS.
+- **HSTS** (`Strict-Transport-Security`) in `static/.htaccess` once HTTPS has run cleanly for a few weeks: hard to undo (browsers refuse plain http for the max-age), so not set in M13.
+- **What the free hosting really offers** (FTPS, `mod_headers`, `mod_deflate`) is only known after the first deploy: if the smoke check or `curl -I` shows a missing header, note it in `docs/deploy.md` and here.
+
+## Performance
+
+- **Each page ships both languages' content in its JS** (page node 31 KB gzipped since M13 moved the skill logos into `skill-logos.svg`; about 5-10 KB of it is the other language). Mobile Lighthouse is 97 without it; revisit only if content grows a lot.
 
 ## Later
 
