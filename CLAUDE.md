@@ -10,10 +10,12 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 
 - `npm run dev`: dev server
 - `npm test`: Vitest unit tests
-- `npm run check`: svelte-check (type check)
+- `npm run check`: svelte-check (type check), plus `tsc -p scripts` for the Node scripts in `scripts/`
 - `npm run lint` / `npm run format`: Prettier
 - `npm run build`, then `npm run preview`: static site in `build/`, served at http://localhost:4173
 - `npm run audit`: builds, serves, then runs axe (EN/FR × dark/light × 360/1280px, menu open, before hydration), a 360px overflow check and Lighthouse (mobile + desktop). Targets: 0 axe violations, Lighthouse 100 (Performance ≥ 95). Reports in `reports/` (git-ignored); `npm run audit -- --screens` also saves screenshots at 360–1440px. Not `npm audit`, which is npm's own security audit.
+- `npm run screens`: builds, then captures the site (EN/FR × dark/light × 360–1440px, phone collapsibles open, before hydration; 25 full pages) into `reports/screens-baseline/`. `npm run screens -- --compare` captures again and compares pixel by pixel, writing diff images to `reports/screens-diff/` (exit 1 on any difference). Take the baseline before a refactor, compare after each step.
+- `npm run og`: regenerates the share images and icons in `static/` (loads the data through Vite).
 
 ## Conventions
 
@@ -28,6 +30,9 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - Put logic in pure functions with unit tests (`*.spec.ts` next to the file). Keep components thin.
 - `docs/` and `.superpowers/` are in `.prettierignore`, so docs are never reformatted.
 - How to edit each kind of content is documented in `docs/content-guide.md`; keep it in sync when a data type or file changes.
+- Breakpoints live in `src/lib/breakpoints.ts`; every `@media` width must be one of them (a test checks). Shared colours and sizes are tokens in `src/app.css` (`--page-max`, `--gutter`, `--on-photo-*`…); line icons are path strings in `ICONS` (`src/lib/data/icons.ts`) drawn by `Icon.svelte`.
+- Both light palettes in `src/app.css` (with JS: `[data-theme='light']`; without: `prefers-color-scheme`) must stay identical; `theme-tokens.spec.ts` checks it.
+- Watch list: `docs/backlog.md` holds known issues not fixed yet. Add to it rather than leaving a note in a session; remove an entry when it is done.
 
 ## Workflow (superpowers plugin)
 
