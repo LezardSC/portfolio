@@ -115,11 +115,18 @@ async function lighthouseChecksFor(): Promise<Check[]> {
 		for (const [label, config] of runs) {
 			const result = await lighthouse(
 				`${ORIGIN}/en/`,
-				{ port: DEBUG_PORT, output: 'html', logLevel: 'error', onlyCategories: CATEGORIES },
+				{
+					port: DEBUG_PORT,
+					output: ['html', 'json'],
+					logLevel: 'error',
+					onlyCategories: CATEGORIES
+				},
 				config
 			);
 			if (!result) throw new Error(`Lighthouse ${label} returned no result`);
-			writeFileSync(`${OUT}/lighthouse-${label}.html`, String(result.report));
+			const [html, json] = result.report as string[];
+			writeFileSync(`${OUT}/lighthouse-${label}.html`, html);
+			writeFileSync(`${OUT}/lighthouse-${label}.json`, json);
 			const { categories, audits } = result.lhr;
 			checks.push(
 				...lighthouseChecks(label, {
