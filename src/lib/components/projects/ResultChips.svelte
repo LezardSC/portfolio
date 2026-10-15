@@ -59,7 +59,8 @@
 	}
 	.chip.win {
 		background: var(--tint);
-		color: var(--accent);
+		/* Plain accent on the tint is 4.33:1 in light; a touch of text colour makes it 4.84:1. */
+		color: color-mix(in srgb, var(--accent) 92%, var(--text));
 	}
 	.chip :global(svg) {
 		flex: none;
