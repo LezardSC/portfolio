@@ -7,13 +7,13 @@ import { ICONS } from './icons';
  * label and colour of its card). Add a line here and filters, cards and tiles follow.
  */
 export const DOMAINS = typeset({
-	web: { label: { en: 'Web', fr: 'Web' }, color: '#5b3fa0', icon: ICONS.code },
-	mobile: { label: { en: 'Mobile', fr: 'Mobile' }, color: '#2e6b34', icon: ICONS.phone },
-	blockchain: { label: { en: 'Blockchain', fr: 'Blockchain' }, color: '#24408e', icon: ICONS.cube },
-	ai: { label: { en: 'AI', fr: 'IA' }, color: '#0b6e6e', icon: ICONS.sparkles },
 	'low-level': { label: { en: 'Low-level', fr: 'Bas niveau' }, color: '#c2391b', icon: ICONS.chip },
+	web: { label: { en: 'Web', fr: 'Web' }, color: '#5b3fa0', icon: ICONS.code },
+	devops: { label: { en: 'DevOps', fr: 'DevOps' }, color: '#7a4f10', icon: ICONS.cycle },
+	ai: { label: { en: 'AI', fr: 'IA' }, color: '#0b6e6e', icon: ICONS.sparkles },
+	blockchain: { label: { en: 'Blockchain', fr: 'Blockchain' }, color: '#24408e', icon: ICONS.cube },
 	games: { label: { en: 'Games', fr: 'Jeux' }, color: '#7a2e5e', icon: ICONS.gamepad },
-	devops: { label: { en: 'DevOps', fr: 'DevOps' }, color: '#7a4f10', icon: ICONS.cycle }
+	mobile: { label: { en: 'Mobile', fr: 'Mobile' }, color: '#2e6b34', icon: ICONS.phone }
 } satisfies Record<string, DomainDef>);
 export type Domain = keyof typeof DOMAINS;
 export const DOMAIN_IDS = Object.keys(DOMAINS) as Domain[];
