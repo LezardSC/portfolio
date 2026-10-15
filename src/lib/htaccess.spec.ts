@@ -41,6 +41,14 @@ describe('static/.htaccess', () => {
 		expect(htaccessLang).toBe(pickLang(headerPrefs(header)));
 	});
 
+	it('revalidates pages and the CVs on every visit (an updated CV must not be served stale)', () => {
+		const rule = htaccess.match(/<FilesMatch "([^"]+)">\s*Header set Cache-Control "no-cache"/);
+		const noCache = new RegExp(rule?.[1] ?? '^$');
+		for (const file of ['index.html', 'sitemap.xml', 'robots.txt', 'cv-en.pdf', 'cv-fr.pdf'])
+			expect(noCache.test(file), file).toBe(true);
+		expect(noCache.test('photo.jpg')).toBe(false);
+	});
+
 	it('serves the 404 page and hides the deploy manifest', () => {
 		expect(htaccess).toContain('ErrorDocument 404 /404.html');
 		expect(htaccess).toContain('.deploy-manifest.json');

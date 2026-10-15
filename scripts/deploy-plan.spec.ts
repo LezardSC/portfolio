@@ -42,4 +42,17 @@ describe('planDeploy', () => {
 		]);
 		expect(plan.deletes).toEqual(['old.js', 'x/old.png']);
 	});
+
+	it('uploads a file whose size on the server differs, even when the manifest agrees', () => {
+		const plan = planDeploy(
+			{ 'en/index.html': 'h1' },
+			{ 'en/index.html': 'h1' },
+			['en/index.html'],
+			{
+				local: { 'en/index.html': 100 },
+				remote: { 'en/index.html': 90 }
+			}
+		);
+		expect(plan.uploads).toEqual(['en/index.html']);
+	});
 });

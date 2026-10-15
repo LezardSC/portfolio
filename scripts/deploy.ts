@@ -50,13 +50,18 @@ async function remoteManifest(client: Client, root: string): Promise<Manifest> {
 	}
 }
 
-async function remoteFiles(client: Client, root: string, sub = ''): Promise<string[]> {
-	const files: string[] = [];
+/** Every file on the server under root, with its size. */
+async function remoteFiles(
+	client: Client,
+	root: string,
+	sub = ''
+): Promise<Record<string, number>> {
+	const files: Record<string, number> = {};
 	for (const entry of await client.list(sub ? `${root}/${sub}` : root)) {
 		if (entry.name === '.' || entry.name === '..') continue;
 		const path = sub ? `${sub}/${entry.name}` : entry.name;
-		if (entry.isDirectory) files.push(...(await remoteFiles(client, root, path)));
-		else files.push(path);
+		if (entry.isDirectory) Object.assign(files, await remoteFiles(client, root, path));
+		else files[path] = entry.size;
 	}
 	return files;
 }
@@ -78,17 +83,22 @@ async function main(): Promise<void> {
 		});
 		await client.cd(process.env.FTP_DIR || 'www');
 		const root = await client.pwd();
-		const plan = planDeploy(
-			local,
-			await remoteManifest(client, root),
-			await remoteFiles(client, root)
-		);
+		const onServer = await remoteFiles(client, root);
+		const localSizes = Object.fromEntries(listFiles(BUILD).map((f) => [f.path, f.size]));
+		const plan = planDeploy(local, await remoteManifest(client, root), Object.keys(onServer), {
+			local: localSizes,
+			remote: onServer
+		});
 		console.log(`\n${plan.uploads.length} to upload, ${plan.deletes.length} to delete (${root})`);
 		for (const path of plan.deletes) console.log(`  delete ${path}`);
 		if (dryRun) {
 			for (const path of plan.uploads) console.log(`  upload ${path}`);
 			return;
 		}
+		// The old manifest goes first: if this deploy is cut off, the next one finds none and
+		// sends everything, instead of trusting a manifest that no longer describes the server.
+		if (MANIFEST in onServer && plan.uploads.length + plan.deletes.length > 0)
+			await client.remove(`${root}/${MANIFEST}`);
 		// ensureDir() changes the working directory; every path here is absolute from root.
 		const made = new Set<string>();
 		for (const path of plan.uploads) {
