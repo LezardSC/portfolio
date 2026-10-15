@@ -11,7 +11,7 @@ Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, buil
 | Framework | SvelteKit (Svelte 5 runes) + `@sveltejs/adapter-static`, fully prerendered, TypeScript |
 | Languages | EN + FR toggle; routes `/en`, `/fr` |
 | Theme | Dark + light toggle, defaults to system preference |
-| Hosting | Plain static output, host-agnostic. Plan (2026-10-01): OVH domain, self-hosted on the home server first, a real server later - its own milestone (M11) once the site is polished |
+| Hosting | Plain static output, host-agnostic. OVH free hosting (100 MB, Apache, FTP) at `jocelynrenault.com`, deployed by GitHub Actions on merge to `master` (M13) |
 | Project click | Icon links (GitHub / demo) + clickable media, new tab; no detail pages/modals. Private projects have no link |
 | Sections | Hero, About, Projects, Skills, Experience/Education, Contact |
 | Filtering | Two combinable single-select chip groups: Context × Domain + sort |
@@ -689,6 +689,71 @@ Commit 9eec576 removed about 400 lines of tests and the test-only helpers `mixHe
 - `npm run screens -- --compare` after every task: no difference except the two approved exceptions (only in the captures where they appear).
 - `npm run audit` at the end: 0 axe violations, no overflow at 360px, Lighthouse as before (desktop 100; mobile performance unchanged, tracked on the watch list).
 
+## Milestone 13 - Deployment
+_Settled during Milestone 13 brainstorming (2026-10-15)._
+
+**Goal.** Put the site online at `https://jocelynrenault.com`, so that only checked code can ever reach it: every PR is tested, `master` is protected, and a merge into `master` deploys automatically. Before the first deploy, mobile Lighthouse performance reaches 95 and the absolute SEO URLs are in place.
+
+**Decisions.**
+- **Hosting:** the OVH free hosting that comes with the domain (*Hébergement gratuit*, "start100M"): Apache with `.htaccess`, **100 MB** of disk, FTP access, free Let's Encrypt SSL. It replaces the earlier "home server first" plan. Exact options (FTPS, `mod_rewrite`, `mod_headers`, `mod_deflate`) are confirmed in the OVH docs and on the account during the setup; whatever is missing degrades as written below, never silently.
+- **Canonical host:** the bare domain `jocelynrenault.com`; `www` and `http` redirect to it (301).
+- **Media stays in git and on OVH** (32 MB of the 33 MB build today). A **80 MB build budget** is enforced by CI and the deploy; external media hosting is reconsidered only when the budget gets close.
+- **Deploy is automatic on merge** (GitHub Actions), with a manual `npm run deploy` fallback using the same script.
+- **Contact email unchanged:** `jocelynrenaultpro@gmail.com` (the CVs print it). The Zimbra box on the domain is not used by the site.
+- **Lighthouse in CI:** accessibility, best-practices and SEO must be 100 and block the merge; performance is reported in the job summary only (CI machines are too noisy to block on it). The ≥ 95 performance target is checked locally (3 consecutive mobile runs) in this milestone.
+
+### Site origin and SEO
+- `src/lib/site.ts` exports `SITE_ORIGIN = 'https://jocelynrenault.com'`, the only place the domain is written; absolute URLs are `SITE_ORIGIN` + `base` + path, so a sub-path still works. CLAUDE.md gets the rule.
+- `/en/` and `/fr/`: `<link rel="canonical">` to themselves; absolute `hreflang` alternates `en`, `fr` and `x-default` (→ `/`); absolute `og:url` and `og:image` (`og-en.png` / `og-fr.png`).
+- A prerendered `sitemap.xml` (both locales, with `xhtml:link` alternates) and a `Sitemap:` line in `robots.txt`.
+- `DOMAIN_PENDING_AUDITS` and its handling are removed from `scripts/audit-report.ts`: Lighthouse SEO must be 100.
+
+### 404 page
+A prerendered `404.html` at the build root, in the site's style, bilingual (English and French on the same page, since the URL gives no language), with links to `/en/` and `/fr/`, `noindex`. Served by `ErrorDocument 404` with absolute asset URLs, so it works at any depth.
+
+### Server config (`static/.htaccess`)
+- **Redirects:** `http` → `https` and `www` → bare domain, one 301 each (`mod_rewrite`).
+- **Language on `/`:** a 302 to `/fr/` when `Accept-Language` prefers French, else `/en/`, with `Vary: Accept-Language`. The existing JS redirect page stays as the fallback if the rule does not run.
+- **Caching:** `_app/immutable/*` one year, `immutable`; HTML `no-cache`; images, videos, PDFs and fonts outside `_app` one week.
+- **Compression:** `mod_deflate` for HTML, CSS, JS, SVG, JSON, XML, text.
+- **Security headers:** `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY` and `Content-Security-Policy: frame-ancestors 'none'`. **HSTS is not set in this milestone** (hard to undo); it is added to the watch list for once HTTPS has run cleanly.
+- Every directive that needs a module sits in `<IfModule>`, so a missing module drops that feature instead of returning 500.
+- A unit test checks the language rule names exactly the locales of `lang.ts`.
+
+### Performance (mobile ≥ 95)
+Today FCP 2.1 s, LCP 2.9 s (simulated slow 4G, 4× CPU); TBT and CLS fine. Measure first, then try in order, keeping only what helps:
+1. Render-blocking CSS (37 + 4 KB): inline it with SvelteKit's `inlineStyleThreshold`.
+2. Font: the preloaded file is the one used above the fold; `font-display` and fallback metrics do not delay first paint.
+3. The mobile LCP element does not wait on JS or a lazy image.
+4. The audit server compresses like Apache, so the local score predicts production.
+
+Done: 3 consecutive local mobile runs ≥ 95, desktop 100, `npm run screens -- --compare` unchanged (any difference shown to Jocelyn for approval). After the first deploy, a PageSpeed Insights run on the real URL goes into the review guide.
+
+### CI (`.github/workflows/ci.yml`)
+On every PR to `master` and every push to `master`: Node 24 (`.nvmrc`), `npm ci` (cached), `lint`, `check`, `test`, `build`, the **size budget** (`scripts/budget.ts`: fails over 80 MB and lists the ten largest files), then `npm run audit -- --ci`: axe and the 360px overflow check block; Lighthouse accessibility, best-practices and SEO = 100 block; performance scores go to the job summary. Reports are uploaded as a workflow artifact.
+
+**Branch protection on `master`** (`gh api`): the CI check is required, changes go through PRs, no force-push, no deletion, administrators included; no required approvals (single author).
+
+### Deploy (`.github/workflows/deploy.yml`, `scripts/deploy.ts`)
+- Triggered by a successful CI run on `master` (`workflow_run`, checking the run's conclusion and commit) and by hand (`workflow_dispatch`, which runs lint, check, test and the budget first); one at a time (`concurrency`); builds the same commit again and checks the budget.
+- `scripts/deploy.ts` (dependency `basic-ftp`, works on Linux and Mac): compares `build/` with the server (size + a manifest of hashes kept on the server), uploads new and changed files with **HTML last**, deletes stale files **at the end**, so no visitor gets a page pointing at a missing asset. FTPS if the hosting accepts it, else plain FTP (noted in `docs/deploy.md`). `--dry-run` prints the plan.
+- Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD` in GitHub, entered by Jocelyn. `npm run deploy` reads the same names from an untracked `.env.deploy`.
+- **Smoke check** after upload (`scripts/smoke.ts`): `/en/` and `/fr/` 200 with the right canonical, `/` 302 to a locale, `www` and `http` 301, one hashed asset 200 with the long cache header, an unknown URL 404 with the custom page. A failure turns the job red (GitHub emails).
+- **Rollback:** revert the PR; the revert merge deploys the previous state.
+
+### Setup done by Jocelyn (checklist in `docs/deploy.md`)
+DNS of the apex and `www` pointing to the hosting; Let's Encrypt SSL turned on; FTP password set; the three GitHub secrets; branch protection applied (Claude can run the `gh api` call). The first real deploy is the merge of the M13 PR, after the review.
+
+### Watch list and docs
+- `docs/backlog.md`: remove the English CV entry (done in bc6e2f2), the absolute URLs entry and the mobile performance entry; replace the videos entry with "media in git and on OVH, 80 MB budget enforced; revisit near the limit"; add HSTS. `PRIORITY` stays (Jocelyn's, not blocking).
+- `CLAUDE.md`: commands (`deploy`, CI, budget), the site-origin rule, "merging to `master` deploys", branch protection. `docs/content-guide.md`: how changes get published, the size budget. New `docs/deploy.md`: OVH and GitHub setup, manual deploy, rollback.
+
+### Tests and verification
+- **Unit:** absolute URL helper (with and without `base`); sitemap content; `.htaccess` locales = `LANGS`; budget (over / under, largest-files list); deploy plan (new, changed, stale files; HTML ordered last; stale deletes last).
+- `npm test`, `npm run check`, `npm run lint`, `npm run build` clean; `npm run screens -- --compare` unchanged except approved performance-related differences.
+- `npm run audit`: 0 axe violations, no 360px overflow, Lighthouse desktop 100, mobile ≥ 95 three runs in a row, SEO 100 with no pending audits.
+- CI green on the M13 PR (it runs the new workflow on itself); `deploy.ts --dry-run` against the real server once the credentials exist; the smoke check after the first deploy.
+
 ## Testing
 - Vitest: `filterProjects` / counts / sort / tiers / `primaryLink`; project data integrity (unique ids, `YYYY-MM` dates, ≥1 project per context, media files exist); `skillName` and skill data integrity; `formatPeriod` / sorting and experience data integrity; i18n completeness (fr keys == en keys).
 - `svelte-check` clean.
@@ -707,7 +772,7 @@ Commit 9eec576 removed about 400 lines of tests and the test-only helpers `mixHe
 10. **Phone design** - the same pass for phones, once the desktop version is settled (see "Milestone 10 - Phone design"): sticky header with a Contact button (no burger), compact hero tiles, folded About, blurred-photo featured cards, domain-tinted project tiles with one-sentence summaries, skills accordion, collapsed recommendations, compact contact.
 11. **Content-ready refactor** - see "Milestone 11 - Content-ready refactor": each category (domain, context, skill group) defined in one entry, featured list, hidden projects, optional phone images, derived glance rows, automatic French typography, editing guide `docs/content-guide.md`. No visible change.
 12. **Pre-deploy refactor** - see "Milestone 12 - Pre-deploy refactor": shared tokens and icons, helpers in their right module, grid logic tested outside the component, dead code removed, screenshot comparison script, watch list `docs/backlog.md`. Invisible except two approved icon fixes.
-13. **Deployment** - OVH domain, self-hosted on the home server; absolute canonical/hreflang/OG URLs from one site-origin setting.
+13. **Deployment** - see "Milestone 13 - Deployment": OVH free hosting at `jocelynrenault.com`, absolute canonical/hreflang/OG URLs from one site origin, `.htaccess`, 404 page, mobile performance ≥ 95, CI with branch protection, automatic FTP deploy on merge.
 
 ## Next steps after approval
 1. `git init` in `/home/lezard/portfolio`, save this spec to `docs/superpowers/specs/2026-09-23-portfolio-design.md`, commit.
