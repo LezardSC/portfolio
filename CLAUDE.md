@@ -16,6 +16,10 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - `npm run audit`: builds, serves, then runs axe (EN/FR × dark/light × 360/1280px, menu open, before hydration), a 360px overflow check and Lighthouse (mobile + desktop). Targets: 0 axe violations, Lighthouse 100 (Performance ≥ 95). Reports in `reports/` (git-ignored); `npm run audit -- --screens` also saves screenshots at 360–1440px. Not `npm audit`, which is npm's own security audit.
 - `npm run screens`: builds, then captures the site (EN/FR × dark/light × 360–1440px, phone collapsibles open, before hydration; 25 full pages) into `reports/screens-baseline/`. `npm run screens -- --compare` captures again and compares pixel by pixel, writing diff images to `reports/screens-diff/` (exit 1 on any difference). Take the baseline before a refactor, compare after each step.
 - `npm run og`: regenerates the share images and icons in `static/` (loads the data through Vite).
+- `npm run budget`: fails when `build/` is over 80 MB (the OVH hosting has 100) and lists the largest files.
+- `npm run deploy [-- --dry-run]`: FTP(S) upload of `build/` (only changed files; reads `.env.deploy`). Normally CI does it on merge: see `docs/deploy.md`.
+- `npm run smoke`: checks the live site (redirects, canonical, caching, 404).
+- `npm run audit -- --ci`: as in CI, Lighthouse performance is reported, not required.
 
 ## Conventions
 
@@ -31,6 +35,9 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - `docs/` and `.superpowers/` are in `.prettierignore`, so docs are never reformatted.
 - How to edit each kind of content is documented in `docs/content-guide.md`; keep it in sync when a data type or file changes.
 - Breakpoints live in `src/lib/breakpoints.ts`; every `@media` width must be one of them (a test checks). Shared colours and sizes are tokens in `src/app.css` (`--page-max`, `--gutter`, `--on-photo-*`…); line icons are path strings in `ICONS` (`src/lib/data/icons.ts`) drawn by `Icon.svelte`.
+- The domain lives only in `src/lib/site.ts` (`SITE_ORIGIN`); absolute URLs come from `absoluteUrl(base, path)`. Asset paths are absolute (`paths.relative: false`), so the 404 page works at any depth.
+- `static/.htaccess` is the Apache config (redirects, language on `/`, caching, headers). It hardcodes the locale paths; `htaccess.spec.ts` fails when `lang.ts` changes.
+- Skill logos are not in the page JS: `+page.server.ts` sends each logo's id and colour, and `skill-logos.svg` (prerendered from `SKILL_GROUPS`) holds the drawings. Editing skills is unchanged.
 - Both light palettes in `src/app.css` (with JS: `[data-theme='light']`; without: `prefers-color-scheme`) must stay identical; `theme-tokens.spec.ts` checks it.
 - Watch list: `docs/backlog.md` holds known issues not fixed yet. Add to it rather than leaving a note in a session; remove an entry when it is done.
 
@@ -47,6 +54,7 @@ The user builds this **one milestone at a time** and reviews each one before the
 ## Git notes
 
 - Remote: `origin` = `git@github.com:LezardSC/portfolio.git`, default branch `master`.
+- `master` is protected: changes go through a PR whose CI job `checks` passed (admins included, no force-push). **Merging deploys the site** to https://jocelynrenault.com (`docs/deploy.md`). The repo is public: never commit credentials.
 - Worktrees live in `.claude/worktrees/<name>`, with local branch `worktree-<name>`. The remote branch is `<name>`, so push with
   `git push origin worktree-<name>:<name>`, because a plain `git push` is refused (the names differ).
 
