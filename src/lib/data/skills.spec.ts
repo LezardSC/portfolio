@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { LANGS } from '$lib/i18n/lang';
-import { skillName } from '$lib/skills';
+import { localize } from '$lib/i18n/lang';
 import { isIconPath } from './icons';
 import { SKILL_GROUPS } from './skills';
 
@@ -25,7 +25,7 @@ describe('skill data', () => {
 
 	it('lists each skill at most once per group', () => {
 		for (const group of SKILL_GROUPS) {
-			const names = group.skills.map((s) => skillName(s, 'en').toLowerCase());
+			const names = group.skills.map((s) => localize(s.name, 'en').toLowerCase());
 			const dupes = names.filter((n, i) => names.indexOf(n) !== i);
 			expect(dupes, group.id).toEqual([]);
 		}
@@ -37,20 +37,22 @@ describe('skill data', () => {
 				expect(group.title[lang].trim(), group.id).not.toBe('');
 				expect(group.description[lang].trim(), `${group.id} description`).not.toBe('');
 				for (const skill of group.skills)
-					expect(skillName(skill, lang).trim(), JSON.stringify(skill.name)).not.toBe('');
+					expect(localize(skill.name, lang).trim(), JSON.stringify(skill.name)).not.toBe('');
 			}
 		}
 	});
 
 	it('gives every skill a well-formed SVG path', () => {
-		const bad = allSkills.filter((s) => !isIconPath(s.icon.path)).map((s) => skillName(s, 'en'));
+		const bad = allSkills
+			.filter((s) => !isIconPath(s.icon.path))
+			.map((s) => localize(s.name, 'en'));
 		expect(bad).toEqual([]);
 	});
 
 	it('gives every skill a brand colour as 6 hex digits without #', () => {
 		const bad = allSkills
 			.filter((s) => !/^[0-9A-F]{6}$/i.test(s.icon.hex))
-			.map((s) => skillName(s, 'en'));
+			.map((s) => localize(s.name, 'en'));
 		expect(bad).toEqual([]);
 	});
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { LANGS } from '$lib/i18n/lang';
-import { localize, MEDALS } from '$lib/experience';
+import { MEDALS } from '$lib/experience';
+import { localize } from '$lib/i18n/lang';
 import { EDUCATION, HACKATHONS, JOBS } from './experience';
 import { ALL_PROJECTS } from './projects';
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isLang, localeHref, pickLang } from './lang';
+import { isLang, localeHref, localize, pickLang } from './lang';
 
 describe('isLang', () => {
 	it('accepts supported locales', () => {
@@ -39,5 +39,12 @@ describe('localeHref', () => {
 	it('builds a locale URL from an absolute sub-path base', () => {
 		expect(localeHref('/portfolio', 'en')).toBe('/portfolio/en/');
 		expect(localeHref('/portfolio', 'fr')).toBe('/portfolio/fr/');
+	});
+});
+
+describe('localize', () => {
+	it('keeps a plain string and picks the language of a { en, fr } text', () => {
+		expect(localize('Rust', 'fr')).toBe('Rust');
+		expect(localize({ en: 'Networks', fr: 'Réseaux' }, 'fr')).toBe('Réseaux');
 	});
 });

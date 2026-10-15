@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { Dict, Lang } from '$lib/i18n';
-	import { fill } from '$lib/i18n/format';
-	import { durationLabel, durationMonths, periodPoints, type Job } from '$lib/experience';
+	import { fill, plural } from '$lib/i18n/format';
+	import { durationMonths, periodPoints, type Job } from '$lib/experience';
 	import { ICONS } from '$lib/data/icons';
 	import Icon from '../Icon.svelte';
 	import TechTags from '../projects/TechTags.svelte';
@@ -16,7 +16,7 @@
 	let ready = $state(false);
 	let open = $state(false);
 	const months = $derived(
-		job.end ? durationLabel(durationMonths(job.start, job.end), t.months) : ''
+		job.end ? plural(durationMonths(job.start, job.end), t.months, lang) : ''
 	);
 
 	onMount(() => {

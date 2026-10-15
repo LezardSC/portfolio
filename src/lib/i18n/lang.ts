@@ -4,6 +4,11 @@ export type Lang = (typeof LANGS)[number];
 /** Text available in every supported language. */
 export type Localized = Record<Lang, string>;
 
+/** A plain string (proper nouns) as is, or the `lang` text of a `{ en, fr }` pair. */
+export function localize(value: string | Localized, lang: Lang): string {
+	return typeof value === 'string' ? value : value[lang];
+}
+
 export function isLang(v: string): v is Lang {
 	return (LANGS as readonly string[]).includes(v);
 }
