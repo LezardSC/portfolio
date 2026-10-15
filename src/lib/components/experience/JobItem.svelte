@@ -3,6 +3,8 @@
 	import type { Dict, Lang } from '$lib/i18n';
 	import { fill } from '$lib/i18n/format';
 	import { durationLabel, durationMonths, periodPoints, type Job } from '$lib/experience';
+	import { ICONS } from '$lib/data/icons';
+	import Icon from '../Icon.svelte';
 	import TechTags from '../projects/TechTags.svelte';
 	import Period from './Period.svelte';
 
@@ -52,16 +54,7 @@
 				>
 					<span class="rec-mark" aria-hidden="true">“</span>
 					<span class="rec-label">{fill(t.recommendation, { name: job.quote.author })}</span>
-					<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-						<path
-							d={open ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6'}
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2.2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
+					<Icon path={open ? ICONS.chevronUp : ICONS.chevronDown} size={16} stroke={2.2} />
 				</button>
 			{/if}
 			<figure id={quoteId} class="quote" class:folded={ready && !open}>

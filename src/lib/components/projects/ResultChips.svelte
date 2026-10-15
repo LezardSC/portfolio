@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { ICONS } from '$lib/data/icons';
 	import { placements, yearOf, type Hackathon } from '$lib/experience';
 	import type { Dict } from '$lib/i18n';
 	import { fill } from '$lib/i18n/format';
-	import MedalIcon from '../icons/MedalIcon.svelte';
-	import TrophyIcon from '../icons/TrophyIcon.svelte';
+	import Icon from '../Icon.svelte';
 
 	/** Big desktop cards only. The project's hackathon results (projectResults); nothing when empty. */
 	let { results, t }: { results: Hackathon[]; t: Dict['projects'] } = $props();
@@ -22,7 +22,7 @@
 					.map((h) => fill(t.resultItem, { event: h.event, year: yearOf(h.date) }))
 					.join(', ')}
 			>
-				{#if chip.medal === 1}<TrophyIcon size={14} />{:else}<MedalIcon size={14} />{/if}
+				<Icon path={chip.medal === 1 ? ICONS.trophy : ICONS.medal} size={14} stroke={2} />
 				<span
 					>{prefix}<strong
 						>{t.places[chip.medal]}{#if chip.results.length > 1}<span class="times"
