@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { savePendingSection, takePendingSection } from './sections';
+import { isAtBottom, savePendingSection, sectionInView, takePendingSection } from './sections';
 
 describe('pending section hand-off', () => {
 	const memory = () => {
@@ -43,5 +43,36 @@ describe('pending section hand-off', () => {
 	it('never throws when merely accessing storage throws', () => {
 		expect(() => savePendingSection(fail, 'about')).not.toThrow();
 		expect(takePendingSection(fail)).toBeNull();
+	});
+});
+
+// Viewport-relative tops of each section, as getBoundingClientRect().top reports them.
+const tops = (about: number) => ({
+	about,
+	projects: about + 800,
+	skills: about + 3000,
+	experience: about + 3600,
+	contact: about + 4200
+});
+
+describe('sectionInView', () => {
+	it('is null on the hero, before About reaches the nav', () => {
+		expect(sectionInView(tops(300), 56)).toBeNull();
+	});
+	it('is the last section whose top reached the nav, sub-pixel offsets included', () => {
+		expect(sectionInView(tops(56.5), 56)).toBe('about');
+		expect(sectionInView(tops(-1000), 56)).toBe('projects');
+	});
+	it('is the last section at the bottom of the page, where a short Contact never reaches the nav', () => {
+		expect(sectionInView(tops(-3700), 56, true)).toBe('contact');
+		expect(sectionInView(tops(-3700), 56, false)).toBe('experience');
+	});
+});
+
+describe('isAtBottom', () => {
+	it('is true at the end of the page, within rounding, false higher up', () => {
+		expect(isAtBottom(4100, 900, 5000)).toBe(true);
+		expect(isAtBottom(4098.5, 900, 5000)).toBe(true);
+		expect(isAtBottom(3900, 900, 5000)).toBe(false);
 	});
 });

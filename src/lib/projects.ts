@@ -49,11 +49,6 @@ export function mainDomain(p: Project): Domain {
 /** Small project tiles shown on phones before the "See N other projects" button. */
 export const PHONE_OTHERS = 6;
 
-/** How many small tiles the phone folds behind the button. */
-export function hiddenCount(total: number, shown = PHONE_OTHERS): number {
-	return Math.max(0, total - shown);
-}
-
 export type Filters = { context: Context | 'all'; domain: Domain | 'all' };
 export const NO_FILTERS: Filters = { context: 'all', domain: 'all' };
 
@@ -103,11 +98,48 @@ export function visibleProjects(list: readonly Project[]): Project[] {
 	return list.filter((p) => !p.hidden);
 }
 
-export function splitTiers(
-	list: readonly Project[],
-	n = LARGE_COUNT
-): { large: Project[]; small: Project[] } {
-	return { large: list.slice(0, n), small: list.slice(n) };
+export type LayoutCounts = { large: number; phoneLarge: number; phoneOthers: number };
+
+/** The projects grid for both screens: the page renders both and CSS shows one. */
+export type ProjectLayout = {
+	/** Big cards; `desktopOnly` past the phone's count (a small tile there instead). */
+	large: { project: Project; desktopOnly: boolean }[];
+	/** Small tiles; `phoneOnly` = a big card on desktop; `foldable` = behind the phone's button. */
+	small: { project: Project; phoneOnly: boolean; foldable: boolean }[];
+	/** How many tiles the phone folds behind "See N other projects". */
+	folded: number;
+	/** Whether desktop has small tiles at all (else the "More projects" heading is phone-only). */
+	smallOnDesktop: boolean;
+};
+
+/**
+ * Desktop gives big cards to the first `large`, phones to the first `phoneLarge` (fewer); the
+ * projects in between are big on desktop and lead the small tiles on phones, which show
+ * `phoneOthers` tiles before the button. Assumes `phoneLarge <= large`.
+ */
+export function projectLayout(
+	sorted: readonly Project[],
+	counts: LayoutCounts = {
+		large: LARGE_COUNT,
+		phoneLarge: PHONE_LARGE_COUNT,
+		phoneOthers: PHONE_OTHERS
+	}
+): ProjectLayout {
+	const between =
+		Math.min(counts.large, sorted.length) - Math.min(counts.phoneLarge, sorted.length);
+	const tiles = sorted.slice(counts.phoneLarge);
+	return {
+		large: sorted
+			.slice(0, counts.large)
+			.map((project, i) => ({ project, desktopOnly: i >= counts.phoneLarge })),
+		small: tiles.map((project, i) => ({
+			project,
+			phoneOnly: i < between,
+			foldable: i >= counts.phoneOthers
+		})),
+		folded: Math.max(0, tiles.length - counts.phoneOthers),
+		smallOnDesktop: sorted.length > counts.large
+	};
 }
 
 /** Where the media/title link points: the repo, else the demo, else nowhere. */

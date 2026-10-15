@@ -1,19 +1,16 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
 	import { PRIORITY, PROJECTS } from '$lib/data/projects';
+	import { hydrated } from '$lib/hydrated.svelte';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { plural } from '$lib/i18n/format';
 	import {
 		filterProjects,
-		hiddenCount,
 		NO_FILTERS,
-		PHONE_LARGE_COUNT,
-		PHONE_OTHERS,
+		projectLayout,
 		sortProjects,
-		splitTiers,
 		type Filters,
 		type SortKey
 	} from '$lib/projects';
@@ -28,22 +25,13 @@
 	let sort = $state<SortKey>('priority');
 
 	const sorted = $derived(sortProjects(filterProjects(PROJECTS, filters), sort, PRIORITY));
-	const tiers = $derived(splitTiers(sorted));
-	/** Phones give fewer big cards. Both layouts are in the HTML and CSS picks one, so the
-	    prerendered page is right before JS runs: the big cards past PHONE_LARGE_COUNT are
-	    desktop-only, and the same projects lead the small tiles as phone-only. */
-	const phone = $derived(splitTiers(sorted, PHONE_LARGE_COUNT));
-	const phoneOnly = $derived(phone.small.length - tiers.small.length);
+	/** Both layouts are in the HTML and CSS picks one, so the prerendered page is right before JS runs. */
+	const layout = $derived(projectLayout(sorted));
 	const ms = $derived(prefersReducedMotion.current ? 0 : 300);
 
 	/** False in the prerendered HTML: without JS every tile shows and there is no button. */
-	let ready = $state(false);
+	const ready = hydrated();
 	let showAll = $state(false);
-	const hidden = $derived(hiddenCount(phone.small.length));
-
-	onMount(() => {
-		ready = true;
-	});
 
 	// Any filter or sort change folds the phone list back.
 	$effect(() => {
@@ -57,7 +45,7 @@
 <Section id="projects" {title}>
 	<ProjectFilters projects={PROJECTS} bind:filters bind:sort {lang} {t} />
 
-	{#if tiers.large.length === 0}
+	{#if layout.large.length === 0}
 		<div class="empty">
 			<p>{t.empty}</p>
 			<button type="button" class="btn" onclick={() => (filters = { ...NO_FILTERS })}
@@ -66,32 +54,32 @@
 		</div>
 	{:else}
 		<ul class="grid large" role="list">
-			{#each tiers.large as project, i (project.id)}
+			{#each layout.large as card (card.project.id)}
 				<li
-					class:desktop-only={i >= PHONE_LARGE_COUNT}
+					class:desktop-only={card.desktopOnly}
 					animate:flip={{ duration: ms }}
 					in:fade={{ duration: ms }}
 				>
-					<ProjectCardLarge {project} {lang} {t} />
+					<ProjectCardLarge project={card.project} {lang} {t} />
 				</li>
 			{/each}
 		</ul>
 
-		{#if phone.small.length > 0}
-			<h3 class="more" class:phone-only={tiers.small.length === 0}>{t.more}</h3>
+		{#if layout.small.length > 0}
+			<h3 class="more" class:phone-only={!layout.smallOnDesktop}>{t.more}</h3>
 			<ul id="more-projects" class="grid small" role="list">
-				{#each phone.small as project, i (project.id)}
+				{#each layout.small as tile (tile.project.id)}
 					<li
-						class:phone-only={i < phoneOnly}
-						class:folded={ready && !showAll && i >= PHONE_OTHERS}
+						class:phone-only={tile.phoneOnly}
+						class:folded={ready.current && !showAll && tile.foldable}
 						animate:flip={{ duration: ms }}
 						in:fade={{ duration: ms }}
 					>
-						<ProjectCardSmall {project} {lang} {t} />
+						<ProjectCardSmall project={tile.project} {lang} {t} />
 					</li>
 				{/each}
 			</ul>
-			{#if ready && hidden > 0}
+			{#if ready.current && layout.folded > 0}
 				<button
 					type="button"
 					class="btn show-more"
@@ -99,7 +87,7 @@
 					aria-controls="more-projects"
 					onclick={() => (showAll = !showAll)}
 				>
-					{showAll ? t.showFewer : plural(hidden, t.showMore, lang)}
+					{showAll ? t.showFewer : plural(layout.folded, t.showMore, lang)}
 				</button>
 			{/if}
 		{/if}
