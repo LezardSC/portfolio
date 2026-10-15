@@ -3,14 +3,8 @@
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { MediaQuery } from 'svelte/reactivity';
 	import { DOMAINS } from '$lib/data/categories';
-	import {
-		DESKTOP_QUERY,
-		mainDomain,
-		PHONE_QUERY,
-		primaryLink,
-		shouldPlayVideo,
-		type Project
-	} from '$lib/projects';
+	import { DESKTOP_QUERY, PHONE_QUERY } from '$lib/breakpoints';
+	import { mainDomain, primaryLink, shouldPlayVideo, type Project } from '$lib/projects';
 
 	let { project }: { project: Project } = $props();
 

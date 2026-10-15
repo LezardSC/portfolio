@@ -21,12 +21,6 @@ export type Media =
 	| { kind: 'image'; src: string; phone?: string }
 	| { kind: 'video'; src: string; poster: string; phone?: string };
 
-/** At and above this width cards keep media on top and videos may play; below it is "phone". */
-export const DESKTOP_QUERY = '(min-width: 48rem)';
-
-/** Phone screens, for `<source media>`: exactly the screens DESKTOP_QUERY doesn't match. */
-export const PHONE_QUERY = `not all and ${DESKTOP_QUERY}`;
-
 export type Project = {
 	id: string;
 	title: string;
