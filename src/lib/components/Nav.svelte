@@ -70,7 +70,7 @@
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		padding: 0 max(2.5rem, calc((100% - 77.5rem) / 2 + 2.5rem));
+		padding: 0 max(var(--gutter), calc((100% - var(--page-max)) / 2 + var(--gutter)));
 		background: color-mix(in srgb, var(--bg) 86%, transparent);
 		backdrop-filter: blur(14px);
 		border-bottom: 1px solid var(--rule);
@@ -141,7 +141,7 @@
 		.nav {
 			justify-content: space-between;
 			gap: 0.5rem;
-			padding: 0 1.25rem;
+			padding: 0 var(--gutter);
 			background: color-mix(in srgb, var(--bg) 92%, transparent);
 		}
 		.brand {

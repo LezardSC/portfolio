@@ -21,10 +21,10 @@
 		color: var(--footer-text);
 	}
 	.inner {
-		max-width: 77.5rem;
+		max-width: var(--page-max);
 		min-height: 5.5rem;
 		margin: 0 auto;
-		padding: 0 2.5rem;
+		padding: 0 var(--gutter);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -50,7 +50,7 @@
 		.inner {
 			flex-wrap: wrap;
 			min-height: 4.75rem;
-			padding: 0.5rem 1.25rem;
+			padding: 0.5rem var(--gutter);
 			gap: 0 0.75rem;
 		}
 	}
