@@ -5,10 +5,24 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { chromium } from 'playwright';
-import { PROFILE } from '../src/lib/data/profile.ts';
+import { createServer } from 'vite';
+import type { Lang } from '../src/lib/i18n/lang.ts';
 import { icoFromPng } from './ico.ts';
 
-const LANGS = ['en', 'fr'] as const;
+// Through Vite, so the data's `$lib/…` imports resolve (plain Node cannot).
+const vite = await createServer({
+	server: { middlewareMode: true },
+	appType: 'custom',
+	logLevel: 'error'
+});
+const [{ PROFILE }, { LANGS }] = await Promise.all([
+	vite.ssrLoadModule('/src/lib/data/profile.ts') as Promise<
+		typeof import('../src/lib/data/profile.ts')
+	>,
+	vite.ssrLoadModule('/src/lib/i18n/lang.ts') as Promise<typeof import('../src/lib/i18n/lang.ts')>
+]);
+await vite.close();
+
 const font = readFileSync(
 	'node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2'
 ).toString('base64');
@@ -20,7 +34,7 @@ const FONT_CSS = `@font-face{font-family:S;src:url(data:font/woff2;base64,${font
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
-function ogHtml(lang: (typeof LANGS)[number]): string {
+function ogHtml(lang: Lang): string {
 	return `<!doctype html><html><head><style>${FONT_CSS}</style></head><body>
 <div style="width:1200px;height:630px;background:#FAF8F4;color:#141412;padding:72px 80px;display:flex;flex-direction:column;justify-content:space-between">
   <img src="${svgData(favicon)}" width="72" height="72" alt="">

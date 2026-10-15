@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
 	durationLabel,
 	durationMonths,
-	formatPeriod,
 	hackathonsNewestFirst,
 	newestFirst,
 	periodPoints,
@@ -11,12 +10,12 @@ import {
 	type Hackathon
 } from './experience';
 
-describe('formatPeriod', () => {
-	it('formats a month range in English', () => {
-		expect(formatPeriod('2025-07', '2026-01', 'en', 'Present')).toBe('Jul 2025 – Jan 2026');
-	});
-	it('formats a month range in French', () => {
-		expect(formatPeriod('2025-07', '2026-01', 'fr', "Aujourd'hui")).toBe('juil. 2025 – janv. 2026');
+describe('periodPoints', () => {
+	it('gives each end of a range its text and machine-readable date', () => {
+		expect(periodPoints('2025-07', '2026-01', 'en', 'Present')).toEqual([
+			{ text: 'Jul 2025', datetime: '2025-07' },
+			{ text: 'Jan 2026', datetime: '2026-01' }
+		]);
 	});
 	it.each(['Pacific/Kiritimati', 'Pacific/Pago_Pago'])(
 		'keeps January and December in their own year under TZ=%s',
@@ -25,33 +24,20 @@ describe('formatPeriod', () => {
 			process.env.TZ = tz; // Node applies a TZ change immediately
 			try {
 				expect(new Date(2024, 0, 1).getTimezoneOffset(), 'TZ did not apply').not.toBe(0);
-				expect(formatPeriod('2024-01', '2024-12', 'en', 'Present')).toBe('Jan 2024 – Dec 2024');
+				expect(periodPoints('2024-01', '2024-12', 'en', 'Present').map((p) => p.text)).toEqual([
+					'Jan 2024',
+					'Dec 2024'
+				]);
 			} finally {
 				if (saved === undefined) delete process.env.TZ;
 				else process.env.TZ = saved;
 			}
 		}
 	);
-	it('uses the present label when there is no end', () => {
-		expect(formatPeriod('2026-02', undefined, 'en', 'Present')).toBe('Feb 2026 – Present');
-		expect(formatPeriod('2026-02', undefined, 'fr', "Aujourd'hui")).toBe(
-			"févr. 2026 – Aujourd'hui"
-		);
-	});
-	it('formats a year range', () => {
-		expect(formatPeriod('2022', '2026', 'en', 'Present')).toBe('2022 – 2026');
-	});
-	it('shows the end alone when there is no start or start equals end', () => {
-		expect(formatPeriod(undefined, '2024', 'fr', "Aujourd'hui")).toBe('2024');
-		expect(formatPeriod('2024', '2024', 'en', 'Present')).toBe('2024');
-	});
-});
-
-describe('periodPoints', () => {
-	it('gives each end of a range its text and machine-readable date', () => {
-		expect(periodPoints('2025-07', '2026-01', 'en', 'Present')).toEqual([
-			{ text: 'Jul 2025', datetime: '2025-07' },
-			{ text: 'Jan 2026', datetime: '2026-01' }
+	it('formats months in French', () => {
+		expect(periodPoints('2025-07', '2026-01', 'fr', 'Aujourd’hui').map((p) => p.text)).toEqual([
+			'juil. 2025',
+			'janv. 2026'
 		]);
 	});
 	it('gives "present" no date', () => {

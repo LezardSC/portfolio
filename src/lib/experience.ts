@@ -85,18 +85,6 @@ export function periodPoints(
 	return [{ text: formatPoint(start, lang), datetime: start }, to];
 }
 
-/** "Jul 2025 – Jan 2026", "2022 – 2026", "2024"; a missing end reads as `present`. */
-export function formatPeriod(
-	start: string | undefined,
-	end: string | undefined,
-	lang: Lang,
-	present: string
-): string {
-	return periodPoints(start, end, lang, present)
-		.map((p) => p.text)
-		.join(' – ');
-}
-
 /** Newest first: by end (no end = ongoing = newest), then by start. For 'YYYY' or 'YYYY-MM' dates. */
 export function newestFirst<T extends { start?: string; end?: string }>(items: readonly T[]): T[] {
 	const end = (x: T) => x.end ?? '9999';
