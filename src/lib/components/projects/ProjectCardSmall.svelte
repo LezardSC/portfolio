@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { CONTEXTS, DOMAINS } from '$lib/data/categories';
 	import { HACKATHONS } from '$lib/data/experience';
+	import { ICONS } from '$lib/data/icons';
 	import { projectResults } from '$lib/experience';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { mainDomain, primaryLink, type Project } from '$lib/projects';
@@ -36,7 +37,7 @@
 	</div>
 	<p class="meta">{year} · {CONTEXTS[project.context].label[lang]} · {domain.label[lang]}</p>
 	{#if project.company}
-		<p class="award"><span aria-hidden="true">💼</span> {project.company}</p>
+		<p class="award"><Icon path={ICONS.briefcase} size={16} stroke={2} />{project.company}</p>
 	{/if}
 	<p class="summary">{project.summary[lang]}</p>
 	<TechTags tech={project.tech} small />
@@ -97,6 +98,11 @@
 		font-size: 0.875rem;
 		font-weight: 500;
 		color: var(--muted);
+	}
+	.award {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
 	}
 	.summary {
 		margin: 0;

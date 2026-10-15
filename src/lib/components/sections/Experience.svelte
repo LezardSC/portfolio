@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { EDUCATION, HACKATHONS, JOBS } from '$lib/data/experience';
+	import { ICONS } from '$lib/data/icons';
 	import { hackathonsNewestFirst, localize, newestFirst, yearOf } from '$lib/experience';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { fill } from '$lib/i18n/format';
 	import EducationItem from '../experience/EducationItem.svelte';
 	import JobItem from '../experience/JobItem.svelte';
-	import MedalIcon from '../icons/MedalIcon.svelte';
-	import TrophyIcon from '../icons/TrophyIcon.svelte';
+	import Icon from '../Icon.svelte';
 	import Section from '../Section.svelte';
 
 	let {
@@ -45,7 +45,7 @@
 				{#each hackathons as h (h.event + h.date)}
 					<li class="hk">
 						<span class="tile" class:win={h.medal === 1}>
-							{#if h.medal === 1}<TrophyIcon size={20} />{:else}<MedalIcon />{/if}
+							<Icon path={h.medal === 1 ? ICONS.trophy : ICONS.medal} size={20} stroke={2} />
 						</span>
 						<p class="event">
 							<strong

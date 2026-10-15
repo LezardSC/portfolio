@@ -32,7 +32,25 @@ export const ICONS = {
 	/** Smartphone with a home dot (Mobile). */
 	phone: 'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01',
 	/** Two arrows in a circle (DevOps). */
-	cycle: 'M20 12a8 8 0 0 1-13.66 5.66M4 12a8 8 0 0 1 13.66-5.66M18 3v4h-4M6 21v-4h4'
+	cycle: 'M20 12a8 8 0 0 1-13.66 5.66M4 12a8 8 0 0 1 13.66-5.66M18 3v4h-4M6 21v-4h4',
+	/** Briefcase (company of a professional project). */
+	briefcase:
+		'M4 7h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18',
+	/** Medal on a ribbon (hackathon podium). */
+	medal: 'M6 9a6 6 0 1 0 12 0a6 6 0 1 0-12 0zM8.5 14 7 22l5-3 5 3-1.5-8',
+	/** Trophy cup (hackathon win). */
+	trophy: 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3',
+	/** Chevrons of the phone disclosures (closed, open). */
+	chevronDown: 'M6 9l6 6 6-6',
+	chevronUp: 'M6 15l6-6 6 6',
+	/** Arrow pointing down ("See projects"). */
+	arrowDown: 'M12 5v14M5 12l7 7 7-7',
+	/** Page with a folded corner and two lines (CV). */
+	document: 'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h6',
+	/** Envelope (e-mail). */
+	mail: 'M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3.5 6.5l8.5 6.5 8.5-6.5',
+	/** Two overlapping sheets (copy). */
+	copy: 'M11 9h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zM5 15V3h12'
 } as const;
 
 /** Whether `path` looks like SVG path data: starts with a move, only path commands and numbers. */

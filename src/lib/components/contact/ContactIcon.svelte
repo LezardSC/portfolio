@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { ContactId } from '$lib/contact';
 	import { CONTACT_BRANDS } from '$lib/data/contact-icons';
+	import { ICONS } from '$lib/data/icons';
 	import { logoColor } from '$lib/color';
 	import { THEME_BG } from '$lib/theme';
 
@@ -35,13 +36,7 @@
 		stroke-linejoin="round"
 		aria-hidden="true"
 	>
-		{#if id === 'email'}
-			<rect x="3" y="5" width="18" height="14" rx="2" />
-			<path d="M3.5 6.5l8.5 6.5 8.5-6.5" />
-		{:else}
-			<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
-			<path d="M14 3v5h5M9 13h6M9 17h6" />
-		{/if}
+		<path d={id === 'email' ? ICONS.mail : ICONS.document} />
 	</svg>
 {/if}
 

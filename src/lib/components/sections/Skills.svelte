@@ -3,6 +3,7 @@
 	import { MediaQuery } from 'svelte/reactivity';
 	import { SKILL_GROUPS } from '$lib/data/skills';
 	import type { Dict, Lang } from '$lib/i18n';
+	import { ICONS } from '$lib/data/icons';
 	import { DESKTOP_QUERY } from '$lib/projects';
 	import { logoColor } from '$lib/color';
 	import { nextTab, panelHidden, skillName } from '$lib/skills';
@@ -75,16 +76,7 @@
 						<span class="ic"><Icon path={group.icon} size={22} /></span>
 						<span>{group.title[lang]}</span>
 						<span class="count" aria-hidden="true">{group.skills.length}</span>
-						<svg class="chev" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-							<path
-								d={open === i ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6'}
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2.2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
+						<Icon path={open === i ? ICONS.chevronUp : ICONS.chevronDown} size={18} stroke={2.2} />
 					</button>
 				{/if}
 				<div
@@ -305,7 +297,7 @@
 			width: 2.5rem;
 			height: 2.5rem;
 		}
-		.chev {
+		.acc > :global(svg) {
 			flex: none;
 		}
 		.panel {

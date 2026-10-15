@@ -4,7 +4,9 @@
 	import { contactLinks } from '$lib/contact';
 	import { PROFILE } from '$lib/data/profile';
 	import type { Dict, Lang } from '$lib/i18n';
+	import { ICONS } from '$lib/data/icons';
 	import ContactIcon from '../contact/ContactIcon.svelte';
+	import Icon from '../Icon.svelte';
 	import Section from '../Section.svelte';
 
 	let {
@@ -65,18 +67,7 @@
 				>{local}@<wbr />{domain}</a
 			>
 			<button type="button" class="btn btn-primary" onclick={copy}>
-				<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-					<g
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					>
-						<rect x="9" y="9" width="12" height="12" rx="2" />
-						<path d="M5 15V3h12" />
-					</g>
-				</svg>
+				<Icon path={ICONS.copy} size={16} stroke={2} />
 				{copied ? t.copied : t.copy}
 			</button>
 			{#if failed}<p class="hint">{t.copyHint}</p>{/if}
@@ -241,7 +232,7 @@
 			box-shadow: 6px 6px 0 var(--accent);
 		}
 		/* Logos take the tile's text colour on the filled tile (a dark logo would vanish). !important
-		   because ContactIcon's per-theme brand colour rule is more specific. */
+		   because the per-theme .logo rule of src/app.css is more specific. */
 		.tile:hover :global(svg),
 		.tile:focus-visible :global(svg) {
 			color: var(--on-text) !important;

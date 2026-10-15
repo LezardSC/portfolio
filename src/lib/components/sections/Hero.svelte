@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { CONTACT_BRANDS } from '$lib/data/contact-icons';
+	import { ICONS } from '$lib/data/icons';
 	import { HACKATHONS, JOBS } from '$lib/data/experience';
 	import { PROFILE } from '$lib/data/profile';
 	import { glanceRows } from '$lib/glance';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { assetHref } from '$lib/paths';
+	import ContactIcon from '../contact/ContactIcon.svelte';
+	import Icon from '../Icon.svelte';
 
 	let { lang, t, newTab }: { lang: Lang; t: Dict['hero']; newTab: string } = $props();
 
@@ -16,7 +18,6 @@
 			podiums: t.glancePodiums
 		})
 	);
-	const malt = CONTACT_BRANDS.malt;
 	/** First name and the rest: two lines on phones, one on desktop. */
 	const [first, ...others] = PROFILE.name.split(' ');
 	const last = others.join(' ');
@@ -39,16 +40,7 @@
 			<div class="ctas">
 				<a class="btn btn-primary see" href="#projects">
 					{t.projects}
-					<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-						<path
-							d="M12 5v14M5 12l7 7 7-7"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2.2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
+					<Icon path={ICONS.arrowDown} size={16} stroke={2.2} />
 				</a>
 				<a
 					class="btn cv"
@@ -56,22 +48,11 @@
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-						<path
-							d="M14 3H6v18h12V7zM14 3v4h4M9 13h6M9 17h6"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2.2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
+					<Icon path={ICONS.document} size={16} stroke={2.2} />
 					{t.cv} <span class="sr-only">{newTab}</span>
 				</a>
 				<a class="btn malt" href={PROFILE.malt} target="_blank" rel="noopener noreferrer">
-					<svg viewBox={malt.viewBox} width="18" height="18" fill="#{malt.hex}" aria-hidden="true">
-						<path d={malt.path} />
-					</svg>
+					<ContactIcon id="malt" size={18} />
 					<span class="long">{t.malt}</span><span class="short">{t.maltShort}</span>
 					<span aria-hidden="true">↗</span>
 					<span class="sr-only">{newTab}</span>
@@ -255,7 +236,7 @@
 		.glance-title,
 		.full,
 		.long,
-		.cv svg {
+		.cv :global(svg) {
 			display: none;
 		}
 		.short {
