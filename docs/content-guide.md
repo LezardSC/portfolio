@@ -11,7 +11,7 @@ Each recipe gives the file, a snippet to copy, and what to check.
 | `src/lib/data/categories.ts` | Project **domains** (Web, AI…) and **contexts** (School, Hackathon…): label, colour, icon |
 | `src/lib/data/skills.ts` | Skill groups and the skills in them |
 | `src/lib/data/skill-icons.ts` | Hand-made skill logos (when simple-icons has none) |
-| `src/lib/data/icons.ts` | Line icons for domains and skill groups |
+| `src/lib/data/icons.ts` | Line icons: domains, skill groups and the interface (briefcase, medal, chevrons…) |
 | `src/lib/data/experience.ts` | Jobs, education and certificates, hackathon results |
 | `src/lib/data/profile.ts` | Name, role, pitch, About paragraphs, "At a glance", links, CV and photo paths |
 | `static/` | CV PDFs, the photo, project images and videos (`static/projects/`) |
@@ -169,9 +169,9 @@ To keep another part than the centre, crop it in any image editor first.
 Both live in the phone block (`@media (width < 48rem)`) of `src/lib/components/projects/ProjectCardLarge.svelte`:
 
 - **Blur:** `filter: blur(var(--blur, 4px));` on `.card > :global(.media)`. Change `4px` (more = blurrier). For a much stronger blur, also make its `inset: -1rem` more negative (e.g. `-2rem`): the image overflows the card so the blur's soft edge stays hidden.
-- **Darkening:** a `#10100e` layer whose opacity is `--veil` (0 = none, 1 = black). `.card.has-media { --veil: 0.58; }` is for cards with an image; `--veil: 0.35;` in `.card` is for cards without one (domain colour as background).
+- **Darkening:** a `--photo-veil` layer (`#10100e`, in `src/app.css`) whose opacity is `--veil` (0 = none, 1 = black). `.card.has-media { --veil: 0.58; }` is for cards with an image; `--veil: 0.35;` in `.card` is for cards without one (domain colour as background).
 
-Contrast isn't tested: check the cards by eye at 360px in both themes (lowering the veil can make text unreadable on a light domain colour), and run `npm run audit`.
+`npm test` checks that the text of cards **without** an image stays readable (4.5:1) on every domain colour, so lowering `--veil: 0.35` too far makes it fail. Cards **with** an image can't be tested: check them by eye at 360px in both themes, and run `npm run audit`. The card's text colours are the `--on-photo-*` tokens in `src/app.css`.
 
 ---
 
@@ -186,7 +186,7 @@ In `src/lib/data/categories.ts`. The key order is the filter order.
 ```
 
 - **key** (`devops`): lowercase-with-dashes, used in projects' `domains`.
-- **color**: `#rrggbb`. It tints the phone tiles and the phone cards without media, so it must be fairly dark: check the phone tiles and cards by eye in both themes, and `npm run audit` flags text that's too faint. Give each domain its own colour.
+- **color**: `#rrggbb`. It tints the phone tiles and the phone cards without media, so it must be fairly dark: `npm test` fails if the text on either would read below 4.5:1 in a theme (the message names the domain and the text). Give each domain its own colour.
 - **icon**: one of `ICONS` in `icons.ts`, or a new one (below).
 
 The domain shows up in the filters as soon as a visible project uses it.
@@ -212,6 +212,8 @@ Icons are line drawings on a 24×24 grid. The easiest source is [lucide.dev](htt
 	/** Short description (where it's used). */
 	rocket: 'M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91…' + 'M12 15l-3-3…',
 ```
+
+The same library holds the interface icons (briefcase, medal, trophy, chevrons, document…): reuse one before adding a near-copy.
 
 If a `d` starts with a lowercase `m`, make it an uppercase `M` before joining (a lowercase one would move relative to the end of the previous piece and shift the drawing). `<rect>` and `<circle>` elements have no `d`: convert them to path data first (a circle at `cx, cy` with radius `r` is `M{cx-r} {cy}a{r} {r} 0 1 0 {2r} 0a{r} {r} 0 1 0 {-2r} 0z`), or pick another icon. `npm test` checks every icon is valid path data.
 
@@ -357,3 +359,5 @@ From the repo root:
 3. `npm run check`: catches typos in field names (`hiden: true` → "Did you mean to write 'hidden'?") and in category keys.
 4. `npm run dev`: look at the site (http://localhost:5173), on a narrow window too.
 5. Before publishing: `npm run audit` (accessibility and Lighthouse; reports in `reports/`).
+
+Known issues not fixed yet are listed in [`docs/backlog.md`](backlog.md).
