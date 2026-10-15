@@ -77,6 +77,17 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 	await page.goto(`${ORIGIN}/en/`);
 	checks.push(await axe(page, '/en/ before hydration light 360px', 'en-nojs-360'));
 	await noJs.close();
+	// The 404 page (no JS), both themes.
+	for (const theme of THEMES) {
+		const context = await browser.newContext({
+			viewport: { width: 360, height: 800 },
+			colorScheme: theme
+		});
+		const page = await context.newPage();
+		await page.goto(`${ORIGIN}/404.html`);
+		checks.push(await axe(page, `/404.html ${theme} 360px`, `404-${theme}`));
+		await context.close();
+	}
 	return checks;
 }
 

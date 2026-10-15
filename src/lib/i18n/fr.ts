@@ -8,6 +8,11 @@ export const fr: Dict = {
 		description:
 			'Portfolio de Jocelyn Renault, ingénieur logiciel issu de 42\u00a0: projets backend, systèmes, web, blockchain et IA.'
 	},
+	notFound: {
+		title: 'Page introuvable',
+		text: 'Cette page n’existe pas, ou elle a été déplacée.',
+		home: 'Aller sur le site en français'
+	},
 	hero: {
 		available: 'Disponible',
 		projects: 'Voir les projets',
