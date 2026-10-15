@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { fill, plural } from '$lib/i18n/format';
 	import { durationMonths, periodPoints, type Job } from '$lib/experience';
 	import { ICONS } from '$lib/data/icons';
+	import { hydrated } from '$lib/hydrated.svelte';
 	import Icon from '../Icon.svelte';
 	import TechTags from '../projects/TechTags.svelte';
 	import Period from './Period.svelte';
@@ -13,15 +13,11 @@
 	const uid = $props.id();
 	const quoteId = `${uid}-quote`;
 	/** False in the prerendered HTML: without JS the quote shows and there is no button. */
-	let ready = $state(false);
+	const ready = hydrated();
 	let open = $state(false);
 	const months = $derived(
 		job.end ? plural(durationMonths(job.start, job.end), t.months, lang) : ''
 	);
-
-	onMount(() => {
-		ready = true;
-	});
 </script>
 
 <article class="job">
@@ -43,7 +39,7 @@
 		</ul>
 		<TechTags tech={job.tech} />
 		{#if job.quote}
-			{#if ready}
+			{#if ready.current}
 				<!-- Phone only (CSS): on desktop the quote is always shown. -->
 				<button
 					type="button"
@@ -57,7 +53,7 @@
 					<Icon path={open ? ICONS.chevronUp : ICONS.chevronDown} size={16} stroke={2.2} />
 				</button>
 			{/if}
-			<figure id={quoteId} class="quote" class:folded={ready && !open}>
+			<figure id={quoteId} class="quote" class:folded={ready.current && !open}>
 				<span class="mark" aria-hidden="true">“</span>
 				<blockquote>
 					<p>{job.quote.text[lang]}</p>

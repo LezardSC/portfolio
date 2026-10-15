@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import { PROFILE } from '$lib/data/profile';
 	import type { Dict, Lang } from '$lib/i18n';
+	import { hydrated } from '$lib/hydrated.svelte';
 	import { assetHref } from '$lib/paths';
 	import Section from '../Section.svelte';
 
@@ -15,12 +15,8 @@
 
 	const [first, ...rest] = PROFILE.bio;
 	/** False in the prerendered HTML: without JS every paragraph shows and there is no button. */
-	let ready = $state(false);
+	const ready = hydrated();
 	let open = $state(false);
-
-	onMount(() => {
-		ready = true;
-	});
 </script>
 
 <Section id="about" {title}>
@@ -37,12 +33,12 @@
 		<div class="text">
 			<p>{first[lang]}</p>
 			<!-- Folded on phones only (CSS), and only once hydrated. -->
-			<div id="about-more" class="rest" class:folded={ready && !open}>
+			<div id="about-more" class="rest" class:folded={ready.current && !open}>
 				{#each rest as paragraph, i (i)}
 					<p>{paragraph[lang]}</p>
 				{/each}
 			</div>
-			{#if ready && rest.length > 0}
+			{#if ready.current && rest.length > 0}
 				<button
 					type="button"
 					class="read-more"
