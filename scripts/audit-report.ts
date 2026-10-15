@@ -11,9 +11,6 @@ export const CATEGORY_TARGETS = {
 export type Category = keyof typeof CATEGORY_TARGETS;
 export const CATEGORIES = Object.keys(CATEGORY_TARGETS) as Category[];
 
-/** SEO audits that need absolute URLs, so a real domain (M9); they don't fail the audit before that. */
-export const DOMAIN_PENDING_AUDITS: readonly string[] = ['hreflang', 'canonical'];
-
 export type LighthouseSummary = {
 	scores: Record<Category, number | null>;
 	/** Ids of the weighted SEO audits that did not fully pass. */
@@ -30,8 +27,6 @@ export function lighthouseChecks(label: string, summary: LighthouseSummary): Che
 		if (score === null) return { name, ok: false, detail: 'no score' };
 		if (score >= target) return { name, ok: true, detail: pct(score) };
 		const failed = category === 'seo' ? summary.failedSeoAudits : [];
-		if (failed.length > 0 && failed.every((id) => DOMAIN_PENDING_AUDITS.includes(id)))
-			return { name, ok: true, detail: `${pct(score)} (pending domain: ${failed.join(', ')})` };
 		const suffix = failed.length > 0 ? ` (failed: ${failed.join(', ')})` : '';
 		return { name, ok: false, detail: `${pct(score)} < ${pct(target)}${suffix}` };
 	});

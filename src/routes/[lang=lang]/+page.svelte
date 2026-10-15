@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { localeHref } from '$lib/i18n/lang';
-	import { assetHref } from '$lib/paths';
+	import { alternates } from '$lib/seo';
+	import { absoluteUrl } from '$lib/site';
 	import { THEME_BG } from '$lib/theme';
 	import Footer from '$lib/components/Footer.svelte';
 	import Nav from '$lib/components/Nav.svelte';
@@ -14,18 +15,21 @@
 
 	let { data } = $props();
 	const t = $derived(data.t);
+	const canonical = $derived(absoluteUrl(base, localeHref('', data.lang)));
 </script>
 
 <svelte:head>
 	<title>{t.meta.title}</title>
 	<meta name="description" content={t.meta.description} />
-	<link rel="alternate" hreflang="en" href={localeHref(base, 'en')} />
-	<link rel="alternate" hreflang="fr" href={localeHref(base, 'fr')} />
+	<link rel="canonical" href={canonical} />
+	{#each alternates(base) as alt (alt.hreflang)}
+		<link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+	{/each}
 	<meta property="og:type" content="website" />
+	<meta property="og:url" content={canonical} />
 	<meta property="og:title" content={t.meta.title} />
 	<meta property="og:description" content={t.meta.description} />
-	<!-- Relative until M11: link previews need an absolute URL, which needs the domain. -->
-	<meta property="og:image" content={assetHref(base, `og-${data.lang}.png`)} />
+	<meta property="og:image" content={absoluteUrl(base, `og-${data.lang}.png`)} />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 	<meta property="og:image:alt" content={t.meta.title} />
