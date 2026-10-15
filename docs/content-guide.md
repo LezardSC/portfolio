@@ -38,7 +38,7 @@ All in `src/lib/data/projects.ts`, inside `ALL_PROJECTS`. The order of entries d
 		description: {
 			en: 'Long text for the big cards (desktop). Two or three sentences.',
 			fr: 'Texte long pour les grandes cartes. Deux ou trois phrases.'
-		},
+		}, // ≤ 350 characters in each language (a test checks it)
 		summary: {
 			en: 'One sentence for the small cards, and the big cards on phones, ending with a full stop.', // ≤ 100 characters
 			fr: 'Une phrase pour les tuiles du téléphone.'
