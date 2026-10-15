@@ -13,7 +13,8 @@ export default defineConfig({
 			adapter: adapter(),
 			// Absolute paths: `base` is then '' or '/sub', never '..', so absoluteUrl() gets a real path,
 			// and 404.html (served at any depth) still finds /_app/…
-			paths: { relative: false }
+			paths: { relative: false },
+			inlineStyleThreshold: 64 * 1024
 		})
 	],
 	test: {
