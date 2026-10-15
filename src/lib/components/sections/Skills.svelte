@@ -1,19 +1,31 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
-	import { SKILL_GROUPS } from '$lib/data/skills';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { ICONS } from '$lib/data/icons';
 	import { hydrated } from '$lib/hydrated.svelte';
 	import { DESKTOP_QUERY } from '$lib/breakpoints';
 	import { logoColor } from '$lib/color';
 	import { localize } from '$lib/i18n/lang';
-	import { nextTab, panelHidden } from '$lib/skills';
+	import { nextTab, panelHidden, type ShownSkillGroup } from '$lib/skills';
 	import { THEME_BG } from '$lib/theme';
 	import Section from '../Section.svelte';
 	import Icon from '../Icon.svelte';
 
-	let { lang, title, t }: { lang: Lang; title: string; t: Dict['skills'] } = $props();
+	let {
+		lang,
+		title,
+		t,
+		groups,
+		sprite
+	}: {
+		lang: Lang;
+		title: string;
+		t: Dict['skills'];
+		groups: ShownSkillGroup[];
+		/** URL of skill-logos.svg, the sprite every logo is drawn from. */
+		sprite: string;
+	} = $props();
 
 	/** False in the prerendered HTML: without JS every group shows, stacked, and there are no tabs. */
 	const enhanced = hydrated();
@@ -25,7 +37,7 @@
 	const tabs: HTMLButtonElement[] = [];
 
 	async function onKeydown(event: KeyboardEvent, index: number) {
-		const next = nextTab(index, event.key, SKILL_GROUPS.length);
+		const next = nextTab(index, event.key, groups.length);
 		if (next === null) return;
 		event.preventDefault();
 		selected = next;
@@ -38,7 +50,7 @@
 	<div class="skills" class:enhanced={enhanced.current}>
 		{#if enhanced.current}
 			<div class="tablist" role="tablist" aria-orientation="vertical" aria-label={t.tabsLabel}>
-				{#each SKILL_GROUPS as group, i (group.id)}
+				{#each groups as group, i (group.id)}
 					<button
 						bind:this={tabs[i]}
 						type="button"
@@ -59,7 +71,7 @@
 			</div>
 		{/if}
 		<div class="panels">
-			{#each SKILL_GROUPS as group, i (group.id)}
+			{#each groups as group, i (group.id)}
 				{@const hidden = panelHidden(
 					{ enhanced: enhanced.current, desktop: desktop.current, selected, open },
 					i
@@ -100,8 +112,8 @@
 					<ul role="list" class="tiles">
 						{#each group.skills as skill (localize(skill.name, 'en'))}
 							<li
-								style:--logo-dark={logoColor(skill.icon.hex, THEME_BG.dark)}
-								style:--logo-light={logoColor(skill.icon.hex, THEME_BG.light)}
+								style:--logo-dark={logoColor(skill.logo.hex, THEME_BG.dark)}
+								style:--logo-light={logoColor(skill.logo.hex, THEME_BG.light)}
 							>
 								<svg
 									class="logo"
@@ -111,7 +123,7 @@
 									fill="currentColor"
 									aria-hidden="true"
 								>
-									<path d={skill.icon.path} />
+									<use href="{sprite}#{skill.logo.id}" />
 								</svg>
 								{localize(skill.name, lang)}
 							</li>
