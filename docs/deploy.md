@@ -1,12 +1,12 @@
 # Deployment
 
-The site is static (`build/`) and lives at **https://jocelynrenault.com**, on the OVH free hosting that came with the domain (Apache, 100 MB, FTP).
+The site is static (`build/`) and lives at **https://jocelynrenault.com**, on the OVH free hosting that came with the domain (Apache, 100 MB, SFTP).
 
 ## How the site goes online
 
 1. Open a PR into `master`. The **CI** workflow runs the job `checks`: lint, type check, tests, build, size budget, accessibility audit and Lighthouse (performance is shown, not required, in CI).
 2. Merge it (only possible when `checks` is green).
-3. CI runs again on `master`. When it passes, the **Deploy** workflow builds the same commit, checks the budget, uploads what changed over FTP(S) (`npm run deploy`), then checks the live site (`npm run smoke`).
+3. CI runs again on `master`. When it passes, the **Deploy** workflow builds the same commit, checks the budget, uploads what changed over SFTP (`npm run deploy`), then checks the live site (`npm run smoke`).
 4. A red Deploy run means GitHub emails you. The site keeps the previous version for anything not uploaded yet.
 
 **Rollback:** on GitHub, open the merged PR → *Revert* → merge the revert PR. Its merge deploys the previous state.
@@ -21,26 +21,30 @@ In the OVH control panel, *Web Cloud*:
 2. **Hébergements → Informations générales → Certificat SSL:** enable the free Let's Encrypt certificate (it covers the multisite domains with SSL ticked). Wait until it says active (can take a few hours).
 3. **Domaines → jocelynrenault.com → Zone DNS:** the `A` (and `AAAA`) records of `jocelynrenault.com` and `www` point to the hosting IP shown in *Hébergements → Informations générales*. OVH sets them when the hosting comes with the domain: just check.
 4. **Hébergements → FTP - SSH:** note the FTP server (`ftp.clusterNNN.hosting.ovh.net`) and the login; set a password.
-5. Note here anything the free hosting turns out not to offer (FTPS, an Apache module), found while setting it up.
+5. Note here anything the free hosting turns out not to offer (an Apache module), found while setting it up.
+
+Found during setup (2026-10-15): the Multisite tab has no SSL column any more; both names already had a Let's Encrypt certificate. The hosting is on `cluster129`: FTP server `ftp.cluster129.hosting.ovh.net`. **FTPS is refused** ("500 This security scheme is not implemented") but **SFTP works** with the same login, so the deploy uses SFTP (port 22).
 
 ## GitHub secrets
 
 In the repo directory (each command asks for the value; it is never shown or stored in the repo):
 
 ```bash
-gh secret set FTP_HOST      # ftp.clusterNNN.hosting.ovh.net
+gh secret set FTP_HOST      # ftp.cluster129.hosting.ovh.net
 gh secret set FTP_USER
 gh secret set FTP_PASSWORD
 ```
 
-The deploy uses FTPS (encrypted). If the hosting refuses it: `gh variable set FTP_SECURE --body false` (plain FTP: the password then travels unencrypted).
+The names say FTP because they are the hosting's FTP login, but the deploy connects over **SFTP** (SSH, encrypted). It only sends the password to a server whose host key is one of `OVH_HOST_KEYS` in `scripts/deploy-plan.ts`.
+
+**If the deploy stops with "Host denied (verification failed)":** OVH changed its server keys, or something is between you and OVH. Run `ssh-keyscan ftp.cluster129.hosting.ovh.net | ssh-keygen -lf -`, compare with what the OVH panel or support shows, and only then replace the fingerprints in `OVH_HOST_KEYS`.
 
 ## Manual deploy
 
 Create `.env.deploy` at the repo root (git-ignored, never commit it):
 
 ```
-FTP_HOST=ftp.clusterNNN.hosting.ovh.net
+FTP_HOST=ftp.cluster129.hosting.ovh.net
 FTP_USER=…
 FTP_PASSWORD=…
 ```
@@ -54,7 +58,7 @@ npm run deploy
 npm run smoke                 # checks the live site
 ```
 
-What the deploy does: it compares `build/` with the manifest it left on the server last time (`.deploy-manifest.json`, hidden from visitors) and with the file sizes on the server, removes that manifest, uploads only new and changed files (assets first, then `.htaccess`, then the pages), then writes the new manifest and deletes files that are no longer in `build/`. A deploy cut off halfway leaves no manifest, so the next one sends everything again. It never deletes `.ovhconfig` (OVH's own config). Optional settings: `FTP_DIR` (default `www`), `FTP_PORT` (default 21), `FTP_SECURE=false`.
+What the deploy does: it compares `build/` with the manifest it left on the server last time (`.deploy-manifest.json`, hidden from visitors) and with the file sizes on the server, removes that manifest, uploads only new and changed files (assets first, then `.htaccess`, then the pages), then writes the new manifest and deletes files that are no longer in `build/`. A deploy cut off halfway leaves no manifest, so the next one sends everything again. It never deletes `.ovhconfig` (OVH's own config). Optional settings: `FTP_DIR` (default `www`), `FTP_PORT` (default 22), `SFTP_HOST_KEY` (comma-separated fingerprints that replace the pinned ones, for a test server).
 
 ## Size budget
 

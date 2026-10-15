@@ -9,7 +9,7 @@ Things worth worrying about that are not fixed yet. Each entry: what, why it mat
 ## Hosting
 
 - **HSTS** (`Strict-Transport-Security`) in `static/.htaccess` once HTTPS has run cleanly for a few weeks: hard to undo (browsers refuse plain http for the max-age), so not set in M13.
-- **What the free hosting really offers** (FTPS, `mod_headers`, `mod_deflate`) is only known after the first deploy: if the smoke check or `curl -I` shows a missing header, note it in `docs/deploy.md` and here.
+- **What the free hosting really offers** (`mod_headers`, `mod_deflate`) is only known after the first deploy: if the smoke check or `curl -I` shows a missing header, note it in `docs/deploy.md` and here.
 
 - **`/en` without the slash takes two hops** (M13 review): Apache's mod_dir adds the slash with the scheme it sees behind OVH's proxy (`http://`), so `https://…/en` → `http://…/en/` → `https://…/en/`. Fix: a rewrite rule for directories without the slash to `https://%{HTTP_HOST}/$1/`, and a smoke check.
 - **Old hashed chunks are deleted at once** (M13 review): a visitor with the page open during a deploy who then needs a lazy chunk gets the 404 page. Rare at this traffic; fix by keeping the previous build's `_app/immutable/*` one more deploy.
