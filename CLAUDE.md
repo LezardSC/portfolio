@@ -57,6 +57,7 @@ The user builds this **one milestone at a time** and reviews each one before the
 - `master` is protected: changes go through a PR whose CI job `checks` passed (admins included, no force-push). **Merging deploys the site** to https://jocelynrenault.com (`docs/deploy.md`). The repo is public: never commit credentials.
 - Worktrees live in `.claude/worktrees/<name>`, with local branch `worktree-<name>`. The remote branch is `<name>`, so push with
   `git push origin worktree-<name>:<name>`, because a plain `git push` is refused (the names differ).
+- **Before opening a PR, and again before saying it is ready to merge:** `git fetch` and check `git log HEAD..origin/master`. Jocelyn merges other branches in parallel, so `master` may have moved. If it has, rebase onto `origin/master` (never a merge commit: the user merges with "Rebase and merge", which drops merge commits and brings conflicts back), resolve each conflict inside the commit that causes it, re-run the checks, and push with `git push --force-with-lease=<name>:<old sha> origin worktree-<name>:<name>`. Confirm with `gh pr view <n> --json mergeStateStatus` (must be `CLEAN`, not `BEHIND` or `DIRTY`).
 
 ## Reference material
 
