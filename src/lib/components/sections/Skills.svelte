@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { tick } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
 	import { SKILL_GROUPS } from '$lib/data/skills';
 	import type { Dict, Lang } from '$lib/i18n';
 	import { ICONS } from '$lib/data/icons';
+	import { hydrated } from '$lib/hydrated.svelte';
 	import { DESKTOP_QUERY } from '$lib/breakpoints';
 	import { logoColor } from '$lib/color';
 	import { localize } from '$lib/i18n/lang';
@@ -15,17 +16,13 @@
 	let { lang, title, t }: { lang: Lang; title: string; t: Dict['skills'] } = $props();
 
 	/** False in the prerendered HTML: without JS every group shows, stacked, and there are no tabs. */
-	let enhanced = $state(false);
+	const enhanced = hydrated();
 	let selected = $state(0);
 	/** Phone accordion: the open group (Backend first), -1 when all are closed. */
 	let open = $state(0);
 	/** False on the server; before hydration nothing is hidden anyway. */
 	const desktop = new MediaQuery(DESKTOP_QUERY, false);
 	const tabs: HTMLButtonElement[] = [];
-
-	onMount(() => {
-		enhanced = true;
-	});
 
 	async function onKeydown(event: KeyboardEvent, index: number) {
 		const next = nextTab(index, event.key, SKILL_GROUPS.length);
@@ -38,8 +35,8 @@
 </script>
 
 <Section id="skills" {title} lead={t.lead}>
-	<div class="skills" class:enhanced>
-		{#if enhanced}
+	<div class="skills" class:enhanced={enhanced.current}>
+		{#if enhanced.current}
 			<div class="tablist" role="tablist" aria-orientation="vertical" aria-label={t.tabsLabel}>
 				{#each SKILL_GROUPS as group, i (group.id)}
 					<button
@@ -63,8 +60,11 @@
 		{/if}
 		<div class="panels">
 			{#each SKILL_GROUPS as group, i (group.id)}
-				{@const hidden = panelHidden({ enhanced, desktop: desktop.current, selected, open }, i)}
-				{#if enhanced}
+				{@const hidden = panelHidden(
+					{ enhanced: enhanced.current, desktop: desktop.current, selected, open },
+					i
+				)}
+				{#if enhanced.current}
 					<!-- Phone only (CSS): the tab list is hidden there, these buttons on desktop. -->
 					<button
 						type="button"
@@ -83,8 +83,8 @@
 				<div
 					class="panel"
 					id="skills-panel-{group.id}"
-					role={enhanced && desktop.current ? 'tabpanel' : undefined}
-					aria-labelledby={!enhanced
+					role={enhanced.current && desktop.current ? 'tabpanel' : undefined}
+					aria-labelledby={!enhanced.current
 						? undefined
 						: desktop.current
 							? `skills-tab-${group.id}`

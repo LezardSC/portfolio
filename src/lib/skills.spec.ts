@@ -23,4 +23,15 @@ describe('panelHidden', () => {
 	it('hides nothing before hydration', () => {
 		for (const i of [0, 1, 2]) expect(panelHidden({ ...base, enhanced: false }, i)).toBe(false);
 	});
+	it('shows only the selected tab on desktop, whatever the accordion state', () => {
+		expect(panelHidden(base, 2)).toBe(false);
+		expect(panelHidden(base, 0)).toBe(true);
+		expect(panelHidden({ ...base, open: -1 }, 2)).toBe(false);
+	});
+	it('shows only the open group on phones, none when all are closed', () => {
+		const phone = { ...base, desktop: false };
+		expect(panelHidden(phone, 0)).toBe(false);
+		expect(panelHidden(phone, 2)).toBe(true);
+		for (const i of [0, 1, 2]) expect(panelHidden({ ...phone, open: -1 }, i)).toBe(true);
+	});
 });
