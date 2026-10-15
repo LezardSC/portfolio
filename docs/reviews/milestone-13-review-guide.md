@@ -83,4 +83,6 @@ A fresh reviewer (Opus) read the whole branch. 0 Critical. Fixed (each with a te
 - **An interrupted deploy followed by a rollback could leave pages pointing at deleted JS** (the old manifest no longer described the server). The deploy now removes the manifest before uploading and also compares file sizes with the server. Re-checked on the local FTP server: a file of another size is sent again; with the manifest gone, everything is sent and the server ends byte-identical to `build/`.
 - **The CVs were cached for a week** (an updated CV could reach a returning recruiter late): PDFs now revalidate on every visit, like the pages.
 
+After merging `master` (project order and the portfolio project's images): the new order puts a 1st-place hackathon chip on a big desktop card, and in light theme its text was 4.33:1 on its tint (axe needs 4.5). The chip text now mixes 8% of the text colour into the accent: 4.84:1, barely visible. Audit all PASS again (mobile performance 96).
+
 Deferred minors (on `docs/backlog.md`): `/en` without the slash takes an extra http hop; old hashed chunks deleted at once; empty remote folders stay; the server config assumes the domain root; Accept-Language differences on malformed headers.
