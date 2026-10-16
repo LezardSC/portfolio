@@ -35,10 +35,30 @@ describe('static/.htaccess', () => {
 		'fry',
 		'*',
 		'',
-		'en-GB, fr'
+		'en-GB, fr',
+		// Malformed headers (issue #39): both sides read the leading letters of each item and skip
+		// whatever is not en or fr, however odd. q-values are ignored on both sides.
+		'en_US,fr',
+		'fr_FR',
+		'de_DE,fr',
+		'de,,fr',
+		' , fr',
+		'de;level=1,fr',
+		'de;q=0.5;level=1,fr',
+		'abcdefghi,fr',
+		'de-abcdefghi,fr',
+		'1fr,fr',
+		'en;q=0,fr'
 	])('chooses what pickLang chooses for "%s"', (header) => {
 		const htaccessLang = frenchRule().test(header) ? 'fr' : 'en';
 		expect(htaccessLang).toBe(pickLang(headerPrefs(header)));
+	});
+
+	it('reads a long malformed header in linear time (no catastrophic backtracking)', () => {
+		const header = `${'  de  ;  q=0.5  ,'.repeat(2000)}en`;
+		const start = performance.now();
+		expect(frenchRule().test(header)).toBe(false);
+		expect(performance.now() - start).toBeLessThan(100);
 	});
 
 	it('revalidates pages and the CVs on every visit (an updated CV must not be served stale)', () => {
