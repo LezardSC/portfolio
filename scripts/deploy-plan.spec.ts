@@ -54,6 +54,30 @@ describe('planDeploy', () => {
 		expect(plan.deletes).toEqual(['old.js', 'x/old.png']);
 	});
 
+	it("keeps the previous build's hashed files for one more deploy (pages open during it)", () => {
+		const plan = planDeploy(
+			{ 'index.html': 'new', '_app/immutable/chunks/b.js': 'b' },
+			{ 'index.html': 'old', '_app/immutable/chunks/a.js': 'a', 'old.png': 'p' },
+			['index.html', '_app/immutable/chunks/a.js', 'old.png']
+		);
+		expect(plan.deletes).toEqual(['old.png']);
+	});
+
+	it('deletes the hashed files of the build before the previous one', () => {
+		// a.js was kept by the last deploy, which left a manifest of its own build only
+		const plan = planDeploy(
+			{ '_app/immutable/chunks/c.js': 'c' },
+			{ '_app/immutable/chunks/b.js': 'b' },
+			['_app/immutable/chunks/a.js', '_app/immutable/chunks/b.js']
+		);
+		expect(plan.deletes).toEqual(['_app/immutable/chunks/a.js']);
+	});
+
+	it('deletes all stale hashed files when there is no manifest (first or interrupted deploy)', () => {
+		const plan = planDeploy({}, {}, ['_app/immutable/chunks/a.js']);
+		expect(plan.deletes).toEqual(['_app/immutable/chunks/a.js']);
+	});
+
 	it('uploads a file whose size on the server differs, even when the manifest agrees', () => {
 		const plan = planDeploy(
 			{ 'en/index.html': 'h1' },
