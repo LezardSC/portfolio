@@ -337,7 +337,7 @@ In `src/lib/data/profile.ts`.
 - `available: true` shows the green "Available for work" pill in the hero.
 - `email`, `linkedin`, `github`, `malt`: contact links.
 - **CV:** replace `static/cv-en.pdf` and `static/cv-fr.pdf`, keeping the names.
-- **Photo:** replace `static/photo.jpg`, keeping the name. It's shown cropped to portrait 4:5 (240×300 on screen), so use at least 480px wide with your face near the centre.
+- **Photo:** replace `static/photo.jpg`, keeping the name. It's shown cropped to portrait 4:5 (240×300 on screen), so face near the centre. For sharp screens use a source whose centred 4:5 crop is at least 720px wide (for example 1200×1500 or a 1500×1500 square), and export it with `npm run photo -- <source image>`: it writes `static/photo-240|480|720.avif|webp|jpg` (4:5, never upscaled, with a warning when the source is too small). `--out <dir>` writes elsewhere. The page does not use these files yet (`<picture>` markup comes with the new photo).
 
 ---
 
