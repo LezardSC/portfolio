@@ -295,7 +295,7 @@ The hero's "Latest role" shows the newest job as "roleShort - companyShort" (or 
 		start: '2023', // optional, 'YYYY'
 		end: '2024',
 		points: [], // optional lines under the title
-		link: 'https://…' // optional: makes the title a link (certificate)
+		link: 'https://…' // optional: certificate URL, adds a "View certificate" link
 	},
 ```
 
