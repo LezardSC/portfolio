@@ -58,6 +58,8 @@ npm run deploy
 npm run smoke                 # checks the live site
 ```
 
+The deploy refuses to start while `static/` holds files git ignores (a Windows `*:Zone.Identifier` download marker, a `.DS_Store`): the build copies all of `static/`, so they would be uploaded. Delete them, rebuild, deploy again.
+
 What the deploy does: it compares `build/` with the manifest it left on the server last time (`.deploy-manifest.json`, hidden from visitors) and with the file sizes on the server, removes that manifest, uploads only new and changed files (assets first, then `.htaccess`, then the pages), then writes the new manifest and deletes files that are no longer in `build/`. A deploy cut off halfway leaves no manifest, so the next one sends everything again. It never deletes `.ovhconfig` (OVH's own config). Optional settings: `FTP_DIR` (default `www`), `FTP_PORT` (default 22), `SFTP_HOST_KEY` (comma-separated fingerprints that replace the pinned ones, for a test server).
 
 ## Size budget

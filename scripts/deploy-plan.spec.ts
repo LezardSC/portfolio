@@ -1,5 +1,16 @@
-import { describe, expect, it } from 'vitest';
-import { fingerprint, hostKeyTrusted, MANIFEST, OVH_HOST_KEYS, planDeploy } from './deploy-plan';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
+import {
+	fingerprint,
+	hostKeyTrusted,
+	ignoredFiles,
+	MANIFEST,
+	OVH_HOST_KEYS,
+	planDeploy
+} from './deploy-plan';
 
 describe('planDeploy', () => {
 	it('uploads new and changed files, skips unchanged ones', () => {
@@ -74,5 +85,38 @@ describe('host key check', () => {
 
 	it('refuses any other key (someone in between, or the server changed)', () => {
 		expect(hostKeyTrusted(Buffer.from('another key'), OVH_HOST_KEYS)).toBe(false);
+	});
+});
+
+describe('ignoredFiles', () => {
+	let repo = '';
+	afterEach(() => rmSync(repo, { recursive: true, force: true }));
+
+	/** A throwaway repository with a .gitignore and the given (empty) files. */
+	function makeRepo(files: string[]): string {
+		repo = mkdtempSync(join(tmpdir(), 'ignored-'));
+		execFileSync('git', ['init', '-q'], { cwd: repo });
+		writeFileSync(join(repo, '.gitignore'), '*:Zone.Identifier\n.DS_Store\n');
+		for (const file of files) {
+			mkdirSync(dirname(join(repo, file)), { recursive: true });
+			writeFileSync(join(repo, file), '');
+		}
+		return repo;
+	}
+
+	it('lists the files under the folder that are ignored (Windows download markers)', () => {
+		const cwd = makeRepo(['static/cv.pdf', 'static/cv.pdf:Zone.Identifier', 'static/x/.DS_Store']);
+		expect(ignoredFiles('static', cwd)).toEqual([
+			'static/cv.pdf:Zone.Identifier',
+			'static/x/.DS_Store'
+		]);
+	});
+
+	it('is empty when nothing is ignored (a clean checkout, as in CI)', () => {
+		expect(ignoredFiles('static', makeRepo(['static/cv.pdf', 'static/a.png']))).toEqual([]);
+	});
+
+	it('leaves out ignored files outside the folder', () => {
+		expect(ignoredFiles('static', makeRepo(['static/a.png', 'other/.DS_Store']))).toEqual([]);
 	});
 });
