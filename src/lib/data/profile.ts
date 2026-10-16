@@ -70,14 +70,14 @@ export const PROFILE = typeset<Profile>({
 		},
 		{ label: { en: 'Latest role', fr: 'Dernier poste' }, auto: 'latestRole' },
 		{
-			label: { en: 'Main Stack', fr: 'Stack principale' },
+			label: { en: 'Main stack', fr: 'Stack principale' },
 			value: { en: 'Rust, Python, Node.js, C, Docker', fr: 'Rust, Python, Node.js, C, Docker' },
 			wide: true
 		},
 		{ label: { en: 'Hackathons', fr: 'Hackathons' }, auto: 'hackathons' },
 		{
 			label: { en: 'Languages', fr: 'Langues' },
-			value: { en: 'French, English', fr: 'Français, Anglais' }
+			value: { en: 'French, English', fr: 'Français, anglais' }
 		}
 	],
 	email: 'jocelynrenaultpro@gmail.com',
