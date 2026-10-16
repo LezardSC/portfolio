@@ -8,6 +8,7 @@
 	import { logoColor } from '$lib/color';
 	import { localize } from '$lib/i18n/lang';
 	import { nextTab, panelHidden, type ShownSkillGroup } from '$lib/skills';
+	import { slide } from '$lib/slide-dom';
 	import { THEME_BG } from '$lib/theme';
 	import Section from '../Section.svelte';
 	import Icon from '../Icon.svelte';
@@ -32,9 +33,27 @@
 	let selected = $state(0);
 	/** Phone accordion: the open group (Backend first), -1 when all are closed. */
 	let open = $state(0);
+	/** The phone group sliding closed, kept shown until it has; -1 when none. */
+	let closing = $state(-1);
 	/** False on the server; before hydration nothing is hidden anyway. */
 	const desktop = new MediaQuery(DESKTOP_QUERY, false);
 	const tabs: HTMLButtonElement[] = [];
+	const panels: HTMLDivElement[] = [];
+
+	async function toggle(index: number) {
+		const before = open;
+		open = open === index ? -1 : index;
+		if (closing === open) closing = -1;
+		if (before !== -1) slideClosed(before);
+		if (open === -1) return;
+		await tick();
+		slide(panels[open], true);
+	}
+
+	async function slideClosed(index: number) {
+		closing = index;
+		if ((await slide(panels[index], false)) && closing === index) closing = -1;
+	}
 
 	async function onKeydown(event: KeyboardEvent, index: number) {
 		const next = nextTab(index, event.key, groups.length);
@@ -73,7 +92,7 @@
 		<div class="panels">
 			{#each groups as group, i (group.id)}
 				{@const hidden = panelHidden(
-					{ enhanced: enhanced.current, desktop: desktop.current, selected, open },
+					{ enhanced: enhanced.current, desktop: desktop.current, selected, open, closing },
 					i
 				)}
 				{#if enhanced.current}
@@ -84,7 +103,7 @@
 						id="skills-acc-{group.id}"
 						aria-expanded={open === i}
 						aria-controls="skills-panel-{group.id}"
-						onclick={() => (open = open === i ? -1 : i)}
+						onclick={() => toggle(i)}
 					>
 						<span class="ic"><Icon path={group.icon} size={22} /></span>
 						<span>{group.title[lang]}</span>
@@ -93,6 +112,7 @@
 					</button>
 				{/if}
 				<div
+					bind:this={panels[i]}
 					class="panel"
 					id="skills-panel-{group.id}"
 					role={enhanced.current && desktop.current ? 'tabpanel' : undefined}
@@ -316,7 +336,9 @@
 		.panel {
 			padding: 1.25rem;
 		}
+		/* No stretching beside a tab list here; and with flex: 1 the slide's height would be ignored. */
 		.enhanced .panel {
+			flex: none;
 			min-height: 0;
 			padding: 1.125rem 0.125rem 0.5rem;
 			background: none;

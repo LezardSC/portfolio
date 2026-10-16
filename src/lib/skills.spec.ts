@@ -19,7 +19,7 @@ describe('nextTab', () => {
 });
 
 describe('panelHidden', () => {
-	const base = { enhanced: true, desktop: true, selected: 2, open: 0 };
+	const base = { enhanced: true, desktop: true, selected: 2, open: 0, closing: -1 };
 	it('hides nothing before hydration', () => {
 		for (const i of [0, 1, 2]) expect(panelHidden({ ...base, enhanced: false }, i)).toBe(false);
 	});
@@ -33,6 +33,13 @@ describe('panelHidden', () => {
 		expect(panelHidden(phone, 0)).toBe(false);
 		expect(panelHidden(phone, 2)).toBe(true);
 		for (const i of [0, 1, 2]) expect(panelHidden({ ...phone, open: -1 }, i)).toBe(true);
+	});
+	it('keeps a phone group shown while it slides closed', () => {
+		const phone = { ...base, desktop: false, open: 1, closing: 0 };
+		expect(panelHidden(phone, 0)).toBe(false);
+		expect(panelHidden(phone, 1)).toBe(false);
+		expect(panelHidden(phone, 2)).toBe(true);
+		expect(panelHidden({ ...phone, desktop: true }, 0)).toBe(true);
 	});
 });
 
