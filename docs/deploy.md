@@ -48,13 +48,15 @@ Every PR into `master` also gets a **preview** on Cloudflare Pages (workflow **P
 - Not tested by a preview: `.htaccess` (so `/` does not redirect to a language) and OVH's caching and headers. The smoke test after a merge checks those on the live site.
 - Every page is served with `X-Robots-Tag: noindex`.
 - Not a required check: a failed preview never blocks a merge. Re-run it from the PR's *Checks* tab.
-- Without the secrets below (or on a PR from a fork) the workflow does nothing and says so in its log.
+- Without the secrets below the workflow does nothing and says so in its log. A PR from a fork gets no secrets either: its run just shows the jobs as skipped.
+- The Cloudflare token is given only to the deploy step, never to the steps that run the PR's code (install, build, captures).
 - `wrangler` (Cloudflare's CLI) is not a dependency: the workflow runs an exact version with `npx`, so `npm ci` stays small.
 
 ### One-time setup
 
 1. Create a free account at https://dash.cloudflare.com/sign-up.
 2. *Workers & Pages* → *Create* → *Pages* → *Use direct upload* (not "Connect to Git"). Project name `jocelynrenault-previews`, then *Create project*. Skip the upload it then offers. In the project's *Settings*, the production branch should be `master` (nothing is ever deployed to it, so the production address stays empty).
+   If the dashboard insists on an upload first, create the project from the command line instead: `npx --yes wrangler@4.146.0 login`, then `npx --yes wrangler@4.146.0 pages project create jocelynrenault-previews --production-branch=master`.
 3. If the project's address is not `jocelynrenault-previews.pages.dev` (the name may be taken), set it: `gh variable set CLOUDFLARE_PAGES_DOMAIN` and enter the address without `https://`.
 4. *My Profile* → *API Tokens* → *Create Token* → *Create Custom Token*. Permissions: *Account* · *Cloudflare Pages* · *Edit*. Account resources: *Include* your account. Create it and copy the token (shown once).
 5. Your account ID: on the *Workers & Pages* overview page, right column (*Account ID*).
