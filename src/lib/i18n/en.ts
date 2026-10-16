@@ -88,7 +88,7 @@ export const en = {
 	experience: {
 		work: 'Experience',
 		education: 'Education',
-		hackathonsTitle: 'Hackathons - {n} podiums',
+		hackathonsTitle: { one: 'Hackathons - {n} podium', other: 'Hackathons - {n} podiums' },
 		present: 'Present',
 		internship: 'Internship',
 		translated: '(translated from French)',
