@@ -1,0 +1,177 @@
+# Every push to master (so every merge): each open PR from this repo is rebased onto master, so it
+# stays mergeable without asking. Without conflict it is a plain `git rebase`. With a conflict,
+# Claude Code resolves it, this workflow checks the result itself (lint, check, test), pushes and
+# comments on the PR with how each conflict was resolved; if anything fails, nothing is pushed and
+# the PR gets a comment saying to rebase by hand. Setup: docs/deploy.md, "Automatic rebase".
+name: Auto-rebase
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# One run at a time. A run waiting behind it is replaced by a newer one: only the latest master counts.
+concurrency:
+  group: auto-rebase
+  cancel-in-progress: false
+
+env:
+  # Exact version, fetched only when there is a conflict to resolve.
+  CLAUDE_CODE: '@anthropic-ai/claude-code@2.1.287'
+
+jobs:
+  prs:
+    runs-on: ubuntu-24.04
+    outputs:
+      list: ${{ steps.list.outputs.list }}
+    steps:
+      - id: list
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TOKEN: ${{ secrets.AUTO_REBASE_TOKEN }}
+        # Never a fork's PR: its branch is not ours to push to, and its code must not run with our secrets.
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::notice::No AUTO_REBASE_TOKEN secret, so no rebase: see docs/deploy.md, Automatic rebase."
+            echo "list=[]" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          list=$(gh pr list --repo "$GITHUB_REPOSITORY" --base master --state open --limit 100 \
+            --json number,headRefName,isCrossRepository \
+            --jq '[.[] | select(.isCrossRepository | not) | {number, branch: .headRefName}]')
+          echo "$list"
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+
+  rebase:
+    needs: prs
+    if: needs.prs.outputs.list != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        pr: ${{ fromJSON(needs.prs.outputs.list) }}
+    name: 'rebase #${{ matrix.pr.number }}'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    # The push token is given only to the push step: the PR's code (npm ci, checks) and Claude never see it.
+    env:
+      PR: ${{ matrix.pr.number }}
+      BRANCH: ${{ matrix.pr.branch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.pr.branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Rebase onto master
+        id: rebase
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          echo "old=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          if git merge-base --is-ancestor origin/master HEAD; then
+            echo "Already on top of master."
+            echo "result=current" >> "$GITHUB_OUTPUT"
+          elif git rebase origin/master; then
+            echo "result=clean" >> "$GITHUB_OUTPUT"
+          else
+            git rebase --abort
+            echo "result=conflict" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Only with a conflict: Claude redoes the rebase and resolves it, then the result is checked here.
+      - if: steps.rebase.outputs.result == 'conflict'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - if: steps.rebase.outputs.result == 'conflict'
+        run: npm ci
+      - name: Resolve the conflict with Claude
+        id: claude
+        if: steps.rebase.outputs.result == 'conflict'
+        continue-on-error: true
+        timeout-minutes: 25
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          PROMPT: |
+            This is a GitHub Actions run. Pull request #${{ matrix.pr.number }} (this checkout, branch
+            `${{ matrix.pr.branch }}`) conflicts with `master`. Rebase it onto `origin/master` and resolve
+            the conflicts. Read CLAUDE.md first.
+
+            1. `git rebase origin/master`. Resolve each conflict inside the commit that causes it: keep
+               everything master changed, and keep what that commit meant to do. `git add` the files, then
+               `GIT_EDITOR=true git rebase --continue`, until the rebase is done. Never a merge commit, and
+               never `git rebase --skip` a commit that still has changes of its own.
+            2. Run `npm run lint`, `npm run check` and `npm test`. If the rebase broke something, fix it in
+               the commit at fault: `git commit --fixup=<sha>`, then
+               `GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash origin/master`.
+            3. Leave no uncommitted changes. Do not push: this workflow checks the result and pushes it.
+
+            If a conflict needs a choice only the author can make (the two sides want different things),
+            run `git rebase --abort` and stop.
+
+            Your last message is posted as-is as a comment on the PR. Write it in English Markdown, no
+            preamble: for each file that conflicted, one bullet saying what each side changed and how you
+            combined them; then any fix from step 2. If you stopped, say why and what the author must decide.
+        run: |
+          if [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "No CLAUDE_CODE_OAUTH_TOKEN secret, so the conflict is not resolved." > "$RUNNER_TEMP/summary.md"
+            exit 1
+          fi
+          # Installed outside the repo, so the checkout stays clean. Its install script fetches the
+          # native binary: npx and newer npm skip it unless allowed.
+          npm install --global --prefix "$RUNNER_TEMP/claude" --allow-scripts=@anthropic-ai/claude-code "$CLAUDE_CODE"
+          "$RUNNER_TEMP/claude/bin/claude" -p "$PROMPT" \
+            --permission-mode acceptEdits \
+            --allowedTools 'Read,Edit,Write,Glob,Grep,Bash(git *),Bash(npm run *),Bash(npm test*),Bash(GIT_EDITOR=true git *),Bash(GIT_SEQUENCE_EDITOR=true git *)' \
+            > "$RUNNER_TEMP/summary.md"
+          cat "$RUNNER_TEMP/summary.md"
+      - name: Check Claude's rebase
+        id: verify
+        if: steps.claude.outcome == 'success'
+        run: |
+          fail() { echo "::error::$1"; exit 1; }
+          git_dir=$(git rev-parse --git-dir)
+          if [ -d "$git_dir/rebase-merge" ] || [ -d "$git_dir/rebase-apply" ]; then fail "The rebase is not finished."; fi
+          git merge-base --is-ancestor origin/master HEAD || fail "The branch is not on top of master."
+          [ -z "$(git rev-list --merges origin/master..HEAD)" ] || fail "The branch has a merge commit."
+          [ -z "$(git status --porcelain)" ] || fail "Uncommitted changes are left."
+          ! git diff origin/master HEAD | grep -qE '^\+(<<<<<<<|>>>>>>>)( |$)' || fail "Conflict markers are left."
+          npm run lint
+          npm run check
+          npm test
+
+      - name: Push
+        id: push
+        if: steps.rebase.outputs.result == 'clean' || steps.verify.outcome == 'success'
+        env:
+          TOKEN: ${{ secrets.AUTO_REBASE_TOKEN }}
+          OLD: ${{ steps.rebase.outputs.old }}
+        # A token of our own, not GITHUB_TOKEN, so that the push runs CI again on the PR. The lease
+        # refuses the push if the branch moved on GitHub since this run fetched it.
+        run: >-
+          git push --force-with-lease="refs/heads/$BRANCH:$OLD"
+          "https://x-access-token:$TOKEN@github.com/$GITHUB_REPOSITORY.git" "HEAD:refs/heads/$BRANCH"
+
+      - name: Comment on the PR
+        if: always() && steps.rebase.outputs.result == 'conflict'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUSHED: ${{ steps.push.outcome == 'success' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          {
+            if [ "$PUSHED" = true ]; then
+              echo "**Rebased onto master by Claude**, conflicts resolved (lint, check and test passed). Before merging, check that both sides survived:"
+            else
+              echo "**This PR conflicts with master and could not be rebased automatically.** Nothing was pushed: rebase it by hand. ([run]($RUN_URL))"
+            fi
+            echo
+            cat "$RUNNER_TEMP/summary.md" 2>/dev/null || true
+          } > "$RUNNER_TEMP/comment.md"
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/comment.md"
