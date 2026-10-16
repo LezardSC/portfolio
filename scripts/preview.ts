@@ -1,4 +1,5 @@
 import { execSync, spawn, type ChildProcess } from 'node:child_process';
+import { createServer, type AddressInfo } from 'node:net';
 import type { Page } from 'playwright';
 
 /** True once vite's output shows its URL on `port`. Colour codes (on when CI is set) are ignored. */
@@ -35,21 +36,45 @@ function waitForPreview(server: ChildProcess, port: number, timeoutMs = 30_000):
 	});
 }
 
-/** Builds the site, serves build/ on `port` and returns the function that stops the server. */
-export async function startPreview(port: number): Promise<() => void> {
-	execSync('npm run build', { stdio: 'inherit' });
-	const server = spawn(
-		'./node_modules/.bin/vite',
-		['preview', '--port', String(port), '--strictPort'],
-		{ stdio: ['ignore', 'pipe', 'pipe'] }
-	);
-	try {
-		await waitForPreview(server, port);
-	} catch (e) {
-		server.kill();
-		throw e;
+/**
+ * A port nothing listens on right now, chosen by the OS. Another process could still take it
+ * before vite does: startPreview() then tries again.
+ */
+export function freePort(): Promise<number> {
+	return new Promise((resolve, reject) => {
+		const server = createServer();
+		server.once('error', reject);
+		server.listen(0, '127.0.0.1', () => {
+			const { port } = server.address() as AddressInfo;
+			server.close(() => resolve(port));
+		});
+	});
+}
+
+export type Preview = { origin: string; stop: () => void };
+
+/**
+ * Builds the site (unless `build` is false), serves it with `vite preview` on a free port and
+ * returns its origin and the function that stops the server. Several worktrees can run this at
+ * the same time. Serves the current directory's build: run it from the checkout to capture.
+ */
+export async function startPreview({ build = true }: { build?: boolean } = {}): Promise<Preview> {
+	if (build) execSync('npm run build', { stdio: 'inherit' });
+	for (let attempt = 1; ; attempt++) {
+		const port = await freePort();
+		const server = spawn(
+			'./node_modules/.bin/vite',
+			['preview', '--host', '127.0.0.1', '--port', String(port), '--strictPort'],
+			{ stdio: ['ignore', 'pipe', 'pipe'] }
+		);
+		try {
+			await waitForPreview(server, port);
+			return { origin: `http://127.0.0.1:${port}`, stop: () => server.kill() };
+		} catch (e) {
+			server.kill();
+			if (attempt === 3) throw e;
+		}
 	}
-	return () => server.kill();
 }
 
 /** Phone (360px) collapsibles: open each kind once, so what they reveal is checked too. */

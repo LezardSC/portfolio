@@ -22,11 +22,8 @@ import {
 	type Category,
 	type Check
 } from './audit-report.ts';
-import { openCollapsibles, startPreview } from './preview.ts';
+import { freePort, openCollapsibles, startPreview } from './preview.ts';
 
-const PORT = 4180;
-const DEBUG_PORT = 9223;
-const ORIGIN = `http://localhost:${PORT}`;
 const OUT = 'reports';
 const LANGS = ['en', 'fr'] as const;
 const THEMES = ['dark', 'light'] as const;
@@ -41,7 +38,7 @@ async function axe(page: Page, label: string, file: string): Promise<Check> {
 	return axeCheck(label, violations);
 }
 
-async function browserChecks(browser: Browser): Promise<Check[]> {
+async function browserChecks(browser: Browser, origin: string): Promise<Check[]> {
 	const checks: Check[] = [];
 	for (const lang of LANGS)
 		for (const theme of THEMES)
@@ -54,7 +51,7 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 					reducedMotion: 'reduce'
 				});
 				const page = await context.newPage();
-				await page.goto(`${ORIGIN}/${lang}/`, { waitUntil: 'networkidle' });
+				await page.goto(`${origin}/${lang}/`, { waitUntil: 'networkidle' });
 				const label = `/${lang}/ ${theme} ${width}px`;
 				const file = `${lang}-${theme}-${width}`;
 				checks.push(await axe(page, label, file));
@@ -77,7 +74,7 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 	});
 	const page = await noJs.newPage();
 	await page.route('**/_app/**/*.js', (route) => route.abort());
-	await page.goto(`${ORIGIN}/en/`);
+	await page.goto(`${origin}/en/`);
 	checks.push(await axe(page, '/en/ before hydration light 360px', 'en-nojs-360'));
 	await noJs.close();
 	// The 404 page (no JS), both themes.
@@ -87,14 +84,14 @@ async function browserChecks(browser: Browser): Promise<Check[]> {
 			colorScheme: theme
 		});
 		const page = await context.newPage();
-		await page.goto(`${ORIGIN}/404.html`);
+		await page.goto(`${origin}/404.html`);
 		checks.push(await axe(page, `/404.html ${theme} 360px`, `404-${theme}`));
 		await context.close();
 	}
 	return checks;
 }
 
-async function screenshots(browser: Browser): Promise<void> {
+async function screenshots(browser: Browser, origin: string): Promise<void> {
 	mkdirSync(`${OUT}/screens`, { recursive: true });
 	for (const lang of LANGS)
 		for (const theme of THEMES)
@@ -107,7 +104,7 @@ async function screenshots(browser: Browser): Promise<void> {
 					reducedMotion: 'reduce'
 				});
 				const page = await context.newPage();
-				await page.goto(`${ORIGIN}/${lang}/`, { waitUntil: 'networkidle' });
+				await page.goto(`${origin}/${lang}/`, { waitUntil: 'networkidle' });
 				await page.screenshot({
 					path: `${OUT}/screens/${lang}-${theme}-${width}.png`,
 					fullPage: true
@@ -116,10 +113,11 @@ async function screenshots(browser: Browser): Promise<void> {
 			}
 }
 
-async function lighthouseChecksFor(): Promise<Check[]> {
+async function lighthouseChecksFor(origin: string): Promise<Check[]> {
 	// Lighthouse attaches to Playwright's own Chromium through its debugging port.
 	// (chrome-launcher is not used: under WSL it converts paths to Windows ones.)
-	const chrome = await chromium.launch({ args: [`--remote-debugging-port=${DEBUG_PORT}`] });
+	const debugPort = await freePort();
+	const chrome = await chromium.launch({ args: [`--remote-debugging-port=${debugPort}`] });
 	try {
 		const checks: Check[] = [];
 		const runs = [
@@ -128,9 +126,9 @@ async function lighthouseChecksFor(): Promise<Check[]> {
 		] as const;
 		for (const [label, config] of runs) {
 			const result = await lighthouse(
-				`${ORIGIN}/en/`,
+				`${origin}/en/`,
 				{
-					port: DEBUG_PORT,
+					port: debugPort,
 					output: ['html', 'json'],
 					logLevel: 'error',
 					onlyCategories: CATEGORIES
@@ -168,17 +166,17 @@ async function main(): Promise<void> {
 	mkdirSync(OUT, { recursive: true });
 	for (const entry of readdirSync(OUT))
 		if (!entry.startsWith('screens-')) rmSync(`${OUT}/${entry}`, { recursive: true, force: true });
-	const stop = await startPreview(PORT);
+	const { origin, stop } = await startPreview();
 	let checks: Check[] = [];
 	try {
 		const browser = await chromium.launch();
 		try {
-			checks = await browserChecks(browser);
-			if (process.argv.includes('--screens')) await screenshots(browser);
+			checks = await browserChecks(browser, origin);
+			if (process.argv.includes('--screens')) await screenshots(browser, origin);
 		} finally {
 			await browser.close();
 		}
-		checks.push(...(await lighthouseChecksFor()));
+		checks.push(...(await lighthouseChecksFor(origin)));
 	} finally {
 		stop();
 	}
