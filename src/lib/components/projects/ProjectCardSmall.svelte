@@ -229,14 +229,15 @@
 			min-height: 2.25rem;
 		}
 		/* No room for two links at the bottom: with code too, the demo goes top right, level with
-		   the label (which leaves it room). */
+		   the label (which leaves it room). A margin, not padding: the label paints above the link,
+		   so its box must stop short of it or it swallows the taps. */
 		.card :global(.links:has(.repo) .demo) {
 			position: absolute;
 			top: 0.375rem;
 			right: 0.75rem;
 		}
 		.card:has(:global(.repo)):has(:global(.demo)) .label {
-			padding-right: 3.75rem;
+			margin-right: 3.75rem;
 		}
 		.card :global(.links a) {
 			font-size: 0.8125rem;
