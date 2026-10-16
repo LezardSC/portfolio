@@ -10,7 +10,7 @@ const gh = (repo: string) => `https://github.com/LezardSC/${repo}`;
 /**
  * Priority order: these projects come first, in this order; every other project follows, newest
  * first. Not a separate category: the first 6 of whatever list is displayed (filters included)
- * get the big cards (the first 5 on phones). Move a line to reorder. Every id must exist and not
+ * get the big cards; the rest are folded behind a button. Move a line to reorder. Every id must exist and not
  * be hidden (a test checks it).
  */
 export const PRIORITY: string[] = [

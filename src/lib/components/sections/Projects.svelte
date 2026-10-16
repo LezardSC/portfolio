@@ -9,8 +9,8 @@
 	import {
 		filterProjects,
 		NO_FILTERS,
-		projectLayout,
 		sortProjects,
+		splitProjects,
 		type Filters,
 		type SortKey
 	} from '$lib/projects';
@@ -25,13 +25,12 @@
 	let sort = $state<SortKey>('priority');
 
 	const sorted = $derived(sortProjects(filterProjects(PROJECTS, filters), sort, PRIORITY));
-	/** Both layouts are in the HTML and CSS picks one, so the prerendered page is right before JS runs. */
-	const layout = $derived(projectLayout(sorted));
+	const layout = $derived(splitProjects(sorted));
 	const ms = $derived(prefersReducedMotion.current ? 0 : 300);
 
-	/** False in the prerendered HTML: without JS every tile shows and there is no button. */
+	/** False in the prerendered HTML: without JS every project shows and there is no button. */
 	const ready = hydrated();
-	/** Which list is unfolded: any filter or sort change gives a new key, so the phone list folds back. */
+	/** Which list is unfolded: any filter or sort change gives a new key, so the other projects fold back. */
 	const listKey = $derived(JSON.stringify([filters.context, filters.domain, sort]));
 	let unfoldedKey = $state<string | null>(null);
 	const showAll = $derived(unfoldedKey === listKey);
@@ -49,32 +48,16 @@
 		</div>
 	{:else}
 		<ul class="grid large" role="list">
-			{#each layout.large as card (card.project.id)}
-				<li
-					class:desktop-only={card.desktopOnly}
-					animate:flip={{ duration: ms }}
-					in:fade={{ duration: ms }}
-				>
-					<ProjectCardLarge project={card.project} {lang} {t} />
+			{#each layout.large as project (project.id)}
+				<li animate:flip={{ duration: ms }} in:fade={{ duration: ms }}>
+					<ProjectCardLarge {project} {lang} {t} />
 				</li>
 			{/each}
 		</ul>
 
-		{#if layout.small.length > 0}
-			<h3 class="more" class:phone-only={!layout.smallOnDesktop}>{t.more}</h3>
-			<ul id="more-projects" class="grid small" role="list">
-				{#each layout.small as tile (tile.project.id)}
-					<li
-						class:phone-only={tile.phoneOnly}
-						class:folded={ready.current && !showAll && tile.foldable}
-						animate:flip={{ duration: ms }}
-						in:fade={{ duration: ms }}
-					>
-						<ProjectCardSmall project={tile.project} {lang} {t} />
-					</li>
-				{/each}
-			</ul>
-			{#if ready.current && layout.folded > 0}
+		{#if layout.others.length > 0}
+			<!-- Before the list, not after: the projects unfold below the button instead of pushing it out of view. -->
+			{#if ready.current}
 				<button
 					type="button"
 					class="btn show-more"
@@ -82,9 +65,19 @@
 					aria-controls="more-projects"
 					onclick={() => (unfoldedKey = showAll ? null : listKey)}
 				>
-					{showAll ? t.showFewer : plural(layout.folded, t.showMore, lang)}
+					{showAll ? t.showFewer : plural(layout.others.length, t.showMore, lang)}
 				</button>
 			{/if}
+			<div id="more-projects" hidden={ready.current && !showAll}>
+				<h3 class="more">{t.more}</h3>
+				<ul class="grid small" role="list">
+					{#each layout.others as project (project.id)}
+						<li animate:flip={{ duration: ms }} in:fade={{ duration: ms }}>
+							<ProjectCardSmall {project} {lang} {t} />
+						</li>
+					{/each}
+				</ul>
+			</div>
 		{/if}
 	{/if}
 </Section>
@@ -109,21 +102,17 @@
 		gap: 1rem;
 	}
 	.more {
-		margin: 5rem 0 1.5rem;
+		margin: 4rem 0 1.5rem;
 		font-size: 1.625rem;
 		font-weight: 800;
 	}
-	.show-more,
-	.phone-only {
-		display: none;
+	.show-more {
+		display: flex;
+		justify-content: center;
+		width: min(100%, 22rem);
+		margin: 3rem auto 0;
 	}
 	@media (width < 48rem) {
-		.phone-only {
-			display: revert;
-		}
-		.desktop-only {
-			display: none;
-		}
 		.large {
 			grid-template-columns: minmax(0, 1fr);
 			grid-auto-rows: auto;
@@ -134,17 +123,12 @@
 			gap: 0.625rem;
 		}
 		.more {
-			margin: 2.5rem 0 1.375rem;
+			margin: 2rem 0 1.375rem;
 			font-size: 1.3125rem;
 		}
-		.folded {
-			display: none;
-		}
 		.show-more {
-			display: flex;
-			justify-content: center;
 			width: 100%;
-			margin-top: 0.75rem;
+			margin-top: 1.5rem;
 		}
 	}
 	.empty {
