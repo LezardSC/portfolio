@@ -26,13 +26,18 @@
 	let announcement = $state('');
 	let address: HTMLElement | undefined = $state();
 	let timer: ReturnType<typeof setTimeout> | undefined;
+	let announceTimer: ReturnType<typeof setTimeout> | undefined;
 
-	onDestroy(() => clearTimeout(timer));
+	onDestroy(() => {
+		clearTimeout(timer);
+		clearTimeout(announceTimer);
+	});
 
-	/** Clearing first, then setting on the next frame, makes screen readers repeat an identical message. */
+	/** Clearing first, then setting after a short delay, makes screen readers repeat an identical message (some need ~100 ms). */
 	function announce(text: string) {
 		announcement = '';
-		requestAnimationFrame(() => (announcement = text));
+		clearTimeout(announceTimer);
+		announceTimer = setTimeout(() => (announcement = text), 100);
 	}
 
 	/** Copy the address; if the clipboard is unavailable (plain http, denied), select it and show a hint. */
