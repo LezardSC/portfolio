@@ -14,10 +14,12 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - `npm run lint` / `npm run format`: Prettier
 - `npm run build`, then `npm run preview`: static site in `build/`, served at http://localhost:4173
 - `npm run audit`: builds, serves, then runs axe (EN/FR × dark/light × 360/1280px, menu open, before hydration), a 360px overflow check and Lighthouse (mobile + desktop). Targets: 0 axe violations, Lighthouse 100 (Performance ≥ 95). Reports in `reports/` (git-ignored); `npm run audit -- --screens` also saves screenshots at 360–1440px. Not `npm audit`, which is npm's own security audit.
-- `npm run screens`: builds, then captures the site (EN/FR × dark/light × 360–1440px, phone collapsibles open, before hydration; 25 full pages) into `reports/screens-baseline/`. `npm run screens -- --compare` captures again and compares pixel by pixel, writing diff images to `reports/screens-diff/` (exit 1 on any difference). Take the baseline before a refactor, compare after each step.
+- `npm run screens`: builds, then captures the site (EN/FR × dark/light × 360–1440px, phone collapsibles open, before hydration; 25 full pages) into `reports/screens-baseline/`. `npm run screens -- --compare` captures again and compares pixel by pixel, writing diff images to `reports/screens-diff/` (exit 1 on any difference). Take the baseline before a refactor, compare after each step. `--out <dir>` captures elsewhere, `--no-build` serves the existing build; `--before <dir> --after <dir> --review <dir>` writes the review page that CI publishes in each PR preview.
+- `npm run audit` and `npm run screens` serve the build on a free port, so several worktrees can run them at once. `npm run dev` takes the next free port too: read the URL it prints.
 - `npm run og`: regenerates the share images and icons in `static/` (loads the data through Vite).
 - `npm run budget`: fails when `build/` is over 80 MB (the OVH hosting has 100) and lists the largest files.
 - `npm run deploy [-- --dry-run]`: SFTP upload of `build/` (only changed files; reads `.env.deploy`). Normally CI does it on merge: see `docs/deploy.md`.
+- PR previews: the **Preview** workflow deploys every PR to `https://pr-<n>.jocelynrenault-previews.pages.dev` with a before/after page at `/_review/`, and links both in a PR comment (`docs/deploy.md`, "PR previews").
 - `npm run smoke`: checks the live site (redirects, canonical, caching, 404).
 - `npm run audit -- --ci`: as in CI, Lighthouse performance is reported, not required.
 
@@ -51,13 +53,16 @@ The user builds this **one milestone at a time** and reviews each one before the
 4. Push a branch, open a PR with `gh` (installed and authenticated as LezardSC), and add a review guide in `docs/reviews/`.
 5. Stop. The user reviews the PR before anything is merged.
 
-Smaller work goes **issue by issue**, without a plan file:
+Smaller work goes **issue by issue**, without a plan file. The same routine works in a terminal opened for one issue (`claude --worktree issue-<n>-<slug>`) and for an agent dispatched from another session:
 
-1. Read the issue and check it still holds (the code may have moved on). Unclear or several possible fixes: ask first.
-2. One worktree and branch per issue (`issue-<n>-<slug>`). Small related issues may share a PR.
-3. Fix it, tests first when there is logic. Run `npm run check`, `npm test`, `npm run lint`; for anything visual, `npm run screens -- --compare` against a baseline taken before.
-4. Open the PR with `Closes #<n>` in its description (merging closes the issue). A review guide in `docs/reviews/` only when the change is big enough to need one.
-5. Stop. The user reviews and merges.
+1. One worktree and branch per issue (`issue-<n>-<slug>`), then `npm ci` in it. Small related issues may share a PR.
+2. Read the issue (`gh issue view <n>`) and check it still holds (the code may have moved on). Unclear, or a choice that is the user's to make: ask before writing code. A dispatched agent stops and reports the question instead of guessing.
+3. Fix it, tests first when there is logic. Run `npm run check`, `npm test`, `npm run lint`; `npm run audit` when the UI changed.
+4. Fetch and rebase on `origin/master` (Git notes), push, open the PR with `Closes #<n>` and a short "what to look at" list. A review guide in `docs/reviews/` only when the change is big enough to need one.
+5. Wait for the **Preview** comment on the PR (`gh pr view <n> --comments`), open its `/_review/` page and check that only intended screens changed. If not, fix and push again.
+6. Stop. The user reviews (often on the phone, from the preview) and merges. "Address the review on PR #<n>" means: read the comments (`gh pr view <n> --comments` and `gh api repos/LezardSC/portfolio/pulls/<n>/comments`), fix, push, and answer each one.
+
+**Dispatching several issues** ("work on #47 #48 #50" in one session): read each issue and guess which files it touches. Issues likely to touch the same files run one after another; the others run in parallel, one background agent per issue (Agent tool, `isolation: "worktree"`), each told to follow the routine above and to stop at step 6. Report each PR with its preview link, and any question an agent stopped on.
 
 ## Git notes
 

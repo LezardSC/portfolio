@@ -11,6 +11,7 @@ My personal portfolio, live at **[jocelynrenault.com](https://jocelynrenault.com
 - English and French, dark and light themes; works without JavaScript
 - Tested with Vitest; every PR runs lint, type check, tests, an accessibility audit (axe) and Lighthouse in CI
 - Deployed over SFTP to OVH hosting by GitHub Actions on each merge to `master`
+- Every PR also gets a preview on Cloudflare Pages, with a before/after page of the screens it changes
 
 ## Run it locally
 
@@ -32,6 +33,12 @@ Other scripts:
 - `npm run budget` - build size budget (80 MB)
 - `npm run deploy` - SFTP deploy (normally done by CI)
 - `npm run smoke` - checks the live site
+
+## Working on several issues at once
+
+Each issue gets its own git worktree and branch, so several can be worked on in parallel (one terminal each with `claude --worktree issue-<n>-<slug>`, or dispatched from one session). `npm run audit` and `npm run screens` pick free ports, so they can run in several worktrees at the same time.
+
+Each PR is then reviewed from its preview, linked in a comment on the PR: the site itself, and `/_review/`, which shows every screen the PR changed (both languages, both themes, phone to desktop) before and after. Both work on a phone. See [PR previews](docs/deploy.md#pr-previews).
 
 ## Layout
 
