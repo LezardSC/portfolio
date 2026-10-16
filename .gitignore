@@ -28,3 +28,6 @@ vite.config.ts.timestamp-*
 
 # Audit output
 /reports
+
+# Claude Code (worktrees, local settings)
+/.claude/
