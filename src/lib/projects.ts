@@ -6,10 +6,11 @@ export type { Context, Domain };
 export const SORTS = ['priority', 'newest'] as const;
 export type SortKey = (typeof SORTS)[number];
 
-/** How many results get the large card layout: the first ones of the displayed list, whatever they are. */
+/**
+ * How many results get the large card layout, on every screen: the first ones of the displayed
+ * list, whatever they are. The rest are the "Other projects", behind a button.
+ */
 export const LARGE_COUNT = 6;
-/** Same on phones, which have room for fewer: the next ones lead the small tiles. */
-export const PHONE_LARGE_COUNT = 5;
 
 /**
  * Card media. Paths are relative to `static/`, without a leading slash. A video always has a
@@ -45,9 +46,6 @@ export type Project = {
 export function mainDomain(p: Project): Domain {
 	return p.domains[0];
 }
-
-/** Small project tiles shown on phones before the "See N other projects" button. */
-export const PHONE_OTHERS = 6;
 
 export type Filters = { context: Context | 'all'; domain: Domain | 'all' };
 export const NO_FILTERS: Filters = { context: 'all', domain: 'all' };
@@ -98,48 +96,12 @@ export function visibleProjects(list: readonly Project[]): Project[] {
 	return list.filter((p) => !p.hidden);
 }
 
-export type LayoutCounts = { large: number; phoneLarge: number; phoneOthers: number };
-
-/** The projects grid for both screens: the page renders both and CSS shows one. */
-export type ProjectLayout = {
-	/** Big cards; `desktopOnly` past the phone's count (a small tile there instead). */
-	large: { project: Project; desktopOnly: boolean }[];
-	/** Small tiles; `phoneOnly` = a big card on desktop; `foldable` = behind the phone's button. */
-	small: { project: Project; phoneOnly: boolean; foldable: boolean }[];
-	/** How many tiles the phone folds behind "See N other projects". */
-	folded: number;
-	/** Whether desktop has small tiles at all (else the "More projects" heading is phone-only). */
-	smallOnDesktop: boolean;
-};
-
-/**
- * Desktop gives big cards to the first `large`, phones to the first `phoneLarge` (fewer); the
- * projects in between are big on desktop and lead the small tiles on phones, which show
- * `phoneOthers` tiles before the button. Assumes `phoneLarge <= large`.
- */
-export function projectLayout(
+/** The first `large` projects get big cards; the `others` (small tiles) are folded behind a button. */
+export function splitProjects(
 	sorted: readonly Project[],
-	counts: LayoutCounts = {
-		large: LARGE_COUNT,
-		phoneLarge: PHONE_LARGE_COUNT,
-		phoneOthers: PHONE_OTHERS
-	}
-): ProjectLayout {
-	const between =
-		Math.min(counts.large, sorted.length) - Math.min(counts.phoneLarge, sorted.length);
-	const tiles = sorted.slice(counts.phoneLarge);
-	return {
-		large: sorted
-			.slice(0, counts.large)
-			.map((project, i) => ({ project, desktopOnly: i >= counts.phoneLarge })),
-		small: tiles.map((project, i) => ({
-			project,
-			phoneOnly: i < between,
-			foldable: i >= counts.phoneOthers
-		})),
-		folded: Math.max(0, tiles.length - counts.phoneOthers),
-		smallOnDesktop: sorted.length > counts.large
-	};
+	large: number = LARGE_COUNT
+): { large: Project[]; others: Project[] } {
+	return { large: sorted.slice(0, large), others: sorted.slice(large) };
 }
 
 /** Where the media/title link points: the repo, else the demo, else nowhere. */

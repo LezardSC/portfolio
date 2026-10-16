@@ -2,13 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
 	countFor,
 	filterProjects,
+	LARGE_COUNT,
 	mediaFiles,
 	mediaIssues,
 	NO_FILTERS,
 	primaryLink,
-	projectLayout,
 	shouldPlayVideo,
 	sortProjects,
+	splitProjects,
 	visibleProjects,
 	type Project
 } from './projects';
@@ -205,52 +206,27 @@ describe('mediaFiles', () => {
 	});
 });
 
-describe('projectLayout', () => {
-	const counts = { large: 6, phoneLarge: 5, phoneOthers: 6 };
+describe('splitProjects', () => {
 	const n = (len: number) => Array.from({ length: len }, (_, i) => make({ id: `p${i}` }));
-	/** `*` desktop-only big card, `^` phone-only tile, `~` folded behind the phone button. */
-	const layoutIds = (len: number) => {
-		const l = projectLayout(n(len), counts);
-		return {
-			large: l.large.map((c) => c.project.id + (c.desktopOnly ? '*' : '')),
-			small: l.small.map((c) => c.project.id + (c.phoneOnly ? '^' : '') + (c.foldable ? '~' : '')),
-			folded: l.folded,
-			smallOnDesktop: l.smallOnDesktop
-		};
+	const ids = (len: number, large = 6) => {
+		const s = splitProjects(n(len), large);
+		return { large: s.large.map((p) => p.id), others: s.others.map((p) => p.id) };
 	};
 
 	it('is empty for no project', () => {
-		expect(layoutIds(0)).toEqual({ large: [], small: [], folded: 0, smallOnDesktop: false });
+		expect(ids(0)).toEqual({ large: [], others: [] });
 	});
-	it('gives big cards to everything when there are 5 or fewer', () => {
-		expect(layoutIds(3)).toEqual({
-			large: ['p0', 'p1', 'p2'],
-			small: [],
-			folded: 0,
-			smallOnDesktop: false
+	it('gives big cards to everything when there are 6 or fewer', () => {
+		expect(ids(3)).toEqual({ large: ['p0', 'p1', 'p2'], others: [] });
+		expect(ids(6)).toEqual({ large: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'], others: [] });
+	});
+	it('puts everything past the first 6 in the other projects, in order', () => {
+		expect(ids(9)).toEqual({
+			large: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5'],
+			others: ['p6', 'p7', 'p8']
 		});
 	});
-	it('with exactly 5 (the phone boundary), all are big cards and no phone-only tile appears', () => {
-		expect(layoutIds(5)).toEqual({
-			large: ['p0', 'p1', 'p2', 'p3', 'p4'],
-			small: [],
-			folded: 0,
-			smallOnDesktop: false
-		});
-	});
-	it('with exactly 6, the 6th is a big card on desktop and the only (phone-only) tile on phones', () => {
-		expect(layoutIds(6)).toEqual({
-			large: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5*'],
-			small: ['p5^'],
-			folded: 0,
-			smallOnDesktop: false
-		});
-	});
-	it('folds the phone tiles past 6 behind the button', () => {
-		const l = layoutIds(13);
-		expect(l.large.at(-1)).toBe('p5*');
-		expect(l.small).toEqual(['p5^', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11~', 'p12~']);
-		expect(l.folded).toBe(2);
-		expect(l.smallOnDesktop).toBe(true);
+	it('defaults to LARGE_COUNT big cards', () => {
+		expect(splitProjects(n(LARGE_COUNT + 2)).large).toHaveLength(LARGE_COUNT);
 	});
 });
