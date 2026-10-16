@@ -2,7 +2,8 @@
  * npm run deploy [-- --dry-run]
  * Uploads build/ to the hosting over SFTP: only new and changed files (hashes compared with the
  * manifest left by the previous deploy), assets before .htaccess before HTML, then the manifest,
- * then deletes the files no longer in build/. The password is only sent to a server holding one
+ * then deletes the files no longer in build/ (the previous build's _app/immutable/ files wait one
+ * more deploy, for pages still open). The password is only sent to a server holding one
  * of the pinned host keys (OVH_HOST_KEYS). It refuses to start while static/ holds files git
  * ignores, since the build copied them into build/.
  * Needs FTP_HOST, FTP_USER, FTP_PASSWORD (GitHub secrets, or .env.deploy locally); FTP_DIR
