@@ -4,6 +4,7 @@
  *                               capture with the baseline (bytes, then pixels), writes diff
  *                               images to reports/screens-diff/ and exits 1 on any difference.
  * --out <dir>                   captures into <dir> instead of the baseline folder.
+ * --force                       replaces an existing baseline (or --out folder); refused otherwise.
  * --no-build                    serves the existing build instead of building first.
  * --before <dir> --after <dir> --review <dir>
  *                               compares two capture folders and writes a review page
@@ -18,6 +19,7 @@ import { reviewPage, reviewSummary } from './review-page.ts';
 import {
 	captures,
 	formatResults,
+	checkOverwrite,
 	parseScreensArgs,
 	type Capture,
 	type Result
@@ -212,6 +214,7 @@ async function compareDirs(before: string, after: string, out: Output): Promise<
 async function main(): Promise<void> {
 	const args = parseScreensArgs(process.argv.slice(2));
 	if (args.mode === 'capture') {
+		checkOverwrite(args.out, existsSync(args.out), args.force);
 		await captureInto(args.out, args.build);
 		console.log(`\n${captures().length} captures in ${args.out}/`);
 		return;

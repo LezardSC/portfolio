@@ -47,25 +47,33 @@ const BASELINE = 'reports/screens-baseline';
 
 /** What `npm run screens` was asked to do. */
 export type ScreensArgs =
-	| { mode: 'capture'; out: string; build: boolean }
+	| { mode: 'capture'; out: string; build: boolean; force: boolean }
 	| { mode: 'compare'; build: boolean }
 	| { mode: 'review'; before: string; after: string; review: string };
+
+/** Refuses to replace an existing capture folder (the baseline) unless --force was given. */
+export function checkOverwrite(out: string, exists: boolean, force: boolean): void {
+	if (exists && !force)
+		throw new Error(`${out}/ already exists: --force replaces it (the old captures are lost).`);
+}
 
 const PATH_OPTIONS = ['--out', '--before', '--after', '--review'];
 
 /**
  * (none) or --out <dir>: capture (default reports/screens-baseline). --compare: capture again and
- * compare with the baseline. --no-build: serve the existing build. --before <dir> --after <dir>
+ * compare with the baseline. --force: replace an existing capture folder. --no-build: serve the existing build. --before <dir> --after <dir>
  * --review <dir>: compare two capture folders and write the review page (CI, preview.yml).
  */
 export function parseScreensArgs(argv: readonly string[]): ScreensArgs {
 	const paths: Record<string, string> = {};
 	let compare = false;
+	let force = false;
 	let build = true;
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
 		if (arg === '--compare') compare = true;
 		else if (arg === '--no-build') build = false;
+		else if (arg === '--force') force = true;
 		else if (PATH_OPTIONS.includes(arg)) {
 			const value = argv[++i];
 			if (!value || value.startsWith('--')) throw new Error(`${arg} needs a path`);
@@ -77,13 +85,14 @@ export function parseScreensArgs(argv: readonly string[]): ScreensArgs {
 	const review = paths['--review'];
 	if (before || after || review) {
 		if (!before || !after || !review) throw new Error('--before, --after and --review go together');
-		if (compare || !build || paths['--out'])
+		if (compare || !build || force || paths['--out'])
 			throw new Error('--before/--after/--review compare existing captures: no other option');
 		return { mode: 'review', before, after, review };
 	}
 	if (compare) {
+		if (force) throw new Error('--force only applies when saving a baseline');
 		if (paths['--out']) throw new Error('--compare always captures into reports/screens-current/');
 		return { mode: 'compare', build };
 	}
-	return { mode: 'capture', out: paths['--out'] ?? BASELINE, build };
+	return { mode: 'capture', out: paths['--out'] ?? BASELINE, build, force };
 }
