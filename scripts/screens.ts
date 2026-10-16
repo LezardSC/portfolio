@@ -10,13 +10,11 @@ import { chromium, type Browser, type Page } from 'playwright';
 import { openCollapsibles, startPreview } from './preview.ts';
 import { captures, formatResults, type Capture, type Result } from './screens-report.ts';
 
-const PORT = 4181;
-const ORIGIN = `http://localhost:${PORT}`;
 const BASELINE = 'reports/screens-baseline';
 const CURRENT = 'reports/screens-current';
 const DIFF = 'reports/screens-diff';
 
-async function shoot(browser: Browser, c: Capture): Promise<Buffer> {
+async function shoot(browser: Browser, origin: string, c: Capture): Promise<Buffer> {
 	const context = await browser.newContext({
 		viewport: { width: c.width, height: 900 },
 		colorScheme: c.theme,
@@ -24,7 +22,7 @@ async function shoot(browser: Browser, c: Capture): Promise<Buffer> {
 	});
 	const page = await context.newPage();
 	if (c.noJs) await page.route('**/_app/**/*.js', (route) => route.abort());
-	await page.goto(`${ORIGIN}/${c.lang}/`, { waitUntil: 'networkidle' });
+	await page.goto(`${origin}/${c.lang}/`, { waitUntil: 'networkidle' });
 	if (c.open) await openCollapsibles(page);
 	await settle(page);
 	const png = await page.screenshot({ fullPage: true, animations: 'disabled' });
@@ -124,10 +122,10 @@ async function main(): Promise<void> {
 		rmSync(d, { recursive: true, force: true });
 		mkdirSync(d, { recursive: true });
 	}
-	const stop = await startPreview(PORT);
+	const { origin, stop } = await startPreview();
 	const results: Result[] = [];
 	try {
-		await capture(compare, dir, results);
+		await capture(origin, compare, dir, results);
 	} finally {
 		stop();
 	}
@@ -139,12 +137,17 @@ async function main(): Promise<void> {
 	process.exitCode = results.every((r) => r.same) ? 0 : 1;
 }
 
-async function capture(compare: boolean, dir: string, results: Result[]): Promise<void> {
+async function capture(
+	origin: string,
+	compare: boolean,
+	dir: string,
+	results: Result[]
+): Promise<void> {
 	const browser = await chromium.launch();
 	try {
 		const diffPage = await browser.newPage();
 		for (const c of captures()) {
-			const png = await shoot(browser, c);
+			const png = await shoot(browser, origin, c);
 			writeFileSync(`${dir}/${c.name}.png`, png);
 			if (!compare) continue;
 			const base = readFileSync(`${BASELINE}/${c.name}.png`);
