@@ -4,7 +4,7 @@
 	import { hackathonsNewestFirst, newestFirst, yearOf } from '$lib/experience';
 	import { localize } from '$lib/i18n/lang';
 	import type { Dict, Lang } from '$lib/i18n';
-	import { fill } from '$lib/i18n/format';
+	import { plural } from '$lib/i18n/format';
 	import EducationItem from '../experience/EducationItem.svelte';
 	import JobItem from '../experience/JobItem.svelte';
 	import Icon from '../Icon.svelte';
@@ -40,7 +40,7 @@
 		</div>
 		<div>
 			<h3 id="experience-hackathons" class="sub">
-				{fill(t.hackathonsTitle, { n: hackathons.length })}
+				{plural(hackathons.length, t.hackathonsTitle, lang)}
 			</h3>
 			<ol role="list" class="list" aria-labelledby="experience-hackathons">
 				{#each hackathons as h (h.event + h.date)}

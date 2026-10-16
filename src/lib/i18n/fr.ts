@@ -83,7 +83,10 @@ export const fr: Dict = {
 	experience: {
 		work: 'Expérience',
 		education: 'Formation',
-		hackathonsTitle: 'Hackathons - {n}\u00a0podiums',
+		hackathonsTitle: {
+			one: 'Hackathons - {n}\u00a0podium',
+			other: 'Hackathons - {n}\u00a0podiums'
+		},
 		present: 'Aujourd’hui',
 		internship: 'Stage',
 		translated: '(traduit de l’anglais)',
