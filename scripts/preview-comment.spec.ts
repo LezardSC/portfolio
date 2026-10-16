@@ -27,6 +27,9 @@ describe('previewComment', () => {
 		expect(body).not.toContain('/_review/');
 		expect(body).toContain('[workflow log](https://github.com/LezardSC/portfolio/actions/runs/1)');
 	});
+	it('warns that the address takes a minute or two to show a new push', () => {
+		expect(previewComment(input)).toContain('a minute or two');
+	});
 	it('says what the preview does not test', () => {
 		expect(previewComment(input)).toContain('.htaccess');
 	});
