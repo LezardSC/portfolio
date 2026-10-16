@@ -89,7 +89,7 @@ The PR's code (`npm ci`, the checks) and Claude never see the push token: only t
 ### One-time setup
 
 1. **Push token.** `GITHUB_TOKEN` cannot be used: GitHub does not start CI for a push made with it, so `checks` would never run on the rebased PR. On GitHub: *Settings* (of your account) → *Developer settings* → *Personal access tokens* → *Fine-grained tokens* → *Generate new token*. Name `portfolio auto-rebase`, expiration as long as you like (one year), *Only select repositories* → `LezardSC/portfolio`. Permissions: *Contents* · *Read and write*, *Workflows* · *Read and write* (needed to push a branch that changes `.github/workflows/`). Generate and copy it.
-2. **Claude token.** On your machine: `claude setup-token`. It opens the browser, then prints a long-lived token tied to your Claude subscription (conflict resolutions count against your usage). Copy it.
+2. **Claude token.** On your machine: `claude setup-token`. It opens the browser, then prints a long-lived token tied to your Claude subscription (conflict resolutions count against your usage limits; the workflow uses Sonnet, set by `CLAUDE_MODEL` at its top). Copy it.
 3. In the repo directory:
 
    ```bash
