@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { captures, formatResults, parseScreensArgs } from './screens-report.ts';
+import { captures, checkOverwrite, formatResults, parseScreensArgs } from './screens-report.ts';
 
 describe('captures', () => {
 	it('covers both languages and themes at every width, plus the open and no-JS states', () => {
@@ -38,15 +38,26 @@ describe('parseScreensArgs', () => {
 		expect(parseScreensArgs([])).toEqual({
 			mode: 'capture',
 			out: 'reports/screens-baseline',
-			build: true
+			build: true,
+			force: false
 		});
 	});
 	it('captures into --out, and skips the build with --no-build', () => {
 		expect(parseScreensArgs(['--out', '/tmp/after', '--no-build'])).toEqual({
 			mode: 'capture',
 			out: '/tmp/after',
-			build: false
+			build: false,
+			force: false
 		});
+	});
+	it('accepts --force when saving a baseline', () => {
+		expect(parseScreensArgs(['--force'])).toMatchObject({ mode: 'capture', force: true });
+	});
+	it('refuses --force with --compare or a review', () => {
+		expect(() => parseScreensArgs(['--compare', '--force'])).toThrow('--force');
+		expect(() =>
+			parseScreensArgs(['--before', 'b', '--after', 'a', '--review', 'r', '--force'])
+		).toThrow();
 	});
 	it('compares with the baseline', () => {
 		expect(parseScreensArgs(['--compare'])).toEqual({ mode: 'compare', build: true });
@@ -68,5 +79,15 @@ describe('parseScreensArgs', () => {
 			parseScreensArgs(['--before', 'b', '--after', 'a', '--review', 'r', '--compare'])
 		).toThrow();
 		expect(() => parseScreensArgs(['--compar'])).toThrow('Unknown option: --compar');
+	});
+});
+
+describe('checkOverwrite', () => {
+	it('refuses an existing folder without --force', () => {
+		expect(() => checkOverwrite('reports/screens-baseline', true, false)).toThrow('--force');
+	});
+	it('allows a new folder, or an existing one with --force', () => {
+		expect(() => checkOverwrite('x', false, false)).not.toThrow();
+		expect(() => checkOverwrite('x', true, true)).not.toThrow();
 	});
 });
