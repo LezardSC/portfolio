@@ -4,7 +4,7 @@ The site is static (`build/`) and lives at **https://jocelynrenault.com**, on th
 
 ## How the site goes online
 
-1. Open a PR into `master`. The **CI** workflow runs the job `checks`: lint, type check, tests, build, size budget, accessibility audit and Lighthouse (performance is shown, not required, in CI).
+1. Open a PR into `master`. The **CI** workflow runs the job `checks`: lint, type check, tests, build, size budget, accessibility audit and Lighthouse (performance is shown, not required, in CI). The **Preview** workflow also deploys the PR to its own address (see [PR previews](#pr-previews)).
 2. Merge it (only possible when `checks` is green).
 3. CI runs again on `master`. When it passes, the **Deploy** workflow builds the same commit, checks the budget, uploads what changed over SFTP (`npm run deploy`), then checks the live site (`npm run smoke`).
 4. A red Deploy run means GitHub emails you. The site keeps the previous version for anything not uploaded yet.
@@ -38,6 +38,36 @@ gh secret set FTP_PASSWORD
 The names say FTP because they are the hosting's FTP login, but the deploy connects over **SFTP** (SSH, encrypted). It only sends the password to a server whose host key is one of `OVH_HOST_KEYS` in `scripts/deploy-plan.ts`.
 
 **If the deploy stops with "Host denied (verification failed)":** OVH changed its server keys, or something is between you and OVH. Run `ssh-keyscan ftp.cluster129.hosting.ovh.net | ssh-keygen -lf -`, compare with what the OVH panel or support shows, and only then replace the fingerprints in `OVH_HOST_KEYS`.
+
+## PR previews
+
+Every PR into `master` also gets a **preview** on Cloudflare Pages (workflow **Preview**, `.github/workflows/preview.yml`). It is not production: OVH still only gets what is merged.
+
+- Address: `https://pr-<n>.jocelynrenault-previews.pages.dev` (one per PR, updated on every push). The bot's comment on the PR links `/en/`, `/fr/` and the review page.
+- `/_review/` in each preview: the screens (EN/FR × dark/light × 360–1440px, phone sections open, before JavaScript) that differ from where the PR branched from `master`, as before, after and diff. Readable on a phone.
+- Not tested by a preview: `.htaccess` (so `/` does not redirect to a language) and OVH's caching and headers. The smoke test after a merge checks those on the live site.
+- Every page is served with `X-Robots-Tag: noindex`.
+- Not a required check: a failed preview never blocks a merge. Re-run it from the PR's *Checks* tab.
+- Without the secrets below (or on a PR from a fork) the workflow does nothing and says so in its log.
+- `wrangler` (Cloudflare's CLI) is not a dependency: the workflow runs an exact version with `npx`, so `npm ci` stays small.
+
+### One-time setup
+
+1. Create a free account at https://dash.cloudflare.com/sign-up.
+2. *Workers & Pages* → *Create* → *Pages* → *Use direct upload* (not "Connect to Git"). Project name `jocelynrenault-previews`, then *Create project*. Skip the upload it then offers. In the project's *Settings*, the production branch should be `master` (nothing is ever deployed to it, so the production address stays empty).
+3. If the project's address is not `jocelynrenault-previews.pages.dev` (the name may be taken), set it: `gh variable set CLOUDFLARE_PAGES_DOMAIN` and enter the address without `https://`.
+4. *My Profile* → *API Tokens* → *Create Token* → *Create Custom Token*. Permissions: *Account* · *Cloudflare Pages* · *Edit*. Account resources: *Include* your account. Create it and copy the token (shown once).
+5. Your account ID: on the *Workers & Pages* overview page, right column (*Account ID*).
+6. In the repo directory:
+
+   ```bash
+   gh secret set CLOUDFLARE_API_TOKEN    # the token from step 4
+   gh secret set CLOUDFLARE_ACCOUNT_ID   # the ID from step 5
+   ```
+
+7. Open any PR (or push to one): the **Preview** run should end with a comment on the PR.
+
+To revoke: delete the token in Cloudflare, then `gh secret delete CLOUDFLARE_API_TOKEN`.
 
 ## Manual deploy
 
