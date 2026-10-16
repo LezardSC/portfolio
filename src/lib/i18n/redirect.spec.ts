@@ -17,6 +17,8 @@ const cases: [string[] | undefined, string][] = [
 	[['de-DE', 'fr-CA'], 'de-DE'],
 	[['de-DE', 'es'], 'de-DE'],
 	[['FR'], 'FR'],
+	[['fr_FR'], 'fr_FR'],
+	[['en_US', 'fr'], 'en_US'],
 	[[], 'fr-BE'],
 	[undefined, 'fr']
 ];

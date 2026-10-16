@@ -21,6 +21,11 @@ describe('pickLang', () => {
 		expect(pickLang(['de-DE', 'fr-FR'])).toBe('fr');
 		expect(pickLang(['es', 'en-GB', 'fr'])).toBe('en');
 	});
+	it('reads the leading letters of a malformed tag (underscore, no letters)', () => {
+		expect(pickLang(['fr_FR'])).toBe('fr');
+		expect(pickLang(['en_US', 'fr'])).toBe('en');
+		expect(pickLang(['1fr', 'fry', 'fr'])).toBe('fr');
+	});
 	it('falls back to en', () => {
 		expect(pickLang(['de-DE', 'ja'])).toBe('en');
 		expect(pickLang([])).toBe('en');

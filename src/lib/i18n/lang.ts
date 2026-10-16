@@ -14,12 +14,13 @@ export function isLang(v: string): v is Lang {
 }
 
 /**
- * First supported language from the browser's preference list, else 'en'.
+ * First supported language from the browser's preference list, else 'en'. Each tag is read by its
+ * leading letters ('fr-CA', 'fr_FR' → 'fr'; 'fry' stays 'fry'), as the `/` rule in static/.htaccess.
  * redirectScript() in redirect.ts duplicates this for the `/` page; redirect.spec.ts keeps them in sync.
  */
 export function pickLang(prefs: readonly string[]): Lang {
 	for (const pref of prefs) {
-		const base = pref.toLowerCase().split('-')[0];
+		const base = /^[a-z]*/.exec(pref.toLowerCase())![0];
 		if (isLang(base)) return base;
 	}
 	return 'en';
