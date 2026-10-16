@@ -21,6 +21,7 @@
 		"screens": "node scripts/screens.ts",
 		"og": "node scripts/og.ts",
 		"budget": "node scripts/budget.ts",
+		"photo": "node scripts/photo.ts",
 		"deploy": "node --env-file-if-exists=.env.deploy scripts/deploy.ts",
 		"smoke": "node scripts/smoke.ts"
 	},
@@ -36,6 +37,7 @@
 		"playwright": "1.63.0",
 		"prettier": "^3.8.3",
 		"prettier-plugin-svelte": "^4.1.0",
+		"sharp": "^0.35.5",
 		"simple-icons": "^16.33.0",
 		"ssh2-sftp-client": "^12.1.1",
 		"svelte": "^5.56.1",
