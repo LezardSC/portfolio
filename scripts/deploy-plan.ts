@@ -43,6 +43,12 @@ export function ignoredFiles(dir: string, cwd = '.'): string[] {
 	return out.split('\0').filter(Boolean).sort();
 }
 
+/**
+ * The build's hashed files (JS, CSS). A page loaded before a deploy still asks for the chunks of
+ * its own build, so these stay on the server for one more deploy.
+ */
+const IMMUTABLE = '_app/immutable/';
+
 /** Assets first, then .htaccess, then HTML: a page never points at a file not uploaded yet. */
 const rank = (path: string) => (path.endsWith('.html') ? 2 : path.endsWith('.htaccess') ? 1 : 0);
 
@@ -53,6 +59,9 @@ export type Sizes = { local: Record<string, number>; remote: Record<string, numb
  * What to send and delete. A file is sent when it is new, changed since the manifest, missing on
  * the server, or of another size there (a truncated upload, or a deploy cut off before it wrote
  * its manifest: the old manifest then no longer describes the server).
+ * A file no longer in build/ is deleted, except the previous build's hashed files: those listed in
+ * the remote manifest are kept, and since the new manifest lists only this build, the next deploy
+ * deletes them.
  */
 export function planDeploy(
 	local: Manifest,
@@ -66,6 +75,9 @@ export function planDeploy(
 	const uploads = Object.keys(local)
 		.filter((path) => local[path] !== remote[path] || !onServer.has(path) || sizeDiffers(path))
 		.sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
-	const deletes = remoteFiles.filter((path) => !(path in local) && !KEEP.includes(path)).sort();
+	const previousBuild = (path: string) => path.startsWith(IMMUTABLE) && path in remote;
+	const deletes = remoteFiles
+		.filter((path) => !(path in local) && !KEEP.includes(path) && !previousBuild(path))
+		.sort();
 	return { uploads, deletes };
 }
