@@ -25,6 +25,9 @@ import {
 import { freePort, openCollapsibles, startPreview } from './preview.ts';
 
 const OUT = 'reports';
+// axe-core/playwright bundles its own playwright-core, whose Page type differs from the pinned one.
+type AxePage = ConstructorParameters<typeof AxeBuilder>[0]['page'];
+
 const LANGS = ['en', 'fr'] as const;
 const THEMES = ['dark', 'light'] as const;
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
@@ -32,7 +35,9 @@ const SCREEN_WIDTHS = [360, 390, 768, 1024, 1440];
 const CI = process.argv.includes('--ci');
 
 async function axe(page: Page, label: string, file: string): Promise<Check> {
-	const { violations } = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
+	const { violations } = await new AxeBuilder({ page: page as unknown as AxePage })
+		.withTags(AXE_TAGS)
+		.analyze();
 	if (violations.length > 0)
 		writeFileSync(`${OUT}/axe-${file}.json`, JSON.stringify(violations, null, 2));
 	return axeCheck(label, violations);

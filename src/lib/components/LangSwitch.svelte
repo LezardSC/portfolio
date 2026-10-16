@@ -39,7 +39,7 @@
 	{href}
 	hreflang={target}
 	lang={target}
-	aria-label={t.label}
+	aria-label={`${t.short} – ${t.label}`}
 	title={t.label}
 	data-sveltekit-reload
 	{onclick}
