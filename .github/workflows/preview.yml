@@ -1,0 +1,100 @@
+# Every PR into master: a preview of the site on Cloudflare Pages and a before/after visual
+# review page, linked in one PR comment that each push updates. Not a required check, and it
+# never touches production (deploy.yml does, on merge). Setup: docs/deploy.md, "PR previews".
+name: Preview
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  PROJECT: jocelynrenault-previews
+  # Exact version, fetched only by this workflow (as a dependency it would add ~150 MB to every npm ci).
+  WRANGLER: wrangler@4.146.0
+
+jobs:
+  secrets:
+    # A fork's PR gets no secrets: nothing to deploy with.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    outputs:
+      ok: ${{ steps.check.outputs.ok }}
+    steps:
+      - id: check
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$TOKEN" ] && [ -n "$ACCOUNT" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::No Cloudflare secrets, so no preview: see docs/deploy.md, PR previews."
+          fi
+
+  preview:
+    needs: secrets
+    if: needs.secrets.outputs.ok == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PR: ${{ github.event.pull_request.number }}
+      SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+
+      # The review page. A failure in these three steps still deploys the site; the comment says so.
+      - name: Capture this PR
+        id: after
+        continue-on-error: true
+        run: node scripts/screens.ts --no-build --out "$RUNNER_TEMP/after"
+      - name: Build and capture the merge base
+        id: before
+        if: steps.after.outcome == 'success'
+        continue-on-error: true
+        # The PR's own capture script, run from the base checkout so it serves that build.
+        run: |
+          git worktree add "$RUNNER_TEMP/base" "$(git merge-base HEAD origin/master)"
+          cd "$RUNNER_TEMP/base"
+          npm ci
+          npm run build
+          node "$GITHUB_WORKSPACE/scripts/screens.ts" --no-build --out "$RUNNER_TEMP/before"
+      - name: Review page
+        id: review
+        if: steps.before.outcome == 'success'
+        continue-on-error: true
+        run: >-
+          node scripts/screens.ts --before "$RUNNER_TEMP/before" --after "$RUNNER_TEMP/after"
+          --review build/_review
+
+      - name: Deploy to Cloudflare Pages
+        run: |
+          printf '/*\n  X-Robots-Tag: noindex\n' > build/_headers
+          npx --yes "$WRANGLER" pages deploy build --project-name="$PROJECT" --branch="pr-$PR" \
+            --commit-hash="$SHA" --commit-dirty=true
+      - name: Comment on the PR
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PREVIEW_URL: https://pr-${{ github.event.pull_request.number }}.${{ vars.CLOUDFLARE_PAGES_DOMAIN || 'jocelynrenault-previews.pages.dev' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REVIEW_SUMMARY_FILE: ${{ steps.review.outcome == 'success' && 'build/_review/summary.txt' || '' }}
+        run: node scripts/post-preview-comment.ts
