@@ -31,15 +31,10 @@
 
 	/** False in the prerendered HTML: without JS every tile shows and there is no button. */
 	const ready = hydrated();
-	let showAll = $state(false);
-
-	// Any filter or sort change folds the phone list back.
-	$effect(() => {
-		void filters.context;
-		void filters.domain;
-		void sort;
-		showAll = false;
-	});
+	/** Which list is unfolded: any filter or sort change gives a new key, so the phone list folds back. */
+	const listKey = $derived(JSON.stringify([filters.context, filters.domain, sort]));
+	let unfoldedKey = $state<string | null>(null);
+	const showAll = $derived(unfoldedKey === listKey);
 </script>
 
 <Section id="projects" {title}>
@@ -85,7 +80,7 @@
 					class="btn show-more"
 					aria-expanded={showAll}
 					aria-controls="more-projects"
-					onclick={() => (showAll = !showAll)}
+					onclick={() => (unfoldedKey = showAll ? null : listKey)}
 				>
 					{showAll ? t.showFewer : plural(layout.folded, t.showMore, lang)}
 				</button>
