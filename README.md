@@ -40,6 +40,8 @@ Each issue gets its own git worktree and branch, so several can be worked on in 
 
 Each PR is then reviewed from its preview, linked in a comment on the PR: the site itself, and `/_review/`, which shows every screen the PR changed (both languages, both themes, phone to desktop) before and after. Both work on a phone. See [PR previews](docs/deploy.md#pr-previews).
 
+When one PR is merged, the others are rebased onto `master` automatically; when that conflicts, Claude Code resolves it and explains how in a comment on the PR. See [Automatic rebase](docs/deploy.md#automatic-rebase).
+
 ## Layout
 
 - `src/lib/data/` - content: projects, skills, experience, profile (`{ en, fr }` text)

@@ -71,6 +71,36 @@ Every PR into `master` also gets a **preview** on Cloudflare Pages (workflow **P
 
 To revoke: delete the token in Cloudflare, then `gh secret delete CLOUDFLARE_API_TOKEN`.
 
+## Automatic rebase
+
+Branch protection wants each PR up to date with `master`, so every merge leaves the other open PRs behind, sometimes in conflict. The **Auto-rebase** workflow (`.github/workflows/auto-rebase.yml`) runs on every push to `master` (and by hand: *Actions* → *Auto-rebase* → *Run workflow*) and handles each open PR from this repo:
+
+- **Already up to date:** nothing.
+- **Behind, no conflict:** plain `git rebase origin/master`, pushed. No comment, no AI.
+- **Conflict:** Claude Code (an exact version, run by the workflow) redoes the rebase following CLAUDE.md: each conflict resolved in the commit that causes it, never a merge commit, never pushed by Claude itself. The workflow then checks the result on its own (rebase finished, on top of `master`, no merge commit, no conflict markers, nothing uncommitted, then `npm run lint`, `npm run check`, `npm test`), pushes, and comments on the PR with what each side changed and how they were combined. **Read that comment before merging:** passing checks do not prove both sides' intent survived.
+- **Anything fails** (Claude stops on a choice only you can make, a check fails, no Claude token): nothing is pushed, and the PR gets a comment saying to rebase by hand, with Claude's explanation when there is one.
+
+Every push uses `--force-with-lease`: if the branch moved on GitHub during the run (an agent pushed), the push is refused and the PR is left alone until the next merge. The push re-runs CI and the preview on the PR as usual.
+
+Not handled: PRs from forks (never touched, and they never get the secrets), and PRs into another branch than `master`.
+
+The PR's code (`npm ci`, the checks) and Claude never see the push token: only the push step gets it. Claude does see its own token (`CLAUDE_CODE_OAUTH_TOKEN`), since it runs in that job.
+
+### One-time setup
+
+1. **Push token.** `GITHUB_TOKEN` cannot be used: GitHub does not start CI for a push made with it, so `checks` would never run on the rebased PR. On GitHub: *Settings* (of your account) → *Developer settings* → *Personal access tokens* → *Fine-grained tokens* → *Generate new token*. Name `portfolio auto-rebase`, expiration as long as you like (one year), *Only select repositories* → `LezardSC/portfolio`. Permissions: *Contents* · *Read and write*, *Workflows* · *Read and write* (needed to push a branch that changes `.github/workflows/`). Generate and copy it.
+2. **Claude token.** On your machine: `claude setup-token`. It opens the browser, then prints a long-lived token tied to your Claude subscription (conflict resolutions count against your usage). Copy it.
+3. In the repo directory:
+
+   ```bash
+   gh secret set AUTO_REBASE_TOKEN         # the token from step 1
+   gh secret set CLAUDE_CODE_OAUTH_TOKEN   # the token from step 2
+   ```
+
+Without `AUTO_REBASE_TOKEN` the workflow does nothing and says so in its log. Without `CLAUDE_CODE_OAUTH_TOKEN`, PRs without conflict are still rebased; a conflict gets the "rebase by hand" comment.
+
+When the push token expires, runs fail at the push step: generate a new one and `gh secret set AUTO_REBASE_TOKEN` again. To turn it all off: *Actions* → *Auto-rebase* → *···* → *Disable workflow*.
+
 ## Manual deploy
 
 Create `.env.deploy` at the repo root (git-ignored, never commit it):
