@@ -25,10 +25,11 @@ export function captures(): Capture[] {
 	return list;
 }
 
-export type Result = { name: string; same: boolean; detail: string };
+/** `sizeChanged`: the page got taller or shorter, so there is no pixel diff. */
+export type Result = { name: string; same: boolean; detail: string; sizeChanged?: true };
 
 /** Differences first, then a one-line verdict. */
-export function formatResults(results: readonly Result[]): string {
+export function formatResults(results: readonly Result[], where = 'reports/screens-diff/'): string {
 	const diffs = results.filter((r) => !r.same);
 	const width = Math.max(...results.map((r) => r.name.length));
 	const lines = [...diffs, ...results.filter((r) => r.same)].map(
@@ -37,7 +38,52 @@ export function formatResults(results: readonly Result[]): string {
 	lines.push(
 		diffs.length === 0
 			? `\nall ${results.length} captures identical`
-			: `\n${diffs.length} of ${results.length} captures differ (diff images in reports/screens-diff/)`
+			: `\n${diffs.length} of ${results.length} captures differ (images in ${where})`
 	);
 	return lines.join('\n');
+}
+
+const BASELINE = 'reports/screens-baseline';
+
+/** What `npm run screens` was asked to do. */
+export type ScreensArgs =
+	| { mode: 'capture'; out: string; build: boolean }
+	| { mode: 'compare'; build: boolean }
+	| { mode: 'review'; before: string; after: string; review: string };
+
+const PATH_OPTIONS = ['--out', '--before', '--after', '--review'];
+
+/**
+ * (none) or --out <dir>: capture (default reports/screens-baseline). --compare: capture again and
+ * compare with the baseline. --no-build: serve the existing build. --before <dir> --after <dir>
+ * --review <dir>: compare two capture folders and write the review page (CI, preview.yml).
+ */
+export function parseScreensArgs(argv: readonly string[]): ScreensArgs {
+	const paths: Record<string, string> = {};
+	let compare = false;
+	let build = true;
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
+		if (arg === '--compare') compare = true;
+		else if (arg === '--no-build') build = false;
+		else if (PATH_OPTIONS.includes(arg)) {
+			const value = argv[++i];
+			if (!value || value.startsWith('--')) throw new Error(`${arg} needs a path`);
+			paths[arg] = value;
+		} else throw new Error(`Unknown option: ${arg}`);
+	}
+	const before = paths['--before'];
+	const after = paths['--after'];
+	const review = paths['--review'];
+	if (before || after || review) {
+		if (!before || !after || !review) throw new Error('--before, --after and --review go together');
+		if (compare || !build || paths['--out'])
+			throw new Error('--before/--after/--review compare existing captures: no other option');
+		return { mode: 'review', before, after, review };
+	}
+	if (compare) {
+		if (paths['--out']) throw new Error('--compare always captures into reports/screens-current/');
+		return { mode: 'compare', build };
+	}
+	return { mode: 'capture', out: paths['--out'] ?? BASELINE, build };
 }
