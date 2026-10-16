@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { assetHref } from '$lib/paths';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { MediaQuery } from 'svelte/reactivity';
 	import { DOMAINS } from '$lib/data/categories';
@@ -56,10 +57,10 @@
 		{#if media}
 			<picture>
 				{#if media.phone}
-					<source media={PHONE_QUERY} srcset="{base}/{media.phone}" />
+					<source media={PHONE_QUERY} srcset={assetHref(base, media.phone)} />
 				{/if}
 				<img
-					src="{base}/{media.kind === 'video' ? media.poster : media.src}"
+					src={assetHref(base, media.kind === 'video' ? media.poster : media.src)}
 					alt=""
 					loading="lazy"
 					decoding="async"
@@ -68,8 +69,8 @@
 			{#if media.kind === 'video' && started && !failed}
 				<video
 					bind:this={video}
-					src="{base}/{media.src}"
-					poster="{base}/{media.poster}"
+					src={assetHref(base, media.src)}
+					poster={assetHref(base, media.poster)}
 					muted
 					loop
 					playsinline
@@ -93,7 +94,6 @@
 		rel="noopener noreferrer"
 		tabindex="-1"
 		aria-hidden="true"
-		aria-label={project.title}
 	>
 		{@render content()}
 	</a>
