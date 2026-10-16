@@ -44,11 +44,15 @@ ErrorDocument 404 /404.html
 	Header always set Cache-Control "no-cache" env=LANGREDIRECT
 	Header always merge Vary "Accept-Language" env=LANGREDIRECT
 
-	# Security headers. HSTS comes later, once HTTPS has run cleanly (GitHub issue #34).
+	# Security headers ("always": also on redirects and the 404). HSTS is raised in steps, because
+	# browsers refuse plain http for the whole max-age: see "HSTS" in docs/deploy.md (issue #34).
+	# No includeSubDomains and no preload for now. Browsers ignore it when received over plain http.
+	Header always set Strict-Transport-Security "max-age=86400"
 	Header always set X-Content-Type-Options "nosniff"
 	Header always set Referrer-Policy "strict-origin-when-cross-origin"
 	Header always set X-Frame-Options "DENY"
 	Header always set Content-Security-Policy "frame-ancestors 'none'"
+	Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
 </IfModule>
 
 <IfModule mod_deflate.c>
