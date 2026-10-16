@@ -28,11 +28,11 @@ New workflow `.github/workflows/preview.yml`, separate from `ci.yml`:
 
 - **Trigger:** `pull_request` into `master` (opened, synchronize, reopened). Not required by branch protection: `checks` stays the only required status, so a preview problem never blocks a merge. `concurrency: preview-<PR number>` with `cancel-in-progress: true`.
 - **Permissions:** `contents: read`, `pull-requests: write` (for the comment).
-- **Steps:** checkout, setup-node from `.nvmrc`, `npm ci`, `npm run build`, Part 2's review page into `build/_review/`, then `wrangler pages deploy build --project-name=<project> --branch=pr-<n>`. `wrangler` is a pinned dev dependency, so local and CI use the same version.
+- **Steps:** checkout, setup-node from `.nvmrc`, `npm ci`, `npm run build`, Part 2's review page into `build/_review/`, then `wrangler pages deploy build --project-name=<project> --branch=pr-<n>`. `wrangler` is not a dependency (it would add about 150 MB to every `npm ci`): the workflow runs it with `npx --yes wrangler@4.146.0`, an exact version.
 - **Address:** the branch alias `https://pr-<n>.<project>.pages.dev`, stable for the life of the PR. Every push replaces what it serves.
 - **Never production:** the Cloudflare project's production branch is `master`, and the workflow never deploys `master`. Every deployment is a preview, which Cloudflare serves with `X-Robots-Tag: noindex`; the workflow also writes a `build/_headers` file setting that header on every path, so it does not depend on Cloudflare's default. (`_headers` exists only in the preview build, never in `static/`.) The production `*.pages.dev` address stays empty.
 - **PR comment:** one comment, found by a hidden marker (`<!-- preview -->`) and edited on each push rather than added again. It contains links to `/en/` and `/fr/`, a link to `/_review/` with its one-line summary ("4 of 25 screens changed" / "No visual change"), and the short commit SHA it shows. Posted by `scripts/post-preview-comment.ts` through the GitHub REST API with the workflow's token, no third-party action. Only a comment by `github-actions[bot]` that starts with the marker counts as the preview comment.
-- **Secrets:** `CLOUDFLARE_API_TOKEN` (scoped to *Account → Cloudflare Pages → Edit*) and `CLOUDFLARE_ACCOUNT_ID`. If they are missing (a fork's PR, or before setup) the job ends early with a notice in its log, and no comment.
+- **Secrets:** only the deploy step receives them, and the checkout does not keep the GitHub token, so the PR's own code (install, build, captures) never sees a credential. `CLOUDFLARE_API_TOKEN` (scoped to *Account → Cloudflare Pages → Edit*) and `CLOUDFLARE_ACCOUNT_ID`. If they are missing (before setup) the job ends early with a notice in its log, and no comment. A fork's PR gets no secrets: its jobs are skipped, with no comment.
 - **Known differences from production**, written in the comment's footer: `.htaccess` does not run (so `/` does not redirect to a language: the comment links `/en/` and `/fr/`); OVH's caching and headers are not tested (the post-merge `npm run smoke` still checks them on the live site). `SITE_ORIGIN` stays the real domain, so canonical and share URLs point to production, which is right.
 - **One-time setup** by Jocelyn, documented in a new "PR previews" section of `docs/deploy.md`: create the Cloudflare account, create the Pages project (direct upload, production branch `master`), create the token, `gh secret set` both values.
 
@@ -40,7 +40,7 @@ New workflow `.github/workflows/preview.yml`, separate from `ci.yml`:
 
 Built in the same `preview.yml` run, before the deploy step.
 
-- **Before = the PR's merge base with `master`**, not `master`'s tip, so changes merged into `master` since the branch started never show up as this PR's changes. (With the rebase rule in CLAUDE.md the two are usually the same.) The workflow adds a git worktree for it at `../base`, runs `npm ci` and `npm run build` there.
+- **Before = the PR's merge base with `master`**, not `master`'s tip, so changes merged into `master` since the branch started never show up as this PR's changes. (With the rebase rule in CLAUDE.md the two are usually the same.) The workflow adds a git worktree for it at `$RUNNER_TEMP/base`, runs `npm ci` and `npm run build` there.
 - **Capture:** both builds are captured by the PR's own `scripts/screens.ts` (same capture code for both sides), with the existing list from `captures()`: EN/FR × dark/light × 360–1440px, phone collapsibles open, before hydration. 25 full pages per side.
 - **`screens.ts` gains options**, its current behaviour unchanged without them:
   - `--out <path>`: write the captures there instead of `reports/screens-baseline/`.
@@ -49,7 +49,7 @@ Built in the same `preview.yml` run, before the deploy step.
 - **Capturing the base:** SvelteKit's `vite preview` serves `.svelte-kit/output` of the current directory, not an arbitrary folder, so there is no `--dir` option. The workflow runs the PR's `scripts/screens.ts` with the base checkout as working directory; `startPreview()` starts that checkout's own `vite preview`.
 - **The page** `build/_review/index.html`, made by a pure function in `scripts/review-page.ts` (unit tests in `review-page.spec.ts`), with no JavaScript and inline CSS:
   - a summary line at the top, then **only the captures that changed**, in `captures()` order;
-  - for each: its name (e.g. `fr-light-1280`), the changed-pixel count and bounding box, then *before*, *after* and *diff* images stacked vertically, full width, each a link to the full-size image;
+  - for each: its name (e.g. `fr-light-1280`), the changed-pixel count and bounding box, then *before*, *after* and *diff* images in a grid that stacks them in one column on a phone and puts them side by side on a wide screen, each a link to the full-size image;
   - a capture whose page height changed has no pixel diff: before and after only, with both sizes;
   - "No visual change" alone when nothing differs;
   - readable at 360px; `noindex` meta as well.
