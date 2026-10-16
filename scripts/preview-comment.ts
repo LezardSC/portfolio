@@ -19,7 +19,7 @@ export function previewComment(input: {
 		`- Site: [English](${site}/en/) · [Français](${site}/fr/)`,
 		review,
 		'',
-		"<sub>Cloudflare Pages preview, not indexed, updated on every push. Not tested here: `.htaccess` (so `/` does not pick a language) and OVH's caching and headers.</sub>",
+		"<sub>Cloudflare Pages preview, not indexed, updated on every push: the address can take a minute or two to show it (reload if the review page disagrees with this comment). Not tested here: `.htaccess` (so `/` does not pick a language) and OVH's caching and headers.</sub>",
 		''
 	].join('\n');
 }
