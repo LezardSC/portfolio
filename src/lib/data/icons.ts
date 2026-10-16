@@ -1,8 +1,10 @@
 /**
- * Stroke icons for categories (project domains, skill groups): SVG path data on a 24×24 grid,
- * drawn by `Icon.svelte` with no fill, a 1.5 stroke and round caps and joins. That is the
- * Lucide style: a Lucide icon's `d` attributes, joined into one string, fit as they are
- * (`<rect>` and `<circle>` elements must be converted to path data first).
+ * Stroke icons: SVG path data on a 24×24 grid, drawn by `Icon.svelte` with no fill and round
+ * caps and joins. Category icons (project domains, skill groups) use the default 1.5 stroke;
+ * interface icons (briefcase, medals, chevrons, buttons) get a thicker one from the caller
+ * (2 or 2.2). That is the Lucide style: a Lucide icon's `d` attributes, joined into one
+ * string, fit as they are (`<rect>` and `<circle>` elements must be converted to path data
+ * first).
  */
 export const ICONS = {
 	/** </> brackets (Web). */

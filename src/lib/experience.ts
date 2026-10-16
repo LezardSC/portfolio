@@ -35,7 +35,7 @@ export type Education = {
 	start?: Year;
 	end: Year;
 	points: Localized[];
-	/** Certificate URL; makes the title a link. */
+	/** Certificate URL; adds a "View certificate" link under the entry. */
 	link?: string;
 };
 
@@ -44,7 +44,7 @@ export type Medal = (typeof MEDALS)[number];
 
 export type Hackathon = {
 	medal: Medal;
-	/** Short name shown on the pill (an acronym when the full name is long). */
+	/** Short name for the Hackathons list and project card tooltips (an acronym when the full name is long). */
 	event: string;
 	/** Full name when `event` is an acronym; shown as its tooltip. */
 	fullName?: string;

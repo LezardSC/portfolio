@@ -25,7 +25,7 @@ export type Project = {
 	id: string;
 	title: string;
 	description: Localized;
-	/** One sentence for the small cards on desktop, and every cards on phones (instead of the description). */
+	/** One sentence for the small cards on desktop, and every card on phones (instead of the description). */
 	summary: Localized;
 	/** 'YYYY-MM' */
 	date: string;
