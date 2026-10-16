@@ -2,7 +2,7 @@
  * npm run smoke
  * Checks the live site after a deploy: both locales with their canonical, the language redirect
  * on /, the https, www and trailing-slash redirects, long caching on hashed files, the 404 page
- * at depth.
+ * at depth, the HSTS and Permissions-Policy headers.
  * Exits 1 on any failure.
  */
 import { SITE_ORIGIN } from '../src/lib/site.ts';
@@ -36,6 +36,14 @@ const location =
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 
+const securityHeaders: Expectation = (r) => {
+	const hsts = r.headers.get('strict-transport-security') ?? '';
+	if (!/^max-age=\d+(;|$)/.test(hsts)) return `strict-transport-security "${hsts}"`;
+	return r.headers.get('permissions-policy')?.includes('camera=()')
+		? null
+		: 'no permissions-policy';
+};
+
 async function main(): Promise<void> {
 	const checks: Check[] = [];
 	for (const lang of ['en', 'fr'])
@@ -52,6 +60,8 @@ async function main(): Promise<void> {
 		await check('http → https', `http://${host}/en/`, 301, location(en)),
 		await check('www → bare domain', `https://www.${host}/en/`, 301, location(en)),
 		await check('/en → /en/ (no port)', `${SITE_ORIGIN}/en`, 301, location(en)),
+		await check('HSTS and Permissions-Policy', `${SITE_ORIGIN}/en/`, 200, securityHeaders),
+		await check('HSTS on the 404', `${SITE_ORIGIN}/no/such/page/`, 404, securityHeaders),
 		await check('sitemap', `${SITE_ORIGIN}/sitemap.xml`, 200),
 		await check('skill logos sprite', `${SITE_ORIGIN}/skill-logos.svg`, 200),
 		await check('404 page at depth', `${SITE_ORIGIN}/no/such/page/`, 404, (_r, body) =>

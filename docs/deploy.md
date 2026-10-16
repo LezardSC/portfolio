@@ -147,4 +147,14 @@ JSON
 
 ## Server config
 
-`static/.htaccess` (copied into `build/`) sets: `http` and `www` → `https://jocelynrenault.com` (301); `/` → `/fr/` or `/en/` from the browser language (302); the 404 page; caching (one year for `_app/immutable/`, revalidate HTML, one week for the rest); compression; security headers. HSTS is not set yet ([#34](https://github.com/LezardSC/portfolio/issues/34)).
+`static/.htaccess` (copied into `build/`) sets: `http` and `www` → `https://jocelynrenault.com` (301); `/` → `/fr/` or `/en/` from the browser language (302); the 404 page; caching (one year for `_app/immutable/`, revalidate HTML, one week for the rest); compression; security headers (`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `frame-ancestors`, `Permissions-Policy` with camera, microphone, geolocation and a few more off, and HSTS). All are `Header always set`, so they also appear on redirects and the 404. `npm run smoke` checks HSTS and `Permissions-Policy` on the live site.
+
+### HSTS
+
+Browsers refuse plain http for the whole `max-age`, so it is raised in steps ([#34](https://github.com/LezardSC/portfolio/issues/34)), each one a small PR after a clean `npm run smoke` on the live site:
+
+1. `max-age=86400` (1 day). **Done.**
+2. `max-age=2592000` (30 days), after a few days without problems.
+3. `max-age=31536000` (1 year). Add `includeSubDomains` only if every subdomain of jocelynrenault.com serves HTTPS. No `preload` for now.
+
+Each step changes the one line in `static/.htaccess` and the expected value in `src/lib/htaccess.spec.ts`. The headers can only be checked on securityheaders.com after the deploy.
