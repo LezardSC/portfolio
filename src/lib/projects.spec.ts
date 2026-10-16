@@ -230,6 +230,14 @@ describe('projectLayout', () => {
 			smallOnDesktop: false
 		});
 	});
+	it('with exactly 5 (the phone boundary), all are big cards and no phone-only tile appears', () => {
+		expect(layoutIds(5)).toEqual({
+			large: ['p0', 'p1', 'p2', 'p3', 'p4'],
+			small: [],
+			folded: 0,
+			smallOnDesktop: false
+		});
+	});
 	it('with exactly 6, the 6th is a big card on desktop and the only (phone-only) tile on phones', () => {
 		expect(layoutIds(6)).toEqual({
 			large: ['p0', 'p1', 'p2', 'p3', 'p4', 'p5*'],
