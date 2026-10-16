@@ -49,6 +49,12 @@ describe('static/.htaccess', () => {
 		expect(noCache.test('photo.jpg')).toBe(false);
 	});
 
+	it('adds the slash to a directory itself, so mod_dir never sends https://host:443/en/', () => {
+		expect(htaccess).toMatch(
+			/RewriteCond %\{REQUEST_FILENAME\} -d\s+RewriteCond %\{REQUEST_URI\} !\/\$\s+RewriteRule \^ https:\/\/%\{HTTP_HOST\}%\{REQUEST_URI\}\/ \[R=301,L\]/
+		);
+	});
+
 	it('serves the 404 page and hides the deploy manifest', () => {
 		expect(htaccess).toContain('ErrorDocument 404 /404.html');
 		expect(htaccess).toContain('.deploy-manifest.json');
