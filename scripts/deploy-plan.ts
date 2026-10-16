@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 
 /** Path → SHA-256 of the file's content. */
@@ -26,6 +27,20 @@ export function fingerprint(key: Buffer): string {
 
 export function hostKeyTrusted(key: Buffer, trusted: readonly string[]): boolean {
 	return trusted.includes(fingerprint(key));
+}
+
+/**
+ * Files under `dir` that git ignores, sorted. The build copies all of static/, ignored files
+ * included (a Windows `*:Zone.Identifier` download marker, a `.DS_Store`), so a deploy from a
+ * local checkout would upload them. CI deploys from a clean checkout, where this is empty.
+ */
+export function ignoredFiles(dir: string, cwd = '.'): string[] {
+	const out = execFileSync(
+		'git',
+		['ls-files', '--others', '--ignored', '--exclude-standard', '-z', '--', dir],
+		{ cwd, encoding: 'utf8' }
+	);
+	return out.split('\0').filter(Boolean).sort();
 }
 
 /** Assets first, then .htaccess, then HTML: a page never points at a file not uploaded yet. */

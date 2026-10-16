@@ -3,7 +3,8 @@
  * Uploads build/ to the hosting over SFTP: only new and changed files (hashes compared with the
  * manifest left by the previous deploy), assets before .htaccess before HTML, then the manifest,
  * then deletes the files no longer in build/. The password is only sent to a server holding one
- * of the pinned host keys (OVH_HOST_KEYS).
+ * of the pinned host keys (OVH_HOST_KEYS). It refuses to start while static/ holds files git
+ * ignores, since the build copied them into build/.
  * Needs FTP_HOST, FTP_USER, FTP_PASSWORD (GitHub secrets, or .env.deploy locally); FTP_DIR
  * defaults to www. Run `npm run build` first. --dry-run prints the plan and changes nothing.
  */
@@ -14,6 +15,7 @@ import SftpClient from 'ssh2-sftp-client';
 import { checkBudget, formatBudget, listFiles } from './budget.ts';
 import {
 	hostKeyTrusted,
+	ignoredFiles,
 	MANIFEST,
 	OVH_HOST_KEYS,
 	planDeploy,
@@ -72,6 +74,11 @@ async function remoteFiles(
 }
 
 async function main(): Promise<void> {
+	const ignored = ignoredFiles('static');
+	if (ignored.length > 0)
+		throw new Error(
+			`static/ holds files git ignores, which the build copies: delete them, rebuild, deploy again. Nothing uploaded.\n  ${ignored.join('\n  ')}`
+		);
 	const budget = checkBudget(listFiles(BUILD));
 	console.log(formatBudget(budget));
 	if (!budget.ok) throw new Error('build/ is over budget: nothing uploaded');
