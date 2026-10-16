@@ -22,6 +22,8 @@ concurrency:
 env:
   # Exact version, fetched only when there is a conflict to resolve.
   CLAUDE_CODE: '@anthropic-ai/claude-code@2.1.287'
+  # Sonnet is enough for a rebase conflict and uses less of the subscription's limits than Opus.
+  CLAUDE_MODEL: sonnet
 
 jobs:
   prs:
@@ -127,6 +129,7 @@ jobs:
           # native binary: npx and newer npm skip it unless allowed.
           npm install --global --prefix "$RUNNER_TEMP/claude" --allow-scripts=@anthropic-ai/claude-code "$CLAUDE_CODE"
           "$RUNNER_TEMP/claude/bin/claude" -p "$PROMPT" \
+            --model "$CLAUDE_MODEL" \
             --permission-mode acceptEdits \
             --allowedTools 'Read,Edit,Write,Glob,Grep,Bash(git *),Bash(npm run *),Bash(npm test*),Bash(GIT_EDITOR=true git *),Bash(GIT_SEQUENCE_EDITOR=true git *)' \
             > "$RUNNER_TEMP/summary.md"
