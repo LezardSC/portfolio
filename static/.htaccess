@@ -23,6 +23,12 @@ ErrorDocument 404 /404.html
 	RewriteCond %{HTTP:Accept-Language} ^(?:\s*(?!(?:en|fr)(?![a-z]))[a-z*]{1,8}(?:-[a-z0-9]{1,8})*(?:\s*;\s*q=[0-9.]+)?\s*,)*\s*fr(?![a-z]) [NC]
 	RewriteRule ^$ https://%{HTTP_HOST}/fr/ [R=302,L,E=LANGREDIRECT:1]
 	RewriteRule ^$ https://%{HTTP_HOST}/en/ [R=302,L,E=LANGREDIRECT:1]
+
+	# 3. A directory without its slash (/en) → /en/, before mod_dir does it: mod_dir builds the
+	#    address from the port it sees and sends https://host:443/en/. The query string is kept.
+	RewriteCond %{REQUEST_FILENAME} -d
+	RewriteCond %{REQUEST_URI} !/$
+	RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI}/ [R=301,L]
 </IfModule>
 
 <IfModule mod_headers.c>
