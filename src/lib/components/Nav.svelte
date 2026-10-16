@@ -3,6 +3,7 @@
 	import { base } from '$app/paths';
 	import { PROFILE } from '$lib/data/profile';
 	import type { Dict, Lang } from '$lib/i18n';
+	import { PHONE_QUERY } from '$lib/breakpoints';
 	import { assetHref } from '$lib/paths';
 	import { SECTIONS, sectionNumber, type SectionId } from '$lib/sections';
 	import { currentSection } from '$lib/sections-dom';
@@ -13,6 +14,15 @@
 
 	/** Section on screen; null on the hero. */
 	let active = $state<SectionId | null>(null);
+
+	let contact: HTMLElement;
+	/** Focused element of the header, kept until focus leaves it while it is still visible. */
+	let focused: Element | null = null;
+	const focusin = (e: FocusEvent) => (focused = e.target as Element);
+	const focusout = (e: FocusEvent) => {
+		// Hidden by a resize (not left by the user): keep it, so the resize handler can see it.
+		if ((e.target as Element).checkVisibility()) focused = null;
+	};
 
 	onMount(() => {
 		// Recompute at most once per frame while scrolling or resizing.
@@ -25,9 +35,18 @@
 			});
 		};
 		active = currentSection();
+		// Narrowing to the phone layout hides the section links and CV button: if focus was on
+		// one, move it to the Contact button instead of dropping it on <body>.
+		const phone = matchMedia(PHONE_QUERY);
+		const onPhone = () => {
+			if (phone.matches && focused && !focused.checkVisibility()) contact.focus();
+			focused = null;
+		};
+		phone.addEventListener('change', onPhone);
 		addEventListener('scroll', track, { passive: true });
 		addEventListener('resize', track);
 		return () => {
+			phone.removeEventListener('change', onPhone);
 			removeEventListener('scroll', track);
 			removeEventListener('resize', track);
 			cancelAnimationFrame(frame);
@@ -35,7 +54,7 @@
 	});
 </script>
 
-<header class="nav">
+<header class="nav" onfocusin={focusin} onfocusout={focusout}>
 	<a class="brand" href="#hero">{PROFILE.name}</a>
 	<nav aria-label={t.navLabel}>
 		<ul role="list">
@@ -57,7 +76,7 @@
 			target="_blank"
 			rel="noopener noreferrer">{t.navCv} <span class="sr-only">{t.newTab}</span></a
 		>
-		<a class="btn btn-primary contact" href="#contact">{t.nav.contact}</a>
+		<a class="btn btn-primary contact" bind:this={contact} href="#contact">{t.nav.contact}</a>
 	</div>
 </header>
 
