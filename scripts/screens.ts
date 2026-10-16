@@ -3,12 +3,24 @@
  * npm run screens -- --compare  captures again into reports/screens-current/, compares each
  *                               capture with the baseline (bytes, then pixels), writes diff
  *                               images to reports/screens-diff/ and exits 1 on any difference.
+ * --out <dir>                   captures into <dir> instead of the baseline folder.
+ * --no-build                    serves the existing build instead of building first.
+ * --before <dir> --after <dir> --review <dir>
+ *                               compares two capture folders and writes a review page
+ *                               (index.html, JPEGs, summary.txt) into <dir>: used by preview.yml.
+ * Captures serve the current directory's build: run from another checkout to capture it.
  * Full pages, reduced motion (no scroll reveal, no video), every image loaded eagerly.
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
 import { openCollapsibles, startPreview } from './preview.ts';
-import { captures, formatResults, type Capture, type Result } from './screens-report.ts';
+import {
+	captures,
+	formatResults,
+	parseScreensArgs,
+	type Capture,
+	type Result
+} from './screens-report.ts';
 
 const BASELINE = 'reports/screens-baseline';
 const CURRENT = 'reports/screens-current';
@@ -114,59 +126,84 @@ function pixelDiff(page: Page, a: Buffer, b: Buffer): Promise<PixelDiff> {
 	);
 }
 
-async function main(): Promise<void> {
-	const compare = process.argv.includes('--compare');
-	if (compare && !existsSync(BASELINE)) throw new Error('No baseline: run npm run screens first.');
-	const dir = compare ? CURRENT : BASELINE;
-	for (const d of compare ? [dir, DIFF] : [dir]) {
-		rmSync(d, { recursive: true, force: true });
-		mkdirSync(d, { recursive: true });
-	}
-	const { origin, stop } = await startPreview();
-	const results: Result[] = [];
+/** Empties `dir`, creating it if needed. */
+function fresh(dir: string): void {
+	rmSync(dir, { recursive: true, force: true });
+	mkdirSync(dir, { recursive: true });
+}
+
+/** Serves the build and writes every capture into `dir` as <name>.png. */
+async function captureInto(dir: string, build: boolean): Promise<void> {
+	fresh(dir);
+	const { origin, stop } = await startPreview({ build });
 	try {
-		await capture(origin, compare, dir, results);
+		const browser = await chromium.launch();
+		try {
+			for (const c of captures())
+				writeFileSync(`${dir}/${c.name}.png`, await shoot(browser, origin, c));
+		} finally {
+			await browser.close();
+		}
 	} finally {
 		stop();
 	}
-	if (!compare) {
-		console.log(`\nBaseline: ${captures().length} captures in ${BASELINE}/`);
-		return;
-	}
-	console.log(`\n${formatResults(results)}`);
-	process.exitCode = results.every((r) => r.same) ? 0 : 1;
 }
 
-async function capture(
-	origin: string,
-	compare: boolean,
-	dir: string,
-	results: Result[]
-): Promise<void> {
+type Output = { diffDir?: string; reviewDir?: string };
+
+/**
+ * Compares each capture in `before` with the one in `after` (bytes, then pixels). For each
+ * difference: a diff PNG in `diffDir`, and before/after/diff JPEGs in `reviewDir`.
+ */
+async function compareDirs(before: string, after: string, out: Output): Promise<Result[]> {
+	const results: Result[] = [];
 	const browser = await chromium.launch();
 	try {
-		const diffPage = await browser.newPage();
+		const page = await browser.newPage();
 		for (const c of captures()) {
-			const png = await shoot(browser, origin, c);
-			writeFileSync(`${dir}/${c.name}.png`, png);
-			if (!compare) continue;
-			const base = readFileSync(`${BASELINE}/${c.name}.png`);
-			if (base.equals(png)) {
+			const a = readFileSync(`${before}/${c.name}.png`);
+			const b = readFileSync(`${after}/${c.name}.png`);
+			if (a.equals(b)) {
 				results.push({ name: c.name, same: true, detail: 'identical' });
 				continue;
 			}
-			const d = await pixelDiff(diffPage, base, png);
-			if (d.count === 0) results.push({ name: c.name, same: true, detail: 'same pixels' });
-			else if (d.count < 0)
-				results.push({ name: c.name, same: false, detail: `page size ${d.size}` });
-			else {
-				writeFileSync(`${DIFF}/${c.name}.png`, Buffer.from(d.image, 'base64'));
-				results.push({ name: c.name, same: false, detail: `${d.count} px in ${d.box}` });
+			const d = await pixelDiff(page, a, b);
+			if (d.count === 0) {
+				results.push({ name: c.name, same: true, detail: 'same pixels' });
+				continue;
 			}
+			const diff = d.count > 0 ? Buffer.from(d.image, 'base64') : undefined;
+			results.push(
+				diff
+					? { name: c.name, same: false, detail: `${d.count} px in ${d.box}` }
+					: { name: c.name, same: false, detail: `page size ${d.size}`, sizeChanged: true }
+			);
+			if (out.diffDir && diff) writeFileSync(`${out.diffDir}/${c.name}.png`, diff);
+			// Task 4 adds the review JPEGs here.
 		}
 	} finally {
 		await browser.close();
 	}
+	return results;
+}
+
+async function main(): Promise<void> {
+	const args = parseScreensArgs(process.argv.slice(2));
+	if (args.mode === 'capture') {
+		await captureInto(args.out, args.build);
+		console.log(`\n${captures().length} captures in ${args.out}/`);
+		return;
+	}
+	if (args.mode === 'compare') {
+		if (!existsSync(BASELINE)) throw new Error('No baseline: run npm run screens first.');
+		await captureInto(CURRENT, args.build);
+		fresh(DIFF);
+		const results = await compareDirs(BASELINE, CURRENT, { diffDir: DIFF });
+		console.log(`\n${formatResults(results)}`);
+		process.exitCode = results.every((r) => r.same) ? 0 : 1;
+		return;
+	}
+	throw new Error('Review mode: added in the next commit.');
 }
 
 await main();
