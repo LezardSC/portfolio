@@ -152,6 +152,19 @@ a {
 	white-space: nowrap;
 }
 
+/* The same, below the desktop breakpoint only (48rem = BREAKPOINTS_REM.desktop). */
+@media (width < 48rem) {
+	.sr-only-phone {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+}
+
 /* First focusable element: hidden until a keyboard user tabs to it. */
 .skip-link {
 	position: fixed;

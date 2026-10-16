@@ -88,7 +88,8 @@
 				rel="noopener noreferrer"
 				aria-labelledby="malt-title malt-cta malt-new-tab"
 			>
-				<span id="malt-cta" class="cta-text">{t.maltCta}</span> <span aria-hidden="true">↗</span>
+				<span id="malt-cta" class="sr-only-phone">{t.maltCta}</span>
+				<span aria-hidden="true">↗</span>
 				<span id="malt-new-tab" class="sr-only">{newTab}</span>
 			</a>
 		</div>
@@ -321,16 +322,6 @@
 			border: 0;
 			background: none;
 			font-weight: 700;
-		}
-		/* The link's text stays its accessible name; only ↗ shows. */
-		.cta-text {
-			position: absolute;
-			width: 1px;
-			height: 1px;
-			margin: -1px;
-			overflow: hidden;
-			clip-path: inset(50%);
-			white-space: nowrap;
 		}
 		/* The whole card is the link. */
 		.malt-cta::after {

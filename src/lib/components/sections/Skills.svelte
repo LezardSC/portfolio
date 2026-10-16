@@ -127,7 +127,8 @@
 						open = i;
 					}}
 				>
-					<h3 id="skills-{group.id}">{group.title[lang]}</h3>
+					<!-- The accordion button names the group; the heading stays for screen readers. -->
+					<h3 id="skills-{group.id}" class:sr-only-phone={enhanced.current}>{group.title[lang]}</h3>
 					<p class="desc">{group.description[lang]}</p>
 					<ul role="list" class="tiles">
 						{#each group.skills as skill (localize(skill.name, 'en'))}
@@ -346,16 +347,6 @@
 		}
 		.enhanced .panel[hidden] {
 			padding: 0;
-		}
-		/* The accordion button names the group; the heading stays for screen readers. */
-		.enhanced h3 {
-			position: absolute;
-			width: 1px;
-			height: 1px;
-			margin: -1px;
-			overflow: hidden;
-			clip-path: inset(50%);
-			white-space: nowrap;
 		}
 		.desc {
 			margin: 0 0 0.875rem;
