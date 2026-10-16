@@ -19,6 +19,7 @@ Personal portfolio for recruiters. SvelteKit + **Svelte 5 (runes)**, fully stati
 - `npm run og`: regenerates the share images and icons in `static/` (loads the data through Vite).
 - `npm run budget`: fails when `build/` is over 80 MB (the OVH hosting has 100) and lists the largest files.
 - `npm run deploy [-- --dry-run]`: SFTP upload of `build/` (only changed files; reads `.env.deploy`). Normally CI does it on merge: see `docs/deploy.md`.
+- Automatic rebase: on every push to `master`, the **Auto-rebase** workflow rebases each open PR onto it; on a conflict, Claude Code resolves it, the workflow re-runs lint, check and test, pushes, and comments on the PR (`docs/deploy.md`, "Automatic rebase").
 - PR previews: the **Preview** workflow deploys every PR to `https://pr-<n>.jocelynrenault-previews.pages.dev` with a before/after page at `/_review/`, and links both in a PR comment (`docs/deploy.md`, "PR previews").
 - `npm run smoke`: checks the live site (redirects, canonical, caching, 404).
 - `npm run audit -- --ci`: as in CI, Lighthouse performance is reported, not required.
@@ -71,6 +72,7 @@ Smaller work goes **issue by issue**, without a plan file. The same routine work
 - Worktrees live in `.claude/worktrees/<name>`, with local branch `worktree-<name>`. The remote branch is `<name>`, so push with
   `git push origin worktree-<name>:<name>`, because a plain `git push` is refused (the names differ).
 - **Before opening a PR, and again before saying it is ready to merge:** `git fetch` and check `git log HEAD..origin/master`. Jocelyn merges other branches in parallel, so `master` may have moved. If it has, rebase onto `origin/master` (never a merge commit: the user merges with "Rebase and merge", which drops merge commits and brings conflicts back), resolve each conflict inside the commit that causes it, re-run the checks, and push with `git push --force-with-lease=<name>:<old sha> origin worktree-<name>:<name>`. Confirm with `gh pr view <n> --json mergeStateStatus` (must be `CLEAN`, not `BEHIND` or `DIRTY`).
+- **A PR branch may have been rebased on GitHub** by the Auto-rebase workflow since you last pushed (it then has a new committer, `github-actions[bot]`). Before working on an existing PR again: `git fetch`, and if `git log worktree-<name>..origin/<name>` lists commits, `git rebase origin/<name>` (commits already there are skipped). A push whose lease is refused means the same thing: fetch and rebase, never force without a lease.
 
 ## Reference material
 
