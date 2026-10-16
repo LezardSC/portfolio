@@ -29,4 +29,9 @@ describe('plural', () => {
 		expect(plural(1, fr.projects.showMore, 'fr')).toBe('Voir 1 autre projet');
 		expect(plural(5, en.projects.showMore, 'en')).toBe('See the 5 other projects');
 	});
+	it('reads the real hackathons heading with one podium', () => {
+		expect(plural(1, en.experience.hackathonsTitle, 'en')).toBe('Hackathons - 1 podium');
+		expect(plural(1, fr.experience.hackathonsTitle, 'fr')).toBe('Hackathons - 1 podium');
+		expect(plural(5, en.experience.hackathonsTitle, 'en')).toBe('Hackathons - 5 podiums');
+	});
 });
