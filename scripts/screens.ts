@@ -14,6 +14,7 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
 import { openCollapsibles, startPreview } from './preview.ts';
+import { reviewPage, reviewSummary } from './review-page.ts';
 import {
 	captures,
 	formatResults,
@@ -126,6 +127,22 @@ function pixelDiff(page: Page, a: Buffer, b: Buffer): Promise<PixelDiff> {
 	);
 }
 
+/** The same image as a JPEG (quality 0.8): the review page stays light on a phone connection. */
+async function toJpeg(page: Page, png: Buffer): Promise<Buffer> {
+	const b64 = await page.evaluate(async (src) => {
+		const img = new Image();
+		await new Promise((done) => {
+			img.onload = done;
+			img.src = `data:image/png;base64,${src}`;
+		});
+		const canvas = document.createElement('canvas');
+		[canvas.width, canvas.height] = [img.width, img.height];
+		canvas.getContext('2d')!.drawImage(img, 0, 0);
+		return canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+	}, png.toString('base64'));
+	return Buffer.from(b64, 'base64');
+}
+
 /** Empties `dir`, creating it if needed. */
 function fresh(dir: string): void {
 	rmSync(dir, { recursive: true, force: true });
@@ -179,7 +196,12 @@ async function compareDirs(before: string, after: string, out: Output): Promise<
 					: { name: c.name, same: false, detail: `page size ${d.size}`, sizeChanged: true }
 			);
 			if (out.diffDir && diff) writeFileSync(`${out.diffDir}/${c.name}.png`, diff);
-			// Task 4 adds the review JPEGs here.
+			if (out.reviewDir) {
+				const dir = out.reviewDir;
+				writeFileSync(`${dir}/${c.name}-before.jpg`, await toJpeg(page, a));
+				writeFileSync(`${dir}/${c.name}-after.jpg`, await toJpeg(page, b));
+				if (diff) writeFileSync(`${dir}/${c.name}-diff.jpg`, await toJpeg(page, diff));
+			}
 		}
 	} finally {
 		await browser.close();
@@ -203,7 +225,14 @@ async function main(): Promise<void> {
 		process.exitCode = results.every((r) => r.same) ? 0 : 1;
 		return;
 	}
-	throw new Error('Review mode: added in the next commit.');
+	fresh(args.review);
+	const results = await compareDirs(args.before, args.after, { reviewDir: args.review });
+	const changed = results
+		.filter((r) => !r.same)
+		.map((r) => ({ name: r.name, detail: r.detail, sizeChanged: r.sizeChanged === true }));
+	writeFileSync(`${args.review}/index.html`, reviewPage(changed, results.length));
+	writeFileSync(`${args.review}/summary.txt`, reviewSummary(changed.length, results.length));
+	console.log(`\n${formatResults(results, `${args.review}/`)}`);
 }
 
 await main();
