@@ -12,7 +12,7 @@ export function redirectScript(base: string): string {
 	return (
 		`(function(){var L=${literal(LANGS)},n=navigator,` +
 		`p=n.languages&&n.languages.length?n.languages:[n.language],l='en';` +
-		`for(var i=0;i<p.length;i++){var b=String(p[i]).toLowerCase().split('-')[0];` +
+		`for(var i=0;i<p.length;i++){var b=/^[a-z]*/.exec(String(p[i]).toLowerCase())[0];` +
 		`if(L.indexOf(b)>=0){l=b;break}}` +
 		`location.replace(${literal(base)}+'/'+l+'/')})()`
 	);

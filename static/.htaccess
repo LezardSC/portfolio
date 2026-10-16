@@ -17,10 +17,12 @@ ErrorDocument 404 /404.html
 	RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
 	# 2. / → the visitor's language, like pickLang(): the first of en/fr in Accept-Language wins.
+	#    An item is en or fr by its leading letters (fr-CA, fr_FR; not fry); any other item, however
+	#    malformed (de_DE, empty, extra parameters), is skipped. q-values are ignored, as in pickLang.
 	#    302 and not cached, so a visitor changing language preferences is not stuck. Absolute
 	#    https target: Apache behind the proxy may think the request is http (one hop saved).
 	#    The JS redirect page at / stays as the fallback when this does not run.
-	RewriteCond %{HTTP:Accept-Language} ^(?:\s*(?!(?:en|fr)(?![a-z]))[a-z*]{1,8}(?:-[a-z0-9]{1,8})*(?:\s*;\s*q=[0-9.]+)?\s*,)*\s*fr(?![a-z]) [NC]
+	RewriteCond %{HTTP:Accept-Language} ^(?:(?!\s*(?:en|fr)(?![a-z]))[^,]*,)*\s*fr(?![a-z]) [NC]
 	RewriteRule ^$ https://%{HTTP_HOST}/fr/ [R=302,L,E=LANGREDIRECT:1]
 	RewriteRule ^$ https://%{HTTP_HOST}/en/ [R=302,L,E=LANGREDIRECT:1]
 
