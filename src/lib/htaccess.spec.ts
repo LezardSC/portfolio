@@ -55,6 +55,18 @@ describe('static/.htaccess', () => {
 		);
 	});
 
+	it('sets HSTS for at most the current rollout step, without includeSubDomains or preload', () => {
+		const hsts = htaccess.match(/Header always set Strict-Transport-Security "([^"]+)"/)?.[1];
+		// Step 1 of issue #34. Raise it in a later PR (docs/deploy.md, "HSTS") and update this.
+		expect(hsts).toBe('max-age=86400');
+	});
+
+	it('turns off browser features the site never uses', () => {
+		const policy = htaccess.match(/Header always set Permissions-Policy "([^"]+)"/)?.[1] ?? '';
+		for (const feature of ['camera', 'microphone', 'geolocation'])
+			expect(policy).toContain(`${feature}=()`);
+	});
+
 	it('serves the 404 page and hides the deploy manifest', () => {
 		expect(htaccess).toContain('ErrorDocument 404 /404.html');
 		expect(htaccess).toContain('.deploy-manifest.json');
