@@ -86,10 +86,15 @@ jobs:
           fi
 
       # Only with a conflict: Claude redoes the rebase and resolves it, then the result is checked here.
+      # The Node version comes from master: the PR's branch may predate .nvmrc, or pin an older one.
+      - name: Node version from master
+        id: node
+        if: steps.rebase.outputs.result == 'conflict'
+        run: echo "version=$(git show origin/master:.nvmrc)" >> "$GITHUB_OUTPUT"
       - if: steps.rebase.outputs.result == 'conflict'
         uses: actions/setup-node@v7
         with:
-          node-version-file: .nvmrc
+          node-version: ${{ steps.node.outputs.version }}
           cache: npm
       - if: steps.rebase.outputs.result == 'conflict'
         run: npm ci
@@ -109,8 +114,8 @@ jobs:
                everything master changed, and keep what that commit meant to do. `git add` the files, then
                `GIT_EDITOR=true git rebase --continue`, until the rebase is done. Never a merge commit, and
                never `git rebase --skip` a commit that still has changes of its own.
-            2. Run `npm run lint`, `npm run check` and `npm test`. If the rebase broke something, fix it in
-               the commit at fault: `git commit --fixup=<sha>`, then
+            2. Run `npm ci` (master may have changed the dependencies), then `npm run lint`, `npm run check`
+               and `npm test`. If the rebase broke something, fix it in the commit at fault: `git commit --fixup=<sha>`, then
                `GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash origin/master`.
             3. Leave no uncommitted changes. Do not push: this workflow checks the result and pushes it.
 
@@ -131,7 +136,7 @@ jobs:
           "$RUNNER_TEMP/claude/bin/claude" -p "$PROMPT" \
             --model "$CLAUDE_MODEL" \
             --permission-mode acceptEdits \
-            --allowedTools 'Read,Edit,Write,Glob,Grep,Bash(git *),Bash(npm run *),Bash(npm test*),Bash(GIT_EDITOR=true git *),Bash(GIT_SEQUENCE_EDITOR=true git *)' \
+            --allowedTools 'Read,Edit,Write,Glob,Grep,Bash(git *),Bash(npm ci),Bash(npm run *),Bash(npm test*),Bash(GIT_EDITOR=true git *),Bash(GIT_SEQUENCE_EDITOR=true git *)' \
             > "$RUNNER_TEMP/summary.md"
           cat "$RUNNER_TEMP/summary.md"
       - name: Check Claude's rebase
@@ -145,6 +150,8 @@ jobs:
           [ -z "$(git rev-list --merges origin/master..HEAD)" ] || fail "The branch has a merge commit."
           [ -z "$(git status --porcelain)" ] || fail "Uncommitted changes are left."
           ! git diff origin/master HEAD | grep -qE '^\+(<<<<<<<|>>>>>>>)( |$)' || fail "Conflict markers are left."
+          # The node_modules installed above follow the PR's old lockfile, not the rebased one.
+          npm ci
           npm run lint
           npm run check
           npm test
