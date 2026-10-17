@@ -1,5 +1,5 @@
 /** Page sections after the hero, in display and nav order. */
-export const SECTIONS = ['about', 'projects', 'skills', 'experience', 'contact'] as const;
+export const SECTIONS = ['about', 'projects', 'experience', 'skills', 'contact'] as const;
 export type SectionId = (typeof SECTIONS)[number];
 
 type SessionStore = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;

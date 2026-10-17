@@ -13,7 +13,7 @@ Jocelyn (GitHub: LezardSC) wants a portfolio to show recruiters their work, buil
 | Theme | Dark + light toggle, defaults to system preference |
 | Hosting | Plain static output, host-agnostic. OVH free hosting (100 MB, Apache, FTP) at `jocelynrenault.com`, deployed by GitHub Actions on merge to `master` (M13) |
 | Project click | Icon links (GitHub / demo) + clickable media, new tab; no detail pages/modals. Private projects have no link |
-| Sections | Hero, About, Projects, Skills, Experience/Education, Contact |
+| Sections | Hero, About, Projects, Experience/Education, Skills, Contact |
 | Filtering | Two combinable single-select chip groups: Context × Domain + sort |
 
 ## Architecture
