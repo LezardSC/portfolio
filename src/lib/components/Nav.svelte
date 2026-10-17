@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { base } from '$app/paths';
 	import { PROFILE } from '$lib/data/profile';
 	import type { Dict, Lang } from '$lib/i18n';
@@ -16,6 +16,30 @@
 	let active = $state<SectionId | null>(null);
 
 	let contact: HTMLElement;
+	let list: HTMLElement;
+	const links: Partial<Record<SectionId, HTMLAnchorElement>> = {};
+
+	/** The orange bar under the active link: it slides from one link to the next. */
+	let bar = $state({ x: 0, y: 0, w: 0, shown: false, slide: false });
+	/** Moves the bar under the active link; slides only when it was already under another one. */
+	function place(slide: boolean) {
+		const link = active ? links[active] : undefined;
+		if (!link?.offsetWidth) {
+			bar.shown = false;
+			return;
+		}
+		bar = {
+			x: link.offsetLeft,
+			y: link.offsetTop + link.offsetHeight / 2,
+			w: link.offsetWidth,
+			shown: true,
+			slide: slide && bar.shown
+		};
+	}
+	$effect(() => {
+		void active;
+		untrack(() => place(true));
+	});
 	/** Focused element of the header, kept until focus leaves it while it is still visible. */
 	let focused: Element | null = null;
 	const focusin = (e: FocusEvent) => (focused = e.target as Element);
@@ -43,10 +67,14 @@
 			focused = null;
 		};
 		phone.addEventListener('change', onPhone);
+		// A resize or the web font changes the links' widths: follow them without sliding.
+		const resized = new ResizeObserver(() => place(false));
+		resized.observe(list);
 		addEventListener('scroll', track, { passive: true });
 		addEventListener('resize', track);
 		return () => {
 			phone.removeEventListener('change', onPhone);
+			resized.disconnect();
 			removeEventListener('scroll', track);
 			removeEventListener('resize', track);
 			cancelAnimationFrame(frame);
@@ -57,13 +85,23 @@
 <header class="nav" onfocusin={focusin} onfocusout={focusout}>
 	<a class="brand" href="#hero">{PROFILE.name}</a>
 	<nav aria-label={t.navLabel}>
-		<ul role="list">
+		<ul role="list" bind:this={list}>
 			{#each SECTIONS as id (id)}
 				<li>
-					<a href="#{id}" aria-current={active === id ? 'true' : undefined}>{t.nav[id]}</a>
+					<a href="#{id}" bind:this={links[id]} aria-current={active === id ? 'true' : undefined}
+						>{t.nav[id]}</a
+					>
 				</li>
 			{/each}
 		</ul>
+		<span
+			class="bar"
+			class:shown={bar.shown}
+			class:slide={bar.slide}
+			style:width="{bar.w}px"
+			style:transform="translate({bar.x}px, {bar.y}px)"
+			aria-hidden="true"
+		></span>
 	</nav>
 	<div class="actions">
 		<ThemeToggle t={t.theme} />
@@ -100,6 +138,7 @@
 		white-space: nowrap;
 	}
 	nav {
+		position: relative;
 		flex: 1;
 		min-width: 0;
 		overflow-x: auto;
@@ -127,9 +166,30 @@
 	nav a:hover {
 		color: var(--accent);
 	}
-	nav a[aria-current] {
-		text-decoration: underline 2px var(--accent);
-		text-underline-offset: 0.4em;
+	.bar {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 2px;
+		margin-top: 0.8rem;
+		background: var(--accent);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.2s;
+	}
+	.bar.shown {
+		opacity: 1;
+	}
+	.bar.slide {
+		transition:
+			opacity 0.2s,
+			transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+			width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.bar.slide {
+			transition: opacity 0.2s;
+		}
 	}
 	.actions {
 		display: flex;
