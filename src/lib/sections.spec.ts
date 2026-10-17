@@ -50,8 +50,8 @@ describe('pending section hand-off', () => {
 const tops = (about: number) => ({
 	about,
 	projects: about + 800,
-	skills: about + 3000,
-	experience: about + 3600,
+	experience: about + 3000,
+	skills: about + 3600,
 	contact: about + 4200
 });
 
@@ -65,7 +65,7 @@ describe('sectionInView', () => {
 	});
 	it('is the last section at the bottom of the page, where a short Contact never reaches the nav', () => {
 		expect(sectionInView(tops(-3700), 56, true)).toBe('contact');
-		expect(sectionInView(tops(-3700), 56, false)).toBe('experience');
+		expect(sectionInView(tops(-3700), 56, false)).toBe('skills');
 	});
 });
 

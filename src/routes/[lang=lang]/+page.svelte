@@ -48,6 +48,7 @@
 	<Hero lang={data.lang} t={t.hero} newTab={t.newTab} />
 	<About lang={data.lang} title={t.sections.about} t={t.about} common={t.common} />
 	<Projects lang={data.lang} title={t.sections.projects} t={t.projects} />
+	<Experience lang={data.lang} title={t.sections.experience} t={t.experience} newTab={t.newTab} />
 	<Skills
 		lang={data.lang}
 		title={t.sections.skills}
@@ -55,7 +56,6 @@
 		groups={data.skills}
 		sprite={assetHref(base, data.logoSprite)}
 	/>
-	<Experience lang={data.lang} title={t.sections.experience} t={t.experience} newTab={t.newTab} />
 	<Contact lang={data.lang} title={t.sections.contact} t={t.contact} newTab={t.newTab} />
 </main>
 
