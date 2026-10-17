@@ -5,7 +5,7 @@
 	import type { Dict, Lang } from '$lib/i18n';
 	import { PHONE_QUERY } from '$lib/breakpoints';
 	import { assetHref } from '$lib/paths';
-	import { SECTIONS, sectionNumber, type SectionId } from '$lib/sections';
+	import { SECTIONS, type SectionId } from '$lib/sections';
 	import { currentSection } from '$lib/sections-dom';
 	import LangSwitch from './LangSwitch.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
@@ -60,9 +60,7 @@
 		<ul role="list">
 			{#each SECTIONS as id (id)}
 				<li>
-					<a href="#{id}" aria-current={active === id ? 'true' : undefined}
-						><span class="n" aria-hidden="true">{sectionNumber(id)}</span>{t.nav[id]}</a
-					>
+					<a href="#{id}" aria-current={active === id ? 'true' : undefined}>{t.nav[id]}</a>
 				</li>
 			{/each}
 		</ul>
@@ -120,7 +118,6 @@
 	nav a {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.375rem;
 		min-height: 2.5rem;
 		color: var(--text);
 		font-size: 1rem;
@@ -133,11 +130,6 @@
 	nav a[aria-current] {
 		text-decoration: underline 2px var(--accent);
 		text-underline-offset: 0.4em;
-	}
-	.n {
-		font-size: 0.8125rem;
-		font-weight: 600;
-		color: var(--accent);
 	}
 	.actions {
 		display: flex;

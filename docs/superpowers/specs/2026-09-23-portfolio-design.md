@@ -357,11 +357,11 @@ The same values go in the no-JS `prefers-color-scheme` block. `THEME_BG` in `src
 **Font.** Schibsted Grotesk (variable, weights 400–900) from `@fontsource-variable/schibsted-grotesk`, latin subset only, self-hosted (no Google request), `font-display: swap`, woff2 preloaded. It replaces the system stack everywhere. Body text 18px, line-height 1.6. The canvas used IBM Plex Mono for the small nav numbers; it is dropped (Schibsted 13px, one font file less) - a deliberate deviation.
 
 **Page and sections.** Container max 1240px, 40px side padding. `Section.svelte` becomes a 12-column grid (column gap 32px, row gap 28px), 112px top and bottom padding, 2px `--text` top rule:
-- header, 3 columns: the section number ("01"–"05", from the order in `src/lib/sections.ts`, `aria-hidden`) at 112px, weight 900, letter-spacing −0.05em, line-height 0.82, transparent fill with a 2px `--accent` text stroke; then the `h2` at 46px, weight 800, letter-spacing −0.035em, 14px above; then an optional lead line, 17px `--muted`;
+- header, 3 columns: ~~the section number ("01"–"05", from the order in `src/lib/sections.ts`, `aria-hidden`) at 112px, weight 900, letter-spacing −0.05em, line-height 0.82, transparent fill with a 2px `--accent` text stroke; then~~ the `h2` at 46px, weight 800, letter-spacing −0.035em, ~~14px above~~; _(Section numbers removed on 2026-10-18 after tester feedback, #51: no number in the nav or the section headers.)_ then an optional lead line, 17px `--muted`;
 - body, 9 columns.
 Under 48rem the header stacks above the body and the M8 phone paddings and heading sizes stay.
 
-**Nav.** Stays at the top while scrolling: 72px tall, background `--bg` at 86% opacity with a 14px backdrop blur, 1px `--rule` bottom border. Brand "Jocelyn Renault" 19px weight 800; links 16px weight 500, 24px apart, each prefixed by its number ("01 ") in `--accent` at 13px. Right side: theme toggle and language switch as 44px square buttons (1px `--rule`, 4px radius), then a new primary **CV** button (44px tall, opens `cv-{lang}.pdf` in a new tab). M7 behaviour (active-section underline, phone menu) is unchanged.
+**Nav.** Stays at the top while scrolling: 72px tall, background `--bg` at 86% opacity with a 14px backdrop blur, 1px `--rule` bottom border. Brand "Jocelyn Renault" 19px weight 800; links 16px weight 500, 24px apart, ~~each prefixed by its number ("01 ") in `--accent` at 13px~~ (numbers removed 2026-10-18, #51). Right side: theme toggle and language switch as 44px square buttons (1px `--rule`, 4px radius), then a new primary **CV** button (44px tall, opens `cv-{lang}.pdf` in a new tab). M7 behaviour (active-section underline, phone menu) is unchanged.
 
 **Buttons.** Shared `.btn` / `.btn-primary` classes in `app.css` (used by Hero, Nav, Contact): min-height 48px, padding 0 22px, 2px `--text` border, 6px radius, 16px weight 600; primary = `--text` fill and `--on-text` text, hover → `--accent` fill and border with `--on-accent` text; secondary = transparent, hover → `--accent` text and border.
 
@@ -456,7 +456,7 @@ _Settled during Milestone 10 brainstorming (2026-10-08), after a design session 
 
 ### Foundations (phone)
 - Side padding 20px; body text 17px, line-height 1.6.
-- `Section`: 48px vertical padding, 2px `--text` top rule kept. Header on one line (`display: flex; align-items: flex-end; gap: 14px`): the outlined number 46px, weight 900, line-height 0.8, letter-spacing −0.05em, transparent fill with a **1.5px** `--accent` stroke; the `h2` 29px, weight 800, line-height 1.05, letter-spacing −0.03em. Lead 15px `--muted`, line-height 1.5, 10px above. Body starts ~20px below the header.
+- `Section`: 48px vertical padding, 2px `--text` top rule kept. ~~Header on one line (`display: flex; align-items: flex-end; gap: 14px`): the outlined number 46px, weight 900, line-height 0.8, letter-spacing −0.05em, transparent fill with a **1.5px** `--accent` stroke;~~ (number removed 2026-10-18, #51) the `h2` 29px, weight 800, line-height 1.05, letter-spacing −0.03em. Lead 15px `--muted`, line-height 1.5, 10px above. Body starts ~20px below the header.
 - Buttons on phones: `.btn` min-height 48px, padding 0 16px (M9 desktop keeps 22px).
 
 ### Header

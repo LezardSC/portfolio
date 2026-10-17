@@ -57,11 +57,6 @@ export function isAtBottom(scrollY: number, viewportHeight: number, pageHeight: 
 	return scrollY + viewportHeight >= pageHeight - 2;
 }
 
-/** Two-digit number shown before a section title and its nav link: 'about' → '01'. */
-export function sectionNumber(id: SectionId): string {
-	return String(SECTIONS.indexOf(id) + 1).padStart(2, '0');
-}
-
 /**
  * Characters in the longest word of a title. Section titles shrink below their design size only
  * when this word wouldn't fit the narrow title column (see Section.svelte).
