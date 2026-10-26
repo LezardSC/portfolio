@@ -153,6 +153,23 @@ export const ALL_PROJECTS = typeset<Project[]>([
 		}
 	},
 	{
+		id: 'personal-college',
+		title: 'Personal College',
+		description: {
+			en: 'Turns Claude Code into a personal university: from books and links it builds a full course with written lessons, labs, homework, written and oral exams, and grades against a rubric written before your work is seen. Professor, grader and teaching assistant are separate agents, a Python engine keeps the record.',
+			fr: 'Transforme Claude Code en université personnelle : à partir de livres et liens, il construit un cursus complet avec cours écrits, TP, devoirs, examens écrits et oraux, et notes selon un barème écrit avant de voir la copie. Professeur, correcteur et assistant sont des agents séparés, un moteur Python tient le dossier.'
+		},
+		summary: {
+			en: 'Claude Code as a personal university: lessons, labs, exams and honest grades out of 20.',
+			fr: 'Claude Code en université personnelle : cours, TP, examens et notes sur 20 sans complaisance.'
+		},
+		date: '2026-10',
+		context: 'personal',
+		domains: ['ai'],
+		tech: ['Claude Code', 'Python', 'LLM agents'],
+		links: { repo: gh('personal-college') }
+	},
+	{
 		id: 'portfolio',
 		title: 'Portfolio',
 		description: {
